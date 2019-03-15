@@ -1,0 +1,105 @@
+Documentation for GAUSBAS 15 May 2001                        A.F, J.D.
+
+########################################################################
+
+GTOBAS is a program for fitting Gaussian-type orbitals (GTOs) to
+continuum functions. The Exponents of GTOs are optimized using the
+method of Nestmann and Peyerimhoff [1]. The numerical routines are
+from Numerical Recipes [2]. The numerical continuum functions, which
+provide the input for the program, must be generated from an external
+module (e.g. NUMBAS).
+
+For a more detailed description of the program see: Faure et al.,
+Computer Physics Communications 144 (2002) 224–241.
+
+[1] Nestmann B. M. and Peyerimhoff S. D., J. Phys. B. (1990) L773
+[2] Press W. H., Teukolski S. A., Vetterling W. T. and Flannery
+     B. P., Numerical Recipes in Fortran 77, Cambridge University Press
+     (1986-1992).
+
+########################################################################
+
+
+The code is set up to run in 'batch' mode, ie all input is from the
+namelist /fit/ on the standard input. 
+
+The variables input via namelist /fit/ are 
+(name   ::  description (default value)
+
+     iguess  :: initial selection of exponents (2), 
+                =0 exponents provided by the user, 
+                =1 random selection, 
+                =2 selection from an appropriate function
+     expo    :: list of initial exponents (needed if iguess=0)
+     noexp   :: number of exponents to be used (needed if iguess=1,2). 
+                Must be larger or equal to the number of functions. 
+     nplot   :: no functions (0) / all functions (1) on unit luplot (0)
+     lunumb  :: unit number for numerical functions input (13 for NUMBAS) 
+     luplot  :: unit number for plotable functions output (if used) (17)
+     iswmol3 :: unit number for final exponents in SWMOL3 format (18)
+     ftol    :: convergence criterion usid in POWELL (1.d-9)
+     iprint  :: print flag (0) 
+                =1 all iteration data, 
+                =2 plus mesh. 
+     rdlow   :: lower limit of the random selection (0.01) 
+                (used if iguess=1)
+     rdup    :: upper limit of the random selection (0.49) 
+                (used if iguess=1) 
+     beta    :: even-tempered beta coefficient (0.016)
+                (used if iguess=2)
+     gamma   :: even-tempered gamma coefficient (1.39)
+                (used if iguess=2)
+
+Examples (both examples require running the program NUMCBAS first in order to
+generate the n umerical functions, Bessel or Coulomb, that are fitted by GTOBAS.
+________
+
+
+1) Ionic targets : Coulomb functions (model potential = point charge) 
+   *************
+
+cat > basis.data << EOF
+ &INPUT
+  title='Ionic target',
+  lval=0,
+  ecmax=5.0D0,
+  rlim=12.0D0,
+  charge=1.0D0,
+ /
+EOF
+./numbas < basis.data
+
+cat > gtobas.data << EOF
+ &FIT
+ noexp=12,
+ iguess=2,
+ nplot=1,     
+ iprint=0,
+ /  
+EOF
+./gtobas < gtobas.data
+
+
+2) Neutral targets : Bessel functions (model potential = zero). 
+   ***************
+
+cat > basis.data << EOF
+ &INPUT
+  title='Neutral target',
+  lval=0,
+  ecmax=4.0D0,
+  rlim=12.0D0,
+  chrage=0.0D0,
+ /
+EOF
+./numbas < basis.data
+
+cat > gtobas.data << EOF
+ &FIT
+ expo=6.0,3.0,0.7,0.3,0.1,0.07,0.05,0.02,0.01,
+ iguess=0,
+ nplot=1,                          
+ iprint=0,
+ /
+EOF
+./gtobas < gtobas.data 

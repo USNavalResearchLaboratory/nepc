@@ -1,0 +1,336 @@
+Documentation for module SCATCI version 8.1
+Documentation 4 Nov 96 JT
+
+-------------------------------------------------------------------
+Usage notes:
+
+SCATCI requires namelists
+&INPUT .... &END
+&CINORN .... &END
+More than one CINORN namelist can be given if several diagonalistions
+are to be performed on the same Hamiltonian (may be useful if ESHIFT is
+specified).
+
+If CI targets are used (ICITG=1) then the input to module CONGEN must be
+organized so that all states involving continuum orbitals preceed
+all N+1 electron bound states.  The ordering within these two
+classes is also important, see CONGEN documentation. It also is assumed
+that all continuum states involving a particular N electron target state
+are grouped together.
+
+IEXPC=1 expands CSFs containing an electron in a continuum orbital.
+To do this it assumes:
+a. That CSFs corresponding to the occupation of the first TWO continuum
+   orbitals of each symmetry and with each N electron configuration were
+   generated sequentially in CONGEN.
+b. ALL CSFs involving continuum functions must be before any purely L**2 CSFs.
+   This is also a requirement of for ci target runs (ICITG=1)
+(Note: if correlation CSFs, those involving occupancy of a target virtual by
+the scattering electron, are to be contracted with the continuum orbital, then
+the first 'continuum orbital' is actually the first virtual of the same
+symmetry).
+
+It is recommended that the reference determinant specified in CONGEN
+by parameter REFORB (and REFORG) does NOT contain any continuum orbitals
+(otherwise correct answers cannot be guaranteed). Ideally the reference
+determinants should be defined using target orbitals as specified in the NOB0
+parameter in CONGEN.
+
+The IDIAG=0 option (old default in Congen) must not be used with IEXPC=1
+Either IDIAG=1 (conventional) or IDIAG=2 (neglect pure target integrals and
+evaluate target matrix elements as difference from first element for automatic 
+CI target generation) or IDIAG=3 (neglect pure target integrals)
+may be used in all cases.
+
+-------------------------------------------------------------------
+The format of the following is
+NAME  TYPE DIMENSION (default)
+   Description
+
+Fixed dimensions are specified by PARAMETER
+  NTGTMX=1000 maximum number of target electronic symmetries (in INPUT)
+                                                or states  (in CINORN)
+
+-------------------------------------------------------------------
+Input via namelist /INPUT/
+-------------------------------------------------------------------
+
+ICIDG I 1 (1)
+      Run flag
+      = 0 Do not diagonalise Hamiltonian matrix
+      = 1 Do diagonalise Hamiltonian matrix
+      = 2 Do diagonalisation but DO NOT reconstruct the 
+          Hamiltonian matrix in case of a restart of SCATCI.
+          (This works in case of a saved state using the ARPACK diagonaliser only.
+           ARPACK diagonaliser is selected when doing a partitioned-Rmat calculation
+           with less than 20% of eigenvalues.)
+
+ICITG I 1 (0)
+      CI target flag
+      = 0 No CI target
+      = 1 Perform CI target contraction
+
+IEXPC I 1 (0)
+      Prototype CI expansion flag
+      = 0 Normal CSFs read from CONGEN
+      = 1 Prototype CSFs read from CONGEN: expand
+
+IDIAG   I    1  (default passed from CONGEN)  [0:3]
+! Matrix element evaluation flag:
+   = 0  Evaluate matrix elements as difference from first element
+        (Do not use this option with IEXPC=1)
+   = 1  Evaluate all matrix elements in full
+   = 2  Do not evaluate pure target integrals
+        (and with automatic target generation, evaluate target
+         matrix elements as difference from first element)
+   = 3  Do not evaluate pure target integrals
+
+  IDIAG = 2 is STRONGLY recommended with option ICITG=1
+  but must NOT be used for target only calculations.
+  NOB0 must have been set in CONGEN set for options IDIAG=2 or 3.
+
+NFTI I 1  (16)
+   Unit number for input of transformed molecular integrals.
+
+NFTE I 1  (26)
+   Temporary storage for Hamiltonian matrix
+
+LEMBF I 1 (5000)
+   Number of matrix elements per record stored on NFTE
+
+MEGUL I 1  (13)
+   Unit number for input from module CONGEN
+
+NFTG I 1  (39)
+    CI target vectors switch:
+    NFTG = 0 Use scattering wavefunctions to generated (phase corrected)
+             target wavefunctions.
+    note: 1. target orbitals defined by NOB0 must be specified in CONGEN
+          2. phase correction using ISCAT=2 in CONGEN is the recommended
+             alternative.
+    NFTG > 0 Unit of target data dumpfile.
+
+NTGSYM I 1  (1)
+    Number of target state symmetries.
+    Needed if IEXPC or ICITG .ne. 0
+    Read directly from file MEGUL if ISCAT=2 specified in CONGEN
+
+NUMTGT I NTGSYM (NTGTMX*1)
+    Number of target states for each symmetries.
+    Needed if IEXPC or ICITG .ne. 0
+
+NOTGT I NTGSYM
+    Number of continuum orbitals associated with each target symmetry.
+    Needed if IEXPC or ICITG .ne. 0
+    Read directly from file MEGUL if ISCAT=2 specified in CONGEN
+    However, if IEXPC=1 this parameter must be provided.
+
+NCTGT I NTGSYM (NTGTMX*1)
+    Number of CI components of each target symmetry.
+    (SCF states are denoted by NCTGT(i)=1)
+    Needed if IEXPC or ICITG .ne. 0
+    Read directly from file MEGUL if ISCAT=2 specified in CONGEN
+
+NTGTF I NTGT (NTGTMX*0) (NTGT is sum of NTGSYM terms of NUMTGT)
+    Set number, on unit NFTG, which contains the required target state
+    (CI targets only, not required if NFTG=0)
+
+NTGTS I NTGT (NTGTMX*0) (NTGT is sum of NTGSYM terms of NUMTGT)
+    Sequence number of the state within the set specified by NTGTF
+    to be used as the target state.
+    (CI targets only, not required if NFTG=0)
+
+MCONT I NTGSYM (NTGTMX*0)
+   Lambda value ('symmetry') of the continuum orbitals associated with each
+   target state. Note that a (degenerate) target state which couples with
+   continuum orbitals of two different symmetries must be treated as two
+   target states.
+   Needed if IEXPC or ICITG .ne. 0
+   Read directly from file MEGUL if ISCAT=2 specified in CONGEN
+
+GUCONT I NTGSYM (NTGTMX*0)
+   Gerade/ungerade symmetry of the continuum orbitals associated with each
+   target state.
+   =0 for C inf v or non-linear target
+   =+1 for g and -1 for u, for D inf v target.
+   Needed if IEXPC or ICITG .ne. 0 and SYMTYP=1
+   Read directly from file MEGUL if ISCAT=2 specified in CONGEN
+
+NCONT I 1 (0)
+   Number of last CSF containing a continuum orbital
+   Needed only if IEXPC=0, ICITG=0 and IDIAG=2
+
+NCORB I 1 (-1)
+   Flag for performing phase corrected target CI runs
+   NCORB = -1 Normal run
+         =  0 Neglect ALL integrals involving continuum orbitals
+         (note: target orbitals defined by NOB0 which must be set in CONGEN)
+         >  0 Neglect integrals involving spin-orbital with specified number
+   If NFTG = 0, then NCORB should be left at its default of -1.
+   Note: use of ISCAT=2 in CONGEN is prefered to this method of phase
+         correction.
+
+NOBC    I   NSYM  (Default: see below)
+      ! Number of target orbitals for each symmetry.
+        NOBC gives the starting point of the continuum for IEXPC=1
+        calculations. NOBC(I) actually gives the number of orbitals,
+        of symmetry I, NOT to used in the expansion.
+        Default values for NOBC are constructed using NOB (from CONGEN) and
+        NOTGT. This default is sufficient unless not all continuum orbitals
+        are to be used in the calculation, in which case NOBC must be set.
+
+IORD I 1 (1)
+    Integral ordering flag.
+
+NAME  C 120 (Default to name of CONGEN run)
+    Name of run
+
+SCALEM R 1 (1.0D0)
+    Mass, in electron mass units, of the exotic particle in calculations
+    on an exotic particle. Only used if IPOSIT .NE. 0 in CONGEN.
+
+SCFUSE I 1 (0)
+    SCFUSE = 0 Transformed integral blocks created for CI
+          .ne. 0 Blocks created for SCF first then CI
+
+THRHM R 1 (1.D-15)
+    Threshold below which integrals are regarded as zero
+
+UKRMOLP_INTS L 1 (.false.)
+    This switch applies only to polyatomic calculations. It is not effective for 
+    calculations using the non-Abelian point groups. If set to .true. then it is 
+    assumed that the transformed integrals on unit NFTI were calculated using UKRMol+.
+
+The following parameters are only apply if ICITG=1 and NFTG=0
+See CINORN for definitions
+IGH  I 1 (0)
+CRITE R 1 (1D-12)
+CRITC R 1 (1D-10)
+CRITR R 1 (1D-8)
+ORTHO R 1 (1D-7)
+MAXITER I 1 (-1)
+
+LUSME
+    logical unit for output symbolic matrix elements (SME) which are used
+    for making Hamiltonian in SCATCI. If LUSME is non zero, SME are
+    written out from PINDEX. LUSME will be used for calculating delta
+    matrix for Zeff runs.
+
+-------------------------------------------------------------------
+Input via namelist /CINORN/
+-------------------------------------------------------------------
+
+NFTA I 1  (6)
+   Unit number for printed output
+
+NFTW I 1  (25)
+    Unit number for CI output
+
+NCISET I 1 (1)
+    Set number of output CI vectors.  If NCISET<0 then the CI vectors
+    are not saved.  The first set on a file must have NCISET=1.
+    Subsequent sets will be concatenated and labelled consecutively
+    if NCISET=0. WARNING!! In Linux machines NCISET=0 may NOT work and
+    set numbers will have to be input explicitely (1,2,3, etc.)  
+
+NPFLG I 2 (2*0)
+    Print flag
+    NPFLG(1) = 1 all Hamiltonian is printed
+             = 0 no Hamiltonian matrix elements printed
+             =-1 diagonal elements are printed
+    NPFLG(2) = 1 print all eigenvalues
+             = 0 print lowest 20 eigenvalues only
+
+NPCVC I 1 (1)
+    NPCVC = 0 heading of data set to be added to NFTW is printed
+          = 1 headings of all datasets on NFTW are printed
+
+NAME  C 120
+    Name of run
+
+ITGT  I 1 (0)
+    Target run switch: 0 is scattering run, 1 is target run.
+    Only needed if ESHIFT parameter is used.
+
+NOPVEC I 1 (0)
+    Number of CI eigenvectors to be printed. If -1 then all vectors
+    are printed
+
+NTGT I 1  (default set using NTGSYM and NUMTGT in namelist SCAT)
+    Number of target states. Only needed if threshold shifts are to be used.
+
+NOTGT I NTGT (default using from NOTGT in SCATCI)
+    Number of continuum orbitals associated with each target state.
+    ( Only needed for ESHIFT is non-zero)
+
+ESHIFT R NTGT (NTGTMX*0.)
+    Shifts to be applied to target energy levels.
+    If the shifts are to be applied prior to Hamiltionian diagonalisation
+    then NOTGT must also be input (either here or in SCAT) for each level.
+    If the shifts are to be applied to the final eigen energies
+    then ITGT=1 must also be input.
+    Note the order of the shift energies is the same order that congen
+    produces the states.
+
+NCIPFG I 1 (3)
+    Controls which elements of the eigenvectors are printed.
+    Default is all elements. The other options require the use of the
+    variables listed below.
+
+NKEY    I 1 (0)     :
+                    :
+LARGE   I 1 (8)     :    All these control the selective printing of
+                    :    CI data.  See CIMCN documentation for details
+THRPRT  R 1 (0.0025):
+                    :
+KEYCSF  I 20        :
+
+NSTAT   I 1 (0)
+    Number of eigenvalues and eigenvectors requested.
+    If .le. 0, all are obtained.
+    Note: this parameter acts as a switch between diagonalisers. For
+    calculations requiring a few eigenvalues/vectors, selecting the number
+    required will greatly reduce CPU time usage.
+
+IGH  I 1 
+    =1  Forces in-core Givens-Householder diagonalisation
+    =0  Forces use of the iterative Davidson technique (see below)
+    =-1 Forces use of the iterative Arpack diagonaliser
+Defaults set as follows:
+IGH = 1 if NOCSF .le. 750 and/or NSTAT > 0.2 * NOCSF
+IGH = 0 if NOCSF > 750 and NSTAT .le. 3
+IGH =-1 if NOCSF > 750 and 3 < NSTAT < 0.2 * NOCSF
+where NOCSF is the size of the Hamiltonian.
+Use of non-default values of IGH should be done with caution
+
+The following parameters are only used with Davidson diagonalisation
+(see A Strathopoulos and C F Fischer, Computer Phys Comm 79, 268 (1994)
+for a fuller explanation)
+
+
+CRITC R 1 (1D-10)
+      Eigenvector convergence paratemeter
+      Recommended values from 1D-9 to 1D-14
+
+CRITR R 1 (1D-8)
+      Residual vector norms convergence paratemeter
+      Recommended values from 1D-6 to 1D-10
+
+ORTHO R 1 (1D-7)
+      Orthoganlisation threshold trigger: value above which
+      vectors are reorthogonalized.
+      Usually ORTHO.LE.CRITR*10 but the process can
+      be skipped by setting ORTHO to a large number(eg,1.D+3).
+
+The following parameters are used with Davidson diagonalisation
+or the ARPACK diagonaliser
+
+CRITE R 1 (1D-12)
+      For Davidson: eigenenergy convergence paratemeter 
+      Recommended values from 1D-10 to 1D-14
+      For Arpack using CRITE=0.0 gives machnine accuracy.
+
+MAXITER I 1 (-1)
+      Maximum number of iterations allowed.
+      If MAXITER.LE.0 then it is set as MAX(NSTAT*40,500) for Davidson
+                                     or MAX(NSTAT*50,1000) for ARPACK

@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{Carr2012}
+J.~M. Carr, P.~G. Galiatsatos, J.~D. Gorfinkiel, A.~G. Harvey, M.~A. Lysaght,
+  D.~Madden, Z.~Ma{\v{s}}{\'i}n, M.~Plummer, J.~Tennyson, and H.~N. Varambhia.
+\newblock Ukrmol: a low-energy electron- and positron-molecule scattering
+  suite.
+\newblock {\em The European Physical Journal D}, 66(3):58, Mar 2012.
+
+\bibitem{TENNYSON201029}
+Jonathan Tennyson.
+\newblock Electron–molecule collision calculations using the r-matrix method.
+\newblock {\em Physics Reports}, 491(2):29 -- 76, 2010.
+
+\bibitem{Darby_Lewis_2017}
+Daniel Darby-Lewis, Zden{\v{e}}k Ma{\v{s}}{\'{\i}}n, and Jonathan Tennyson.
+\newblock R-matrix calculations of electron impact electronic excitation of
+  {BeH}.
+\newblock {\em Journal of Physics B: Atomic, Molecular and Optical Physics},
+  50(17):175201, aug 2017.
+
+\bibitem{PhysRevA.89.062714}
+Yang Wang, Oleg Zatsarinny, and Klaus Bartschat.
+\newblock $b$-spline $r$-matrix-with-pseudostates calculations for
+  electron-impact excitation and ionization of nitrogen.
+\newblock {\em Phys. Rev. A}, 89:062714, Jun 2014.
+
+\end{thebibliography}

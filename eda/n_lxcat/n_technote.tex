@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amscd}
+\usepackage{bbm}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage{color}
+
+
+%\graphicspath{{figs/}}
+
+%\usepackage{tikz,pgfplots}
+%\pgfplotsset{compat=newest} 
+%\pgfplotsset{plot coordinates/math parser=false}
+
+% for better list... used for custom title page
+\usepackage{enumitem}
+
+%\usepackage{pgf}
+%\usepackage{pgffor}
+%\usepgflibrary{plothandlers}
+
+%\usepgfplotslibrary{external} 
+%\tikzexternalize% activate externalization!
+
+% use this to remake a particular plot...
+%\tikzset{external/remake next}
+
+%use this to remake all
+%\tikzset{external/force remake}
+
+%\tikzsetexternalprefix{figures/}
+
+%% Fonts %%
+\usepackage{microtype}
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+% Times New Roman
+\usepackage{mathptmx}
+
+% this stuff is to make the section headings look like phys plasmas
+\usepackage[scaled=.92]{helvet}
+%\usepackage{helvet}
+
+% NB, use citenum to get inline citation (not superscript)
+
+\usepackage[colorlinks=true,
+		citecolor=blue,
+		linkcolor=blue,
+		anchorcolor=blue,
+		filecolor=blue,
+		menucolor=blue,
+		runcolor=blue,
+		urlcolor=blue,
+		unicode
+		]{hyperref}
+\usepackage[all]{hypcap}
+
+
+%
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\usepackage{sectsty}  
+%\sectionfont{\normalfont\sffamily\large\underline\bfseries\color{orange}}
+%\sectionfont{\normalfont\sffamily\large\bfseries\color{orange}\sectionrule{0pt}{??0pt}{-4pt}{1pt}}
+%\sectionfont{\normalfont\sffamily\large\bfseries\sectionrule{3ex}{3pt}{-1ex}{1pt}}
+\sectionfont{\normalfont\sffamily\large\bfseries}
+\subsectionfont{\normalfont\sffamily\normalsize\bfseries}
+
+\newcommand{\mycomment}[1]{}
+
+% set noindents for entire document
+\setlength\parindent{0pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEGIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+
+\rmfamily
+\begin{center}\sffamily\bfseries
+PULSED POWER PHYSICS TECHNOTE NO. 2019-xx\\
+{~}
+\end{center}
+
+\begin{description}[leftmargin=8em,style=nextline,font=\sffamily\bfseries ]
+\item[TITLE:]{\bfseries 
+Exploratory Data Analysis of Electron-Atomic Nitrogen Scattering Cross-Section Data*
+}
+\item[AUTHORS:]{ P.~E.~Adamson, S.~Swanekamp\\
+{\itshape Code 6770.1, Plasma Physics Division, Naval Research Laboratory}}
+\item[DATE:]\today
+\item[ABSTRACT:] 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed lacus mi. Quisque commodo mattis hendrerit. Nulla eget sem erat, nec sagittis mauris. Maecenas nec condimentum risus. Praesent vehicula aliquam diam, sit amet laoreet lacus scelerisque in. Cras mollis enim at purus euismod at ullamcorper felis egestas. Donec enim leo, aliquet nec bibendum vitae, luctus at libero. Proin id laoreet elit. Quisque bibendum vehicula risus et eleifend. Duis sed odio sit amet magna tincidunt euismod. Aenean feugiat turpis rhoncus nunc euismod convallis tristique mi ullamcorper. Donec eu eros ut lorem consectetur porta. Vestibulum quis orci ante. Duis sagittis adipiscing blandit. Maecenas orci ligula, placerat non condimentum vitae, elementum sodales dui.
+
+Proin ullamcorper tellus et lectus varius rhoncus. Sed mauris est, scelerisque vel tempus non, varius eget est. Donec lacinia cursus dignissim. Donec mollis nulla sit amet leo malesuada in rutrum ligula sollicitudin. Morbi sed mauris quis tellus facilisis facilisis. Mauris fermentum mi blandit quam pellentesque ornare. Ut non elit mauris, nec mollis lacus. In vel nisl eget dui placerat mollis vestibulum sed quam. Sed at nisl vestibulum massa laoreet accumsan vel ut metus.
+\end{description}
+
+
+\vfill
+
+{\small
+\noindent THIS REPORT REPRESENTS UNPUBLISHED INTERNAL WORKING DOCUMENTS AND SHOULD NOT BE REFERENCED OR DISTRIBUTED WITHOUT THE AUTHORS' CONSENT
+
+{~}
+
+\noindent * Work supported by DTRA/RD-NTE 6.2 program.
+}
+\end{titlepage}
+
+
+\pagestyle{myheadings}
+\markright{\hfill \color{red}\sf DRAFT VERSION DO NOT CIRCULATE \hfill}
+
+\section{Introduction}
+Use xarray package.\cite{hoyer2017xarray}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed lacus mi. Quisque commodo mattis hendrerit. Nulla eget sem erat, nec sagittis mauris. Maecenas nec condimentum risus. Praesent vehicula aliquam diam, sit amet laoreet lacus scelerisque in. Cras mollis enim at purus euismod at ullamcorper felis egestas. Donec enim leo, aliquet nec bibendum vitae, luctus at libero. Proin id laoreet elit. Quisque bibendum vehicula risus et eleifend. Duis sed odio sit amet magna tincidunt euismod. Aenean feugiat turpis rhoncus nunc euismod convallis tristique mi ullamcorper. Donec eu eros ut lorem consectetur porta. Vestibulum quis orci ante. Duis sagittis adipiscing blandit. Maecenas orci ligula, placerat non condimentum vitae, elementum sodales dui.
+
+Proin ullamcorper tellus et lectus varius rhoncus. Sed mauris est, scelerisque vel tempus non, varius eget est. Donec lacinia cursus dignissim. Donec mollis nulla sit amet leo malesuada in rutrum ligula sollicitudin. Morbi sed mauris quis tellus facilisis facilisis. Mauris fermentum mi blandit quam pellentesque ornare. Ut non elit mauris, nec mollis lacus. In vel nisl eget dui placerat mollis vestibulum sed quam. Sed at nisl vestibulum massa laoreet accumsan vel ut metus.
+
+\section{Acknowledgments}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed lacus mi. Quisque commodo mattis hendrerit. Nulla eget sem erat, nec sagittis mauris. Maecenas nec condimentum risus. Praesent vehicula aliquam diam, sit amet laoreet lacus scelerisque in. Cras mollis enim at purus euismod at ullamcorper felis egestas. Donec enim leo, aliquet nec bibendum vitae, luctus at libero. Proin id laoreet elit. Quisque bibendum vehicula risus et eleifend. Duis sed odio sit amet magna tincidunt euismod. Aenean feugiat turpis rhoncus nunc euismod convallis tristique mi ullamcorper. Donec eu eros ut lorem consectetur porta. Vestibulum quis orci ante. Duis sagittis adipiscing blandit. Maecenas orci ligula, placerat non condimentum vitae, elementum sodales dui.
+
+Proin ullamcorper tellus et lectus varius rhoncus. Sed mauris est, scelerisque vel tempus non, varius eget est. Donec lacinia cursus dignissim. Donec mollis nulla sit amet leo malesuada in rutrum ligula sollicitudin. Morbi sed mauris quis tellus facilisis facilisis. Mauris fermentum mi blandit quam pellentesque ornare. Ut non elit mauris, nec mollis lacus. In vel nisl eget dui placerat mollis vestibulum sed quam. Sed at nisl vestibulum massa laoreet accumsan vel ut metus.
+
+\bibliography{ref}{}
+\bibliographystyle{plain}
+
+\end{document}
+
+\endinput
+
+
