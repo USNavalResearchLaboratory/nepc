@@ -1,2 +1,9 @@
+<<<<<<< HEAD
 .DS_Store
 
+=======
+*.blg
+*.aux
+*.bbl
+*.dvi
+>>>>>>> refs/remotes/origin/master
