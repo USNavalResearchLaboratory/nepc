@@ -1,0 +1,10 @@
+&input
+  megul = 730, ! input from module CONGEN
+  ukrmolp_ints = .true., !true if you run UKRmol+ suite, false for old version of code
+&end
+&cinorn
+  name = 'hydrogen.peroxide_plus_scattering CI calculation - triplet A',
+  nstat = 1, ! number of CI eigenvalues
+  nciset = 2, ! index of calculated CI vectors within output file (0 = automatic indexing, but first must be 1)
+  igh = 1,
+&end

@@ -1,0 +1,20 @@
+Job 5012.ppdadamsonlinux started on Mon Mar  4 02:18:03 EST 2019 
+copying integrals to .inp on Mon Mar 4 02:18:03 EST 2019
+running scatci_integrals on Mon Mar 4 02:18:03 EST 2019
+scatci_integrals finished on Mon Mar 4 02:18:20 EST 2019
+running congen 1 on Mon Mar 4 02:18:20 EST 2019
+running scatci 1 on Mon Mar 4 02:18:21 EST 2019
+running congen 2 on Mon Mar 4 02:18:21 EST 2019
+running scatci 2 on Mon Mar 4 02:18:21 EST 2019
+running congen 3 on Mon Mar 4 02:18:21 EST 2019
+running scatci 3 on Mon Mar 4 02:18:21 EST 2019
+running congen 4 on Mon Mar 4 02:18:22 EST 2019
+running scatci 4 on Mon Mar 4 02:18:22 EST 2019
+running denprop on Mon Mar 4 02:18:22 EST 2019
+running congen 5 on Mon Mar 4 02:18:23 EST 2019
+running scatci 5 on Mon Mar 4 02:18:23 EST 2019
+running outer 1 on Mon Mar 4 02:18:40 EST 2019
+running congen 6 on Mon Mar 4 02:18:52 EST 2019
+running scatci 6 on Mon Mar 4 02:18:53 EST 2019
+running outer 2 on Mon Mar 4 02:19:08 EST 2019
+Job ended on Mon Mar  4 02:19:19 EST 2019 on Mon Mar 4 02:19:19 EST 2019

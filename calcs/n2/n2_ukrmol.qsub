@@ -1,0 +1,82 @@
+#!/bin/bash
+#gen_pbs version: 1.0.0
+#PBS -N           J_h2o2
+#PBS -joe
+#PBS -e           h2o2.oe
+#PBS -o           h2o2.oe
+#PBS -M           adamson
+#PBS -mbe
+#PBS -l           walltime=48:00:00
+#PBS -l           select=1:ompthreads=16
+#PBS -q           workq
+ 
+JOBNAME='h2o2'
+
+cd $PBS_O_WORKDIR
+
+echo "Job $PBS_JOBID started on `date` " > $JOBNAME.log
+
+mpirun_ser="mpirun -ilp64 -n 1 -genv OMP_NUM_THREADS=16 -genv I_MPI_PIN_DOMAIN=omp"
+mpirun_par="mpirun -ilp64 -n 2 -genv OMP_NUM_THREADS=8 -genv I_MPI_PIN_DOMAIN=omp"
+
+# Launch the parallel job
+bininner=$HOME/opt/ukrmol-in-2.0/build/bin
+binouter=$HOME/opt/UKRmol-out-2.0/build/bin
+
+echo copying integrals to .inp on `date` >> $JOBNAME.log
+cp inputs/scattering.integrals.inp ./inp
+rm moints
+echo running scatci_integrals on `date` >> $JOBNAME.log
+${mpirun_par} ${bininner}/scatci_integrals
+echo scatci_integrals finished on `date` >> $JOBNAME.log
+
+ln -sf moints fort.16
+ln -sf moints fort.17
+ln -sf moints fort.22
+
+#TARGET
+echo running congen 1 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/target.congen.singlet.A.inp > output/target.congen.singlet.A.out || exit
+echo running scatci 1 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/target.scatci.singlet.A.inp > output/target.scatci.singlet.A.out || exit
+
+echo running congen 2 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/target.congen.triplet.A.inp > output/target.congen.triplet.A.out || exit
+echo running scatci 2 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/target.scatci.triplet.A.inp > output/target.scatci.triplet.A.out || exit
+
+echo running congen 3 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/target.congen.singlet.B.inp > output/target.congen.singlet.B.out || exit
+echo running scatci 3 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/target.scatci.singlet.B.inp > output/target.scatci.singlet.B.out || exit
+
+echo running congen 4 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/target.congen.triplet.B.inp > output/target.congen.triplet.B.out || exit
+echo running scatci 4 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/target.scatci.triplet.B.inp > output/target.scatci.triplet.B.out || exit
+
+echo running denprop on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/denprop < inputs/target.denprop.inp > output/target.denprop.out || exit
+
+#SCATTERING
+echo running congen 5 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/scattering.congen.doublet.A.inp > output/scattering.congen.doublet.A.serial.out || exit
+echo running scatci 5 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/scattering.scatci.doublet.A.inp > output/scattering.scatci.doublet.A.serial.out || exit
+
+echo running outer 1 on `date` >> $JOBNAME.log
+${mpirun_ser} ${binouter}/outer < inputs/scattering.outerres.doublet.A.inp > output/scattering.outerres.doublet.A.out || exit
+mv fort.100 xsec_a
+mv fort.110 eigenph_a
+
+echo running congen 6 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/congen < inputs/scattering.congen.doublet.B.inp > output/scattering.congen.doublet.B.serial.out || exit
+echo running scatci 6 on `date` >> $JOBNAME.log
+${mpirun_ser} ${bininner}/scatci < inputs/scattering.scatci.doublet.B.inp > output/scattering.scatci.doublet.B.serial.out || exit
+
+echo running outer 2 on `date` >> $JOBNAME.log
+${mpirun_ser} ${binouter}/outer < inputs/scattering.outerres.doublet.B.inp > output/scattering.outerres.doublet.B.out || exit
+mv fort.100 xsec_b
+mv fort.110 eigenph_b
+
+echo "Job ended on `date`" on `date` >> $JOBNAME.log

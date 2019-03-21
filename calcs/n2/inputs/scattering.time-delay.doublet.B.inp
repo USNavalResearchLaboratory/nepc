@@ -1,0 +1,7 @@
+&input
+ min_en = 0,  ! minimum energy
+ max_en = -1, ! maximum energy, if -1, then all energies
+ inp='./fort.19'
+ print_eig=1, ! how many Q-matrix eigenvalues to print
+&end
+

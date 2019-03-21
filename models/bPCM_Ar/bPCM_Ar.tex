@@ -1,0 +1,37 @@
+\newcommand{\notenumber}{2019-xx}
+\newcommand{\notetitle}{\ac{bpcm} for intense electron beam driven plasmas in Argon*}
+\newcommand{\noteauthors}{P.~E.~Adamson}
+\newcommand{\noteabstract}{A \ac{bpcm} is developed for intense electron
+beam driven plasmas in Ar.  This work is part of an effort to 
+develop \acp{prm} for a DTRA- and NRL-funded effort to update ICEPIC and MEEC++ to
+model \ac{sgemp}.}
+%TODO: if new calcs, describe...
+%TODO: if new data from literature, describe...
+%TODO: If different decisions, describe...
+%TODO: How will model be V&V'd?
+\newcommand{\notesponsor}{DTRA/RD-NTE 6.2 program}
+
+\input{../../latex/prolog.tex}
+
+\markright{\hfill \color{red}\sf DRAFT VERSION DO NOT CIRCULATE \hfill}
+
+\section{Introduction}
+
+electron impact ionization of ground state argon atom with
+threshold (ionization) energy of 15.76 eV
+
+$e^− + Ar \rightarrow Ar^+ + 2e^− , \varepsilon_{thres} = \epsilon_{ion} = 15.76 eV$
+
+\begin{table}
+\caption{Important spectral lines of Ar}
+\begin{tabular}{lcrcclll}
+\hline\hline
+Atom & $\lambda [\si{\angstrom}]$ & Intensity [a.u.] & $E_L [eV]$ & $E_H [eV]$ & Transition & $J$ & $A [10^8 s^{-1}]$ \\
+\hline
+Ar & 7503.8685 & 700 & 11.83 & 13.48 & $4s^1P^0_1-4p^1S^0$ & 1-0 & 0.472$\pm$ 1\% \\
+Ar & 7635.1056 & 500 & 11.55 & 13.17 & $4s^3P^0_2-4p^1D_2$ & 2-2 & 0.274$\pm$ 25\% \\
+\hline\hline 
+\end{tabular}
+\end{table}
+
+\input{../../latex/epilog.tex}

@@ -1,0 +1,3300 @@
+
+MPI running with 1 processes.
+          My rank is 0
+          I am running on the processor with name: ppdadamsonlinux                                                                                                                
+
+ Smallest positive magnitude:  2.225073858507201E-308
+ Largest magnitude:  1.797693134862316E+308
+ Smallest relative spacing:  1.110223024625157E-016
+ Largest relative spacing:  2.220446049250313E-016
+ Log10(Base)  0.301029995663981     
+ Decimal precision for real(kind=cfp):                    15
+ Number of bits in default integer:                    64
+ Number of bits in MPI integers:                    64
+--------->done:mpi_mod:mpi_mod_start
+--------->basis_data_generic_obj:read
+
+Reading basis data from the file: fort.22                                                                                                                                                                                                        
+
+DATA FILE OPENED:fort.22                                                                                                                                                                                                        
+File identifier: DATA FILE version 1.0                                                                                                                                                                                          
+Number of data sets stored on the file: 5
+          Contents of Data Header:
+Header position: 224
+Header: atomic_orbital_basis_obj                                                                                                                                                                                       
+Data set record start, end: 455 20155
+Data set size [Mib]:         0.018787384033203
+Position of the next header: 20155
+          Contents of Data Header:
+Header position: 20155
+Header: molecular_orbital_basis_obj                                                                                                                                                                                    
+Data set record start, end: 20386 336699
+Data set size [Mib]:         0.301659584045410
+Position of the next header: 336699
+          Contents of Data Header:
+Header position: 336699
+Header: molecular_orbital_basis_obj:One-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 336930 1729813
+Data set size [Mib]:         1.328356742858887
+Position of the next header: 1729813
+          Contents of Data Header:
+Header position: 1729813
+Header: molecular_orbital_basis_obj:Two-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 1730044 12465123
+Data set size [Mib]:        10.237769126892090
+Position of the next header: 12465123
+          Contents of Data Header:
+Header position: 12465123
+Header: molecular_orbital_basis_obj:ijkl indices                                                                                                                                                                       
+Data set record start, end: 12465354 23200114
+Data set size [Mib]:        10.237464904785156
+Position of the next header: -1
+--------->geometry_obj:read
+--------->geometry_obj:check
+<---------done:geometry_obj:check
+<---------done:geometry_obj:read
+
+Symmetry data read-in.
+--------->atomic_orbital_basis_obj:init
+--------->symmetry_obj:init
+--------->geometry_obj:check
+<---------done:geometry_obj:check
+Order of IRRs is: 1 A   2 B  
+--------->symmetry_obj:set_symmetry
+Nuclei  1 and  3 are symmetrically equivalent.
+Nuclei  2 and  4 are symmetrically equivalent.
+Nucleus  0 is the scattering center.
+Nucleus  1 O  is symmetrically non-redundant.
+Nucleus  2 H  is symmetrically non-redundant.
+Nucleus  0 sc is symmetrically non-redundant.
+Non-redundant nucleus  1 O  has  1 symmetrically equivalent nuclei.
+     Equivalent nucleus:  3 O 
+Non-redundant nucleus  2 H  has  1 symmetrically equivalent nuclei.
+     Equivalent nucleus:  4 H 
+Non-redundant nucleus  0 sc has  0 symmetrically equivalent nuclei.
+<---------done:symmetry_obj:set_symmetry
+--------->symmetry_obj:check
+<---------done:symmetry_obj:check
+<---------done:symmetry_obj:init
+<---------atomic_orbital_basis_obj:init
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:8
+Exponents:       0.1172000000E+05    0.1759000000E+04    0.4008000000E+03    0.1137000000E+03    0.3703000000E+02    0.1327000000E+02    0.5025000000E+01    0.1013000000E+01
+Contractions:    0.7096459465E-03    0.5467272292E-02    0.2782311861E-01    0.1047477397E+00    0.2829208464E+00    0.4484952387E+00    0.2708168852E+00    0.1545029161E-01
+Primitive normalization factors:    0.8027971111E+03    0.1935795482E+03    0.6384191077E+02    0.2481592345E+02    0.1069856122E+02    0.4955223919E+01    0.2392005323E+01    0.7196431175E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    1
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:8
+Exponents:       0.1172000000E+05    0.1759000000E+04    0.4008000000E+03    0.1137000000E+03    0.3703000000E+02    0.1327000000E+02    0.5025000000E+01    0.1013000000E+01
+Contractions:   -0.3144434117E-03   -0.2482137681E-02   -0.1231635538E-01   -0.5053891734E-01   -0.1393849033E+00   -0.3250774948E+00   -0.2298483076E+00    0.1095379347E+01
+Primitive normalization factors:    0.8027971111E+03    0.1935795482E+03    0.6384191077E+02    0.2481592345E+02    0.1069856122E+02    0.4955223919E+01    0.2392005323E+01    0.7196431175E+00
+Contraction normalization factor:    0.9999999998E+00
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    2
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.3023000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2905619240E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    3
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:3
+Exponents:       0.1770000000E+02    0.3854000000E+01    0.1046000000E+01
+Contractions:    0.6267916628E-01    0.3335365659E+00    0.7412396416E+00
+Primitive normalization factors:    0.5174956111E+02    0.7697146025E+01    0.1507838033E+01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    4
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.2753000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2842482844E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    5
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.1185000000E+01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2215218498E+01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    6
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:8
+Exponents:       0.1172000000E+05    0.1759000000E+04    0.4008000000E+03    0.1137000000E+03    0.3703000000E+02    0.1327000000E+02    0.5025000000E+01    0.1013000000E+01
+Contractions:    0.7096459465E-03    0.5467272292E-02    0.2782311861E-01    0.1047477397E+00    0.2829208464E+00    0.4484952387E+00    0.2708168852E+00    0.1545029161E-01
+Primitive normalization factors:    0.8027971111E+03    0.1935795482E+03    0.6384191077E+02    0.2481592345E+02    0.1069856122E+02    0.4955223919E+01    0.2392005323E+01    0.7196431175E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    7
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:8
+Exponents:       0.1172000000E+05    0.1759000000E+04    0.4008000000E+03    0.1137000000E+03    0.3703000000E+02    0.1327000000E+02    0.5025000000E+01    0.1013000000E+01
+Contractions:   -0.3144434117E-03   -0.2482137681E-02   -0.1231635538E-01   -0.5053891734E-01   -0.1393849033E+00   -0.3250774948E+00   -0.2298483076E+00    0.1095379347E+01
+Primitive normalization factors:    0.8027971111E+03    0.1935795482E+03    0.6384191077E+02    0.2481592345E+02    0.1069856122E+02    0.4955223919E+01    0.2392005323E+01    0.7196431175E+00
+Contraction normalization factor:    0.9999999998E+00
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    8
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.3023000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2905619240E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:    9
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:3
+Exponents:       0.1770000000E+02    0.3854000000E+01    0.1046000000E+01
+Contractions:    0.6267916628E-01    0.3335365659E+00    0.7412396416E+00
+Primitive normalization factors:    0.5174956111E+02    0.7697146025E+01    0.1507838033E+01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   10
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.2753000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2842482844E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   11
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00   -0.1315816206E+01   -0.1043128751E+00
+Number of primitives:1
+Exponents:       0.1185000000E+01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2215218498E+01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   12
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.1477198805E+01    0.1699052636E+01    0.8345029971E+00
+Number of primitives:3
+Exponents:       0.1301000000E+02    0.1962000000E+01    0.4446000000E+00
+Contractions:    0.3349872639E-01    0.2348008012E+00    0.8136829579E+00
+Primitive normalization factors:    0.4882228085E+01    0.1181501683E+01    0.3880495517E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   13
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.1477198805E+01    0.1699052636E+01    0.8345029971E+00
+Number of primitives:1
+Exponents:       0.1220000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1471227944E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   14
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.1477198805E+01    0.1699052636E+01    0.8345029971E+00
+Number of primitives:1
+Exponents:       0.7270000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9568813751E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   15
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:    -0.1477198805E+01   -0.1699052636E+01    0.8345029971E+00
+Number of primitives:3
+Exponents:       0.1301000000E+02    0.1962000000E+01    0.4446000000E+00
+Contractions:    0.3349872639E-01    0.2348008012E+00    0.8136829579E+00
+Primitive normalization factors:    0.4882228085E+01    0.1181501683E+01    0.3880495517E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   16
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:    -0.1477198805E+01   -0.1699052636E+01    0.8345029971E+00
+Number of primitives:1
+Exponents:       0.1220000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1471227944E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   17
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:    -0.1477198805E+01   -0.1699052636E+01    0.8345029971E+00
+Number of primitives:1
+Exponents:       0.7270000000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9568813751E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  F
+Atomic target shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   18
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1609120000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1810720493E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   19
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1211210000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1463270705E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   20
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.9232900000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1193750842E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   21
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.7054200000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9755418806E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   22
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.5375200000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.7956206807E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   23
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.4071400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6459782884E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   24
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3057500000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.5211166406E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   25
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2270900000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.4169256360E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   26
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1663400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.3301091901E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   27
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1196700000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2578689551E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   28
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:0
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.8375000000E-02
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1973098216E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   29
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1276470000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1087560319E+00
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   30
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.9979600000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.7995240018E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   31
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.7904100000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.5973867979E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   32
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.6277400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.4478832714E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   33
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.4974500000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.3348704933E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   34
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3920000000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2486266462E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   35
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3062800000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1826368407E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   36
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2365100000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1322062458E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   37
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1796600000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9375713591E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   38
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:1
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1329400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6434424079E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   39
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1276100000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.4484434617E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   40
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1014480000E+00
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.3001480754E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   41
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.8173100000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2056299540E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   42
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.6605200000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1416478241E-01
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   43
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.5328800000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9727717331E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   44
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.4277300000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6621501042E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   45
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3405800000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.4444193432E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   46
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2681500000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2924627831E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   47
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2077800000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1871612791E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   48
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:2
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1569000000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1144852686E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   49
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.9232600000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6917250371E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   50
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.7384500000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.4184821257E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   51
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.5976300000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2599724504E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   52
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.4843100000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1619877532E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   53
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3908600000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1000005093E-02
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   54
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3127400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6055042159E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   55
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2467500000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.3552491625E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   56
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:3
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.1899600000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1972169835E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   57
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.6522800000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.6111236590E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   58
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.5198100000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.3273468440E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   59
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.4179000000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.1796323064E-03
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   60
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.3349900000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.9778516955E-04
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   61
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2656400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.5167047716E-04
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   62
+<---------atomic_orbital_basis_obj:add_shell
+--------->atomic_orbital_basis_obj:add_shell
+Contracted spherical GTO shell data:
+L:4
+Center:     0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Number of primitives:1
+Exponents:       0.2059400000E-01
+Contractions:    0.1000000000E+01
+Primitive normalization factors:    0.2565797475E-04
+Contraction normalization factor:    0.1000000000E+01
+Is non-zero at the boundary:  T
+Atomic continuum shell of type CGTO_shell_data_obj has been added to the atomic basis as shell number:   63
+
+All shells have been added. Mapping of basis function indices to shells and relative indices within shells follows:
+    1     1     1  F
+    2     2     1  F
+    3     3     1  F
+    4     4     1  F
+    5     4     2  F
+    6     4     3  F
+    7     5     1  F
+    8     5     2  F
+    9     5     3  F
+   10     6     1  F
+   11     6     2  F
+   12     6     3  F
+   13     6     4  F
+   14     6     5  F
+   15     7     1  F
+   16     8     1  F
+   17     9     1  F
+   18    10     1  F
+   19    10     2  F
+   20    10     3  F
+   21    11     1  F
+   22    11     2  F
+   23    11     3  F
+   24    12     1  F
+   25    12     2  F
+   26    12     3  F
+   27    12     4  F
+   28    12     5  F
+   29    13     1  F
+   30    14     1  F
+   31    15     1  F
+   32    15     2  F
+   33    15     3  F
+   34    16     1  F
+   35    17     1  F
+   36    18     1  F
+   37    18     2  F
+   38    18     3  F
+   39    19     1  T
+   40    20     1  T
+   41    21     1  T
+   42    22     1  T
+   43    23     1  T
+   44    24     1  T
+   45    25     1  T
+   46    26     1  T
+   47    27     1  T
+   48    28     1  T
+   49    29     1  T
+   50    30     1  T
+   51    30     2  T
+   52    30     3  T
+   53    31     1  T
+   54    31     2  T
+   55    31     3  T
+   56    32     1  T
+   57    32     2  T
+   58    32     3  T
+   59    33     1  T
+   60    33     2  T
+   61    33     3  T
+   62    34     1  T
+   63    34     2  T
+   64    34     3  T
+   65    35     1  T
+   66    35     2  T
+   67    35     3  T
+   68    36     1  T
+   69    36     2  T
+   70    36     3  T
+   71    37     1  T
+   72    37     2  T
+   73    37     3  T
+   74    38     1  T
+   75    38     2  T
+   76    38     3  T
+   77    39     1  T
+   78    39     2  T
+   79    39     3  T
+   80    40     1  T
+   81    40     2  T
+   82    40     3  T
+   83    40     4  T
+   84    40     5  T
+   85    41     1  T
+   86    41     2  T
+   87    41     3  T
+   88    41     4  T
+   89    41     5  T
+   90    42     1  T
+   91    42     2  T
+   92    42     3  T
+   93    42     4  T
+   94    42     5  T
+   95    43     1  T
+   96    43     2  T
+   97    43     3  T
+   98    43     4  T
+   99    43     5  T
+  100    44     1  T
+  101    44     2  T
+  102    44     3  T
+  103    44     4  T
+  104    44     5  T
+  105    45     1  T
+  106    45     2  T
+  107    45     3  T
+  108    45     4  T
+  109    45     5  T
+  110    46     1  T
+  111    46     2  T
+  112    46     3  T
+  113    46     4  T
+  114    46     5  T
+  115    47     1  T
+  116    47     2  T
+  117    47     3  T
+  118    47     4  T
+  119    47     5  T
+  120    48     1  T
+  121    48     2  T
+  122    48     3  T
+  123    48     4  T
+  124    48     5  T
+  125    49     1  T
+  126    49     2  T
+  127    49     3  T
+  128    49     4  T
+  129    49     5  T
+  130    50     1  T
+  131    50     2  T
+  132    50     3  T
+  133    50     4  T
+  134    50     5  T
+  135    50     6  T
+  136    50     7  T
+  137    51     1  T
+  138    51     2  T
+  139    51     3  T
+  140    51     4  T
+  141    51     5  T
+  142    51     6  T
+  143    51     7  T
+  144    52     1  T
+  145    52     2  T
+  146    52     3  T
+  147    52     4  T
+  148    52     5  T
+  149    52     6  T
+  150    52     7  T
+  151    53     1  T
+  152    53     2  T
+  153    53     3  T
+  154    53     4  T
+  155    53     5  T
+  156    53     6  T
+  157    53     7  T
+  158    54     1  T
+  159    54     2  T
+  160    54     3  T
+  161    54     4  T
+  162    54     5  T
+  163    54     6  T
+  164    54     7  T
+  165    55     1  T
+  166    55     2  T
+  167    55     3  T
+  168    55     4  T
+  169    55     5  T
+  170    55     6  T
+  171    55     7  T
+  172    56     1  T
+  173    56     2  T
+  174    56     3  T
+  175    56     4  T
+  176    56     5  T
+  177    56     6  T
+  178    56     7  T
+  179    57     1  T
+  180    57     2  T
+  181    57     3  T
+  182    57     4  T
+  183    57     5  T
+  184    57     6  T
+  185    57     7  T
+  186    58     1  T
+  187    58     2  T
+  188    58     3  T
+  189    58     4  T
+  190    58     5  T
+  191    58     6  T
+  192    58     7  T
+  193    58     8  T
+  194    58     9  T
+  195    59     1  T
+  196    59     2  T
+  197    59     3  T
+  198    59     4  T
+  199    59     5  T
+  200    59     6  T
+  201    59     7  T
+  202    59     8  T
+  203    59     9  T
+  204    60     1  T
+  205    60     2  T
+  206    60     3  T
+  207    60     4  T
+  208    60     5  T
+  209    60     6  T
+  210    60     7  T
+  211    60     8  T
+  212    60     9  T
+  213    61     1  T
+  214    61     2  T
+  215    61     3  T
+  216    61     4  T
+  217    61     5  T
+  218    61     6  T
+  219    61     7  T
+  220    61     8  T
+  221    61     9  T
+  222    62     1  T
+  223    62     2  T
+  224    62     3  T
+  225    62     4  T
+  226    62     5  T
+  227    62     6  T
+  228    62     7  T
+  229    62     8  T
+  230    62     9  T
+  231    63     1  T
+  232    63     2  T
+  233    63     3  T
+  234    63     4  T
+  235    63     5  T
+  236    63     6  T
+  237    63     7  T
+  238    63     8  T
+  239    63     9  T
+<---------atomic_orbital_basis_obj:add_shell
+
+Data for 63 shells of functions read-in.
+
+DATA FILE CLOSED
+<---------basis_data_generic_obj:read
+--------->basis_data_generic_obj:read
+
+Reading basis data from the file: fort.22                                                                                                                                                                                                        
+
+DATA FILE OPENED:fort.22                                                                                                                                                                                                        
+File identifier: DATA FILE version 1.0                                                                                                                                                                                          
+Number of data sets stored on the file: 5
+          Contents of Data Header:
+Header position: 224
+Header: atomic_orbital_basis_obj                                                                                                                                                                                       
+Data set record start, end: 455 20155
+Data set size [Mib]:         0.018787384033203
+Position of the next header: 20155
+          Contents of Data Header:
+Header position: 20155
+Header: molecular_orbital_basis_obj                                                                                                                                                                                    
+Data set record start, end: 20386 336699
+Data set size [Mib]:         0.301659584045410
+Position of the next header: 336699
+          Contents of Data Header:
+Header position: 336699
+Header: molecular_orbital_basis_obj:One-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 336930 1729813
+Data set size [Mib]:         1.328356742858887
+Position of the next header: 1729813
+          Contents of Data Header:
+Header position: 1729813
+Header: molecular_orbital_basis_obj:Two-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 1730044 12465123
+Data set size [Mib]:        10.237769126892090
+Position of the next header: 12465123
+          Contents of Data Header:
+Header position: 12465123
+Header: molecular_orbital_basis_obj:ijkl indices                                                                                                                                                                       
+Data set record start, end: 12465354 23200114
+Data set size [Mib]:        10.237464904785156
+Position of the next header: -1
+--------->geometry_obj:read
+--------->geometry_obj:check
+<---------done:geometry_obj:check
+<---------done:geometry_obj:read
+
+Symmetry data read-in.
+--------->molecular_orbital_basis_obj:init
+--------->symmetry_obj:init
+--------->geometry_obj:check
+<---------done:geometry_obj:check
+Order of IRRs is: 1 A   2 B  
+--------->symmetry_obj:set_symmetry
+Nuclei  1 and  3 are symmetrically equivalent.
+Nuclei  2 and  4 are symmetrically equivalent.
+Nucleus  0 is the scattering center.
+Nucleus  1 O  is symmetrically non-redundant.
+Nucleus  2 H  is symmetrically non-redundant.
+Nucleus  0 sc is symmetrically non-redundant.
+Non-redundant nucleus  1 O  has  1 symmetrically equivalent nuclei.
+     Equivalent nucleus:  3 O 
+Non-redundant nucleus  2 H  has  1 symmetrically equivalent nuclei.
+     Equivalent nucleus:  4 H 
+Non-redundant nucleus  0 sc has  0 symmetrically equivalent nuclei.
+<---------done:symmetry_obj:set_symmetry
+--------->symmetry_obj:check
+<---------done:symmetry_obj:check
+<---------done:symmetry_obj:init
+<---------molecular_orbital_basis_obj:init
+--------->molecular_orbital_basis_obj:add_shell
+Orbital set of type orbital_data_obj has been added to the molecular basis.
+<---------molecular_orbital_basis_obj:add_shell
+--------->molecular_orbital_basis_obj:add_shell
+Orbital set of type orbital_data_obj has been added to the molecular basis.
+
+Orbitals for all symmetries have been supplied. Generating indices and analyzing orbital coefficients...
+<---------molecular_orbital_basis_obj:add_shell
+
+Data for 2 shells of functions read-in.
+
+DATA FILE CLOSED
+<---------basis_data_generic_obj:read
+
+DATA FILE OPENED:fort.22                                                                                                                                                                                                        
+File identifier: DATA FILE version 1.0                                                                                                                                                                                          
+Number of data sets stored on the file: 5
+          Contents of Data Header:
+Header position: 224
+Header: atomic_orbital_basis_obj                                                                                                                                                                                       
+Data set record start, end: 455 20155
+Data set size [Mib]:         0.018787384033203
+Position of the next header: 20155
+          Contents of Data Header:
+Header position: 20155
+Header: molecular_orbital_basis_obj                                                                                                                                                                                    
+Data set record start, end: 20386 336699
+Data set size [Mib]:         0.301659584045410
+Position of the next header: 336699
+          Contents of Data Header:
+Header position: 336699
+Header: molecular_orbital_basis_obj:One-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 336930 1729813
+Data set size [Mib]:         1.328356742858887
+Position of the next header: 1729813
+          Contents of Data Header:
+Header position: 1729813
+Header: molecular_orbital_basis_obj:Two-particle AO->MO transformed integrals for symmetric operators                                                                                                                  
+Data set record start, end: 1730044 12465123
+Data set size [Mib]:        10.237769126892090
+Position of the next header: 12465123
+          Contents of Data Header:
+Header position: 12465123
+Header: molecular_orbital_basis_obj:ijkl indices                                                                                                                                                                       
+Data set record start, end: 12465354 23200114
+Data set size [Mib]:        10.237464904785156
+Position of the next header: -1
+--------->molecular_orbital_basis_obj:read_ijkl_indices
+              12465354                     0                  -131
+               1341843                     1
+<---------molecular_orbital_basis_obj:read_ijkl_indices
+
+DATA FILE CLOSED
+--------->molecular_orbital_basis_obj:calculate_amplitudes
+--------->atomic_orbital_basis_obj:calculate_amplitudes
+Continuum functions will be normalized to the requested radius:     0.130000000000000E+02
+1 39    0.129163549307651E-10
+1 40    0.869168971628052E-08
+1 41    0.920246476541894E-06
+1 42    0.298751418592197E-04
+1 43    0.415992087316326E-03
+1 44    0.305866506970548E-02
+1 45    0.136909763809320E-01
+1 46    0.414187528636648E-01
+1 47    0.919659687972610E-01
+1 48    0.160855276061948E+00
+1 49    0.236630738244802E+00
+2 50    0.160929193921313E-07
+3 51    0.160929193921313E-07
+4 52    0.160929193921313E-07
+2 53    0.130965983145220E-05
+3 54    0.130965983145220E-05
+4 55    0.130965983145220E-05
+2 56    0.326521494461927E-04
+3 57    0.326521494461927E-04
+4 58    0.326521494461927E-04
+2 59    0.382604396367762E-03
+3 60    0.382604396367762E-03
+4 61    0.382604396367762E-03
+2 62    0.258664037961054E-02
+3 63    0.258664037961054E-02
+4 64    0.258664037961054E-02
+2 65    0.114124818390988E-01
+3 66    0.114124818390988E-01
+4 67    0.114124818390988E-01
+2 68    0.357070463126553E-01
+3 69    0.357070463126553E-01
+4 70    0.357070463126553E-01
+2 71    0.842943427785472E-01
+3 72    0.842943427785472E-01
+4 73    0.842943427785472E-01
+2 74    0.158329168758807E+00
+3 75    0.158329168758807E+00
+4 76    0.158329168758807E+00
+2 77    0.249415439916051E+00
+3 78    0.249415439916051E+00
+4 79    0.249415439916051E+00
+5 80    0.672393954286141E-07
+6 81    0.672393954286141E-07
+7 82    0.672393954286141E-07
+8 83    0.672393954286141E-07
+9 84    0.672393954286141E-07
+5 85    0.374482678326578E-05
+6 86    0.374482678326578E-05
+7 87    0.374482678326578E-05
+8 88    0.374482678326578E-05
+9 89    0.374482678326578E-05
+5 90    0.718334783660670E-04
+6 91    0.718334783660670E-04
+7 92    0.718334783660670E-04
+8 93    0.718334783660670E-04
+9 94    0.718334783660670E-04
+5 95    0.700200953784949E-03
+6 96    0.700200953784949E-03
+7 97    0.700200953784949E-03
+8 98    0.700200953784949E-03
+9 99    0.700200953784949E-03
+5 100    0.415765867065919E-02
+6 101    0.415765867065919E-02
+7 102    0.415765867065919E-02
+8 103    0.415765867065919E-02
+9 104    0.415765867065919E-02
+5 105    0.167333095802973E-01
+6 106    0.167333095802973E-01
+7 107    0.167333095802973E-01
+8 108    0.167333095802973E-01
+9 109    0.167333095802973E-01
+5 110    0.490226658350281E-01
+6 111    0.490226658350281E-01
+7 112    0.490226658350281E-01
+8 113    0.490226658350281E-01
+9 114    0.490226658350281E-01
+5 115    0.110256710668750E+00
+6 116    0.110256710668750E+00
+7 117    0.110256710668750E+00
+8 118    0.110256710668750E+00
+9 119    0.110256710668750E+00
+5 120    0.199697042418395E+00
+6 121    0.199697042418395E+00
+7 122    0.199697042418395E+00
+8 123    0.199697042418395E+00
+9 124    0.199697042418395E+00
+5 125    0.306292900760683E+00
+6 126    0.306292900760683E+00
+7 127    0.306292900760683E+00
+8 128    0.306292900760683E+00
+9 129    0.306292900760683E+00
+10 130    0.443021896417668E-04
+11 131    0.443021896417668E-04
+12 132    0.443021896417668E-04
+13 133    0.443021896417668E-04
+14 134    0.443021896417668E-04
+15 135    0.443021896417668E-04
+16 136    0.443021896417668E-04
+10 137    0.608969878700100E-03
+11 138    0.608969878700100E-03
+12 139    0.608969878700100E-03
+13 140    0.608969878700100E-03
+14 141    0.608969878700100E-03
+15 142    0.608969878700100E-03
+16 143    0.608969878700100E-03
+10 144    0.408702030688329E-02
+11 145    0.408702030688329E-02
+12 146    0.408702030688329E-02
+13 147    0.408702030688329E-02
+14 148    0.408702030688329E-02
+15 149    0.408702030688329E-02
+16 150    0.408702030688329E-02
+10 151    0.172867473133454E-01
+11 152    0.172867473133454E-01
+12 153    0.172867473133454E-01
+13 154    0.172867473133454E-01
+14 155    0.172867473133454E-01
+15 156    0.172867473133454E-01
+16 157    0.172867473133454E-01
+10 158    0.518159131678940E-01
+11 159    0.518159131678940E-01
+12 160    0.518159131678940E-01
+13 161    0.518159131678940E-01
+14 162    0.518159131678940E-01
+15 163    0.518159131678940E-01
+16 164    0.518159131678940E-01
+10 165    0.118085649404397E+00
+11 166    0.118085649404397E+00
+12 167    0.118085649404397E+00
+13 168    0.118085649404397E+00
+14 169    0.118085649404397E+00
+15 170    0.118085649404397E+00
+16 171    0.118085649404397E+00
+10 172    0.215957380019170E+00
+11 173    0.215957380019170E+00
+12 174    0.215957380019170E+00
+13 175    0.215957380019170E+00
+14 176    0.215957380019170E+00
+15 177    0.215957380019170E+00
+16 178    0.215957380019170E+00
+10 179    0.334185529128717E+00
+11 180    0.334185529128717E+00
+12 181    0.334185529128717E+00
+13 182    0.334185529128717E+00
+14 183    0.334185529128717E+00
+15 184    0.334185529128717E+00
+16 185    0.334185529128717E+00
+17 186    0.437393109142841E-02
+18 187    0.437393109142841E-02
+19 188    0.437393109142841E-02
+20 189    0.437393109142841E-02
+21 190    0.437393109142841E-02
+22 191    0.437393109142841E-02
+23 192    0.437393109142841E-02
+24 193    0.437393109142841E-02
+25 194    0.437393109142841E-02
+17 195    0.219823568409733E-01
+18 196    0.219823568409733E-01
+19 197    0.219823568409733E-01
+20 198    0.219823568409733E-01
+21 199    0.219823568409733E-01
+22 200    0.219823568409733E-01
+23 201    0.219823568409733E-01
+24 202    0.219823568409733E-01
+25 203    0.219823568409733E-01
+17 204    0.676114528467094E-01
+18 205    0.676114528467094E-01
+19 206    0.676114528467094E-01
+20 207    0.676114528467094E-01
+21 208    0.676114528467094E-01
+22 209    0.676114528467094E-01
+23 210    0.676114528467094E-01
+24 211    0.676114528467094E-01
+25 212    0.676114528467094E-01
+17 213    0.150708119614671E+00
+18 214    0.150708119614671E+00
+19 215    0.150708119614671E+00
+20 216    0.150708119614671E+00
+21 217    0.150708119614671E+00
+22 218    0.150708119614671E+00
+23 219    0.150708119614671E+00
+24 220    0.150708119614671E+00
+25 221    0.150708119614671E+00
+17 222    0.265749871637628E+00
+18 223    0.265749871637628E+00
+19 224    0.265749871637628E+00
+20 225    0.265749871637628E+00
+21 226    0.265749871637628E+00
+22 227    0.265749871637628E+00
+23 228    0.265749871637628E+00
+24 229    0.265749871637628E+00
+25 230    0.265749871637628E+00
+17 231    0.396964869368760E+00
+18 232    0.396964869368760E+00
+19 233    0.396964869368760E+00
+20 234    0.396964869368760E+00
+21 235    0.396964869368760E+00
+22 236    0.396964869368760E+00
+23 237    0.396964869368760E+00
+24 238    0.396964869368760E+00
+25 239    0.396964869368760E+00
+<---------atomic_orbital_basis_obj:calculate_amplitudes
+1 7 1    -0.338348442877116E-01
+1 7 3     0.175653331120479E-01
+1 7 5     0.236405174317956E-01
+1 7 7    -0.999384620813152E-02
+1 7 9    -0.489440695133133E-02
+1 7 11     0.514770285974487E-02
+1 7 13    -0.237736447967697E-02
+1 7 15     0.689341251350541E-03
+1 7 17     0.306228585351847E-04
+1 7 19    -0.271212231893117E-04
+1 7 21    -0.821133097695949E-04
+1 7 23    -0.463772140710643E-04
+1 7 25    -0.113036289967840E-02
+1 8 1     0.529490563651346E-03
+1 8 3     0.419847827250281E-01
+1 8 5    -0.400810376311133E-01
+1 8 7     0.625500616972777E-02
+1 8 9    -0.448545212001194E-02
+1 8 11    -0.137774514491516E-02
+1 8 13     0.350118067386182E-02
+1 8 15     0.392263798532641E-02
+1 8 17    -0.409014177291637E-03
+1 8 19    -0.204357729775720E-03
+1 8 21    -0.283402512813490E-04
+1 8 23    -0.773866799415630E-04
+1 8 25     0.106891328958323E-03
+1 9 1    -0.561121574309674E-02
+1 9 3    -0.221146367549323E-02
+1 9 5    -0.170340975251232E-01
+1 9 7    -0.481185018131589E-01
+1 9 9     0.431119363986798E-01
+1 9 11     0.232268734891076E-02
+1 9 13    -0.117109053646657E-02
+1 9 15     0.227923611313472E-03
+1 9 17    -0.159091771012919E-03
+1 9 19    -0.776401309494278E-04
+1 9 21     0.417266276900879E-04
+1 9 23     0.708285534025682E-04
+1 9 25    -0.257283475755891E-03
+1 10 1    -0.855456554743277E-02
+1 10 3     0.951279114813377E-02
+1 10 5     0.161918754156205E-01
+1 10 7     0.446639108108845E-01
+1 10 9     0.562473696708383E-01
+1 10 11    -0.411283768642191E-02
+1 10 13     0.477816069031437E-02
+1 10 15     0.263106566278508E-02
+1 10 17     0.243093668529141E-03
+1 10 19     0.103481316369280E-03
+1 10 21     0.422124371371999E-03
+1 10 23     0.589639117012277E-03
+1 10 25     0.131772086931343E-02
+1 11 1    -0.121543043682547E-01
+1 11 3    -0.887930919571165E-02
+1 11 5    -0.185373292195468E-01
+1 11 7     0.145643790213588E-01
+1 11 9     0.247692792610408E-02
+1 11 11     0.785252170084148E-01
+1 11 13    -0.412923678334141E-01
+1 11 15    -0.335347236059846E-02
+1 11 17    -0.429211787093852E-03
+1 11 19    -0.231623033139574E-03
+1 11 21    -0.102396251034164E-03
+1 11 23    -0.377866609089393E-04
+1 11 25    -0.221960167100119E-02
+1 12 1     0.159086608422403E-02
+1 12 3    -0.730037478388360E-03
+1 12 5     0.145181256755682E-02
+1 12 7    -0.154648568511505E-02
+1 12 9    -0.977778602901648E-03
+1 12 11     0.431869183047656E-01
+1 12 13     0.824802577755386E-01
+1 12 15    -0.293452604742818E-01
+1 12 17     0.325530604153935E-04
+1 12 19     0.257467891922783E-04
+1 12 21     0.375652516018147E-05
+1 12 23    -0.729119379469991E-05
+1 12 25     0.200839869231644E-03
+1 13 1     0.235764439130762E-02
+1 13 3    -0.485520882411289E-02
+1 13 5     0.246899369917741E-02
+1 13 7    -0.203131395615610E-02
+1 13 9    -0.211679571185200E-02
+1 13 11     0.173716565858243E-01
+1 13 13     0.240838891164702E-01
+1 13 15     0.935606234606198E-01
+1 13 17     0.967914455534375E-04
+1 13 19     0.732101557182043E-04
+1 13 21     0.675680311060852E-05
+1 13 23    -0.186560169965466E-05
+1 13 25     0.201114358214821E-03
+1 14 1     0.887855541670197E-02
+1 14 3     0.499694766584904E-02
+1 14 5     0.744529144087365E-02
+1 14 7    -0.431258774508769E-02
+1 14 9    -0.838372572838097E-04
+1 14 11     0.665359465469358E-02
+1 14 13    -0.428939318675558E-02
+1 14 15    -0.497675790716267E-03
+1 14 17     0.134691497314603E-01
+1 14 19     0.809948472333461E-02
+1 14 21     0.744570669739924E-02
+1 14 23     0.389042281987987E-02
+1 14 25     0.158026265906730E+00
+1 15 1     0.208142537374539E-03
+1 15 3     0.129240344606666E-03
+1 15 5    -0.384716003189585E-03
+1 15 7    -0.625535219396926E-04
+1 15 9    -0.152043749928900E-04
+1 15 11     0.121261660060268E-03
+1 15 13    -0.719086269269460E-04
+1 15 15    -0.210901239322901E-04
+1 15 17     0.130778712835122E+00
+1 15 19    -0.912502110987047E-01
+1 15 21     0.208750046018002E-01
+1 15 23    -0.665727265005672E-02
+1 15 25    -0.730858849352235E-02
+1 16 1     0.806518967444140E-04
+1 16 3     0.248916438094396E-04
+1 16 5    -0.457781747682757E-04
+1 16 7    -0.962911381407374E-04
+1 16 9    -0.148580945695746E-03
+1 16 11     0.182353414992783E-04
+1 16 13    -0.729710039149876E-05
+1 16 15    -0.450800411231425E-06
+1 16 17     0.101494798312240E-01
+1 16 19    -0.196807212432447E-01
+1 16 21    -0.112635041601447E+00
+1 16 23     0.113049931337041E+00
+1 16 25     0.265459319764829E-02
+1 17 1    -0.773086191570853E-03
+1 17 3    -0.426868119517025E-03
+1 17 5     0.471996531889242E-04
+1 17 7     0.540916151967535E-03
+1 17 9     0.536611739425140E-03
+1 17 11    -0.372893595345475E-03
+1 17 13     0.246908827675542E-03
+1 17 15     0.644143192627968E-04
+1 17 17    -0.407317573663292E-01
+1 17 19    -0.732173943054177E-01
+1 17 21    -0.921553650897106E-01
+1 17 23    -0.101239037471460E+00
+1 17 25     0.142521016118624E-01
+1 18 1    -0.102596438910643E-03
+1 18 3     0.116345654991479E-03
+1 18 5    -0.663336550291018E-03
+1 18 7     0.228189929197576E-03
+1 18 9     0.378750781747967E-03
+1 18 11     0.392311250021944E-04
+1 18 13    -0.419718635005565E-04
+1 18 15    -0.466167612334552E-04
+1 18 17     0.831426214168225E-01
+1 18 19     0.108737501686856E+00
+1 18 21    -0.655071980535517E-01
+1 18 23    -0.536084451015413E-01
+1 18 25    -0.819161387579714E-02
+1 19 1     0.972571360507753E-01
+1 19 3     0.396007899055458E-01
+1 19 5     0.634598797653178E-01
+1 19 7    -0.239425037560713E-01
+1 19 9     0.146007788030124E-01
+1 19 11     0.379636287112469E-01
+1 19 13    -0.238003554787919E-01
+1 19 15    -0.202969590858685E-02
+1 19 17    -0.232628922372430E-02
+1 19 19    -0.151189865643503E-02
+1 19 21    -0.224388600803056E-02
+1 19 23    -0.185135091272917E-02
+1 19 25    -0.250013591030792E-01
+1 20 1    -0.797340002852422E-01
+1 20 3     0.357016395972984E-01
+1 20 5     0.909403484680485E-01
+1 20 7    -0.546575046317858E-01
+1 20 9    -0.279551229505027E-01
+1 20 11     0.304566166941868E-01
+1 20 13    -0.163995517479303E-01
+1 20 15     0.809627665559331E-03
+1 20 17     0.140194340135344E-03
+1 20 19    -0.198579056806090E-03
+1 20 21    -0.738315928225716E-03
+1 20 23    -0.573927235326494E-03
+1 20 25    -0.906160563214008E-02
+1 21 1    -0.865001750398696E-02
+1 21 3    -0.129040450383538E-01
+1 21 5    -0.582091320632223E-01
+1 21 7    -0.133513114862502E+00
+1 21 9     0.111232204553879E+00
+1 21 11     0.331094072612423E-02
+1 21 13    -0.212233256807795E-02
+1 21 15    -0.618922105421896E-04
+1 21 17    -0.781996942766298E-03
+1 21 19    -0.347975392303541E-03
+1 21 21     0.193880408439611E-03
+1 21 23     0.257690142078150E-03
+1 21 25    -0.397683559875270E-03
+1 22 1     0.251807364674832E-02
+1 22 3     0.119430918657810E+00
+1 22 5    -0.108315084455578E+00
+1 22 7    -0.184319177924797E-01
+1 22 9    -0.585167508202144E-01
+1 22 11     0.169644517308489E-01
+1 22 13     0.238328331516428E-02
+1 22 15     0.180543687751652E-01
+1 22 17    -0.228814076596478E-02
+1 22 19    -0.121068679540708E-02
+1 22 21    -0.872163953321118E-03
+1 22 23    -0.122423495088265E-02
+1 22 25    -0.445310364676457E-02
+1 23 1     0.384075693301065E-01
+1 23 3    -0.691097897139854E-01
+1 23 5    -0.240695066879940E-01
+1 23 7    -0.980201280922857E-01
+1 23 9    -0.140895036044831E+00
+1 23 11     0.107365104464894E-01
+1 23 13    -0.222851072889142E-01
+1 23 15    -0.193858338649307E-01
+1 23 17    -0.499715696095835E-03
+1 23 19    -0.132792410337639E-03
+1 23 21    -0.153200614979361E-02
+1 23 23    -0.210650601542867E-02
+1 23 25    -0.458299675736343E-02
+1 24 1     0.131938592163711E-01
+1 24 3     0.370169939963747E-01
+1 24 5     0.621987905651894E-01
+1 24 7    -0.570926526909794E-01
+1 24 9    -0.196229416928141E-01
+1 24 11    -0.167513006305455E+00
+1 24 13     0.104603453303443E+00
+1 24 15     0.164746419784173E-01
+1 24 17     0.212461381035626E-02
+1 24 19     0.111622454855287E-02
+1 24 21     0.324955306491321E-03
+1 24 23     0.259071504900446E-04
+1 24 25     0.101862210764050E-01
+1 25 1    -0.105454038754114E-02
+1 25 3     0.211360877680149E-02
+1 25 5    -0.649140934791509E-03
+1 25 7     0.218152962995228E-02
+1 25 9     0.216066142027260E-02
+1 25 11    -0.110136960651008E+00
+1 25 13    -0.190814835540531E+00
+1 25 15     0.108980118653342E+00
+1 25 17    -0.546971741157877E-05
+1 25 19    -0.235724626089024E-04
+1 25 21     0.992142778076380E-05
+1 25 23     0.346533102586108E-04
+1 25 25    -0.291928052564327E-03
+1 26 1     0.332175563578689E-02
+1 26 3    -0.238927097414186E-01
+1 26 5     0.661000654371776E-02
+1 26 7    -0.648787174195129E-02
+1 26 9    -0.811666871093790E-02
+1 26 11     0.727206409122085E-01
+1 26 13     0.825612993534174E-01
+1 26 15     0.218921004731209E+00
+1 26 17     0.389607848908863E-03
+1 26 19     0.314568157943330E-03
+1 26 21     0.412565028432609E-04
+1 26 23     0.174040985510761E-04
+1 26 25     0.101964269189461E-02
+1 27 1     0.297194887394635E-01
+1 27 3    -0.407447321437781E-01
+1 27 5    -0.796793366865253E-01
+1 27 7     0.522846686290542E-01
+1 27 9     0.242321257740451E-02
+1 27 11    -0.105553467093581E+00
+1 27 13     0.678007552266425E-01
+1 27 15     0.936122009642133E-02
+1 27 17    -0.249471151822212E-01
+1 27 19    -0.151486863237071E-01
+1 27 21    -0.157833309043768E-01
+1 27 23    -0.127884459865468E-01
+1 27 25    -0.219378332268098E+00
+1 28 1     0.133859269971820E-04
+1 28 3    -0.109866392932081E-03
+1 28 5    -0.676409980863102E-03
+1 28 7     0.159619611917035E-04
+1 28 9    -0.788785837189535E-05
+1 28 11     0.530162443059974E-04
+1 28 13     0.144689445285022E-04
+1 28 15     0.377367818948834E-04
+1 28 17     0.196639726026343E+00
+1 28 19    -0.285542226561735E+00
+1 28 21     0.994044025067775E-01
+1 28 23    -0.677378893339360E-01
+1 28 25    -0.544296207009077E-02
+1 29 1    -0.430247233108791E-04
+1 29 3    -0.270163344141843E-04
+1 29 5    -0.200149869404605E-03
+1 29 7    -0.132403202871929E-03
+1 29 9    -0.238668700527576E-03
+1 29 11     0.150310870681995E-04
+1 29 13     0.123426305622411E-04
+1 29 15     0.174567955800308E-04
+1 29 17     0.512490969002039E-01
+1 29 19    -0.110393514028315E+00
+1 29 21    -0.272965977961278E+00
+1 29 23     0.212829935255262E+00
+1 29 25     0.898578635443173E-02
+1 30 1     0.200052517613564E-03
+1 30 3     0.887765558824778E-03
+1 30 5    -0.540729998892829E-03
+1 30 7    -0.184337295244430E-02
+1 30 9    -0.237105657045294E-02
+1 30 11     0.944747605894626E-03
+1 30 13    -0.612899278712736E-03
+1 30 15    -0.179682099589678E-03
+1 30 17     0.893556413563883E-01
+1 30 19     0.677431539137880E-01
+1 30 21     0.205015672767924E+00
+1 30 23     0.278654564563681E+00
+1 30 25    -0.494958063488495E-01
+1 31 1    -0.587251596328104E-03
+1 31 3     0.304468735282287E-03
+1 31 5    -0.370124005339279E-02
+1 31 7     0.749251979909175E-03
+1 31 9     0.109077592032648E-02
+1 31 11     0.138660656739903E-03
+1 31 13    -0.117867473674874E-03
+1 31 15    -0.155932569631208E-03
+1 31 17     0.289524567224396E+00
+1 31 19     0.189145645998904E+00
+1 31 21    -0.864315943481466E-01
+1 31 23    -0.810695858889995E-01
+1 31 25    -0.329457948167138E-01
+1 32 1    -0.504188507277098E-01
+1 32 3     0.299458684047923E-01
+1 32 5     0.699074964295887E-01
+1 32 7    -0.428224686751980E-01
+1 32 9     0.649607327762140E-03
+1 32 11     0.757726555579976E-01
+1 32 13    -0.478773001942869E-01
+1 32 15    -0.590100303385125E-02
+1 32 17    -0.313222364269746E-01
+1 32 19    -0.196551712001580E-01
+1 32 21    -0.236512423684807E-01
+1 32 23    -0.209439278817853E-01
+1 32 25    -0.286642891177665E+00
+1 33 1     0.254874610682107E+00
+1 33 3     0.279321117191124E-01
+1 33 5     0.803869117275220E-01
+1 33 7    -0.134823134218882E-01
+1 33 9     0.868361744969824E-01
+1 33 11     0.578163982951253E-01
+1 33 13    -0.340708307361896E-01
+1 33 15    -0.126476675090037E-02
+1 33 17    -0.187448637376418E-02
+1 33 19    -0.154366137645103E-02
+1 33 21    -0.300558876856794E-02
+1 33 23    -0.230012222997449E-02
+1 33 25    -0.344561061745713E-01
+1 34 1     0.175752598065818E-01
+1 34 3     0.199242512020887E-01
+1 34 5     0.166766283750803E+00
+1 34 7     0.225472157375815E+00
+1 34 9    -0.171245752026723E+00
+1 34 11     0.396836770318987E-02
+1 34 13    -0.188217319583771E-02
+1 34 15    -0.594295890688546E-03
+1 34 17     0.287353530232032E-02
+1 34 19     0.120335891650045E-02
+1 34 21    -0.574034964131520E-03
+1 34 23    -0.527532723255488E-03
+1 34 25    -0.158328718595017E-02
+1 35 1     0.573949936029502E-01
+1 35 3     0.873072690204111E-01
+1 35 5    -0.259605904222159E+00
+1 35 7     0.128734218869251E+00
+1 35 9    -0.618660115098768E-01
+1 35 11     0.775360832921493E-01
+1 35 13    -0.414932453975532E-01
+1 35 15     0.619057855726082E-02
+1 35 17    -0.758374699518940E-02
+1 35 19    -0.385976494715211E-02
+1 35 21    -0.197947500000302E-02
+1 35 23    -0.216464561291669E-02
+1 35 25    -0.236380920369622E-01
+1 36 1     0.103234957718224E-01
+1 36 3     0.252219365743334E+00
+1 36 5     0.403732456796014E-01
+1 36 7    -0.131248181582111E+00
+1 36 9    -0.990153277955286E-01
+1 36 11    -0.275370332990279E-01
+1 36 13     0.391077387878206E-01
+1 36 15     0.324959642366843E-01
+1 36 17     0.128668516766129E-02
+1 36 19     0.333367872302105E-03
+1 36 21    -0.140897935099495E-02
+1 36 23    -0.222803808773396E-02
+1 36 25     0.331827628193376E-02
+1 37 1     0.799397999432482E-01
+1 37 3    -0.120974780318148E+00
+1 37 5    -0.352833528094342E-01
+1 37 7    -0.156889441516516E+00
+1 37 9    -0.253388363505554E+00
+1 37 11     0.310602745687399E-01
+1 37 13    -0.365209001055529E-01
+1 37 15    -0.224712738054182E-01
+1 37 17    -0.119046697501611E-02
+1 37 19    -0.478189692732861E-03
+1 37 21    -0.348506609850184E-02
+1 37 23    -0.454124049844165E-02
+1 37 25    -0.136410070206220E-01
+1 38 1     0.903274184908410E-03
+1 38 3     0.278310478808771E-02
+1 38 5     0.941490800286491E-03
+1 38 7     0.121027830226780E-02
+1 38 9     0.142882853124711E-02
+1 38 11    -0.191645773417954E+00
+1 38 13    -0.319508324661919E+00
+1 38 15     0.201637855284623E+00
+1 38 17     0.680135772698924E-04
+1 38 19     0.319064513458480E-05
+1 38 21    -0.163693167712117E-04
+1 38 23     0.615311635724525E-05
+1 38 25    -0.415193007616301E-03
+1 39 1     0.858628174848916E-02
+1 39 3     0.384699875360905E-01
+1 39 5    -0.424905203724183E-02
+1 39 7     0.324254162832055E-02
+1 39 9     0.509028189872707E-02
+1 39 11    -0.148299125119815E+00
+1 39 13    -0.143789823738290E+00
+1 39 15    -0.369196846341345E+00
+1 39 17    -0.458902779025205E-03
+1 39 19    -0.461165004175047E-03
+1 39 21    -0.321926623906203E-03
+1 39 23    -0.365668392832004E-03
+1 39 25    -0.258623459120358E-02
+1 40 1    -0.946848306923161E-01
+1 40 3     0.188480087233341E-01
+1 40 5     0.458741945606592E-01
+1 40 7    -0.226193574862827E-01
+1 40 9     0.230346846384585E-01
+1 40 11     0.332792901836020E+00
+1 40 13    -0.228235206745248E+00
+1 40 15    -0.455042110529950E-01
+1 40 17     0.425226112787208E-02
+1 40 19     0.249078311126251E-02
+1 40 21     0.338797743150845E-02
+1 40 23     0.332142651632204E-02
+1 40 25     0.367437528038906E-01
+1 41 1     0.356227875365851E+00
+1 41 3    -0.395294401638514E-02
+1 41 5     0.277096067809871E-01
+1 41 7     0.139377402338188E-01
+1 41 9     0.865277788472877E-01
+1 41 11     0.615486066420783E-01
+1 41 13    -0.349411043249686E-01
+1 41 15     0.290453776762031E-03
+1 41 17     0.157480682427318E-01
+1 41 19     0.110928101588446E-01
+1 41 21     0.143026201300840E-01
+1 41 23     0.882352013663648E-02
+1 41 25     0.198443816684201E+00
+1 42 1     0.334966629537271E-03
+1 42 3     0.498692801445356E-03
+1 42 5     0.113726192795121E-02
+1 42 7    -0.108752888591289E-04
+1 42 9     0.123897156420029E-03
+1 42 11    -0.183630847445866E-04
+1 42 13    -0.691473577637958E-04
+1 42 15    -0.929721151462731E-04
+1 42 17    -0.223757634660362E+00
+1 42 19     0.388999256918207E+00
+1 42 21    -0.317869597293471E+00
+1 42 23     0.213168868727086E+00
+1 42 25     0.787458449263433E-02
+1 43 1     0.465541925060436E-03
+1 43 3    -0.394623630183143E-03
+1 43 5    -0.894424951356983E-03
+1 43 7    -0.202034509803725E-04
+1 43 9    -0.203357209770145E-03
+1 43 11    -0.121632731745296E-04
+1 43 13     0.838321505073734E-04
+1 43 15     0.928760124606182E-04
+1 43 17     0.157839921464435E+00
+1 43 19    -0.349832856280284E+00
+1 43 21    -0.369527280481510E+00
+1 43 23     0.252269028919366E+00
+1 43 25     0.211142321006730E-01
+1 44 1    -0.782818848435262E-02
+1 44 3    -0.170174819308671E-02
+1 44 5     0.365195353804341E-02
+1 44 7     0.394420165161096E-02
+1 44 9     0.607665714297603E-02
+1 44 11    -0.123930048017377E-02
+1 44 13     0.768846671766196E-03
+1 44 15     0.207205150127261E-03
+1 44 17    -0.134080398836383E+00
+1 44 19    -0.712880934012474E-01
+1 44 21    -0.307727549485170E+00
+1 44 23    -0.472554622583050E+00
+1 44 25     0.819847634094198E-01
+1 45 1     0.213328854562493E-02
+1 45 3    -0.429921770980377E-04
+1 45 5     0.180940137260440E-01
+1 45 7    -0.244914025876571E-02
+1 45 9    -0.334906343661140E-02
+1 45 11     0.339896078639710E-04
+1 45 13    -0.426725329127264E-04
+1 45 15     0.151735258995459E-03
+1 45 17    -0.502678703837040E+00
+1 45 19    -0.260883159871264E+00
+1 45 21     0.112312183679602E+00
+1 45 23     0.114580517944858E+00
+1 45 25     0.327430452952929E-01
+1 46 1    -0.115132491498906E+00
+1 46 3     0.779969540392476E-02
+1 46 5    -0.437781985153173E-01
+1 46 7     0.134887707188570E-02
+1 46 9    -0.706434778989561E-01
+1 46 11    -0.480391337295903E-01
+1 46 13     0.280717155068754E-01
+1 46 15     0.118948603057598E-02
+1 46 17     0.399033241874088E-01
+1 46 19     0.294036839592576E-01
+1 46 21     0.524848128584224E-01
+1 46 23     0.471834343955177E-01
+1 46 25     0.545417580803256E+00
+1 47 1     0.182940246214725E-01
+1 47 3     0.124304280587820E-01
+1 47 5     0.232043004976544E+00
+1 47 7     0.351582231467927E+00
+1 47 9    -0.240147984639252E+00
+1 47 11     0.945671097226634E-02
+1 47 13    -0.542973431908876E-02
+1 47 15    -0.157039022600889E-02
+1 47 17     0.997510805035257E-02
+1 47 19     0.410371466250651E-02
+1 47 21    -0.235061544986306E-02
+1 47 23    -0.203425937119048E-02
+1 47 25    -0.108791142982345E-01
+1 48 1     0.360224876640670E-01
+1 48 3    -0.449768418071516E-02
+1 48 5    -0.425809866421662E+00
+1 48 7     0.195406031431040E+00
+1 48 9    -0.113016848570290E+00
+1 48 11     0.421618944431067E-01
+1 48 13    -0.283391923281875E-01
+1 48 15    -0.263793082687441E-02
+1 48 17    -0.240224219514368E-01
+1 48 19    -0.111900412158207E-01
+1 48 21    -0.316871109894760E-02
+1 48 23    -0.413187680236370E-02
+1 48 25    -0.449611398334114E-01
+1 49 1     0.842527631796654E-02
+1 49 3    -0.441670084245571E+00
+1 49 5     0.966562744293735E-02
+1 49 7    -0.457644909025377E-01
+1 49 9    -0.836672596093401E-01
+1 49 11    -0.656550049048045E-02
+1 49 13    -0.247264305786745E-01
+1 49 15    -0.378983447715082E-01
+1 49 17     0.128690710551394E-02
+1 49 19     0.178382527266436E-02
+1 49 21     0.218436998984192E-03
+1 49 23     0.309817142200413E-03
+1 49 25     0.332419259219178E-02
+1 50 1     0.789419931529043E-01
+1 50 3     0.866961668154022E-01
+1 50 5    -0.551808257320059E-02
+1 50 7    -0.275030511531460E+00
+1 50 9    -0.393953913914441E+00
+1 50 11     0.275672148970052E-01
+1 50 13    -0.152700587870431E-01
+1 50 15     0.325665122700962E-02
+1 50 17    -0.712530109481237E-03
+1 50 19    -0.930023485096179E-03
+1 50 21    -0.113479762706698E-01
+1 50 23    -0.149073485228549E-01
+1 50 25    -0.379396127886685E-01
+1 51 1     0.127187156778941E-02
+1 51 3     0.249011095176773E-02
+1 51 5     0.177144567154584E-02
+1 51 7     0.970220326355317E-03
+1 51 9     0.133850483657719E-02
+1 51 11    -0.272013678960346E+00
+1 51 13    -0.456591989180227E+00
+1 51 15     0.300289234041700E+00
+1 51 17     0.173296923881542E-03
+1 51 19     0.399210192130415E-04
+1 51 21    -0.332497853227839E-04
+1 51 23    -0.509682907033372E-05
+1 51 25    -0.555025045943963E-03
+1 52 1     0.181276763411931E-01
+1 52 3     0.419555743243408E-01
+1 52 5    -0.261961304081817E-02
+1 52 7     0.180687889666161E-02
+1 52 9     0.370016406041616E-02
+1 52 11    -0.230437499566877E+00
+1 52 13    -0.208301899021217E+00
+1 52 15    -0.525564692613418E+00
+1 52 17    -0.458235545213639E-03
+1 52 19    -0.640927595254380E-03
+1 52 21    -0.711458651212020E-03
+1 52 23    -0.855532822855177E-03
+1 52 25    -0.479866978097464E-02
+1 53 1    -0.994129595602461E-01
+1 53 3     0.864802619977294E-02
+1 53 5     0.308957746423170E-01
+1 53 7    -0.123495022949780E-01
+1 53 9     0.223977166595533E-01
+1 53 11     0.487809964277305E+00
+1 53 13    -0.344661871942551E+00
+1 53 15    -0.821144478161616E-01
+1 53 17     0.337924396851475E-02
+1 53 19     0.206255520071749E-02
+1 53 21     0.371877555761763E-02
+1 53 23     0.391873764774020E-02
+1 53 25     0.354309035034223E-01
+1 54 1    -0.521726690300911E+00
+1 54 3    -0.191848413858451E-04
+1 54 5    -0.210694102846709E-01
+1 54 7    -0.163765233668973E-01
+1 54 9    -0.593999668145256E-01
+1 54 11    -0.893416960561494E-01
+1 54 13     0.492540971441629E-01
+1 54 15    -0.291920480647443E-02
+1 54 17    -0.300361590171705E-02
+1 54 19    -0.184888150417843E-02
+1 54 21    -0.920024690169015E-03
+1 54 23     0.241734602719975E-03
+1 54 25    -0.240934251666777E-01
+1 55 1    -0.497872157730947E-02
+1 55 3    -0.186968829088636E-01
+1 55 5    -0.288515090859684E+00
+1 55 7    -0.467286695687185E+00
+1 55 9     0.331770499561288E+00
+1 55 11    -0.476539827611194E-02
+1 55 13     0.270560826585146E-02
+1 55 15     0.163592576088055E-02
+1 55 17     0.137852240701285E-01
+1 55 19     0.586363976641102E-02
+1 55 21    -0.286381877152331E-02
+1 55 23    -0.270652022429546E-02
+1 55 25    -0.731528268482563E-02
+1 56 1     0.199642635407271E-01
+1 56 3    -0.280011031995619E-02
+1 56 5    -0.572354807083503E+00
+1 56 7     0.216939894054176E+00
+1 56 9    -0.187683178579025E+00
+1 56 11     0.304571764152031E-01
+1 56 13    -0.224675275209379E-01
+1 56 15    -0.296378532838188E-02
+1 56 17     0.387089942184077E-01
+1 56 19     0.175893882224710E-01
+1 56 21     0.410803035475555E-02
+1 56 23     0.639718237479682E-02
+1 56 25     0.540587012712326E-01
+1 57 1    -0.292612988204321E-02
+1 57 3     0.604306571589631E+00
+1 57 5    -0.989563616324393E-02
+1 57 7    -0.276407072497759E-01
+1 57 9    -0.781987183764523E-02
+1 57 11     0.754086550259801E-02
+1 57 13     0.227730817891357E-01
+1 57 15     0.366107014808639E-01
+1 57 17     0.288991806751719E-02
+1 57 19     0.551247236605025E-02
+1 57 21     0.863298181857940E-02
+1 57 23     0.119649963606677E-01
+1 57 25     0.298816510954404E-01
+1 58 1    -0.407983601097634E-01
+1 58 3     0.252172932617576E-01
+1 58 5    -0.320943842258256E-01
+1 58 7     0.384976100024264E+00
+1 58 9     0.514606681629684E+00
+1 58 11    -0.187168766680520E-02
+1 58 13     0.696282410340127E-02
+1 58 15     0.522559209749984E-02
+1 58 17     0.107102032226809E-01
+1 58 19     0.462257969221533E-02
+1 58 21    -0.417334750609704E-01
+1 58 23    -0.564665346514374E-01
+1 58 25    -0.895656207470999E-01
+1 59 1     0.346273503463653E-03
+1 59 3    -0.332123324506648E-03
+1 59 5    -0.508017215911391E-04
+1 59 7    -0.753565634613218E-04
+1 59 9    -0.131892067902363E-03
+1 59 11    -0.199842196828977E-04
+1 59 13    -0.314701868185282E-04
+1 59 15    -0.542684585287215E-04
+1 59 17    -0.549837253971879E-01
+1 59 19     0.361294636570999E-01
+1 59 21    -0.666171244946119E+00
+1 59 23     0.443196387752221E+00
+1 59 25     0.244286043304864E-01
+1 60 1     0.628813999258474E-04
+1 60 3    -0.269427343914651E-02
+1 60 5    -0.487255926077854E-03
+1 60 7    -0.270831628003119E-03
+1 60 9    -0.754372143974375E-03
+1 60 11    -0.176158774622016E-04
+1 60 13    -0.430989149657827E-03
+1 60 15    -0.573364049155354E-03
+1 60 17    -0.323146086236870E+00
+1 60 19     0.733015569238826E+00
+1 60 21     0.499625283885916E-01
+1 60 23    -0.237538968361352E-01
+1 60 25    -0.180626959656662E-01
+1 61 1     0.325773865356270E-02
+1 61 3    -0.365504751721953E-02
+1 61 5     0.570385212186919E-02
+1 61 7     0.174092991182109E-01
+1 61 9     0.225482019467578E-01
+1 61 11     0.442301392258813E-02
+1 61 13    -0.260585946940652E-02
+1 61 15    -0.710289339032907E-03
+1 61 17     0.265388434788851E+00
+1 61 19     0.105058073634033E+00
+1 61 21     0.376803367884303E+00
+1 61 23     0.603803945545476E+00
+1 61 25    -0.236963747878582E+00
+1 62 1    -0.246237709484364E-02
+1 62 3     0.661450541447174E-03
+1 62 5     0.357966199021984E-01
+1 62 7    -0.208173910947389E-01
+1 62 9    -0.256739693506657E-01
+1 62 11    -0.213493734416094E-02
+1 62 13     0.159716544120566E-02
+1 62 15    -0.110092239337594E-03
+1 62 17     0.676505249492402E+00
+1 62 19     0.303517358679208E+00
+1 62 21    -0.195362821791211E+00
+1 62 23    -0.233487641990161E+00
+1 62 25    -0.179481265756066E-01
+1 63 1    -0.180241131759864E-01
+1 63 3    -0.231104865276491E-01
+1 63 5     0.383717446960709E-01
+1 63 7     0.322453129923533E-01
+1 63 9     0.848142627457678E-01
+1 63 11    -0.426706394630239E-01
+1 63 13     0.249283046856417E-01
+1 63 15     0.823906575032858E-04
+1 63 17     0.915144831908179E-01
+1 63 19     0.554452512313025E-01
+1 63 21     0.130493607368702E+00
+1 63 23     0.161178290405760E+00
+1 63 25     0.759819799768181E+00
+1 64 1    -0.664438107456533E+00
+1 64 3    -0.700663324455957E-02
+1 64 5    -0.793957500667057E-02
+1 64 7    -0.135637963003674E-01
+1 64 9    -0.290781886923302E-01
+1 64 11     0.138870793101502E+00
+1 64 13    -0.516229338821290E-01
+1 64 15     0.347216579441130E-01
+1 64 17    -0.258445993548276E-02
+1 64 19    -0.126853944893416E-02
+1 64 21     0.295885904728206E-02
+1 64 23     0.508334751046305E-02
+1 64 25    -0.257338492361832E-02
+1 65 1     0.463179022483498E-02
+1 65 3    -0.196784773858397E-02
+1 65 5    -0.231261251111143E-02
+1 65 7    -0.106252727775101E-02
+1 65 9    -0.157660126116169E-02
+1 65 11     0.348064750587092E+00
+1 65 13     0.590306895979043E+00
+1 65 15    -0.398405992104732E+00
+1 65 17    -0.335947938135722E-03
+1 65 19    -0.949839880191763E-04
+1 65 21     0.430748604638805E-05
+1 65 23    -0.614117235072706E-04
+1 65 25     0.684051597197629E-03
+1 66 1    -0.580165902378105E-01
+1 66 3     0.428999858396977E-01
+1 66 5    -0.382701604101347E-02
+1 66 7     0.101429127738646E-02
+1 66 9     0.265990304683032E-02
+1 66 11    -0.304987587422612E+00
+1 66 13    -0.275595355718354E+00
+1 66 15    -0.675499159972238E+00
+1 66 17    -0.819390394773805E-03
+1 66 19    -0.114567753225554E-02
+1 66 21    -0.861917276076932E-03
+1 66 23    -0.927657890768863E-03
+1 66 25    -0.772605495083957E-02
+1 67 1     0.117343186094595E+00
+1 67 3     0.130767633273975E-01
+1 67 5     0.396870983442189E-01
+1 67 7    -0.129725070352388E-01
+1 67 9     0.255015192412184E-01
+1 67 11     0.630058838050733E+00
+1 67 13    -0.450453012166868E+00
+1 67 15    -0.115590569613920E+00
+1 67 17     0.558999657768557E-02
+1 67 19     0.324434920130172E-02
+1 67 21     0.443366126519574E-02
+1 67 23     0.424846557809497E-02
+1 67 25     0.502498410196901E-01
+1 68 1     0.344961532625721E-03
+1 68 3     0.265937113973349E-01
+1 68 5     0.383860615305618E+00
+1 68 7     0.572560453066968E+00
+1 68 9    -0.400053925622206E+00
+1 68 11     0.157670875003377E-02
+1 68 13    -0.600726761412478E-03
+1 68 15    -0.188555094056700E-02
+1 68 17    -0.808334551428673E-02
+1 68 19    -0.350719297568043E-02
+1 68 21     0.130188596450946E-02
+1 68 23     0.120289181650286E-02
+1 68 25     0.990651487678426E-03
+1 69 1     0.185131407817502E-01
+1 69 3    -0.649484600551006E-02
+1 69 5    -0.698000949389877E+00
+1 69 7     0.285767603232066E+00
+1 69 9    -0.256641126564404E+00
+1 69 11     0.326854786808706E-01
+1 69 13    -0.257954345124939E-01
+1 69 15    -0.466317203599599E-02
+1 69 17     0.180944227796278E-01
+1 69 19     0.816630751054173E-02
+1 69 21     0.176869458742781E-02
+1 69 23     0.291410495635324E-02
+1 69 25     0.231586848225919E-01
+1 70 1     0.329016501032366E-02
+1 70 3    -0.756135503937509E+00
+1 70 5     0.154514756816159E-01
+1 70 7     0.680456769418838E-01
+1 70 9     0.567752623790738E-01
+1 70 11    -0.834059924535156E-02
+1 70 13    -0.235567465303428E-01
+1 70 15    -0.386473950198936E-01
+1 70 17    -0.846381805425372E-03
+1 70 19    -0.152511217070651E-02
+1 70 21    -0.327634323160415E-02
+1 70 23    -0.458283687504937E-02
+1 70 25    -0.101347186575053E-01
+1 71 1     0.251402568496132E-01
+1 71 3    -0.816779850775733E-01
+1 71 5     0.453170998331895E-01
+1 71 7    -0.474253009963572E+00
+1 71 9    -0.644456914454771E+00
+1 71 11    -0.514262972092605E-02
+1 71 13    -0.634061703152627E-02
+1 71 15    -0.908483762652917E-02
+1 71 17    -0.397742533271084E-02
+1 71 19    -0.190051396687824E-02
+1 71 21     0.116201814988441E-01
+1 71 23     0.158195032761290E-01
+1 71 25     0.207385487323320E-01
+1 72 1     0.819790870452490E+00
+1 72 3     0.585467452108006E-02
+1 72 5     0.104116614166188E-01
+1 72 7     0.636478755519465E-02
+1 72 9     0.196439684825181E-01
+1 72 11    -0.340080211059122E-01
+1 72 13     0.155956353372697E-01
+1 72 15    -0.482365657730248E-02
+1 72 17    -0.269133206007076E-01
+1 72 19    -0.138011866294560E-01
+1 72 21     0.239133632170692E-01
+1 72 23     0.412441379156943E-01
+1 72 25    -0.517028218057527E-01
+1 73 1     0.154837004820352E-02
+1 73 3     0.779646074533494E-04
+1 73 5    -0.314739158296805E-05
+1 73 7     0.192248216586839E-03
+1 73 9     0.318519785765390E-03
+1 73 11     0.466844627759939E-04
+1 73 13    -0.569687516275286E-05
+1 73 15     0.162786770869358E-04
+1 73 17     0.440072730192256E-01
+1 73 19     0.103594847880284E-01
+1 73 21     0.836572083476341E+00
+1 73 23    -0.540088195209648E+00
+1 73 25    -0.339158091034772E-01
+1 74 1    -0.286423633028558E-03
+1 74 3     0.925249266435332E-03
+1 74 5     0.179185201881556E-03
+1 74 7     0.105728369211253E-03
+1 74 9     0.350980370270253E-03
+1 74 11     0.433507842156719E-04
+1 74 13     0.771884043672361E-03
+1 74 15     0.104435116213599E-02
+1 74 17     0.398519957762678E+00
+1 74 19    -0.913947318925409E+00
+1 74 21    -0.117366543386588E-01
+1 74 23    -0.460091349910172E-02
+1 74 25     0.216811742588939E-01
+1 75 1    -0.378553681254732E-01
+1 75 3    -0.173073996322168E-02
+1 75 5     0.550556561656307E-02
+1 75 7     0.663161801877288E-02
+1 75 9     0.944169906446504E-02
+1 75 11     0.902582821427303E-02
+1 75 13    -0.509587088177990E-02
+1 75 15    -0.114140386669392E-02
+1 75 17     0.362544745361488E+00
+1 75 19     0.142042333418312E+00
+1 75 21     0.452345044952045E+00
+1 75 23     0.749905472863972E+00
+1 75 25    -0.272724674008099E+00
+1 76 1    -0.385519241686021E-01
+1 76 3    -0.757683510238090E-03
+1 76 5    -0.236749302023948E-01
+1 76 7     0.811976903103151E-02
+1 76 9     0.110320481180440E-01
+1 76 11     0.411843075234282E-02
+1 76 13    -0.321667604637832E-02
+1 76 15     0.187130039901762E-03
+1 76 17    -0.827943032317510E+00
+1 76 19    -0.364982921777916E+00
+1 76 21     0.259679486547514E+00
+1 76 23     0.325019671553976E+00
+1 76 25     0.414330006561365E-01
+1 77 1    -0.317544646608620E-01
+1 77 3     0.975691302597786E-02
+1 77 5    -0.208690850937289E-01
+1 77 7    -0.838069457164431E-02
+1 77 9    -0.302093760026363E-01
+1 77 11     0.734665354015502E-01
+1 77 13    -0.431700030427218E-01
+1 77 15    -0.127224485289579E-02
+1 77 17    -0.130044298516384E+00
+1 77 19    -0.765415006590153E-01
+1 77 21    -0.149117527962039E+00
+1 77 23    -0.183242001320370E+00
+1 77 25    -0.954976862866083E+00
+1 78 1     0.108755852742309E-02
+1 78 3    -0.219316634105131E-02
+1 78 5    -0.384819374089157E-02
+1 78 7    -0.162531760351926E-02
+1 78 9    -0.274000251199168E-02
+1 78 11     0.425132325203936E+00
+1 78 13     0.718333725378667E+00
+1 78 15    -0.492016826535046E+00
+1 78 17    -0.795169518572822E-03
+1 78 19    -0.246423863200999E-03
+1 78 21     0.796893719287269E-05
+1 78 23    -0.115930657000486E-03
+1 78 25     0.123212346300011E-02
+1 79 1    -0.159599123145107E-01
+1 79 3     0.535848850563398E-01
+1 79 5    -0.487293486860682E-02
+1 79 7     0.463125026669575E-02
+1 79 9     0.978509643049730E-02
+1 79 11    -0.451139705572846E+00
+1 79 13    -0.286632767833201E+00
+1 79 15    -0.808204123260211E+00
+1 79 17    -0.206758859037956E-02
+1 79 19    -0.265830895824282E-02
+1 79 21    -0.252702649338192E-02
+1 79 23    -0.298478344566294E-02
+1 79 25    -0.203520439368834E-01
+1 80 1     0.359634083552780E-01
+1 80 3     0.175950419099091E-01
+1 80 5     0.435303805966893E-01
+1 80 7    -0.223319671544251E-01
+1 80 9     0.149070026045174E-01
+1 80 11     0.742031160055230E+00
+1 80 13    -0.583588648100534E+00
+1 80 15    -0.211121547617093E+00
+1 80 17     0.108719715389450E-01
+1 80 19     0.585295525150609E-02
+1 80 21     0.777471448558864E-02
+1 80 23     0.781179819311112E-02
+1 80 25     0.871318903125391E-01
+1 81 1    -0.157783981216285E-02
+1 81 3     0.327473392105744E-01
+1 81 5     0.506992893249681E+00
+1 81 7     0.670783646394199E+00
+1 81 9    -0.450133761207493E+00
+1 81 11    -0.170344810931290E-03
+1 81 13     0.112214882691685E-02
+1 81 15    -0.264055575765337E-02
+1 81 17    -0.123017835991631E-01
+1 81 19    -0.536710350516589E-02
+1 81 21     0.155629772965921E-02
+1 81 23     0.131845560832536E-02
+1 81 25    -0.793779584936302E-03
+1 82 1     0.147635626089410E-01
+1 82 3    -0.409306874957099E-02
+1 82 5    -0.806671898425158E+00
+1 82 7     0.382065751811634E+00
+1 82 9    -0.334530366264300E+00
+1 82 11     0.338643014383648E-01
+1 82 13    -0.308056551080034E-01
+1 82 15    -0.798946680591534E-02
+1 82 17     0.226830514551049E-01
+1 82 19     0.100759132126987E-01
+1 82 21     0.147376721483679E-02
+1 82 23     0.286670095753891E-02
+1 82 25     0.231546888477239E-01
+1 83 1    -0.310935497008277E-02
+1 83 3     0.910168208407413E+00
+1 83 5    -0.147245670572241E-01
+1 83 7    -0.934825489625242E-01
+1 83 9    -0.848946348264095E-01
+1 83 11     0.119864218303577E-01
+1 83 13     0.293448772078091E-01
+1 83 15     0.495484215019437E-01
+1 83 17     0.962484369513981E-03
+1 83 19     0.168507684594278E-02
+1 83 21     0.412729228918743E-02
+1 83 23     0.577206498219690E-02
+1 83 25     0.126616658870737E-01
+1 84 1     0.128563358411519E-01
+1 84 3    -0.118137621855650E+00
+1 84 5     0.584010679472526E-01
+1 84 7    -0.554869418020726E+00
+1 84 9    -0.774299908862382E+00
+1 84 11    -0.161896521044459E-01
+1 84 13    -0.479379738046448E-02
+1 84 15    -0.140674089091931E-01
+1 84 17    -0.597978838388041E-02
+1 84 19    -0.293742847248166E-02
+1 84 21     0.139716358249024E-01
+1 84 23     0.191175007236495E-01
+1 84 25     0.205218843429082E-01
+1 85 1     0.979143466317169E+00
+1 85 3     0.447717224508148E-02
+1 85 5     0.927560805405425E-02
+1 85 7     0.159569934872580E-02
+1 85 9     0.101319806708153E-01
+1 85 11    -0.260242821442387E-01
+1 85 13     0.121161705694404E-01
+1 85 15    -0.323654089774228E-02
+1 85 17    -0.506758880083513E-02
+1 85 19    -0.256321060418685E-02
+1 85 21     0.445555063298814E-02
+1 85 23     0.735025801944256E-02
+1 85 25    -0.783875970388759E-02
+2 7 2     0.336229270214554E-01
+2 7 4    -0.330071071465151E-01
+2 7 6     0.120036831572572E-02
+2 7 8    -0.134944430360332E-02
+2 7 10     0.339404808958660E-02
+2 7 12     0.254364870049874E-02
+2 7 14    -0.593837751142726E-03
+2 7 16    -0.229368243293318E-02
+2 7 18    -0.383426780872126E-04
+2 7 20    -0.421308101801106E-04
+2 7 22     0.269583756731274E-04
+2 7 24     0.960902362475495E-04
+2 8 2     0.210742151101574E-01
+2 8 4     0.210114830056166E-01
+2 8 6    -0.354526237852569E-01
+2 8 8    -0.435214860275213E-01
+2 8 10     0.447712467290072E-03
+2 8 12     0.345401843851803E-02
+2 8 14     0.170566964379530E-02
+2 8 16     0.612265477374641E-02
+2 8 18    -0.847797058757810E-03
+2 8 20     0.116925714251791E-03
+2 8 22     0.487010323288552E-03
+2 8 24     0.646281230733730E-03
+2 9 2    -0.233025724460521E-02
+2 9 4     0.557026777760347E-03
+2 9 6     0.533028556783658E-01
+2 9 8    -0.433693686882815E-01
+2 9 10    -0.165323507315080E-02
+2 9 12     0.146116261347557E-03
+2 9 14     0.104044807172326E-04
+2 9 16     0.448113051431565E-03
+2 9 18     0.299511301722412E-03
+2 9 20     0.544359909931161E-03
+2 9 22     0.104167886496426E-03
+2 9 24     0.178898257978685E-03
+2 10 2    -0.184514119494354E-01
+2 10 4    -0.147340092705221E-01
+2 10 6    -0.164875536918499E-01
+2 10 8    -0.207155660910071E-01
+2 10 10     0.276447146148789E-01
+2 10 12    -0.384673584870586E-01
+2 10 14    -0.142103531685046E-01
+2 10 16    -0.680289806954408E-01
+2 10 18     0.150350697595051E-02
+2 10 20    -0.178833329013441E-02
+2 10 22    -0.162470665493369E-02
+2 10 24    -0.227022402401373E-02
+2 11 2     0.533134953867751E-03
+2 11 4     0.999732918717583E-03
+2 11 6    -0.233109042612764E-02
+2 11 8    -0.100128418825271E-02
+2 11 10    -0.653210124226977E-01
+2 11 12     0.478515385759940E-01
+2 11 14     0.434297320919483E-02
+2 11 16    -0.541310523292112E-01
+2 11 18    -0.116639379527310E-04
+2 11 20    -0.191851949842407E-03
+2 11 22    -0.870725727089909E-04
+2 11 24    -0.123187945653821E-03
+2 12 2    -0.634466577035258E-03
+2 12 4    -0.806774993591457E-03
+2 12 6    -0.154974382006849E-02
+2 12 8    -0.126563591670745E-02
+2 12 10    -0.140234975861657E-01
+2 12 12     0.461270436602402E-02
+2 12 14    -0.960721062637617E-01
+2 12 16     0.133480692715881E-01
+2 12 18     0.915151136421374E-04
+2 12 20    -0.177050200453757E-03
+2 12 22    -0.130420055146462E-03
+2 12 24    -0.180043521690909E-03
+2 13 2     0.658258053758352E-02
+2 13 4    -0.244287485375737E-02
+2 13 6    -0.138585358082122E-02
+2 13 8    -0.152698880134819E-03
+2 13 10    -0.639387159435726E-01
+2 13 12    -0.736455447570222E-01
+2 13 14     0.751069035762633E-02
+2 13 16     0.126343640174009E-01
+2 13 18    -0.753539710050185E-04
+2 13 20    -0.193790517806216E-03
+2 13 22    -0.281653664102423E-04
+2 13 24     0.269871882963715E-04
+2 14 2    -0.451567888041171E-01
+2 14 4    -0.472414907379122E-01
+2 14 6    -0.311023684822137E-01
+2 14 8    -0.348190421633258E-01
+2 14 10    -0.181313363736049E-01
+2 14 12     0.207816852445320E-01
+2 14 14     0.118978658528709E-01
+2 14 16     0.415571511593900E-01
+2 14 18     0.163930012613588E-01
+2 14 20    -0.178921396249118E-01
+2 14 22    -0.168090552559830E-01
+2 14 24    -0.231905208081584E-01
+2 15 2    -0.223899660165901E-03
+2 15 4    -0.431473445380423E-04
+2 15 6     0.760756650702192E-04
+2 15 8    -0.605076711643809E-04
+2 15 10     0.533785119161161E-04
+2 15 12     0.811738891836525E-04
+2 15 14     0.120498121041131E-04
+2 15 16     0.370282307395817E-04
+2 15 18     0.546217214095883E-01
+2 15 20    -0.883409273556446E-01
+2 15 22    -0.184469068412583E-01
+2 15 24     0.121745177435016E+00
+2 16 2     0.819262440925258E-04
+2 16 4     0.112832680016098E-03
+2 16 6     0.254924699225899E-03
+2 16 8     0.929868047157410E-04
+2 16 10     0.628224016672624E-04
+2 16 12    -0.302909293362209E-04
+2 16 14    -0.188415096167540E-04
+2 16 16    -0.735921403990862E-04
+2 16 18     0.316059129796130E-01
+2 16 20    -0.600213330410691E-01
+2 16 22     0.141554263344685E+00
+2 16 24    -0.362848007718506E-01
+2 17 2     0.249032821928933E-03
+2 17 4     0.122109788772395E-03
+2 17 6    -0.111857186473520E-02
+2 17 8    -0.552416913097327E-04
+2 17 10    -0.174192881783546E-03
+2 17 12    -0.564880016102652E-04
+2 17 14    -0.252288022286975E-04
+2 17 16    -0.479353057801341E-04
+2 17 18     0.130225904242101E+00
+2 17 20     0.932539468613429E-01
+2 17 22     0.133524714492447E-01
+2 17 24     0.112639587994576E-01
+2 18 2     0.143440731467636E-01
+2 18 4     0.147328016622591E-01
+2 18 6     0.952281872008345E-02
+2 18 8     0.100639533544263E-01
+2 18 10     0.434953900855653E-02
+2 18 12    -0.439207481704305E-02
+2 18 14    -0.252043993289319E-02
+2 18 16    -0.896585165816003E-02
+2 18 18     0.689694528327903E-01
+2 18 20    -0.744401721296479E-01
+2 18 22    -0.716088869504909E-01
+2 18 24    -0.957218617852357E-01
+2 19 2     0.891923591050666E-01
+2 19 4    -0.574083805273708E-01
+2 19 6     0.627769465652699E-01
+2 19 8    -0.118047842193111E+00
+2 19 10     0.139027078018312E-01
+2 19 12     0.126425179505108E-01
+2 19 14    -0.207304196171445E-02
+2 19 16    -0.760042865013897E-02
+2 19 18     0.203258550133269E-03
+2 19 20     0.693879221109408E-03
+2 19 22     0.329508453724954E-03
+2 19 24     0.749654894231516E-03
+2 20 2     0.416913306992544E-01
+2 20 4    -0.105895361116667E+00
+2 20 6     0.291842473331327E-02
+2 20 8     0.123334292159079E+00
+2 20 10     0.125155710026859E-01
+2 20 12     0.570670129480556E-02
+2 20 14    -0.514066503356849E-02
+2 20 16    -0.193607991566143E-01
+2 20 18     0.679297437575604E-03
+2 20 20    -0.444007697951445E-03
+2 20 22    -0.446810074520732E-03
+2 20 24    -0.386467990331404E-03
+2 21 2    -0.700252963079797E-01
+2 21 4    -0.989598944204027E-02
+2 21 6     0.168239577976969E+00
+2 21 8     0.180403857776068E-01
+2 21 10    -0.151605595071260E-01
+2 21 12    -0.879312620058350E-02
+2 21 14    -0.131711915273933E-02
+2 21 16    -0.276044744417930E-02
+2 21 18     0.217105954176042E-02
+2 21 20     0.243283256987104E-02
+2 21 22     0.660091201646003E-05
+2 21 24     0.946549116661771E-04
+2 22 2    -0.589482036393110E-01
+2 22 4    -0.433120702069771E-01
+2 22 6    -0.387014193452138E-01
+2 22 8    -0.498425501193046E-01
+2 22 10     0.481207829377415E-01
+2 22 12    -0.994114375119132E-01
+2 22 14    -0.386856052451556E-01
+2 22 16    -0.161809096189340E+00
+2 22 18     0.509119175450235E-02
+2 22 20    -0.597784982215446E-02
+2 22 22    -0.546539067358647E-02
+2 22 24    -0.765772926748586E-02
+2 23 2     0.327339887154159E-03
+2 23 4    -0.399451734205274E-02
+2 23 6     0.686924369885495E-02
+2 23 8     0.332371038934068E-02
+2 23 10     0.155874798748375E+00
+2 23 12    -0.135174733398992E+00
+2 23 14    -0.195965621636791E-01
+2 23 16     0.131930938215409E+00
+2 23 18    -0.110635757995079E-03
+2 23 20     0.764532086795769E-03
+2 23 22     0.432210850318844E-03
+2 23 24     0.624465892400486E-03
+2 24 2     0.130749094792230E-02
+2 24 4     0.766167471345265E-03
+2 24 6     0.331764981578089E-02
+2 24 8     0.219608073265875E-02
+2 24 10     0.362046275658816E-01
+2 24 12    -0.262647368191681E-01
+2 24 14     0.239585903388501E+00
+2 24 16    -0.342573880131451E-01
+2 24 18    -0.195027996289150E-03
+2 24 20     0.452355490653680E-03
+2 24 22     0.315994459944970E-03
+2 24 24     0.444473067118881E-03
+2 25 2     0.259849396013140E-01
+2 25 4    -0.102133131313118E-01
+2 25 6    -0.442604130333324E-02
+2 25 8     0.328451782124617E-03
+2 25 10    -0.175772080438497E+00
+2 25 12    -0.168047796064823E+00
+2 25 14     0.131366812270503E-01
+2 25 16     0.365989751272209E-01
+2 25 18    -0.396333792420532E-03
+2 25 20    -0.608899258272772E-03
+2 25 22     0.187322637483400E-04
+2 25 24     0.293575461179706E-03
+2 26 2     0.885096724660364E-01
+2 26 4     0.979992645307603E-01
+2 26 6     0.594421873079776E-01
+2 26 8     0.694098265816449E-01
+2 26 10     0.437532862045830E-01
+2 26 12    -0.618843549972273E-01
+2 26 14    -0.351850389615964E-01
+2 26 16    -0.123522264498860E+00
+2 26 18    -0.283888252354368E-01
+2 26 20     0.310892926129465E-01
+2 26 22     0.291578627861854E-01
+2 26 24     0.402611406608588E-01
+2 27 2     0.511580950372763E-03
+2 27 4    -0.173838814436617E-03
+2 27 6    -0.166021254359485E-03
+2 27 8     0.612799264388001E-04
+2 27 10    -0.217490192256533E-03
+2 27 12    -0.203381642853927E-03
+2 27 14     0.513970513361974E-05
+2 27 16     0.287827871496042E-04
+2 27 18    -0.145298787304731E+00
+2 27 20     0.187421563487448E+00
+2 27 22     0.391349904262973E-01
+2 27 24    -0.277333943918831E+00
+2 28 2    -0.953107832989973E-04
+2 28 4    -0.144025007258604E-03
+2 28 6    -0.270825872395925E-03
+2 28 8    -0.103895917612614E-03
+2 28 10    -0.589806216751003E-04
+2 28 12     0.476284848048761E-04
+2 28 14     0.275877662002411E-04
+2 28 16     0.105321138822035E-03
+2 28 18    -0.102445531499285E+00
+2 28 20     0.109530822647911E+00
+2 28 22    -0.324804447332963E+00
+2 28 24     0.818598144728692E-01
+2 29 2    -0.853016751740016E-03
+2 29 4    -0.434630825963291E-03
+2 29 6     0.414404981916458E-02
+2 29 8     0.148555930434518E-03
+2 29 10     0.556146631438565E-03
+2 29 12     0.226967289575492E-03
+2 29 14     0.968437757534888E-04
+2 29 16     0.202061562521792E-03
+2 29 18    -0.278078215727347E+00
+2 29 20    -0.239051790699020E+00
+2 29 22     0.321251285653548E-02
+2 29 24    -0.154072814218439E-01
+2 30 2     0.236541576233897E-01
+2 30 4     0.254375727555432E-01
+2 30 6     0.176631296501114E-01
+2 30 8     0.189122614967683E-01
+2 30 10     0.806126148603014E-02
+2 30 12    -0.941487567703428E-02
+2 30 14    -0.524897878984076E-02
+2 30 16    -0.188054394209174E-01
+2 30 18     0.158206106790264E+00
+2 30 20    -0.171768815846396E+00
+2 30 22    -0.163872270093718E+00
+2 30 24    -0.222040408138810E+00
+2 31 2    -0.625501202086866E-01
+2 31 4    -0.439695636807603E-01
+2 31 6    -0.138753866416512E+00
+2 31 8     0.286904632156373E+00
+2 31 10    -0.245577346848861E-02
+2 31 12    -0.399712147911237E-02
+2 31 14    -0.743014248221531E-03
+2 31 16    -0.367331687891209E-02
+2 31 18    -0.151892152958188E-02
+2 31 20    -0.159412033051426E-02
+2 31 22     0.143391446099731E-04
+2 31 24    -0.202093114887925E-03
+2 32 2    -0.179837904888085E-02
+2 32 4     0.185648113802511E+00
+2 32 6    -0.244256457082368E+00
+2 32 8    -0.806052664264693E-01
+2 32 10    -0.577748321394397E-03
+2 32 12    -0.500586205673553E-02
+2 32 14     0.603656690992624E-02
+2 32 16     0.200982549926761E-01
+2 32 18    -0.311060826019676E-02
+2 32 20    -0.460199491894185E-02
+2 32 22    -0.749003919597023E-03
+2 32 24    -0.165282914634004E-02
+2 33 2    -0.218380068915389E+00
+2 33 4     0.148662964066387E+00
+2 33 6     0.142121971315775E+00
+2 33 8     0.376169885945077E-01
+2 33 10    -0.368009889401461E-01
+2 33 12    -0.172625602700784E-01
+2 33 14     0.683117937752949E-02
+2 33 16     0.274411176011261E-01
+2 33 18     0.433594468123549E-03
+2 33 20     0.471294916323120E-02
+2 33 22     0.174406329586647E-02
+2 33 24     0.199777572806070E-02
+2 34 2    -0.179921180837156E+00
+2 34 4    -0.136789565606470E+00
+2 34 6    -0.103566371497481E+00
+2 34 8    -0.130269059064671E+00
+2 34 10     0.281833067321055E-01
+2 34 12    -0.714843693465165E-01
+2 34 14    -0.329464672663099E-01
+2 34 16    -0.122991258868561E+00
+2 34 18     0.117528994326447E-01
+2 34 20    -0.147631713021267E-01
+2 34 22    -0.130357032509210E-01
+2 34 24    -0.182915720636586E-01
+2 35 2    -0.876869960798159E-03
+2 35 4     0.765890887234545E-02
+2 35 6    -0.851177455312672E-02
+2 35 8    -0.403474598950223E-02
+2 35 10    -0.256150067458547E+00
+2 35 12     0.251950387795112E+00
+2 35 14     0.639017489803146E-01
+2 35 16    -0.215233981540245E+00
+2 35 18     0.351878286666529E-03
+2 35 20    -0.129908232611359E-02
+2 35 22    -0.822199948524478E-03
+2 35 24    -0.119187463917159E-02
+2 36 2     0.113963331617442E-02
+2 36 4    -0.552148857329706E-03
+2 36 6     0.431485316141134E-02
+2 36 8     0.226598028555669E-02
+2 36 10     0.764852891583082E-01
+2 36 12    -0.757933784272559E-01
+2 36 14     0.405606820002980E+00
+2 36 16    -0.593811110192147E-01
+2 36 18    -0.282186384094350E-03
+2 36 20     0.716157901908047E-03
+2 36 22     0.489244692153533E-03
+2 36 24     0.695787731348525E-03
+2 37 2    -0.403292421017855E-01
+2 37 4     0.104331604230345E-01
+2 37 6     0.432376256337134E-02
+2 37 8    -0.192114901329688E-02
+2 37 10     0.306555024330682E+00
+2 37 12     0.293104789806568E+00
+2 37 14    -0.595131800541433E-02
+2 37 16    -0.220526752016371E-01
+2 37 18     0.933839039301279E-03
+2 37 20     0.499927721343543E-03
+2 37 22    -0.400108429081888E-03
+2 37 24    -0.985411634717931E-03
+2 38 2     0.552791280212527E-01
+2 38 4     0.829192014912393E-01
+2 38 6     0.469948981702662E-01
+2 38 8     0.519820759170396E-01
+2 38 10     0.119258371724182E+00
+2 38 12    -0.144041669868035E+00
+2 38 14    -0.100870716262687E+00
+2 38 16    -0.341767334643122E+00
+2 38 18    -0.140204827397037E-01
+2 38 20     0.162384278507975E-01
+2 38 22     0.147518185291481E-01
+2 38 24     0.202863326213583E-01
+2 39 2    -0.133119720812775E-02
+2 39 4     0.909752936484160E-03
+2 39 6     0.249915513385941E-03
+2 39 8    -0.825575522518398E-04
+2 39 10     0.383943494176513E-03
+2 39 12     0.312640963856991E-03
+2 39 14    -0.338464882854864E-04
+2 39 16    -0.131765563994187E-03
+2 39 18     0.246171266015957E+00
+2 39 20    -0.288155391223919E+00
+2 39 22    -0.678729859317907E-01
+2 39 24     0.446861942688937E+00
+2 40 2     0.805028814849144E-04
+2 40 4     0.203692363550360E-03
+2 40 6     0.445496253657512E-03
+2 40 8     0.123779532103859E-03
+2 40 10     0.371174705614709E-04
+2 40 12    -0.398812402099706E-04
+2 40 14    -0.236193376107777E-04
+2 40 16    -0.902419145117348E-04
+2 40 18     0.177320062049747E+00
+2 40 20    -0.168810548515107E+00
+2 40 22     0.521316138653981E+00
+2 40 24    -0.127358446679517E+00
+2 41 2     0.156790150757621E-02
+2 41 4     0.971528874577927E-03
+2 41 6    -0.163870382943671E-01
+2 41 8    -0.458714389546495E-03
+2 41 10    -0.876477821614811E-03
+2 41 12    -0.365080638173090E-03
+2 41 14    -0.146170457822307E-03
+2 41 16    -0.286277604753791E-03
+2 41 18     0.433747372592003E+00
+2 41 20     0.398849861484130E+00
+2 41 22    -0.144417731430070E-01
+2 41 24     0.160634813181827E-01
+2 42 2     0.216725253567934E-01
+2 42 4     0.253244679818580E-01
+2 42 6     0.284942019748468E-01
+2 42 8     0.281141056230368E-01
+2 42 10     0.761096546467719E-02
+2 42 12    -0.781385395778230E-02
+2 42 14    -0.440576453859414E-02
+2 42 16    -0.158271860625953E-01
+2 42 18     0.259779364839286E+00
+2 42 20    -0.276057141600820E+00
+2 42 22    -0.266143288641525E+00
+2 42 24    -0.361568363793117E+00
+2 43 2    -0.727909393477267E-01
+2 43 4    -0.567579733926543E-01
+2 43 6    -0.232847486514645E+00
+2 43 8     0.415246116103884E+00
+2 43 10    -0.210357222437478E-02
+2 43 12    -0.143933492166661E-02
+2 43 14     0.389672782950908E-03
+2 43 16    -0.426619990261867E-04
+2 43 18    -0.890681268028373E-02
+2 43 20    -0.451024815998659E-02
+2 43 22     0.241506336693797E-02
+2 43 24     0.252268717524302E-02
+2 44 2    -0.934077569472209E-02
+2 44 4    -0.300530401924577E+00
+2 44 6     0.335268404815524E+00
+2 44 8     0.136470145460449E+00
+2 44 10    -0.235402503669217E-02
+2 44 12     0.716986761709109E-02
+2 44 14    -0.547908630902240E-02
+2 44 16    -0.176614849201071E-01
+2 44 18     0.663087587772077E-02
+2 44 20     0.170683130601853E-01
+2 44 22     0.517069564752087E-02
+2 44 24     0.901583033559346E-02
+2 45 2     0.234105795265394E+00
+2 45 4    -0.281169451287057E+00
+2 45 6    -0.243926373558182E+00
+2 45 8    -0.133536313651407E+00
+2 45 10     0.400700509466456E-01
+2 45 12     0.274718182658630E-02
+2 45 14    -0.133499907289165E-01
+2 45 16    -0.513773338822174E-01
+2 45 18     0.680172043686241E-02
+2 45 20    -0.243783234868420E-01
+2 45 22    -0.143480107264648E-01
+2 45 24    -0.190793938279782E-01
+2 46 2     0.381848902605773E+00
+2 46 4     0.146188921049974E+00
+2 46 6     0.106291381505454E+00
+2 46 8     0.160154730134370E+00
+2 46 10     0.270848420292089E-03
+2 46 12     0.517125526538340E-01
+2 46 14     0.187862540629879E-01
+2 46 16     0.685520490205001E-01
+2 46 18    -0.201641991595354E-01
+2 46 20     0.260733112088630E-01
+2 46 22     0.229480584746072E-01
+2 46 24     0.329375356267904E-01
+2 47 2     0.962236435146367E-03
+2 47 4    -0.947105410781668E-02
+2 47 6     0.838615759497492E-02
+2 47 8     0.400814207188657E-02
+2 47 10     0.336516103700009E+00
+2 47 12    -0.358671700568025E+00
+2 47 14    -0.191956835536695E+00
+2 47 16     0.306782986954976E+00
+2 47 18    -0.683278111412991E-03
+2 47 20     0.197956001361245E-02
+2 47 22     0.133375929824646E-02
+2 47 24     0.194202142053517E-02
+2 48 2    -0.944908190535656E-03
+2 48 4     0.323671283994271E-02
+2 48 6    -0.595919831666249E-02
+2 48 8    -0.273812925186877E-02
+2 48 10    -0.164881223545176E+00
+2 48 12     0.179523821127580E+00
+2 48 14    -0.558263272712672E+00
+2 48 16     0.412400332984613E-01
+2 48 18     0.512305295144349E-03
+2 48 20    -0.139290404164146E-02
+2 48 22    -0.941190278282605E-03
+2 48 24    -0.135612898247004E-02
+2 49 2     0.466592235263250E-01
+2 49 4    -0.725066757302741E-02
+2 49 6    -0.352992187765228E-02
+2 49 8     0.297820051761038E-02
+2 49 10    -0.443171021557053E+00
+2 49 12    -0.422861663757268E+00
+2 49 14    -0.646862939513595E-02
+2 49 16    -0.136255939145179E-01
+2 49 18    -0.159302623995664E-02
+2 49 20    -0.390840861050186E-03
+2 49 22     0.866661228739849E-03
+2 49 24     0.187731447807900E-02
+2 50 2     0.299951670554580E-01
+2 50 4     0.653659676492861E-01
+2 50 6     0.373296838467370E-01
+2 50 8     0.377347056758024E-01
+2 50 10     0.195383254314831E+00
+2 50 12    -0.181921959109211E+00
+2 50 14    -0.155398011281403E+00
+2 50 16    -0.524898497115162E+00
+2 50 18    -0.139935436701168E-01
+2 50 20     0.169525037060915E-01
+2 50 22     0.150150442003749E-01
+2 50 24     0.205687771598329E-01
+2 51 2    -0.785769550055190E-01
+2 51 4    -0.490242470641458E-01
+2 51 6    -0.316371925794592E+00
+2 51 8     0.550543715503900E+00
+2 51 10    -0.231290870776039E-02
+2 51 12    -0.330158949963746E-03
+2 51 14     0.129730413633381E-02
+2 51 16     0.290083803329423E-02
+2 51 18     0.150272896775253E-01
+2 51 20     0.597131592521945E-02
+2 51 22    -0.484472649539486E-02
+2 51 24    -0.547527589431004E-02
+2 52 2     0.123523086710217E-02
+2 52 4     0.389362191166788E+00
+2 52 6    -0.442901369931467E+00
+2 52 8    -0.214082457109881E+00
+2 52 10     0.503692810404285E-02
+2 52 12    -0.102510994672500E-01
+2 52 14     0.406501886245545E-02
+2 52 16     0.122181449297145E-01
+2 52 18     0.830760076045168E-02
+2 52 20     0.370359544424364E-01
+2 52 22     0.141035882922670E-01
+2 52 24     0.230169707687166E-01
+2 53 2     0.774830959522274E-01
+2 53 4    -0.451695937106618E+00
+2 53 6    -0.338517933240823E+00
+2 53 8    -0.224816849286802E+00
+2 53 10     0.299190053705764E-01
+2 53 12    -0.100691264190227E-01
+2 53 14    -0.160972997203657E-01
+2 53 16    -0.610940303565862E-01
+2 53 18    -0.164213903518766E-01
+2 53 20     0.553640480053305E-01
+2 53 22     0.335597505593028E-01
+2 53 24     0.462911540188829E-01
+2 54 2     0.601296148674150E+00
+2 54 4     0.453546395437479E-01
+2 54 6    -0.478413597836511E-02
+2 54 8     0.954142706629648E-01
+2 54 10     0.261976205470169E-01
+2 54 12     0.425067662899899E-01
+2 54 14     0.781804755108186E-02
+2 54 16     0.271325633473448E-01
+2 54 18     0.348129582163260E-01
+2 54 20    -0.307052007805707E-01
+2 54 22    -0.341745134438176E-01
+2 54 24    -0.525389957135049E-01
+2 55 2     0.472651253252142E-02
+2 55 4    -0.207901695312536E-02
+2 55 6    -0.746287487931252E-04
+2 55 8     0.274885590157997E-03
+2 55 10     0.124942743737832E-02
+2 55 12     0.969297738677211E-03
+2 55 14    -0.159716083060478E-03
+2 55 16    -0.606396120353921E-03
+2 55 18     0.342434780623111E+00
+2 55 20    -0.372463449524036E+00
+2 55 22    -0.124973930820736E+00
+2 55 24     0.611144205962048E+00
+2 56 2     0.941665595815303E-04
+2 56 4    -0.355392348656107E-03
+2 56 6    -0.184510063183559E-03
+2 56 8    -0.557059706676897E-04
+2 56 10     0.574142659079628E-04
+2 56 12    -0.158236601834551E-04
+2 56 14    -0.437510044969159E-04
+2 56 16    -0.164889929306871E-03
+2 56 18     0.264075073460350E+00
+2 56 20    -0.234594699358114E+00
+2 56 22     0.706330954529650E+00
+2 56 24    -0.146503224061979E+00
+2 57 2     0.930451683832557E-02
+2 57 4     0.288527037825586E-02
+2 57 6    -0.327366730649301E-01
+2 57 8    -0.315257063170671E-03
+2 57 10     0.272072149266351E-02
+2 57 12     0.149537224206183E-02
+2 57 14     0.712663146033080E-03
+2 57 16     0.168206852443842E-02
+2 57 18    -0.610187521809133E+00
+2 57 20    -0.515723037047238E+00
+2 57 22     0.653062529683656E-01
+2 57 24     0.408421143516207E-01
+2 58 2    -0.489486965625611E-01
+2 58 4    -0.271056064885805E-01
+2 58 6    -0.526070664963824E-01
+2 58 8    -0.480882463208456E-01
+2 58 10     0.160972078685060E-01
+2 58 12    -0.234519403196120E-01
+2 58 14    -0.117960749704987E-01
+2 58 16    -0.432954740677240E-01
+2 58 18     0.291263172510069E+00
+2 58 20    -0.425737133427135E+00
+2 58 22    -0.352889385567386E+00
+2 58 24    -0.494429295849652E+00
+2 59 2     0.574247998445822E-03
+2 59 4    -0.812471028758777E-02
+2 59 6     0.515781493971028E-02
+2 59 8     0.266252009813527E-02
+2 59 10     0.276549776653033E+00
+2 59 12    -0.309531611144469E+00
+2 59 14    -0.567712002046281E+00
+2 59 16     0.365973279889320E+00
+2 59 18    -0.872647122369162E-03
+2 59 20     0.213085446286108E-02
+2 59 22     0.151849721842813E-02
+2 59 24     0.222707651107580E-02
+2 60 2    -0.106211583307716E-02
+2 60 4     0.979156387991014E-02
+2 60 6    -0.101872978757280E-01
+2 60 8    -0.456138483794453E-02
+2 60 10    -0.387804263477730E+00
+2 60 12     0.441811506666136E+00
+2 60 14    -0.515114579542348E+00
+2 60 16    -0.132905929780087E+00
+2 60 18     0.147373041590720E-02
+2 60 20    -0.387611694394006E-02
+2 60 22    -0.267016879598743E-02
+2 60 24    -0.389235165477567E-02
+2 61 2     0.566657071808224E-01
+2 61 4    -0.609784858563085E-02
+2 61 6    -0.381463146606433E-02
+2 61 8     0.359874410013509E-02
+2 61 10    -0.582632075037376E+00
+2 61 12    -0.539736013258058E+00
+2 61 14    -0.148264599949788E-01
+2 61 16    -0.401916913997011E-01
+2 61 18    -0.249916239874159E-02
+2 61 20    -0.637338097353966E-03
+2 61 22     0.138617047545741E-02
+2 61 24     0.313109708763206E-02
+2 62 2    -0.193711749768371E-01
+2 62 4    -0.581556838903778E-01
+2 62 6    -0.358995840197471E-01
+2 62 8    -0.341280634009908E-01
+2 62 10    -0.255880872352154E+00
+2 62 12     0.217221807857626E+00
+2 62 14     0.201634021572508E+00
+2 62 16     0.690814474889253E+00
+2 62 18     0.201700473885577E-01
+2 62 20    -0.254900165721592E-01
+2 62 22    -0.221138106389325E-01
+2 62 24    -0.303168533101555E-01
+2 63 2     0.826982067887951E-01
+2 63 4     0.215552728169048E-01
+2 63 6     0.360336020862455E+00
+2 63 8    -0.705625358412783E+00
+2 63 10     0.390074020016110E-02
+2 63 12    -0.127959887219702E-02
+2 63 14    -0.276080976627916E-02
+2 63 16    -0.794550897586292E-02
+2 63 18    -0.774954259711379E-02
+2 63 20    -0.150916604787989E-02
+2 63 22     0.323774149511694E-02
+2 63 24     0.393919835073958E-02
+2 64 2     0.241749671794589E-01
+2 64 4    -0.424531552537952E+00
+2 64 6     0.595479639390644E+00
+2 64 8     0.290682438391427E+00
+2 64 10    -0.947761568196212E-02
+2 64 12     0.161549251177216E-01
+2 64 14    -0.164345770000237E-02
+2 64 16    -0.273936791056016E-02
+2 64 18    -0.242966531185056E-02
+2 64 20    -0.194515760889944E-01
+2 64 22    -0.828055531947312E-02
+2 64 24    -0.130456320422667E-01
+2 65 2    -0.299970488190120E-02
+2 65 4    -0.628533064606304E+00
+2 65 6    -0.385867847955240E+00
+2 65 8    -0.214683218204377E+00
+2 65 10     0.237407078690158E-01
+2 65 12    -0.115698672148203E-01
+2 65 14    -0.167780015691351E-01
+2 65 16    -0.637199147312766E-01
+2 65 18    -0.310166835032528E-02
+2 65 20     0.171733832580078E-01
+2 65 22     0.936029859443568E-02
+2 65 24     0.130345197053174E-01
+2 66 2     0.765094241929868E+00
+2 66 4     0.696163112388953E-02
+2 66 6    -0.631934921140935E-01
+2 66 8     0.640501647196148E-01
+2 66 10     0.412151825352989E-01
+2 66 12     0.464202135090154E-01
+2 66 14     0.506508703441197E-02
+2 66 16     0.164682118201316E-01
+2 66 18     0.639147064938601E-02
+2 66 20    -0.272903742555528E-02
+2 66 22    -0.516245825909625E-02
+2 66 24    -0.869903502724087E-02
+2 67 2    -0.179748658279481E-02
+2 67 4     0.947274355312350E-03
+2 67 6    -0.758024567980549E-04
+2 67 8    -0.115189698840962E-03
+2 67 10    -0.224243145063205E-02
+2 67 12    -0.171300279531945E-02
+2 67 14     0.305639019598177E-03
+2 67 16     0.115833249375967E-02
+2 67 18    -0.327266139845198E+00
+2 67 20     0.372714693167602E+00
+2 67 22     0.375743778324306E+00
+2 67 24    -0.779459896770856E+00
+2 68 2     0.543326072728965E-03
+2 68 4    -0.413555495097521E-03
+2 68 6    -0.408230740025707E-04
+2 68 8     0.253565858316455E-04
+2 68 10     0.665698081946092E-03
+2 68 12     0.436835319721310E-03
+2 68 14    -0.157827481653886E-03
+2 68 16    -0.597370770354540E-03
+2 68 18     0.427362606178310E+00
+2 68 20    -0.399430528340405E+00
+2 68 22     0.807598302487005E+00
+2 68 24     0.188811471779017E-01
+2 69 2     0.214759207741790E-02
+2 69 4     0.699918956387902E-03
+2 69 6    -0.210142297462825E-01
+2 69 8    -0.293042706807500E-03
+2 69 10     0.450556098976643E-02
+2 69 12     0.197047295031605E-02
+2 69 14     0.116746422240757E-02
+2 69 16     0.256555855891448E-02
+2 69 18    -0.754620677443963E+00
+2 69 20    -0.646312986034548E+00
+2 69 22     0.786005250645645E-01
+2 69 24     0.456715895578728E-01
+2 70 2     0.718451420702740E-02
+2 70 4    -0.222750553427831E-02
+2 70 6     0.211177414640786E-01
+2 70 8     0.177955766148867E-01
+2 70 10    -0.320756287640677E-01
+2 70 12     0.376627932698332E-01
+2 70 14     0.193427276385869E-01
+2 70 16     0.708636781151331E-01
+2 70 18    -0.368741503181752E+00
+2 70 20     0.527806805004431E+00
+2 70 22     0.441745332219298E+00
+2 70 24     0.620314843019173E+00
+2 71 2    -0.226688937631496E-03
+2 71 4     0.491851634834495E-02
+2 71 6    -0.106595582920156E-02
+2 71 8    -0.103799154157328E-02
+2 71 10    -0.121682701905424E+00
+2 71 12     0.139151654835200E+00
+2 71 14     0.888337807356947E+00
+2 71 16    -0.339769813614021E+00
+2 71 18     0.819757629975763E-03
+2 71 20    -0.138014289779769E-02
+2 71 22    -0.113714167283198E-02
+2 71 24    -0.167959173798797E-02
+2 72 2     0.666635728127592E-03
+2 72 4    -0.186716458086371E-01
+2 72 6     0.147430566378070E-01
+2 72 8     0.635012019110837E-02
+2 72 10     0.560225133520014E+00
+2 72 12    -0.663153613826047E+00
+2 72 14     0.298911968691941E+00
+2 72 16     0.309614656189410E+00
+2 72 18    -0.429032833732185E-02
+2 72 20     0.104166297961665E-01
+2 72 22     0.738041166000780E-02
+2 72 24     0.108204235825183E-01
+2 73 2    -0.843187458779457E-01
+2 73 4     0.769963010035646E-02
+2 73 6     0.586800476788302E-02
+2 73 8    -0.480225895126971E-02
+2 73 10     0.723974671251451E+00
+2 73 12     0.643664343513588E+00
+2 73 14     0.184356793163348E-01
+2 73 16     0.531288773486525E-01
+2 73 18     0.447095198751271E-02
+2 73 20     0.193821249060547E-02
+2 73 22    -0.226426011279784E-02
+2 73 24    -0.583629926365614E-02
+2 74 2    -0.100816943166176E-01
+2 74 4    -0.604778146070839E-01
+2 74 6    -0.388838198131791E-01
+2 74 8    -0.350345280535258E-01
+2 74 10    -0.295788101731279E+00
+2 74 12     0.254511974125309E+00
+2 74 14     0.244455522678445E+00
+2 74 16     0.850447206637504E+00
+2 74 18     0.377481207984633E-01
+2 74 20    -0.495508634412483E-01
+2 74 22    -0.422510538993668E-01
+2 74 24    -0.580652096766050E-01
+2 75 2     0.720357159631981E-01
+2 75 4    -0.454038509700592E-01
+2 75 6     0.296864542099829E+00
+2 75 8    -0.901239176848215E+00
+2 75 10     0.735466159647391E-02
+2 75 12    -0.511452259954248E-02
+2 75 14    -0.572821645747523E-02
+2 75 16    -0.187728538947799E-01
+2 75 18    -0.890132795688536E-02
+2 75 20     0.145380702699835E-02
+2 75 22     0.522343451383050E-02
+2 75 24     0.678472530713486E-02
+2 76 2    -0.782069964723515E-01
+2 76 4    -0.474781412068516E+00
+2 76 6    -0.776788938248430E+00
+2 76 8    -0.231786437909539E+00
+2 76 10     0.225154644743795E-01
+2 76 12    -0.196148033200124E-01
+2 76 14    -0.151256031044578E-01
+2 76 16    -0.607330152716457E-01
+2 76 18     0.467728830376860E-02
+2 76 20     0.240092672498220E-01
+2 76 22     0.878408334567760E-02
+2 76 24     0.132988661435824E-01
+2 77 2    -0.394156540213204E-01
+2 77 4     0.784663729313628E+00
+2 77 6    -0.456409826376937E+00
+2 77 8    -0.195699646032470E+00
+2 77 10     0.836785933867228E-04
+2 77 12    -0.169659238466786E-01
+2 77 14     0.101931241923777E-01
+2 77 16     0.349241676282588E-01
+2 77 18     0.320866911968645E-02
+2 77 20     0.150803306254599E-01
+2 77 22     0.603472422537893E-02
+2 77 24     0.101568288363213E-01
+2 78 2     0.920338606232768E+00
+2 78 4    -0.297505081100111E-02
+2 78 6    -0.111285235817065E+00
+2 78 8     0.410230433261289E-01
+2 78 10     0.700512079234867E-01
+2 78 12     0.623989130710347E-01
+2 78 14     0.315140519528212E-02
+2 78 16     0.862686620080649E-02
+2 78 18     0.383556726172840E-02
+2 78 20     0.280041647697352E-02
+2 78 22    -0.136692402647055E-02
+2 78 24    -0.367798045690634E-02
+<---------molecular_orbital_basis_obj:calculate_amplitudes
+
+          IRR =  1 number of continuum orbitals = 79
+
+          IRR =  2 number of continuum orbitals = 72

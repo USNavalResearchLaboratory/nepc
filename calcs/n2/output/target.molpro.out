@@ -1,0 +1,961 @@
+
+ Primary working directories    : /tmp/zdenek
+ Secondary working directories  : /tmp/zdenek
+ Wavefunction directory         : /home/zdenek/wfu/
+ Main file repository           : /tmp/zdenek/
+ 
+ ARCHNAME  : Linux/x86_64
+ FC        : /opt/intel/Compiler/11.1/064/bin/intel64/ifort
+ FCVERSION : 11.1
+ BLASLIB   : -L/opt/intel/Compiler/11.1/046/mkl/lib/em64t/ -I/opt/intel/Compiler/11.1/046/mkl/lib/ -lmkl_core
+ id        : mbi
+
+ Nodes     nprocs
+ oppie        1
+ ga_uses_ma=false, calling ma_init with nominal heap.
+ GA-space will be limited to   8.0 MW (determined by -G option)
+
+ MPP tuning parameters: Latency=     0 Microseconds,   Broadcast speed=    0 MB/sec
+ default implementation of scratch files=df  
+
+ ***,hydrogen.peroxide_plus_scattering with cc-pVDZ basis
+  Memory,4000000;
+  Gprint,basis;                                                                   ! Print basis information
+  Gprint,civector;                                                                ! Print CI vector in MCSCF
+  Gprint,orbital;                                                                 ! Print orbitals in SCF and MCSCF
+  
+ SYMMETRY,XY
+ basis={
+                                                                                 ! OXYGEN       (9s,4p,1d) -> [3s,2p,1d]
+                                                                                 ! OXYGEN       (9s,4p,1d) -> [3s,2p,1d]
+ s, O , 11720.0000000, 1759.0000000, 400.8000000, 113.7000000, 37.0300000, 13.2700000, 5.0250000, 1.0130000, 0.3023000
+ c, 1.8, 0.0007100, 0.0054700, 0.0278370, 0.1048000, 0.2830620, 0.4487190, 0.2709520, 0.0154580
+ c, 1.8, -0.0001600, -0.0012630, -0.0062670, -0.0257160, -0.0709240, -0.1654110, -0.1169550, 0.5573680
+ c, 9.9, 1
+ p, O , 17.7000000, 3.8540000, 1.0460000, 0.2753000
+ c, 1.3, 0.0430180, 0.2289130, 0.5087280
+ c, 4.4, 1
+ d, O , 1.1850000
+ c, 1.1, 1
+                                                                                 ! HYDROGEN       (4s,1p) -> [2s,1p]
+                                                                                 ! HYDROGEN       (4s,1p) -> [2s,1p]
+ s, H , 13.0100000, 1.9620000, 0.4446000, 0.1220000
+ c, 1.3, 0.0196850, 0.1379770, 0.4781480
+ c, 4.4, 1
+ p, H , 0.7270000
+ c, 1.1, 1
+  
+ }
+ geometry={
+ O,   0.000000000,   1.315816206,  -0.104312875
+ H,   1.477198805,   1.699052636,   0.834502997
+ O,   0.000000000,  -1.315816206,  -0.104312875
+ H,  -1.477198805,  -1.699052636,   0.834502997
+ }
+                                                                                 ! method = SA-CASSCF
+  m_name = CASSCF(10,8)
+  m_closed = [2,2,0,0,0,0,0,0]
+  m_occ = [6,6]
+  
+  {hf;
+  orbprint,-1;}
+  
+  {multi;
+  closed,m_closed(1),m_closed(2);
+  occ,m_occ(1),m_occ(2);
+  wf,18,1,0;
+  state,2;
+  wf,18,2,0;
+  state,1;
+  wf,18,1,2;
+  state,1;
+  wf,18,2,2;
+  state,1;
+                                                                                 !State-averaged orbitals
+  start,2100.2;
+  orbprint,200;}
+
+ Variables initialized (632), CPU time= 0.01 sec
+ Commands  initialized (426), CPU time= 0.00 sec, 469 directives.
+ Default parameters read. Elapsed time= 0.04 sec
+ Checking input...
+ Passed
+1
+
+
+                                         ***  PROGRAM SYSTEM MOLPRO  ***
+                         Copyright, University College Cardiff Consultants Limited, 2008
+
+                                    Version 2009.1 linked 27 Jan 2010 14:11:39
+
+
+ **********************************************************************************************************************************
+ LABEL *   hydrogen.peroxide_plus_scattering with cc-pVDZ basis                          
+ Linux-3.2.0-4-amd64/oppie(x86_64) 64 bit mpp version                                    DATE:  22-Oct-14         TIME: 14:40:58  
+ **********************************************************************************************************************************
+
+ Patch level:      28
+ **********************************************************************************************************************************
+
+
+
+
+ Variable memory set to    4000000 words,  buffer space   230000 words
+
+ SETTING BASIS          =    USERDEF
+ ZSYMEL=XY 
+ 
+
+Geometry recognized as XYZ
+
+ SETTING M_NAME         =    CASSCF(10,8)
+ SETTING M_CLOSED(1)    =         2.00000000                                  
+ SETTING M_CLOSED(2)    =         2.00000000                                  
+ SETTING M_CLOSED(3)    =         0.00000000                                  
+ SETTING M_CLOSED(4)    =         0.00000000                                  
+ SETTING M_CLOSED(5)    =         0.00000000                                  
+ SETTING M_CLOSED(6)    =         0.00000000                                  
+ SETTING M_CLOSED(7)    =         0.00000000                                  
+ SETTING M_CLOSED(8)    =         0.00000000                                  
+ SETTING M_OCC(1)       =         6.00000000                                  
+ SETTING M_OCC(2)       =         6.00000000                                  
+
+
+ Recomputing integrals since basis changed
+
+
+ Using spherical harmonics
+
+
+1PROGRAM * SEWARD (Integral evaluation for generally contracted gaussian basis sets)     Author: Roland Lindh, 1990
+
+ Geometry written to block  1 of record 700
+
+
+ Point group  C2  
+
+
+
+ ATOMIC COORDINATES
+
+ NR  ATOM    CHARGE       X              Y              Z
+
+   1  O       8.00    0.000000000    2.486532269   -0.197122766
+   2  O       8.00    0.000000000   -2.486532269   -0.197122766
+   3  H       1.00    2.791501183    3.210744165    1.576982120
+   4  H       1.00   -2.791501183   -3.210744165    1.576982120
+
+
+ BASIS DATA
+
+   Nr Sym  Nuc  Type         Exponents   Contraction coefficients
+
+   1.1 A     1  1s        11720.000000     0.000710   -0.000160
+   2.1 A     2  1s         1759.000000     0.005470   -0.001263
+                            400.800000     0.027837   -0.006267
+                            113.700000     0.104800   -0.025716
+                             37.030000     0.283062   -0.070924
+                             13.270000     0.448719   -0.165411
+                              5.025000     0.270952   -0.116955
+                              1.013000     0.015458    0.557368
+   3.1 A     1  1s            0.302300     1.000000
+             2  1s     
+   4.1 A     1  2pz          17.700000     0.043018
+             2  2pz           3.854000     0.228913
+                              1.046000     0.508728
+   5.1 A     1  2px          17.700000     0.043018
+             2 -2px           3.854000     0.228913
+                              1.046000     0.508728
+   6.1 A     1  2py          17.700000     0.043018
+             2 -2py           3.854000     0.228913
+                              1.046000     0.508728
+   7.1 A     1  2pz           0.275300     1.000000
+             2  2pz    
+   8.1 A     1  2px           0.275300     1.000000
+             2 -2px    
+   9.1 A     1  2py           0.275300     1.000000
+             2 -2py    
+  10.1 A     1  3d0           1.185000     1.000000
+             2  3d0    
+  11.1 A     1  3d2-          1.185000     1.000000
+             2  3d2-   
+  12.1 A     1  3d2+          1.185000     1.000000
+             2  3d2+   
+  13.1 A     1  3d1+          1.185000     1.000000
+             2 -3d1+   
+  14.1 A     1  3d1-          1.185000     1.000000
+             2 -3d1-   
+  15.1 A     3  1s           13.010000     0.019685
+             4  1s            1.962000     0.137977
+                              0.444600     0.478148
+  16.1 A     3  1s            0.122000     1.000000
+             4  1s     
+  17.1 A     3  2pz           0.727000     1.000000
+             4  2pz    
+  18.1 A     3  2px           0.727000     1.000000
+             4 -2px    
+  19.1 A     3  2py           0.727000     1.000000
+             4 -2py    
+   1.2 B     1  1s        11720.000000     0.000710   -0.000160
+   2.2 B     2  1s         1759.000000     0.005470   -0.001263
+                            400.800000     0.027837   -0.006267
+                            113.700000     0.104800   -0.025716
+                             37.030000     0.283062   -0.070924
+                             13.270000     0.448719   -0.165411
+                              5.025000     0.270952   -0.116955
+                              1.013000     0.015458    0.557368
+   3.2 B     1  1s            0.302300     1.000000
+             2 -1s     
+   4.2 B     1  2px          17.700000     0.043018
+             2  2px           3.854000     0.228913
+                              1.046000     0.508728
+   5.2 B     1  2py          17.700000     0.043018
+             2  2py           3.854000     0.228913
+                              1.046000     0.508728
+   6.2 B     1  2pz          17.700000     0.043018
+             2 -2pz           3.854000     0.228913
+                              1.046000     0.508728
+   7.2 B     1  2px           0.275300     1.000000
+             2  2px    
+   8.2 B     1  2py           0.275300     1.000000
+             2  2py    
+   9.2 B     1  2pz           0.275300     1.000000
+             2 -2pz    
+  10.2 B     1  3d1+          1.185000     1.000000
+             2  3d1+   
+  11.2 B     1  3d1-          1.185000     1.000000
+             2  3d1-   
+  12.2 B     1  3d0           1.185000     1.000000
+             2 -3d0    
+  13.2 B     1  3d2-          1.185000     1.000000
+             2 -3d2-   
+  14.2 B     1  3d2+          1.185000     1.000000
+             2 -3d2+   
+  15.2 B     3  1s           13.010000     0.019685
+             4 -1s            1.962000     0.137977
+                              0.444600     0.478148
+  16.2 B     3  1s            0.122000     1.000000
+             4 -1s     
+  17.2 B     3  2px           0.727000     1.000000
+             4  2px    
+  18.2 B     3  2py           0.727000     1.000000
+             4  2py    
+  19.2 B     3  2pz           0.727000     1.000000
+             4 -2pz    
+
+ NUCLEAR CHARGE:                   18
+ NUMBER OF PRIMITIVE AOS:          68
+ NUMBER OF SYMMETRY AOS:           66
+ NUMBER OF CONTRACTIONS:           38   (  19A   +  19B   )
+ NUMBER OF CORE ORBITALS:           2   (   1A   +   1B   )
+ NUMBER OF VALENCE ORBITALS:       10   (   5A   +   5B   )
+
+
+ NUCLEAR REPULSION ENERGY   20.14104755
+
+
+ Eigenvalues of metric
+
+         1 0.147E+00 0.307E+00 0.393E+00 0.501E+00 0.559E+00 0.899E+00 0.984E+00 0.984E+00
+         2 0.143E+00 0.275E+00 0.389E+00 0.428E+00 0.490E+00 0.899E+00 0.984E+00 0.985E+00
+
+
+ Contracted 2-electron integrals neglected if value below      1.0D-11
+ AO integral compression algorithm  1   Integral accuracy      1.0D-11
+
+     1.049 MB (compressed) written to integral file ( 40.1%)
+
+     Node minimum: 1.049 MB, node maximum: 1.049 MB
+
+
+ NUMBER OF SORTED TWO-ELECTRON INTEGRALS:     144590.     BUFFER LENGTH:  32768
+ NUMBER OF SEGMENTS:   1  SEGMENT LENGTH:     144590      RECORD LENGTH: 524288
+
+ Memory used in sort:       0.70 MW
+
+ SORT1 READ      245816. AND WROTE      112494. INTEGRALS IN      1 RECORDS. CPU TIME:     0.06 SEC, REAL TIME:     0.01 SEC
+ SORT2 READ      112494. AND WROTE      144590. INTEGRALS IN      4 RECORDS. CPU TIME:     0.16 SEC, REAL TIME:     0.02 SEC
+
+ FILE SIZES:   FILE 1:     2.8 MBYTE,  FILE 4:     4.2 MBYTE,   TOTAL:      7.0 MBYTE
+
+ OPERATOR DM      FOR CENTER  0  COORDINATES:    0.000000    0.000000    0.000000
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      19        2.82       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1300     1700   
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    ERIS     OPER   
+
+ PROGRAMS   *        TOTAL       INT
+ CPU TIMES  *         0.78      0.70
+ REAL TIME  *         0.19 SEC
+ DISK USED  *         8.64 MB      
+ GA USED    *         0.00 MB       (max)       0.00 MB       (current)
+ **********************************************************************************************************************************
+
+1PROGRAM * RHF-SCF (CLOSED SHELL)       Authors: W. Meyer, H.-J. Werner
+
+
+ NUMBER OF ELECTRONS:       9+    9-
+ CONVERGENCE THRESHOLDS:    1.00E-05 (Density)    1.00E-07 (Energy)
+ MAX. NUMBER OF ITERATIONS:       60
+ INTERPOLATION TYPE:            DIIS
+ INTERPOLATION STEPS:              2 (START)      1 (STEP)
+ LEVEL SHIFTS:                  0.00 (CLOSED)  0.00 (OPEN) 
+
+
+
+ 
+   Atom=O  basis=cc-pVTZ           lmin=0  lmax=1
+   Atom=H  basis=cc-pVTZ           lmin=0  lmax=1
+ 
+ Orbital guess generated from atomic densities. Full valence occupancy:    6   6
+
+ Molecular orbital dump at record        2100.2
+
+ Initial alpha occupancy:   5   4
+ Initial beta  occupancy:   5   4
+ Wave function symmetry:    1
+
+ ITERATION    DDIFF          GRAD             ENERGY        2-EL.EN.            DIPOLE MOMENTS         DIIS
+    1      0.000D+00      0.000D+00      -150.09045416    162.425208   0.000000   0.000000   2.417853    0
+    2      0.000D+00      0.235D-01      -150.15612142    152.089792   0.000000   0.000000   0.769603    1
+    3      0.319D-01      0.244D-01      -150.19788999    155.893095   0.000000   0.000000   1.148001    2
+    4      0.122D-01      0.496D-02      -150.20136233    155.914386   0.000000   0.000000   1.015189    3
+    5      0.502D-02      0.108D-02      -150.20152734    155.971102   0.000000   0.000000   0.996225    4
+    6      0.112D-02      0.146D-03      -150.20153313    155.957526   0.000000   0.000000   0.991951    5
+    7      0.193D-03      0.435D-04      -150.20153430    155.958161   0.000000   0.000000   0.991266    6
+    8      0.689D-04      0.278D-04      -150.20153529    155.958794   0.000000   0.000000   0.991356    7
+    9      0.689D-04      0.249D-04      -150.20153653    155.958597   0.000000   0.000000   0.991530    6
+   10      0.957D-04      0.234D-04      -150.20153806    155.959363   0.000000   0.000000   0.991754    7
+   11      0.127D-03      0.226D-04      -150.20154329    155.960280   0.000000   0.000000   0.992506    7
+   12      0.478D-03      0.196D-04      -150.20155704    155.965371   0.000000   0.000000   0.995267    8
+   13      0.222D-02      0.115D-04      -150.20155711    155.965295   0.000000   0.000000   0.995277    9
+   14      0.175D-04      0.821D-05      -150.20155767    155.965641   0.000000   0.000000   0.995531    9
+   15      0.313D-03      0.584D-05      -150.20155784    155.965906   0.000000   0.000000   0.995601    9
+   16      0.133D-03      0.490D-05      -150.20155792    155.966244   0.000000   0.000000   0.995711    9
+   17      0.131D-03      0.246D-05      -150.20155793    155.966230   0.000000   0.000000   0.995720    9
+   18      0.144D-04      0.163D-05      -150.20155794    155.966297   0.000000   0.000000   0.995764    9
+   19      0.281D-04      0.488D-06      -150.20155794    155.966292   0.000000   0.000000   0.995773    9
+   20      0.103D-04      0.150D-06      -150.20155794    155.966302   0.000000   0.000000   0.995772    9
+   21      0.107D-05      0.499D-07      -150.20155794    155.966292   0.000000   0.000000   0.995772    0
+
+ Final occupancy:   5   4
+
+ !RHF STATE 1.1 Energy               -150.201557940755
+ Nuclear energy                        20.14104755
+ One-electron energy                 -248.32575160
+ Two-electron energy                   77.98314611
+ Virial quotient                       -1.00751905
+ !RHF STATE 1.1 Dipole moment           0.00000000     0.00000000     0.99577173
+ Dipole moment /Debye                   0.00000000     0.00000000     2.53083351
+
+ Orbital energies:
+
+         1.1          2.1          3.1          4.1          5.1          6.1          7.1
+    -20.692556    -1.227125    -0.532466    -0.469196    -0.356576    -0.011451     0.587855
+
+         1.2          2.2          3.2          4.2          5.2          6.2
+    -20.692516    -1.207188    -0.528237    -0.473869    -0.078715    -0.000593
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      20        2.82       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1300     1700      960(1)
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    ERIS     OPER    ABASIS    
+
+              2       3        0.32       700     1000     2100   
+                                         GEOM     BASIS     RHF  
+
+ PROGRAMS   *        TOTAL        HF       INT
+ CPU TIMES  *         1.22      0.43      0.70
+ REAL TIME  *         0.24 SEC
+ DISK USED  *         8.64 MB      
+ GA USED    *         0.00 MB       (max)       0.00 MB       (current)
+ **********************************************************************************************************************************
+
+1PROGRAM * MULTI (Direct Multiconfiguration SCF)       Authors: P.J. Knowles, H.-J. Werner (1984)     S.T. Elbert (1988)
+
+
+ Number of closed-shell orbitals:  4 (  2  2 )
+ Number of active  orbitals:       8 (  4  4 )
+ Number of external orbitals:     26 ( 13 13 )
+
+ State symmetry 1
+
+ Number of electrons:    10    Spin symmetry=Singlet   Space symmetry=1
+ Number of states:        2
+ Number of CSFs:        600   (1568 determinants, 3136 intermediate states)
+
+ State symmetry 2
+
+ Number of electrons:    10    Spin symmetry=Singlet   Space symmetry=2
+ Number of states:        1
+ Number of CSFs:        576   (1568 determinants, 3136 intermediate states)
+
+ State symmetry 3
+
+ Number of electrons:    10    Spin symmetry=Triplet   Space symmetry=1
+ Number of states:        1
+ Number of CSFs:        744   (968 determinants, 1960 intermediate states)
+
+ State symmetry 4
+
+ Number of electrons:    10    Spin symmetry=Triplet   Space symmetry=2
+ Number of states:        1
+ Number of CSFs:        768   (992 determinants, 1960 intermediate states)
+
+ Molecular orbitals read from record     2100.2  Type=RHF/CANONICAL (state 1.1)
+
+ Wavefunction dump at record             2140.2
+
+ Convergence thresholds  0.10E-01 (gradient)  0.10E-05 (energy)  0.10E-02 (step length)
+
+ Weight factors for state symmetry  1:    0.20000   0.20000
+ Weight factors for state symmetry  2:    0.20000
+ Weight factors for state symmetry  3:    0.20000
+ Weight factors for state symmetry  4:    0.20000
+
+ Number of orbital rotations:     172     (  16 Core/Active   52 Core/Virtual   0 Active/Active  104 Active/Virtual)
+ Total number of variables:      6836
+
+
+ ITER. MIC  NCI  NEG     ENERGY(VAR)     ENERGY(PROJ)   ENERGY CHANGE     GRAD(0)  GRAD(ORB)   GRAD(CI)     STEP       TIME
+
+   1   68  186    0    -150.54178875    -150.61768051   -0.07589175    0.30220880 0.00012272 0.00738628  0.34D+00     13.77
+ WARNING: exit with wrong ci vector!!
+   2   29  205    0    -150.60503631    -150.60546085   -0.00042455    0.02208898 0.00000000 0.00390056  0.25D-01     29.98
+   3   32  203    0    -150.61611372    -150.61635390   -0.00024018    0.01637894 0.00000000 0.00157321  0.20D-01     48.03
+ 
+ NON-ZERO P-SPACE GRADIENT. LARGEST VALUE:    0.16D+02
+ Probably the p-space is not closed under symmetry operations. This can happen if 
+ the initial orbitals are not symmetry adapted or if there is root-flipping between states of 
+ different symmetry. Try different p-space threshold, or select p-space configurations manually. 
+ The check can be bypassed by setting thresh,pspace=thr to a larger value. 
+ Non-zero p-space gradient elements smaller than thr are ignored.
+ 
+ P-space vectors:
+ 2220a2a0           -0.011456    
+ 22aa2200            0.000000    
+ 22202aa0            0.000356    
+ a2a02220            0.000439    
+ 2220aa20            0.000480    
+ aa202220            0.000120    
+ 2aa02220            0.000047    
+ 220022aa            0.000000    
+ 0220a22a            0.000003    
+ a22a0220           -0.000009    
+ a22aa2b0           -0.000374    
+ a22ab2a0           -0.000002    
+ a22ba2a0           -0.000009    
+ b22aa2a0           -0.000381    
+ 2ab022aa            0.000038    
+ 2ba022aa            0.000006    
+ 2aa022ab           -0.000018    
+ 2aa022ba            0.000014    
+ 22aa2ab0            0.000012    
+ 22aa2ba0            0.000014    
+ 22ab2aa0            0.000003    
+ 22ba2aa0            0.000001    
+ 22aaa2b0           -0.000020    
+ 22aab2a0           -0.000005    
+ 22aba2a0            0.000343    
+ 22baa2a0            0.000328    
+ a2b022aa           -0.000054    
+ b2a022aa           -0.000001    
+ a2a022ab            0.000130    
+ a2a022ba            0.000076    
+ ab20a22a            0.000036    
+ ba20a22a            0.000317    
+ aa20a22b            0.000285    
+ aa20b22a            0.000004    
+ 2a2a2200            0.000130    
+ 22202a0a            0.000074    
+ a22aab20            0.000038    
+ a22aba20            0.000010    
+ a22baa20           -0.000026    
+ b22aaa20            0.000002    
+ a2b0a22a           -0.000026    
+ b2a0a22a            0.000007    
+ a2a0a22b            0.000043    
+ a2a0b22a            0.000010    
+ 2a2a2ab0           -0.000235    
+ 2a2a2ba0           -0.000611    
+ 2a2b2aa0           -0.000454    
+ 2b2a2aa0           -0.000078    
+ 2220a20a           -0.002100    
+ 2a2aa2b0            0.000607    
+ 2a2ab2a0            0.000374    
+ 2a2ba2a0            0.001483    
+ 2b2aa2a0            0.001716    
+ ab2022aa           -0.001179    
+ ba2022aa            0.000319    
+ aa2022ab            0.003957    
+ aa2022ba            0.002460    
+ 2220aaab            0.001867    
+ 2220aaba            0.000642    
+ 2220abaa           -0.001020    
+ 2220baaa            0.000205    
+ a22a2200            0.000016    
+ a22a2ab0           -0.002020    
+ a22a2ba0           -0.003142    
+ a22b2aa0           -0.001377    
+ b22a2aa0           -0.000255    
+ 2a2aab20            0.003323    
+ 2a2aba20           -0.000185    
+ 2a2baa20           -0.001162    
+ 2b2aaa20            0.002345    
+ 222002aa            0.000083    
+ ab202a2a            0.000364    
+ ba202a2a            0.000056    
+ aa202a2b            0.000682    
+ aa202b2a            0.000989    
+ 2a2a0220           -0.000249    
+ 022022aa           -0.000004    
+ 2a2a2020            0.000082    
+ 22aa2a0b            0.000048    
+ 22aa2b0a            0.000006    
+ 22ab2a0a           -0.000042    
+ 22ba2a0a            0.000000    
+ 22200a2a            0.000003    
+ 20202a2a            0.000137    
+ 2ab02a2a            0.000254    
+ 2ba02a2a           -0.000125    
+ 2aa02a2b           -0.000016    
+ 2aa02b2a            0.000364    
+ 02202a2a            0.000004    
+ 0a2a2220            0.000018    
+ 2ab0a22a           -0.002818    
+ 2ba0a22a            0.001092    
+ 2aa0a22b            0.003847    
+ 2aa0b22a           -0.000063    
+ 22aaab20            0.003097    
+ 22aaba20           -0.000037    
+ 22abaa20           -0.001162    
+ 22baaa20            0.001972    
+ 202022aa            0.000088    
+ aaab2220            0.000040    
+ aaba2220           -0.000068    
+ abaa2220           -0.000081    
+ baaa2220            0.000027    
+ 2a0a2220           -0.000001    
+ a2b02a2a           -0.000109    
+ b2a02a2a            0.000019    
+ a2a02a2b            0.000136    
+ a2a02b2a            0.000008    
+ 222020aa            0.000478    
+ 22002a2a           -0.000002    
+ 22aaa20b           -0.000861    
+ 22aab20a           -0.000002    
+ 22aba20a            0.000833    
+ 22baa20a           -0.000026    
+ 2020a22a           -0.002871    
+ 22aa0220           -0.000004    
+ a22a02ab           -0.000531    
+ a22a02ba           -0.000019    
+ a22b02aa            0.000520    
+ b22a02aa            0.000008    
+ 0a2ba22a           -0.000247    
+ 0b2aa22a           -0.000003    
+ 0a2aa22b            0.000245    
+ 0a2ab22a            0.000001    
+ 2a0b22aa            0.000012    
+ 2b0a22aa            0.000001    
+ 2a0a22ab           -0.000011    
+ 2a0a22ba            0.000000    
+ a22a0a2b           -0.000036    
+ a22a0b2a            0.000008    
+ a22b0a2a            0.000043    
+ b22a0a2a            0.000000    
+ 02aa2220            0.000017    
+ 2aa02202            0.000005    
+ a02a2220           -0.000110    
+ a22a2020            0.000073    
+ 2220a02a           -0.000111    
+ 2200a22a            0.000054    
+ 20aa2220           -0.000011    
+ a20a2220           -0.000014    
+ 22aa2020            0.000001    
+ 2aa22200            0.000001    
+ a22aaabb            0.000309    
+ a22aabab            0.002344    
+ a22aabba            0.000052    
+ a22abaab            0.000735    
+ a22ababa           -0.000007    
+ a22abbaa           -0.000064    
+ b22baaaa           -0.001304    
+ a22baaab            0.000019    
+ a22baaba           -0.000341    
+ a22babaa           -0.002337    
+ a22bbaaa           -0.000673    
+ b22aaaab            0.001318    
+ b22aaaba            0.000028    
+ b22aabaa            0.000019    
+ b22abaaa            0.000005    
+ 2a2a2a0b            0.000111    
+ 2a2a2b0a           -0.000099    
+ 2a2b2a0a           -0.000172    
+ 2b2a2a0a            0.000038    
+ a22aa20b           -0.000138    
+ a22ab20a           -0.000001    
+ a22ba20a            0.000146    
+ b22aa20a            0.000009    
+ 20ab22aa           -0.000040    
+ 20ba22aa           -0.000007    
+ 20aa22ab            0.000036    
+ 20aa22ba            0.000003    
+ 2a2a20ab            0.001257    
+ 2a2a20ba            0.000093    
+ 2a2b20aa           -0.001134    
+ 2b2a20aa            0.000031    
+ a2a02202            0.000039    
+ 2ab02aa2            0.000001    
+ 2ba02aa2           -0.000064    
+ 2aa02ab2            0.000112    
+ 2aa02ba2            0.000177    
+ aaaa22bb            0.000166    
+ aabb22aa            0.000390    
+ abab22aa            0.000169    
+ abba22aa           -0.000045    
+ baab22aa           -0.000032    
+ baba22aa           -0.000022    
+ bbaa22aa           -0.000002    
+ aaab22ab            0.000013    
+ aaab22ba           -0.000177    
+ aaba22ab           -0.000400    
+ aaba22ba           -0.000032    
+ abaa22ab           -0.000206    
+ abaa22ba            0.000009    
+ baaa22ab            0.000041    
+ baaa22ba            0.000030    
+ 22aaaabb            0.000609    
+ 22aaabab            0.001169    
+ 22aaabba           -0.000090    
+ 22aabaab            0.000013    
+ 22aababa            0.000022    
+ 22aabbaa           -0.000005    
+ 22bbaaaa           -0.000664    
+ 22abaaab           -0.000361    
+ 22abaaba            0.000077    
+ 22ababaa           -0.000245    
+ 22abbaaa           -0.000019    
+ 22baaaab            0.000187    
+ 22baaaba            0.000574    
+ 22baabaa            0.001018    
+ 22babaaa           -0.000034    
+ a20b22aa           -0.000008    
+ b20a22aa            0.000001    
+ a20a22ab            0.000010    
+ a20a22ba            0.000001    
+ a2b0a2a2           -0.000002    
+ b2a0a2a2            0.000000    
+ a2a0a2b2            0.000002    
+ a2a0b2a2            0.000000    
+ 22aa20ab            0.000087    
+ 22aa20ba           -0.000003    
+ 22ab20aa           -0.000085    
+ 22ba20aa            0.000005    
+ 2a2aaabb            0.482486    
+ 2a2aabab            0.802517    
+ 2a2aabba            0.034752    
+ 2a2abaab           -0.015349    
+ 2a2ababa            0.001450    
+ 2a2abbaa            0.007274    
+ 2b2baaaa           -0.310119    
+ 2a2baaab           -0.004931    
+ 2a2baaba           -0.513401    
+ 2a2babaa           -0.806378    
+ 2a2bbaaa            0.013671    
+ 2b2aaaab            0.329623    
+ 2b2aaaba            0.002399    
+ 2b2aabaa           -0.029921    
+ 2b2abaaa            0.003958    
+ 2aa22ab0            0.000042    
+ 2aa22ba0            0.000071    
+ 2ab22aa0            0.000002    
+ 2ba22aa0           -0.000027    
+ aa200222           -0.000002    
+ ab20aa22            0.000002    
+ ba20aa22           -0.000006    
+ aa20ab22           -0.000010    
+ aa20ba22           -0.000002    
+ 0220a2a2           -0.000022    
+ a02ba22a            0.000113    
+ b02aa22a            0.000018    
+ a02aa22b           -0.000097    
+ a02ab22a           -0.000002    
+ ab20a2a2           -0.000775    
+ ba20a2a2           -0.001944    
+ aa20a2b2           -0.001218    
+ aa20b2a2           -0.000049    
+ 
+ P-space residuals:
+ 2220a2a0            0.000000    
+ 22aa2200            0.000000    
+ 22202aa0            0.000000    
+ a2a02220            0.000000    
+ 2220aa20            0.000000    
+ aa202220            0.000000    
+ 2aa02220            0.000000    
+ 220022aa            0.000000    
+ 0220a22a            0.000000    
+ a22a0220            0.000000    
+ a22aa2b0            0.000032    
+ a22ab2a0           -0.000032    
+ a22ba2a0            0.000032    
+ b22aa2a0           -0.000032    
+ 2ab022aa           -0.000003    
+ 2ba022aa            0.000003    
+ 2aa022ab           -0.000003    
+ 2aa022ba            0.000003    
+ 22aa2ab0           -0.000001    
+ 22aa2ba0            0.000001    
+ 22ab2aa0           -0.000001    
+ 22ba2aa0            0.000001    
+ 22aaa2b0           -0.000049    
+ 22aab2a0            0.000049    
+ 22aba2a0           -0.000049    
+ 22baa2a0            0.000049    
+ a2b022aa            0.000000    
+ b2a022aa            0.000000    
+ a2a022ab            0.000000    
+ a2a022ba            0.000000    
+ ab20a22a            0.000014    
+ ba20a22a           -0.000014    
+ aa20a22b            0.000014    
+ aa20b22a           -0.000014    
+ 2a2a2200            0.000000    
+ 22202a0a            0.000000    
+ a22aab20           -0.000012    
+ a22aba20            0.000012    
+ a22baa20           -0.000012    
+ b22aaa20            0.000012    
+ a2b0a22a            0.000000    
+ b2a0a22a            0.000000    
+ a2a0a22b            0.000000    
+ a2a0b22a            0.000000    
+ 2a2a2ab0            0.000078    
+ 2a2a2ba0           -0.000078    
+ 2a2b2aa0            0.000078    
+ 2b2a2aa0           -0.000078    
+ 2220a20a            0.000000    
+ 2a2aa2b0           -0.000228    
+ 2a2ab2a0            0.000228    
+ 2a2ba2a0           -0.000228    
+ 2b2aa2a0            0.000228    
+ ab2022aa            0.000368    
+ ba2022aa           -0.000368    
+ aa2022ab            0.000368    
+ aa2022ba           -0.000368    
+ 2220aaab            0.000231    
+ 2220aaba           -0.000231    
+ 2220abaa            0.000231    
+ 2220baaa           -0.000231    
+ a22a2200            0.000000    
+ a22a2ab0            0.000379    
+ a22a2ba0           -0.000379    
+ a22b2aa0            0.000379    
+ b22a2aa0           -0.000379    
+ 2a2aab20           -0.000034    
+ 2a2aba20            0.000034    
+ 2a2baa20           -0.000034    
+ 2b2aaa20            0.000034    
+ 222002aa            0.000000    
+ ab202a2a            0.000010    
+ ba202a2a           -0.000010    
+ aa202a2b            0.000010    
+ aa202b2a           -0.000010    
+ 2a2a0220            0.000000    
+ 022022aa            0.000000    
+ 2a2a2020            0.000000    
+ 22aa2a0b            0.000014    
+ 22aa2b0a           -0.000014    
+ 22ab2a0a            0.000014    
+ 22ba2a0a           -0.000014    
+ 22200a2a            0.000000    
+ 20202a2a            0.000000    
+ 2ab02a2a            0.000003    
+ 2ba02a2a           -0.000003    
+ 2aa02a2b            0.000003    
+ 2aa02b2a           -0.000003    
+ 02202a2a            0.000000    
+ 0a2a2220            0.000000    
+ 2ab0a22a            0.000343    
+ 2ba0a22a           -0.000343    
+ 2aa0a22b            0.000343    
+ 2aa0b22a           -0.000343    
+ 22aaab20            0.000348    
+ 22aaba20           -0.000348    
+ 22abaa20            0.000348    
+ 22baaa20           -0.000348    
+ 202022aa            0.000000    
+ aaab2220            0.000000    
+ aaba2220            0.000000    
+ abaa2220            0.000000    
+ baaa2220            0.000000    
+ 2a0a2220            0.000000    
+ a2b02a2a            0.000000    
+ b2a02a2a            0.000000    
+ a2a02a2b            0.000000    
+ a2a02b2a            0.000000    
+ 222020aa            0.000000    
+ 22002a2a            0.000000    
+ 22aaa20b           -0.000126    
+ 22aab20a            0.000126    
+ 22aba20a           -0.000126    
+ 22baa20a            0.000126    
+ 2020a22a            0.000000    
+ 22aa0220            0.000000    
+ a22a02ab           -0.000068    
+ a22a02ba            0.000068    
+ a22b02aa           -0.000068    
+ b22a02aa            0.000068    
+ 0a2ba22a            0.000015    
+ 0b2aa22a           -0.000015    
+ 0a2aa22b            0.000015    
+ 0a2ab22a           -0.000015    
+ 2a0b22aa           -0.000001    
+ 2b0a22aa            0.000001    
+ 2a0a22ab           -0.000001    
+ 2a0a22ba            0.000001    
+ a22a0a2b            0.000012    
+ a22a0b2a           -0.000012    
+ a22b0a2a            0.000012    
+ b22a0a2a           -0.000012    
+ 02aa2220            0.000000    
+ 2aa02202            0.000000    
+ a02a2220            0.000000    
+ a22a2020            0.000000    
+ 2220a02a            0.000000    
+ 2200a22a            0.000000    
+ 20aa2220            0.000000    
+ a20a2220            0.000000    
+ 22aa2020            0.000000    
+ 2aa22200            0.000000    
+ a22aaabb           -0.000025    
+ a22aabab            0.000322    
+ a22aabba           -0.000300    
+ a22abaab            0.000158    
+ a22ababa           -0.000180    
+ a22abbaa           -0.000117    
+ b22baaaa            0.000142    
+ a22baaab            0.000057    
+ a22baaba           -0.000035    
+ a22babaa            0.000332    
+ a22bbaaa            0.000147    
+ b22aaaab            0.000152    
+ b22aaaba           -0.000175    
+ b22aabaa           -0.000123    
+ b22abaaa           -0.000357    
+ 2a2a2a0b            0.000028    
+ 2a2a2b0a           -0.000028    
+ 2a2b2a0a            0.000028    
+ 2b2a2a0a           -0.000028    
+ a22aa20b            0.000012    
+ a22ab20a           -0.000012    
+ a22ba20a            0.000012    
+ b22aa20a           -0.000012    
+ 20ab22aa            0.000004    
+ 20ba22aa           -0.000004    
+ 20aa22ab            0.000004    
+ 20aa22ba           -0.000004    
+ 2a2a20ab            0.000241    
+ 2a2a20ba           -0.000241    
+ 2a2b20aa            0.000241    
+ 2b2a20aa           -0.000241    
+ a2a02202            0.000000    
+ 2ab02aa2            0.000001    
+ 2ba02aa2           -0.000001    
+ 2aa02ab2            0.000001    
+ 2aa02ba2           -0.000001    
+ aaaa22bb            0.000002    
+ aabb22aa           -0.000047    
+ abab22aa           -0.000038    
+ abba22aa           -0.000001    
+ baab22aa           -0.000001    
+ baba22aa            0.000041    
+ bbaa22aa            0.000045    
+ aaab22ab            0.000002    
+ aaab22ba           -0.000004    
+ aaba22ab           -0.000041    
+ aaba22ba            0.000043    
+ abaa22ab           -0.000044    
+ abaa22ba            0.000042    
+ baaa22ab            0.000005    
+ baaa22ba           -0.000003    
+ 22aaaabb           -0.000003    
+ 22aaabab            0.000118    
+ 22aaabba            0.000179    
+ 22aabaab           -0.000144    
+ 22aababa           -0.000152    
+ 22aabbaa            0.000037    
+ 22bbaaaa           -0.000034    
+ 22abaaab            0.000203    
+ 22abaaba            0.000094    
+ 22ababaa            0.000021    
+ 22abbaaa           -0.000048    
+ 22baaaab           -0.000131    
+ 22baaaba           -0.000166    
+ 22baabaa            0.000050    
+ 22babaaa           -0.000024    
+ a20b22aa            0.000000    
+ b20a22aa            0.000000    
+ a20a22ab            0.000000    
+ a20a22ba            0.000000    
+ a2b0a2a2            0.000000    
+ b2a0a2a2            0.000000    
+ a2a0a2b2            0.000000    
+ a2a0b2a2            0.000000    
+ 22aa20ab            0.000012    
+ 22aa20ba           -0.000012    
+ 22ab20aa            0.000012    
+ 22ba20aa           -0.000012    
+ 2a2aaabb            9.754861    
+ 2a2aabab           16.399098    
+ 2a2aabba            0.707040    
+ 2a2abaab           -0.314394    
+ 2a2ababa            0.029522    
+ 2a2abbaa            0.146828    
+ 2b2baaaa           -6.442568    
+ 2a2baaab           -0.099846    
+ 2a2baaba          -10.386418    
+ 2a2babaa          -16.477090    
+ 2a2bbaaa            0.281476    
+ 2b2aaaab            6.842107    
+ 2b2aaaba            0.046220    
+ 2b2aabaa           -0.610414    
+ 2b2abaaa            0.080615    
+ 2aa22ab0            0.000000    
+ 2aa22ba0            0.000000    
+ 2ab22aa0            0.000000    
+ 2ba22aa0            0.000000    
+ aa200222            0.000000    
+ ab20aa22            0.000000    
+ ba20aa22            0.000000    
+ aa20ab22            0.000000    
+ aa20ba22            0.000000    
+ 0220a2a2            0.000000    
+ a02ba22a            0.000007    
+ b02aa22a           -0.000007    
+ a02aa22b            0.000007    
+ a02ab22a           -0.000007    
+ ab20a2a2           -0.000046    
+ ba20a2a2            0.000046    
+ aa20a2b2           -0.000046    
+ aa20b2a2            0.000046    
+
+
+*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+
+                                                  ERROR DETECTED
+                                                  **************
+
+     NON-ZERO P-SPACE GRADIENT
+
+*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+
+

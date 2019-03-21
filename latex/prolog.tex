@@ -1,0 +1,146 @@
+%TODO: use mhchem for all chemical species/equations
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amscd}
+\usepackage{siunitx}
+\usepackage{bbm}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage{color,soul}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage[htt]{hyphenat}
+\usepackage[version=4]{mhchem}
+\usepackage{subfigure}
+\usepackage{dcolumn}
+\usepackage{wrapfig}
+\usepackage[nolist,nohyperlinks]{acronym}
+\usepackage{array}
+%\usepackage{parskip}
+%\parskip=1em
+\usepackage{verbatimbox}
+
+\newcommand*{\restrictlinewidthbox}[1]{%
+  \begingroup
+    \sbox0{#1}%
+    \ifdim\wd0>\linewidth
+      \resizebox{\linewidth}{!}{\copy0}%
+    \else
+      \copy0 %
+    \fi
+  \endgroup
+}
+
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\newcommand\mc[1]{\multicolumn{1}{c}{#1}}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
+%\usepackage{tikz,pgfplots}
+%\pgfplotsset{compat=newest} 
+%\pgfplotsset{plot coordinates/math parser=false}
+
+% for better list... used for custom title page
+\usepackage{enumitem}
+
+%\usepackage{pgf}
+%\usepackage{pgffor}
+%\usepgflibrary{plothandlers}
+
+%\usepgfplotslibrary{external} 
+%\tikzexternalize% activate externalization!
+
+% use this to remake a particular plot...
+%\tikzset{external/remake next}
+
+%use this to remake all
+%\tikzset{external/force remake}
+
+%\tikzsetexternalprefix{figures/}
+
+%% Fonts %%
+\usepackage{microtype}
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+% Times New Roman
+\usepackage{mathptmx}
+
+% this stuff is to make the section headings look like phys plasmas
+\usepackage[scaled=.92]{helvet}
+%\usepackage{helvet}
+
+% NB, use citenum to get inline citation (not superscript)
+
+\usepackage[colorlinks=true,
+		citecolor=blue,
+		linkcolor=blue,
+		anchorcolor=blue,
+		filecolor=blue,
+		menucolor=blue,
+		runcolor=blue,
+		urlcolor=blue,
+		unicode
+		]{hyperref}
+\usepackage[all]{hypcap}
+
+%
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\usepackage{sectsty}  
+%\sectionfont{\normalfont\sffamily\large\underline\bfseries\color{orange}}
+%\sectionfont{\normalfont\sffamily\large\bfseries\color{orange}\sectionrule{0pt}{??0pt}{-4pt}{1pt}}
+%\sectionfont{\normalfont\sffamily\large\bfseries\sectionrule{3ex}{3pt}{-1ex}{1pt}}
+\sectionfont{\normalfont\sffamily\large\bfseries}
+\subsectionfont{\normalfont\sffamily\normalsize\bfseries}
+
+\newcommand{\mycomment}[1]{}
+\newcommand{\tbd}{\textcolor{red}{\textbf{\hl{TBD}}}}
+
+% set noindents for entire document
+\setlength\parindent{0pt}
+%\setlength{\parskip}{1em}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEGIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\input{acronyms.tex}
+\graphicspath{{./fig/}}
+\begin{titlepage}
+
+\rmfamily
+\begin{center}\sffamily\bfseries
+PULSED POWER PHYSICS TECHNOTE NO. \notenumber{}\\
+{~}
+\end{center}
+
+\begin{description}[leftmargin=8em,style=nextline,font=\sffamily\bfseries ]
+\item[TITLE:]{\bfseries 
+\notetitle{}
+}
+\item[AUTHORS:]{ \noteauthors{}\\
+{\itshape Code 6770, Plasma Physics Division, Naval Research Laboratory}}
+\item[DATE:]\today
+\item[ABSTRACT:] 
+\noteabstract{}
+\end{description}
+
+\vfill
+
+{\small
+\noindent THIS REPORT REPRESENTS UNPUBLISHED INTERNAL WORKING DOCUMENTS AND SHOULD NOT BE REFERENCED OR DISTRIBUTED WITHOUT THE AUTHORS' CONSENT
+
+{~}
+
+\noindent * Work supported by \notesponsor{}. 
+}
+\end{titlepage}
+
+\pagestyle{myheadings}
+

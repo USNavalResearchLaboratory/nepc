@@ -4,3 +4,5 @@
 *.aux
 *.bbl
 *.dvi
+
+*.tex.swp

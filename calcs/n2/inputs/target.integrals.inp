@@ -1,0 +1,9 @@
+&target_data
+  a =-1, !radius of R-matrix sphere
+  no_sym_op = 1,
+  sym_op = 'XY',
+  molden_file = './hydrogen.peroxide_plus_scattering.molden'
+nob = 19,19,
+&end
+&continuum_data
+&end
