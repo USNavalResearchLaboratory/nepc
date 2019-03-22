@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2019.3.15)  21 MAR 2019 16:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2019.3.15)  22 MAR 2019 15:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,7 +6,7 @@ entering extended mode
 (./PCM_overview.tex
 LaTeX2e <2017-04-15>
 Babel <3.18> and hyphenation patterns for 7 language(s) loaded.
-(../../latex/prolog.tex
+(../../src/latex/prolog.tex
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
@@ -750,22 +750,47 @@ readarray: bounds checking OFF
 \ps@tempboxa=\box53
 \boxtop@sep=\skip82
 \boxbottom@sep=\skip83
-) (/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count298
+\lst@gtempboxa=\box54
+\lst@token=\toks34
+\lst@length=\count299
+\lst@currlwidth=\dimen179
+\lst@column=\count300
+\lst@pos=\count301
+\lst@lostspace=\dimen180
+\lst@width=\dimen181
+\lst@newlines=\count302
+\lst@lineno=\count303
+\lst@maxwidth=\dimen182
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count304
+\lst@skipnumbers=\count305
+\lst@framebox=\box55
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
+(/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \labelindent=\skip84
-\enit@outerparindent=\dimen179
-\enit@toks=\toks34
-\enit@inbox=\box54
-\enitdp@description=\count298
+\enit@outerparindent=\dimen183
+\enit@toks=\toks35
+\enit@inbox=\box56
+\enitdp@description=\count306
 )
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.sty
 Package: microtype 2018/01/14 v2.7a Micro-typographical refinements (RS)
-\MT@toks=\toks35
-\MT@count=\count299
+\MT@toks=\toks36
+\MT@count=\count307
 LaTeX Info: Redefining \textls on input line 793.
-\MT@outer@kern=\dimen180
+\MT@outer@kern=\dimen184
 LaTeX Info: Redefining \textmicrotypecontext on input line 1339.
-\MT@listname@count=\count300
+\MT@listname@count=\count308
 
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-pdftex.def
 File: microtype-pdftex.def 2018/01/14 v2.7a Definitions specific to pdftex (RS)
@@ -950,14 +975,14 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
-\@linkdim=\dimen181
-\Hy@linkcounter=\count301
-\Hy@pagecounter=\count302
+\@linkdim=\dimen185
+\Hy@linkcounter=\count309
+\Hy@pagecounter=\count310
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2018/02/06 v6.86b Hyperref: PDFDocEncoding definition (HO)
 )
-\Hy@SavedSpaceFactor=\count303
+\Hy@SavedSpaceFactor=\count311
 
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
@@ -975,17 +1000,17 @@ Package hyperref Info: Plain pages OFF on input line 4524.
 Package hyperref Info: Backreferencing OFF on input line 4529.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4762.
-\c@Hy@tempcnt=\count304
+\c@Hy@tempcnt=\count312
 
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5115.
-\XeTeXLinkMargin=\dimen182
-\Fld@menulength=\count305
-\Field@Width=\dimen183
-\Fld@charsize=\dimen184
+\XeTeXLinkMargin=\dimen186
+\Fld@menulength=\count313
+\Field@Width=\dimen187
+\Fld@charsize=\dimen188
 Package hyperref Info: Hyper figures OFF on input line 6369.
 Package hyperref Info: Link nesting OFF on input line 6374.
 Package hyperref Info: Hyper index ON on input line 6377.
@@ -995,9 +1020,9 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6394.
 Package hyperref Info: PDF/A mode OFF on input line 6399.
 LaTeX Info: Redefining \ref on input line 6439.
 LaTeX Info: Redefining \pageref on input line 6443.
-\Hy@abspage=\count306
-\c@Item=\count307
-\c@Hfootnote=\count308
+\Hy@abspage=\count314
+\c@Item=\count315
+\c@Hfootnote=\count316
 )
 Package hyperref Info: Driver (default): hdvips.
 
@@ -1006,13 +1031,13 @@ File: hdvips.def 2018/02/06 v6.86b Hyperref driver for dvips
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pdfmark.def
 File: pdfmark.def 2018/02/06 v6.86b Hyperref definitions for pdfmark specials
-\pdf@docset=\toks36
-\pdf@box=\box55
-\pdf@toks=\toks37
-\pdf@defaulttoks=\toks38
-\HyField@AnnotCount=\count309
-\Fld@listcount=\count310
-\c@bookmark@seq@number=\count311
+\pdf@docset=\toks37
+\pdf@box=\box57
+\pdf@toks=\toks38
+\pdf@defaulttoks=\toks39
+\HyField@AnnotCount=\count317
+\Fld@listcount=\count318
+\c@bookmark@seq@number=\count319
 
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
@@ -1026,18 +1051,18 @@ Package: hypcap 2016/05/16 v1.12 Adjusting the anchors of captions (HO)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
-\Gm@cnth=\count312
-\Gm@cntv=\count313
-\c@Gm@tempcnt=\count314
-\Gm@bindingoffset=\dimen185
-\Gm@wd@mp=\dimen186
-\Gm@odd@mp=\dimen187
-\Gm@even@mp=\dimen188
-\Gm@layoutwidth=\dimen189
-\Gm@layoutheight=\dimen190
-\Gm@layouthoffset=\dimen191
-\Gm@layoutvoffset=\dimen192
-\Gm@dimlist=\toks39
+\Gm@cnth=\count320
+\Gm@cntv=\count321
+\c@Gm@tempcnt=\count322
+\Gm@bindingoffset=\dimen189
+\Gm@wd@mp=\dimen190
+\Gm@odd@mp=\dimen191
+\Gm@even@mp=\dimen192
+\Gm@layoutwidth=\dimen193
+\Gm@layoutheight=\dimen194
+\Gm@layouthoffset=\dimen195
+\Gm@layoutvoffset=\dimen196
+\Gm@dimlist=\toks40
 )
 (/usr/share/texlive/texmf-dist/tex/latex/sectsty/sectsty.sty
 Package: sectsty 2002/02/25 v2.0.2 Commands to change all sectional heading sty
@@ -1046,30 +1071,30 @@ les
 (./PCM_overview.aux)
 \openout1 = `PCM_overview.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 112.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 112.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 113.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 113.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 112.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 113.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
@@ -1081,7 +1106,7 @@ Dictionary: translator-basic-dictionary, Language: English
 (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
 File: siunitx-abbreviations.cfg 2017/11/26 v2.7k siunitx: Abbreviated units
 )
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 112.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 113.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
@@ -1089,98 +1114,99 @@ File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/it' undefined
-(Font)              using `T1/cmtt/b/n' instead on input line 112.
+(Font)              using `T1/cmtt/b/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/sl' undefined
-(Font)              using `T1/cmtt/b/n' instead on input line 112.
+(Font)              using `T1/cmtt/b/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/sc' undefined
-(Font)              using `T1/cmtt/b/n' instead on input line 112.
+(Font)              using `T1/cmtt/b/n' instead on input line 113.
 
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 112.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 113.
 LaTeX Font Info:    Font shape `T1/cmtt/bx/it' in size <12> not available
-(Font)              Font shape `T1/cmtt/m/it' tried instead on input line 112.
+(Font)              Font shape `T1/cmtt/m/it' tried instead on input line 113.
 
 LaTeX Font Warning: Font shape `T1/cmtt/bx/sl' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 112.
+(Font)              using `T1/cmtt/bx/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/bx/sc' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 112.
+(Font)              using `T1/cmtt/bx/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/sb/n' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/sb/it' undefined
-(Font)              using `T1/cmtt/sb/n' instead on input line 112.
+(Font)              using `T1/cmtt/sb/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/sb/sl' undefined
-(Font)              using `T1/cmtt/sb/n' instead on input line 112.
+(Font)              using `T1/cmtt/sb/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/sb/sc' undefined
-(Font)              using `T1/cmtt/sb/n' instead on input line 112.
+(Font)              using `T1/cmtt/sb/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/c/n' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/c/it' undefined
-(Font)              using `T1/cmtt/c/n' instead on input line 112.
+(Font)              using `T1/cmtt/c/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/c/sl' undefined
-(Font)              using `T1/cmtt/c/n' instead on input line 112.
+(Font)              using `T1/cmtt/c/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/c/sc' undefined
-(Font)              using `T1/cmtt/c/n' instead on input line 112.
+(Font)              using `T1/cmtt/c/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/l/n' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/l/it' undefined
-(Font)              using `T1/cmtt/l/n' instead on input line 112.
+(Font)              using `T1/cmtt/l/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/l/sl' undefined
-(Font)              using `T1/cmtt/l/n' instead on input line 112.
+(Font)              using `T1/cmtt/l/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/l/sc' undefined
-(Font)              using `T1/cmtt/l/n' instead on input line 112.
+(Font)              using `T1/cmtt/l/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/m/ui' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/bx/ui' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 112.
+(Font)              using `T1/cmtt/bx/n' instead on input line 113.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/m/In' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 112.
+(Font)              using `T1/cmtt/m/n' instead on input line 113.
 
 .................................................
 . chemgreek info: "mapping-activated"
 . 
-. Activating mapping `default' on line 112.
+. Activating mapping `default' on line 113.
 .................................................
-LaTeX Info: Redefining \microtypecontext on input line 112.
+\c@lstlisting=\count323
+LaTeX Info: Redefining \microtypecontext on input line 113.
 Package microtype Info: Generating DVI output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1191,8 +1217,8 @@ Package microtype Info: No adjustment of character kerning.
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-\AtBeginShipoutBox=\box56
-Package hyperref Info: Link coloring ON on input line 112.
+\AtBeginShipoutBox=\box58
+Package hyperref Info: Link coloring ON on input line 113.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -1200,11 +1226,11 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count315
+\c@section@level=\count324
 )
-LaTeX Info: Redefining \ref on input line 112.
-LaTeX Info: Redefining \pageref on input line 112.
-LaTeX Info: Redefining \nameref on input line 112.
+LaTeX Info: Redefining \ref on input line 113.
+LaTeX Info: Redefining \pageref on input line 113.
+LaTeX Info: Redefining \nameref on input line 113.
 
 (./PCM_overview.out) (./PCM_overview.out)
 \@outlinefile=\write4
@@ -1245,9 +1271,9 @@ LaTeX Info: Redefining \nameref on input line 112.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c__siunitx_mathsf_int=\count316
+\c__siunitx_mathsf_int=\count325
 LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 11
-2.
+3.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
@@ -1256,19 +1282,19 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 11
-2.
+3.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 11
-2.
+3.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 11
-2.
+3.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
@@ -1279,52 +1305,52 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 112.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 113.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 112.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 113.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 112.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 113.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 112.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 113.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmss' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-\c__siunitx_mathtt_int=\count317
+\c__siunitx_mathtt_int=\count326
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
  (./acronyms.tex)
-LaTeX Font Info:    Try loading font information for T1+phv on input line 118.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 119.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 118.
+(Font)              scaled to size 11.03998pt on input line 119.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `phv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 118.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 119.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 11.03998pt on input line 118.
+(Font)              scaled to size 11.03998pt on input line 119.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 124.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 125.
 Package acronym Info: Label `acro:pcm' newly defined as it shall be overridden
-although it is yet undefined on input line 125.
+although it is yet undefined on input line 126.
 Package acronym Info: Label `acro:prm' newly defined as it shall be overridden
-although it is yet undefined on input line 131.
+although it is yet undefined on input line 132.
 Package acronym Info: Label `acro:sgemp' newly defined as it shall be overridde
 n
-although it is yet undefined on input line 131.
+although it is yet undefined on input line 132.
  [1
 
 ])
@@ -1341,16 +1367,28 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 File: ./fig/meichsner_fig3.7.eps Graphic file (type eps)
 
 <./fig/meichsner_fig3.7.eps>
-File: ./fig/meichsner_fig3.8.eps Graphic file (type eps)
- <./fig/meichsner_fig3.8.eps>
-Missing character: There is no â in font zptmcm7t!
-Missing character: There is no ˆ in font zptmcm7t!
-Missing character: There is no ’ in font zptmcm7t!
-Missing character: There is no â in font zptmcm7t!
-Missing character: There is no ˆ in font zptmcm7t!
-Missing character: There is no ’ in font zptmcm7t!
-File: ./fig/meichsner_tab3.7.eps Graphic file (type eps)
 
+LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 24.
+
+
+LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 24.
+
+File: ./fig/meichsner_fig3.8.eps Graphic file (type eps)
+<./fig/meichsner_fig3.8.eps>
+Missing character: There is no â in font zptmcm7t!
+Missing character: There is no ˆ in font zptmcm7t!
+Missing character: There is no ’ in font zptmcm7t!
+
+
+LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 30.
+
+Missing character: There is no â in font zptmcm7t!
+Missing character: There is no ˆ in font zptmcm7t!
+Missing character: There is no ’ in font zptmcm7t!
+
+LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 30.
+
+File: ./fig/meichsner_tab3.7.eps Graphic file (type eps)
 <./fig/meichsner_tab3.7.eps>
 File: ./fig/meichsner_tab3.8.eps Graphic file (type eps)
  <./fig/meichsner_tab3.8.eps>
@@ -1366,29 +1404,52 @@ Underfull \hbox (badness 10000) in paragraph at lines 49--50
 
  []
 
-[1] [2] (../../latex/epilog.tex (./PCM_overview.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4.
+[1] [2]
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 76.
+ (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
  [3]
+(../../src/latex/epilog.tex (./PCM_overview.bbl
+
+LaTeX Warning: Empty `thebibliography' environment on input line 3.
+
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4.
+ [4]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 4.
  (./PCM_overview.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 4.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4.
 Package rerunfilecheck Info: File `PCM_overview.out' has not changed.
-(rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
+(rerunfilecheck)             Checksum: A0E3F90F3AA860F9F18D5C6146F2C597;367.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4.
  ) )
 (\end occurred when \ifx on line 161 was incomplete) 
 Here is how much of TeX's memory you used:
- 25007 strings out of 494848
- 455483 string characters out of 6179106
- 539437 words of memory out of 5000000
- 28033 multiletter control sequences out of 15000+600000
- 564173 words of font info for 72 fonts, out of 8000000 for 9000
+ 26503 strings out of 494848
+ 477184 string characters out of 6179106
+ 602577 words of memory out of 5000000
+ 29509 multiletter control sequences out of 15000+600000
+ 578276 words of font info for 104 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 44i,5n,38p,10406b,782s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,6n,51p,10410b,2360s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on PCM_overview.dvi (4 pages, 11688 bytes).
+Output written on PCM_overview.dvi (5 pages, 20156 bytes).

@@ -11,7 +11,7 @@ model \ac{sgemp}.}
 %TODO: How will model be V&V'd?
 \newcommand{\notesponsor}{DTRA/RD-NTE 6.2 program}
 
-\input{../../latex/prolog.tex}
+\input{../../src/latex/prolog.tex}
 
 \markright{\hfill \color{red}\sf DRAFT VERSION DO NOT CIRCULATE \hfill}
 
@@ -71,5 +71,39 @@ Tables and figures to include in each PCM:
 \item dissociative electron attachment thresholds
 \end{itemize}
 
+\section{Data File Formats}
 
-\input{../../latex/epilog.tex}
+\subsection{Reaction Rates}
+
+
+\begin{lstlisting}[numbers=left,language=HTML,basicstyle=\small]
+----------------------------------------
+Reaction: e+N2(X1)->e+N2(X1)                            
+Type: Ground/MomXfer					
+Delta(eV): 0.00
+Mass(AMU): (5.4858E-4:28.0134)->(5.4858E-4:28.0134)
+Charge: (-1:0)->(-1:0)
+#  These reaction rates were obtained with
+#  the two-term solver Bolsig.
+----------------------------------------
+<E>(eV)          Rate_Constant(cm^3/s)
+0.0336           4.903E-09
+0.0344           4.997E-09
+...
+ 100.3           4.515E-07
+ 103.4           4.533E-07
+----------------------------------------
+Reaction: e+N2(X1)->e+N2(Rot)
+Type: Rotation
+Delta(eV): 0.02
+Mass(AMU): (5.4858E-4:28.0134)->(5.4858E-4:28.0134)
+Charge: (-1:0)->(-1:0)
+----------------------------------------
+<E>(eV)          Rate_Constant(cm^3/s)
+0.0336           1.804E-11
+0.0344           1.849E-11
+...
+\end{lstlisting}
+
+
+\input{../../src/latex/epilog.tex}
