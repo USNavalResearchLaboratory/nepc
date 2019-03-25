@@ -6,3 +6,5 @@
 *.dvi
 
 *.tex.swp
+
+.ipynb_checkpoints
