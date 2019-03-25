@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2019.3.15)  22 MAR 2019 15:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2019.3.15)  25 MAR 2019 13:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1367,28 +1367,16 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 File: ./fig/meichsner_fig3.7.eps Graphic file (type eps)
 
 <./fig/meichsner_fig3.7.eps>
-
-LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 24.
-
-
-LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 24.
-
 File: ./fig/meichsner_fig3.8.eps Graphic file (type eps)
-<./fig/meichsner_fig3.8.eps>
+ <./fig/meichsner_fig3.8.eps>
 Missing character: There is no â in font zptmcm7t!
 Missing character: There is no ˆ in font zptmcm7t!
 Missing character: There is no ’ in font zptmcm7t!
-
-
-LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 30.
-
 Missing character: There is no â in font zptmcm7t!
 Missing character: There is no ˆ in font zptmcm7t!
 Missing character: There is no ’ in font zptmcm7t!
-
-LaTeX Warning: Citation `meichsner2013' on page 1 undefined on input line 30.
-
 File: ./fig/meichsner_tab3.7.eps Graphic file (type eps)
+
 <./fig/meichsner_tab3.7.eps>
 File: ./fig/meichsner_tab3.8.eps Graphic file (type eps)
  <./fig/meichsner_tab3.8.eps>
@@ -1414,17 +1402,13 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 80.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 80.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
- [3]
-(../../src/latex/epilog.tex (./PCM_overview.bbl
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 80.
 
-LaTeX Warning: Empty `thebibliography' environment on input line 3.
-
-)
+(../../src/latex/epilog.tex (./PCM_overview.bbl [3])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4.
  [4]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 4.
@@ -1437,19 +1421,16 @@ Package rerunfilecheck Info: File `PCM_overview.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4.
  ) )
 (\end occurred when \ifx on line 161 was incomplete) 
 Here is how much of TeX's memory you used:
- 26503 strings out of 494848
- 477184 string characters out of 6179106
- 602577 words of memory out of 5000000
- 29509 multiletter control sequences out of 15000+600000
+ 26504 strings out of 494848
+ 477199 string characters out of 6179106
+ 602576 words of memory out of 5000000
+ 29510 multiletter control sequences out of 15000+600000
  578276 words of font info for 104 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 44i,6n,51p,10410b,2360s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,5n,51p,10410b,1257s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on PCM_overview.dvi (5 pages, 20156 bytes).
+Output written on PCM_overview.dvi (5 pages, 19632 bytes).
