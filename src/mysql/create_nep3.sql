@@ -1,0 +1,19 @@
+DROP SCHEMA IF EXISTS nep3;
+
+CREATE SCHEMA IF NOT EXISTS nep3;
+
+USE nep3;
+
+	/*n2_state_id INT NOT NULL AUTO_INCREMENT,*/
+	/*PRIMARY KEY (n2_state_id));*/
+CREATE TABLE IF NOT EXISTS nep3.n2_states (
+	2_sigma_u TINYINT NULL,
+	1_pi_u TINYINT NULL, 
+	3_sigma_g TINYINT NULL,
+	1_pi_g TINYINT NULL, 
+	3_sigma_u TINYINT NULL, 
+	3s_sigma_g TINYINT NULL, 
+	state VARCHAR(40) NOT NULL,
+	n2_state_id INT NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY (n2_state_id));
+
