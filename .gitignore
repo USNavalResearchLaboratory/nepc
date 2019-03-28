@@ -5,6 +5,6 @@
 *.bbl
 *.dvi
 
-*.tex.swp
+*.swp
 
 .ipynb_checkpoints
