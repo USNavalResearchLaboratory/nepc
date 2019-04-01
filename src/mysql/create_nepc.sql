@@ -11,7 +11,7 @@ CREATE TABLE `nepc`.`species`(
 );
 
 CREATE TABLE `nepc`.`processes`(
-	`id` INT UNSIGNED NOT NULL auto_increment ,
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`name` VARCHAR(40) NOT NULL ,
 	`long_name` VARCHAR(240) NOT NULL ,
 	`lhs_e` BOOLEAN ,
@@ -113,17 +113,17 @@ LOAD DATA LOCAL INFILE 'states.tex'
 	),
 	specie_id = (select max(id) from nepc.species where name = 'N2');
 
-LOAD DATA LOCAL INFILE 'total'
+LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/karwasz2003/extracted/total_karwasz2003_6.1.3a'
 	INTO TABLE nepc.cs
-	(id,@specie,process_id,units_e,units_sigma)
-	SET specie_id = (select id from nepc.species where name = @specie);
-/*
+	(id,@specie,@process,units_e,units_sigma)
+	SET specie_id = (select id from nepc.species where name = @specie),
 	process_id = (select id from nepc.processes where name = @process);
+/*
 	lhs_id = (select id from nepc.states where name = @lhs),
 	rhs_id = (select id from nepc.states where name = @rhs),
 */
 
-LOAD DATA LOCAL INFILE 'total_data'
+LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/karwasz2003/extracted/total_karwasz2003_6.1.3a_data'
 	INTO TABLE nepc.csdata
 	(id,e,sigma)
 	SET cs_id = 1;
