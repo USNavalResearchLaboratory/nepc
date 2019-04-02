@@ -6,7 +6,7 @@ SET default_storage_engine = INNODB;
 CREATE TABLE `nepc`.`species`(
 	`id` INT UNSIGNED NOT NULL auto_increment ,
 	`name` VARCHAR(40) NOT NULL ,
-	`tex` VARCHAR(100) NOT NULL ,
+	`long_name` VARCHAR(100) NOT NULL ,
 	PRIMARY KEY(`id`)
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE `nepc`.`states`(
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`specie_id` INT UNSIGNED NOT NULL ,
 	`name` VARCHAR(100) NOT NULL ,
-	`tex` VARCHAR(100) NOT NULL ,
+	`long_name` VARCHAR(100) NOT NULL ,
 	`configuration` JSON NOT NULL ,
 	PRIMARY KEY(`id`) ,
 	INDEX `SPECIE_ID`(`specie_id` ASC) ,
@@ -40,7 +40,7 @@ CREATE TABLE `nepc`.`cs`(
 	`process_id` INT UNSIGNED NOT NULL ,
 	`units_e` DOUBLE NOT NULL,
 	`units_sigma` DOUBLE NOT NULL,
-	`ref_id` INT UNSIGNED NOT NULL,
+	`ref` VARCHAR(1000),
 	`lhs_id` INT UNSIGNED NULL ,
 	`rhs_id` INT UNSIGNED NULL ,
 	`hv` DOUBLE NULL ,
@@ -80,22 +80,17 @@ CREATE TABLE `nepc`.`csdata`(
 /***************/
 /** Load data **/
 /***************/
-LOAD DATA LOCAL INFILE 'processes.tex'    
+LOAD DATA LOCAL INFILE 'processes'    
 	INTO TABLE nepc.processes
-	FIELDS TERMINATED BY '\&' ESCAPED BY ''
-	LINES TERMINATED BY '\\\\\n' STARTING BY ''
-	IGNORE 2 LINES;
+	IGNORE 1 LINES;
 
-LOAD DATA LOCAL INFILE 'species.txt' 
+LOAD DATA LOCAL INFILE 'species' 
 	INTO TABLE nepc.species;
 
-LOAD DATA LOCAL INFILE 'states.tex'    
+LOAD DATA LOCAL INFILE 'states'    
 	INTO TABLE nepc.states
-	FIELDS TERMINATED BY '\&' ESCAPED BY ''
-	LINES TERMINATED BY '\\\\\n' STARTING BY ''
-	IGNORE 3 LINES
-	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,tex)
-	/*TODO: refactor to read orbitals from tex file or vice versa*/
+	IGNORE 1 LINES
+	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)
 	SET configuration = JSON_OBJECT(
 		JSON_OBJECT('order', 
 			JSON_ARRAY("2sigma_u", '1pi_u', '3sigma_g', '1pi_g', '3sigma_u', '3ssigma_g')
@@ -113,17 +108,18 @@ LOAD DATA LOCAL INFILE 'states.tex'
 	),
 	specie_id = (select max(id) from nepc.species where name = 'N2');
 
-LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/karwasz2003/extracted/total_karwasz2003_6.1.3a'
+
+LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/total_karwasz2003_6.1.3a_metadata'
 	INTO TABLE nepc.cs
-	(id,@specie,@process,units_e,units_sigma)
+	(id,@specie,@process,units_e,units_sigma,ref,@lhs,@rhs)
 	SET specie_id = (select id from nepc.species where name = @specie),
-	process_id = (select id from nepc.processes where name = @process);
-/*
+	process_id = (select id from nepc.processes where name = @process),
 	lhs_id = (select id from nepc.states where name = @lhs),
-	rhs_id = (select id from nepc.states where name = @rhs),
+	rhs_id = (select id from nepc.states where name = @rhs);
+/*
 */
 
-LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/karwasz2003/extracted/total_karwasz2003_6.1.3a_data'
+LOAD DATA LOCAL INFILE '/home/adamson/projects/cs/data/raw/ext/n2/total_karwasz2003_6.1.3a_data'
 	INTO TABLE nepc.csdata
 	(id,e,sigma)
 	SET cs_id = 1;

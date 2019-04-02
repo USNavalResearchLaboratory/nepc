@@ -1,0 +1,6 @@
+	short	long	LHS_e	RHS_e	LHS_hv	RHS_hv
+	elastic	Elastic electron scattering	1	1	0	0
+	excitation	Excitation of atoms, inelastic electron scattering	1	1	0	0
+	deexcitation_s	Spontaneous de-excitation	0	0	0	1
+	deexcitation_c	Collisional induced de-excitation	1	1	0	1
+	total	Total electron scattering cross section	1	1	0	0
