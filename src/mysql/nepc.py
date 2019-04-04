@@ -25,10 +25,10 @@ mycursor.execute("CREATE TABLE `nepc`.`processes`("
 "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
 "	`name` VARCHAR(40) NOT NULL ,"
 "	`long_name` VARCHAR(240) NOT NULL ,"
-"	`lhs_e` BOOLEAN ,"
-"	`rhs_e` BOOLEAN ,"
-"	`lhs_hv` BOOLEAN ,"
-"	`rhs_hv` BOOLEAN ,"
+"	`lhs_e` INT,"
+"	`rhs_e` INT,"
+"	`lhs_hv` INT,"
+"	`rhs_hv` INT,"
 "	PRIMARY KEY(`id`)"
 ");"
 )
@@ -48,9 +48,9 @@ mycursor.execute("CREATE TABLE `nepc`.`states`("
 )
 
 mycursor.execute("CREATE TABLE `nepc`.`cs`("
-"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
-"	`specie_id` INT UNSIGNED NOT NULL ,"
-"	`process_id` INT UNSIGNED NOT NULL ,"
+"	`id` INT UNSIGNED NOT NULL, "
+"	`specie_id` INT UNSIGNED NOT NULL, "
+"	`process_id` INT UNSIGNED NOT NULL, "
 "	`units_e` DOUBLE NOT NULL,"
 "	`units_sigma` DOUBLE NOT NULL,"
 "	`ref` VARCHAR(1000),"
@@ -77,15 +77,15 @@ mycursor.execute("CREATE TABLE `nepc`.`cs`("
 )
 
 mycursor.execute("CREATE TABLE `nepc`.`csdata`("
-"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"
 "	`cs_id` INT UNSIGNED NOT NULL ,"
 "	`e` DOUBLE NOT NULL ,"
 "	`sigma` DOUBLE NOT NULL ,"
 "	PRIMARY KEY(`id`) ,"
-"        INDEX `CS_ID`(`cs_id` ASC) ,"
-"        CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`cs_id`)"
-"                REFERENCES `nepc`.`cs`(`id`)"
-"                ON DELETE RESTRICT ON UPDATE CASCADE"
+"	INDEX `CS_ID`(`cs_id` ASC) ,"
+"	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`cs_id`)"
+"		REFERENCES `nepc`.`cs`(`id`)"
+"		ON DELETE RESTRICT ON UPDATE CASCADE"
 ");"
 )
 
@@ -95,7 +95,7 @@ mycursor.execute("CREATE TABLE `nepc`.`csdata`("
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'processes'"   
 "	INTO TABLE nepc.processes"
-"	IGNORE 1 LINES;")
+"	IGNORE 2 LINES;")
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'species'"
 "	INTO TABLE nepc.species;")
@@ -125,26 +125,32 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'states'    "
 directoryname = "/home/adamson/projects/cs/data/raw/ext/n2/"
 directory = os.fsencode(directoryname)
 
+cs_id = 1
 for file in os.listdir(directory):
 	filename = os.fsdecode(file)
-	if filename.endswith("_metadata"):
-		mycursor.execute("LOAD DATA LOCAL INFILE " + directoryname + filename + ""
-			"	INTO TABLE nepc.cs"
-			"	(id,@specie,@process,units_e,units_sigma,ref,@lhs,@rhs)"
-			"	SET specie_id = (select id from nepc.species where name = @specie),"
-			"	process_id = (select id from nepc.processes where name = @process),"
-			"	lhs_id = (select id from nepc.states where name = @lhs),"
-			"	rhs_id = (select id from nepc.states where name = @rhs);"
-		)
+	#print(directoryname + filename + "\n")
+	if filename.endswith(".metadata"):
+		continue
+	else:
+		executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+			filename + ".metadata' INTO TABLE nepc.cs "
+			"(@temp,@specie,@process,units_e,units_sigma,ref,@lhs,@rhs) "
+			"SET id = " + str(cs_id) + ", "
+			"specie_id = (select id from nepc.species where name = @specie), "
+			"process_id = (select id from nepc.processes where name = @process), "
+			"lhs_id = (select id from nepc.states where name = @lhs), "
+			"rhs_id = (select id from nepc.states where name = @rhs);")
 
-for file in os.listdir(directory):
-	filename = os.fsdecode(file)
-	if filename.endswith("_data"):
-		mycursor.execute("LOAD DATA LOCAL INFILE " + directoryname + filename + ""
-		"	INTO TABLE nepc.csdata"
-		"	(id,e,sigma)"
-		"	SET cs_id = 1;"
-		)
+		executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+			filename + "' INTO TABLE nepc.csdata "
+			"(id,e,sigma) "
+			"SET cs_id = " + str(cs_id) + ";")
+
+		#print("executeTextCS: " + executeTextCS + "\n")
+		#print("executeTextCSDATA: " + executeTextCSDATA + "\n")
+		mycursor.execute(executeTextCS)
+		mycursor.execute(executeTextCSDATA)
+		cs_id = cs_id + 1
 
 mycursor.execute("use nepc;")
 
@@ -154,7 +160,17 @@ def printTable(table):
 	for x in mycursor:
 		print(x) 
 
+def countTableRows(table):
+	print("\nRows in " + table + ": ") 
+	mycursor.execute("select count(*) from " + table + ";")
+	for x in mycursor:
+		print(x) 
+
 printTable("species")
 printTable("processes")
+printTable("states")
 printTable("cs")
-printTable("csdata where id < 10")
+#printTable("csdata") 
+
+#TODO: unit test to check for correct number of rows in csdata
+countTableRows("csdata")

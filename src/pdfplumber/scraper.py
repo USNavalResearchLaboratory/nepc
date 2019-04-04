@@ -3,6 +3,7 @@ import re
 import sys
 import os
 import shutil
+import numpy as np
 
 def getPDF(pdfFilename):
     if (sys.platform == 'linux'):
@@ -23,7 +24,8 @@ def removeOutdir(outdir):
 
 def getTableData(pdf,pageNumber,cropDimArray,locateTables=False,omitRegexp=''):
     pg = pdf.pages[pageNumber]
-    data = [[] for i in range(len(cropDimArray))]
+    #data = [[] for i in range(len(cropDimArray))]
+    data = np.empty(shape=(0,2))
     for i in range(len(cropDimArray)):
         pgCropped = pg.crop(cropDimArray[i])
         if (locateTables):
@@ -33,23 +35,15 @@ def getTableData(pdf,pageNumber,cropDimArray,locateTables=False,omitRegexp=''):
             for j in range(len(textSpaceDelim)):
                         if (omitRegexp == '' or not(bool(re.search(omitRegexp, textSpaceDelim[j])))):
                             textArray = textSpaceDelim[j].split(' ')
-                            data[i].append((textArray[0],textArray[1]))
+                            data=np.append(data,[[float(textArray[0]),
+						  float(textArray[1])]],axis=0)
     return data
 
 def writeDataToFile(dataArray,filename):
-    f = open(filename, "x")
-    for i in range(len(dataArray)):
-        for j in range(len(dataArray[i])):
-            f.write("\t"+str(dataArray[i][j][0])+"\t"+str(dataArray[i][j][1])+"\n")
-    f.close()
-
-def writeDataToMultipleFiles(dataArray,filenameGenerator):
-    for i in range(len(dataArray)):
-        filename=filenameGenerator(i)
-        f = open(filename, "x")
-        for j in range(len(dataArray[i])):
-            f.write("\t"+str(dataArray[i][j][0])+"\t"+str(dataArray[i][j][1])+"\n")
-        f.close()
+	f = open(filename, "x")
+	for i in range(len(dataArray)): 
+		f.write("\t"+str(dataArray[i,0])+"\t"+str(dataArray[i,1])+"\n")
+	f.close()
 
 def writeMetaDataToFile(filename,specie,process,units_e,units_sigma,ref,lhs='',rhs='',hv='',background='',lpu='',upu=''):
     f = open(filename, "x")

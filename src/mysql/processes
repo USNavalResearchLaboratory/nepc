@@ -1,6 +1,20 @@
+From Meichsner, 2013
 	short	long	LHS_e	RHS_e	LHS_hv	RHS_hv
 	elastic	Elastic electron scattering	1	1	0	0
 	excitation	Excitation of atoms, inelastic electron scattering	1	1	0	0
 	deexcitation_s	Spontaneous de-excitation	0	0	0	1
 	deexcitation_c	Collisional induced de-excitation	1	1	0	1
+	super_elastic	Super elastic collisions	1	1	0	0
+	ionization	Ionization of atoms	1	2	0	0
+	stepwise_ionization	Stepwise ionization	2	2	0	0
+	attachment	Attachment	1	0	0	0
+	detachment	Detachment	1	2	0	0
+	recombination	Recombination	1	0	0	0
+	three_body_recombination	Three-body collision recombination	1	0	0	0
+	dissociation	Dissociation of molecules	1	1	0	0
+	dissociative_ionization	Dissociative ionization	1	2	0	0
+	dissociative_ionization_excitation	Dissociative ionization with excitation	1	2	0	0
+	ion_pair	Ion pair formation	1	1	0	0
+	dissociative_attachment	Dissociative attachment	1	0	0	0
+	momentum	Elastic momentum transfer	1	1	0	0
 	total	Total electron scattering cross section	1	1	0	0
