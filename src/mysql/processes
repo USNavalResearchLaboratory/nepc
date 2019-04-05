@@ -1,20 +1,33 @@
 From Meichsner, 2013
-	short	long	LHS_e	RHS_e	LHS_hv	RHS_hv
-	elastic	Elastic electron scattering	1	1	0	0
-	excitation	Excitation of atoms, inelastic electron scattering	1	1	0	0
-	deexcitation_s	Spontaneous de-excitation	0	0	0	1
-	deexcitation_c	Collisional induced de-excitation	1	1	0	1
-	super_elastic	Super elastic collisions	1	1	0	0
-	ionization	Ionization of atoms	1	2	0	0
-	stepwise_ionization	Stepwise ionization	2	2	0	0
-	attachment	Attachment	1	0	0	0
-	detachment	Detachment	1	2	0	0
-	recombination	Recombination	1	0	0	0
-	three_body_recombination	Three-body collision recombination	1	0	0	0
-	dissociation	Dissociation of molecules	1	1	0	0
-	dissociative_ionization	Dissociative ionization	1	2	0	0
-	dissociative_ionization_excitation	Dissociative ionization with excitation	1	2	0	0
-	ion_pair	Ion pair formation	1	1	0	0
-	dissociative_attachment	Dissociative attachment	1	0	0	0
-	momentum	Elastic momentum transfer	1	1	0	0
-	total	Total electron scattering cross section	1	1	0	0
+id	short	long	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
+	elastic	Elastic electron scattering	1	1	0	0	0	0	0	0
+	excitation	Excitation of atoms (pure electronic), inelastic electron scattering	1	1	0	0	0	0	0	0
+	excitation_v	Excitation of atoms (including vibrational), inelastic electron scattering	1	1	0	0	1	1	0	0
+	excitation_j	Excitation of atoms (including rotational), inelastic electron scattering	1	1	0	0	0	0	1	1
+	excitation_vj	Excitation of atoms (including vibrational and rotational), inelastic electron scattering	1	1	0	0	1	1	1	1
+	s_deexcitation	Spontaneous de-excitation (pure electronic)	0	0	0	1	0	0	0	0
+	s_deexcitation_v	Spontaneous de-excitation (including vibrational)	0	0	0	1	1	1	0	0
+	s_deexcitation_j	Spontaneous de-excitation (including rotational)	0	0	0	1	0	0	1	1
+	s_deexcitation_vj	Spontaneous de-excitation (including vibrational and rotational)	0	0	0	1	1	1	1	1
+	c_deexcitation	Collisional induced de-excitation (pure electronic)	1	1	0	1	0	0	0	0
+	c_deexcitation_v	Collisional induced de-excitation (including vibrational)	1	1	0	1	1	1	0	0
+	c_deexcitation_j	Collisional induced de-excitation (including rotational)	1	1	0	1	0	0	1	1
+	c_deexcitation_vj	Collisional induced de-excitation (including vibrational and rotational)	1	1	0	1	1	1	1	1
+	super_elastic	Super elastic collisions	1	1	0	0	0	0	0	0
+	ionization	Ionization	1	2	0	0	0	0	0	0
+	stepwise_ionization	Stepwise ionization	2	2	0	0	0	0	0	0
+	attachment	Attachment	1	0	0	0	0	0	0	0
+	detachment	Detachment	1	2	0	0	0	0	0	0
+	recombination	Recombination	1	0	0	0	0	0	0	0
+	three_body_recombination	Three-body collision recombination	1	0	0	0	0	0	0	0
+	dissociation	Dissociation of molecules	1	1	0	0	0	0	0	0
+	d_ionization	Dissociative ionization	1	2	0	0	0	0	0	0
+	d_ionization_excitation	Dissociative ionization with excitation (pure electronic)	1	2	0	0	0	0	0	0
+	d_ionization_excitation_v	Dissociative ionization with excitation (including vibrational)	1	2	0	0	1	1	0	0
+	d_ionization_excitation_j	Dissociative ionization with excitation (including rotational)	1	2	0	0	0	0	1	1
+	d_ionization_excitation_vj	Dissociative ionization with excitation (including vibrational and rotational)	1	2	0	0	1	1	1	1
+	ion_pair	Ion pair formation	1	1	0	0	0	0	0	0
+	dissociative_attachment	Dissociative attachment	1	0	0	0	0	0	0	0
+	momentum	Elastic momentum transfer	1	1	0	0	0	0	0	0
+	momentum_v	Inelastic momentum transfer with vibrational excitation	1	1	0	0	1	1	0	0
+	total	Total electron scattering cross section	1	1	0	0	0	0	0	0

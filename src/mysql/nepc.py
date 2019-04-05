@@ -2,6 +2,9 @@ import os
 import mysql.connector
 import config
 
+#TODO: add threshold table
+#TODO: add reference table
+
 userHome = config.userHome()
 
 mydb = mysql.connector.connect(
@@ -32,6 +35,10 @@ mycursor.execute("CREATE TABLE `nepc`.`processes`("
 "	`rhs_e` INT,"
 "	`lhs_hv` INT,"
 "	`rhs_hv` INT,"
+"	`lhs_v` INT,"
+"	`rhs_v` INT,"
+"	`lhs_j` INT,"
+"	`rhs_j` INT,"
 "	PRIMARY KEY(`id`)"
 ");"
 )
@@ -59,7 +66,11 @@ mycursor.execute("CREATE TABLE `nepc`.`cs`("
 "	`ref` VARCHAR(1000),"
 "	`lhs_id` INT UNSIGNED NULL ,"
 "	`rhs_id` INT UNSIGNED NULL ,"
-"	`hv` DOUBLE NULL ,"
+"	`wavelength` DOUBLE NULL ,"
+"	`lhs_v` INT NULL ,"
+"	`rhs_v` INT NULL ,"
+"	`lhs_j` INT NULL ,"
+"	`rhs_j` INT NULL ,"
 "	`background` VARCHAR(10000) ,"
 "	`lpu` DOUBLE NULL ,"
 "	`upu` DOUBLE NULL ,"
@@ -103,7 +114,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'processes'"
 mycursor.execute("LOAD DATA LOCAL INFILE 'species'"
 "	INTO TABLE nepc.species;")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'states'    "
+mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states'"
 "	INTO TABLE nepc.states"
 "	IGNORE 1 LINES"
 "	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)"
@@ -137,12 +148,12 @@ for file in os.listdir(directory):
 	else:
 		executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
 			filename + ".metadata' INTO TABLE nepc.cs "
-			"(@temp,@specie,@process,units_e,units_sigma,ref,@lhs,@rhs) "
+			"(@temp,@specie,@process,units_e,units_sigma,ref,@lhs,@rhs,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
 			"SET id = " + str(cs_id) + ", "
 			"specie_id = (select id from nepc.species where name = @specie), "
 			"process_id = (select id from nepc.processes where name = @process), "
-			"lhs_id = (select id from nepc.states where name = @lhs), "
-			"rhs_id = (select id from nepc.states where name = @rhs);")
+			"lhs_id = (select id from nepc.states where name LIKE @lhs), "
+			"rhs_id = (select id from nepc.states where name LIKE @rhs);")
 
 		executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
 			filename + "' INTO TABLE nepc.csdata "

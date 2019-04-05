@@ -1,0 +1,106 @@
+Cross-sections for e - N collisions: 
+Ref.:   BSR-690 model, PHYSICAL REVIEW A 89, 062714 (2014)
+
+For similar calculations, see also:
+1.  e-C, BSR-696 model, PHYSICAL REVIEW A 87, 012704 (2013)2.  e-F, BSR-690 model, PHYSICAL REVIEW A 89, 052713 (2014)
+
+
+Email for communication:  oleg_zoi@yahoo.com  ->  Oleg Zatsarinny                                            
+--------------------------------------------------------------------------------
+
+Excitations cross sections are given in individual files tr_iii_fff 
+
+for each transition  iii -> fff:
+1 column: excitation energy in eV2 column: cross section in 10^-16 cm^2
+3 column: excitation energy in Ry
+4 column: collision strength 
+
+
+=== VERY IMPORTANT:  ALL ENERGIES ARE GIVEN RELATIVE TO THE GROUND STATE !!! ===
+Consequently, for transitions between excited states as function of the incident projectile energy, the energy of the initial state needs to be subtracted from the energy given in the first (or third) row.
+
+The files mt_xxx and ion_xxx additionally contain the momentum-transfer and ionization
+cross sections for the first three states with configuration 2p3. 
+
+--------------------------------------------------------------------------------
+
+
+Data are presented only for transitions between the lowest 27 PHYSICAL
+target states, which position and ordering agree well with experiment:  
+
+
+List of physical target states in BSR690 model:
+
+ #  State_LS         E(eV) - NIST      E(eV) - BSR
+
+01  2p3_4So            0.000             0.000
+02  2p3_2Do            2.384             2.391
+03  2p3_2Po            3.576             3.568
+04  2p2_3P_3s_4Pe      10.332           10.422
+05  2p2_3P_3s_2Pe      10.687           10.774
+06  2s_2p4_4Pe         10.927           10.948
+07  2p2_3P_3p_2So      11.603           11.618
+08  2p2_3P_3p_4Do      11.758           11.785
+09  2p2_3P_3p_4Po      11.842           11.871
+10  2p2_3P_3p_4So      11.996           12.003
+11  2p2_3P_3p_2Do      12.006           12.027
+12  2p2_3P_3p_2Po      12.125           12.145
+13  2p2_1D_3s_2De      12.357           12.373
+14  2p2_3P_4s_4Pe      12.856           12.853
+15  2p2_3P_4s_2Pe      12.919           12.918
+16  2p2_3P_3d_2Pe      12.972           12.963
+17  2p2_3P_3d_4Fe      12.984           12.971
+18  2p2_3P_3d_4Pe      12.999           12.986
+19  2p2_3P_3d_2Fe      13.000           12.983
+20  2p2_3P_3d_4De      13.019           13.005
+21  2p2_3P_3d_2De      13.035           13.021
+22  2p2_3P_4p_2So      13.202           13.193
+23  2p2_3P_4p_4Do      13.244           13.242
+24  2p2_3P_4p_4Po      13.268           13.268
+25  2p2_3P_4p_2Do      13.294           13.292
+26  2p2_3P_4p_4So      13.322           13.320
+27  2p2_3P_4p_2Po      13.343           13.348
+
+
+
+June 09, 2014  -  sent to:
+
+Kushner, Mark <mjkush@umich.edu>
+Electrical Engineering and Computer Science Department, 
+University of Michigan, Ann Arbor,
+MI 48109, USA
+
+
+October 9,  2014 - sent to:
+
+Luis Lemos ALVES
+Gas Discharges Gaseous Electronics, Head
+Instituto de Plasmas e Fusao Nuclear
+Instituto Superior Tecnico
+Av. Rovisco Pais
+1049-001 Lisboa, Portugal
+http://www.ipfn.ist.utl.pt
+Luís Lemos Alves <llalves@ist.utl.pt>;
+
+
+December 2, 2015 - sent to:
+
+Justin Angus, 
+a plasma physicist working at the Naval Research Laboratory in the U.S.
+<justin.angus@nrl.navy.mil>  
+
+
+December 12, 2016 - sent to:
+
+ Daniel Wolf Savin
+ >> Columbia Astrophysics Laboratory
+ >> email: savin@astro.columbia.edu
+ >> web page: http://www.astro.columbia.edu/~savin
+
+
+Feb.3, 2017 - sent to
+
+Winifred M. Huo <Winifred.M.Huo@nasa.gov>   
+ 
+ 
+
