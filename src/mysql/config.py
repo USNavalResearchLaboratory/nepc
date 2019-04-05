@@ -1,3 +1,9 @@
+import os
 import sys
 
-print(sys.platform)
+def userHome():
+    user = os.environ.get('USER')
+    if sys.platform == 'darwin':
+        return '/Users/' + user + '/'
+    else:
+        return '/home/' + user + '/'

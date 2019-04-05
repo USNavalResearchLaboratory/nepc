@@ -1,10 +1,12 @@
-import mysql.connector
 import os
+import mysql.connector
+import config
 
+userHome = config.userHome()
 
 mydb = mysql.connector.connect(
 	host='localhost',
-	option_files='/home/adamson/.mysql/defaults'
+	option_files=userHome + '/.mysql/defaults'
 )
 
 mycursor = mydb.cursor()
@@ -123,7 +125,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'states'    "
 "	specie_id = (select max(id) from nepc.species where name = 'N2');"
 )
 
-directoryname = "/home/adamson/projects/cs/data/raw/ext/n2/"
+directoryname = userHome + "/projects/cs/data/raw/ext/n2/"
 directory = os.fsencode(directoryname)
 
 cs_id = 1
