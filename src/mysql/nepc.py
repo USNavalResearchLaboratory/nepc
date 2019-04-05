@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 
+
 mydb = mysql.connector.connect(
 	host='localhost',
 	option_files='/home/adamson/.mysql/defaults'
