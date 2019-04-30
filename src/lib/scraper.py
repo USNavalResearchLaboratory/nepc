@@ -15,6 +15,12 @@ def rmdir(outdir):
     except OSError as e:
         print ("Error: %s - %s." % (e.filename, e.strerror))
 
+def rmfile(filename):
+	if os.path.exists(filename):
+		os.remove(filename)
+	else:
+		print(filename + " does not exist")     
+
 def mkdir(outdir):
     try:
         os.mkdir(outdir)
@@ -37,6 +43,28 @@ def getTableData(pdf,pageNumber,cropDimArray,locateTables=False,omitRegexp=''):
                             data=np.append(data,[[float(textArray[0]),
 						  float(textArray[1])]],axis=0)
     return data
+
+def textArrayToFloatArray(textArray, omitRegexp=''):
+	data = np.empty(shape=(0,1))
+	for i in range(len(textArray)):
+		if (omitRegexp == '' or not(bool(re.search(omitRegexp, textArray[i])))):
+			data=np.append(data,[[float(textArray[i])]],axis=0)
+	return data
+
+def getColumnStrings(pdf,pageNumber,cropDimArray,locateTables=False,omitRegexp=''):
+	pg = pdf.pages[pageNumber]
+	data = []
+	pgCropped = pg.crop(cropDimArray)
+	if (locateTables):
+		display(pgCropped.to_image().reset().draw_rects(pgCropped.chars))
+	else:
+		textSpaceDelim = pgCropped.extract_text().split("\n")
+		for j in range(len(textSpaceDelim)):
+			if (omitRegexp == '' or not(bool(re.search(omitRegexp, textSpaceDelim[j])))):
+				#textArray = textSpaceDelim[j].split(' ')
+				#data.append([textArray[0], textArray[1]])
+				data.append(textSpaceDelim[j])
+	return data
 
 
 
