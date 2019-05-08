@@ -145,6 +145,29 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
 "	specie_id = (select max(id) from nepc.species where name = 'N');"
 )
 
+mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
+"	INTO TABLE nepc.states"
+"	IGNORE 1 LINES"
+"	(id,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,name,long_name)"
+"	SET configuration = JSON_OBJECT("
+"		JSON_OBJECT('order', "
+"			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', '3d','4s')"
+"		),"
+"		JSON_OBJECT('occupations',"
+"			JSON_OBJECT("
+"				'2s',@2s,"
+"				'2p',@2p,"
+"				'CoreTerm',@CoreTerm,"
+"				'3s',@3s,"
+"				'3p',@3p,"
+"				'3d',@3d,"
+"				'4s',@4s"
+"			)"
+"		)"
+"	),"
+"	specie_id = (select max(id) from nepc.species where name = 'N+');"
+)
+
 mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
 "	INTO TABLE nepc.states"
 "	IGNORE 1 LINES"
@@ -167,37 +190,40 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
 "	specie_id = (select max(id) from nepc.species where name = 'N2');"
 )
 
-directoryname = userHome + "/projects/cs/data/raw/ext/n2/"
-directory = os.fsencode(directoryname)
+directorynames = [userHome + "/projects/cs/data/raw/ext/n2/itikawa/",
+	userHome + "/projects/cs/data/raw/ext/n2/zipf/"]
 
-cs_id = 1
-for file in os.listdir(directory):
-	filename = os.fsdecode(file)
-	#print(directoryname + filename + "\n")
-	if filename.endswith(".metadata"):
-		continue
-	else:
-		executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-			filename + ".metadata' INTO TABLE nepc.cs "
-			"(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
-			"SET id = " + str(cs_id) + ", "
-			"specie_id = (select id from nepc.species where name = @specie), "
-			"process_id = (select id from nepc.processes where name = @process), "
-			"lhsA_id = (select id from nepc.states where name LIKE @lhsA), "
-			"lhsB_id = (select id from nepc.states where name LIKE @lhsB), "
-			"rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
-			"rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
+for directoryname in directorynames:
+	directory = os.fsencode(directoryname)
 
-		executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-			filename + "' INTO TABLE nepc.csdata "
-			"(id,e,sigma) "
-			"SET cs_id = " + str(cs_id) + ";")
-
-		#print("executeTextCS: " + executeTextCS + "\n")
-		#print("executeTextCSDATA: " + executeTextCSDATA + "\n")
-		mycursor.execute(executeTextCS)
-		mycursor.execute(executeTextCSDATA)
-		cs_id = cs_id + 1
+	cs_id = 1
+	for file in os.listdir(directory):
+		filename = os.fsdecode(file)
+		#print(directoryname + filename + "\n")
+		if filename.endswith(".metadata"):
+			continue
+		else:
+			executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+				filename + ".metadata' INTO TABLE nepc.cs "
+				"(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
+				"SET id = " + str(cs_id) + ", "
+				"specie_id = (select id from nepc.species where name = @specie), "
+				"process_id = (select id from nepc.processes where name = @process), "
+				"lhsA_id = (select id from nepc.states where name LIKE @lhsA), "
+				"lhsB_id = (select id from nepc.states where name LIKE @lhsB), "
+				"rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
+				"rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
+	
+			executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+				filename + "' INTO TABLE nepc.csdata "
+				"(id,e,sigma) "
+				"SET cs_id = " + str(cs_id) + ";")
+	
+			#print("executeTextCS: " + executeTextCS + "\n")
+			#print("executeTextCSDATA: " + executeTextCSDATA + "\n")
+			mycursor.execute(executeTextCS)
+			mycursor.execute(executeTextCSDATA)
+			cs_id = cs_id + 1
 
 mycursor.execute("use nepc;")
 
