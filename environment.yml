@@ -12,9 +12,12 @@ dependencies:
   - pip=19.0.3
   - python=3.7.2
   - scipy=1.2.1
+  - matplotlib
   - pip:
     - mysql-connector-python==8.0.11
     - pdfminer.six==20181108
     - pdfplumber==0.5.11
     - scikit-learn==0.20.3
     - sklearn==0.0
+    - periodictable==1.5.0
+    - "--editable=git+https://github.com/stggh/PyDiatomic.git@b1514df0a7554bc2a2c58ca581088bc70559d758#egg=PyDiatomic-matching_point"
