@@ -190,6 +190,28 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
 "	specie_id = (select max(id) from nepc.species where name = 'N2');"
 )
 
+mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv'"
+"	INTO TABLE nepc.states"
+"	IGNORE 1 LINES"
+"	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)"
+"	SET configuration = JSON_OBJECT("
+"		JSON_OBJECT('order', "
+"			JSON_ARRAY('2sigma_u', '1pi_u', '3sigma_g', '1pi_g', '3sigma_u', '3ssigma_g')"
+"		),"
+"		JSON_OBJECT('occupations',"
+"			JSON_OBJECT("
+"				'2sigma_u',@o1,"
+"				'1pi_u',@o2,"
+"				'3sigma_g',@o3,"
+"				'1pi_g',@o4,"
+"				'3sigma_u',@o5,"
+"				'3ssigma_g',@o6"
+"			)"
+"		)"
+"	),"
+"	specie_id = (select max(id) from nepc.species where name = 'N2+');"
+)
+
 directorynames = [userHome + "/projects/cs/data/raw/ext/n2/itikawa/",
 	userHome + "/projects/cs/data/raw/ext/n2/zipf/"]
 
