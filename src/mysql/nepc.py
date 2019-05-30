@@ -247,6 +247,8 @@ for directoryname in directorynames:
 			mycursor.execute(executeTextCSDATA)
 			cs_id = cs_id + 1
 
+mydb.commit()
+
 mycursor.execute("use nepc;")
 
 def printTable(table):
@@ -269,3 +271,7 @@ printTable("cs")
 
 #TODO: unit test to check for correct number of rows in csdata
 countTableRows("csdata")
+
+mycursor.close()
+
+mydb.close()
