@@ -21,4 +21,3 @@ dependencies:
     - sklearn==0.0
     - periodictable==1.5.0
     - "--editable=git+https://github.com/stggh/PyDiatomic.git@b1514df0a7554bc2a2c58ca581088bc70559d758#egg=PyDiatomic-matching_point"
-    - sshtunnel==0.1.4
