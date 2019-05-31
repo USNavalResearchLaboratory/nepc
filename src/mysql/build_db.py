@@ -60,16 +60,16 @@ mycursor.execute("CREATE TABLE `nepc`.`states`("
 ");"
 )
 
-mycursor.execute("CREATE TABLE `nepc`.`models`("
-"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+mycursor.execute("CREATE TABLE `nepc`.`model`("
+"	`model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
 "	`name` VARCHAR(40) NOT NULL ,"
 "	`long_name` VARCHAR(240) NOT NULL ,"
-"	PRIMARY KEY(`id`)"
+"	PRIMARY KEY(`model_id`)"
 ");"
 )
 
 mycursor.execute("CREATE TABLE `nepc`.`cs`("
-"	`id` INT UNSIGNED NOT NULL, "
+"	`cs_id` INT UNSIGNED NOT NULL, "
 "	`specie_id` INT UNSIGNED NOT NULL, "
 "	`process_id` INT UNSIGNED NOT NULL, "
 "	`units_e` DOUBLE NOT NULL,"
@@ -87,7 +87,7 @@ mycursor.execute("CREATE TABLE `nepc`.`cs`("
 "	`background` VARCHAR(10000) ,"
 "	`lpu` DOUBLE NULL ,"
 "	`upu` DOUBLE NULL ,"
-"	PRIMARY KEY(`id`) ,"
+"	PRIMARY KEY(`cs_id`) ,"
 "	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
 "	INDEX `PROCESS_ID`(`process_id` ASC) ,"
 "	CONSTRAINT `SPECIE_ID_CS` FOREIGN KEY(`specie_id`)"
@@ -115,12 +115,18 @@ mycursor.execute("CREATE TABLE `nepc`.`csdata`("
 "	PRIMARY KEY(`id`) ,"
 "	INDEX `CS_ID`(`cs_id` ASC) ,"
 "	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`cs_id`)"
-"		REFERENCES `nepc`.`cs`(`id`)"
+"		REFERENCES `nepc`.`cs`(`cs_id`)"
 "		ON DELETE RESTRICT ON UPDATE CASCADE"
 ");"
 )
 
-#TODO: models2cs mapping
+mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
+"	`cs_id` INT UNSIGNED NOT NULL ,"
+"	`model_id` INT UNSIGNED NOT NULL ,"
+"	PRIMARY KEY pk_models2cs (cs_id, model_id)"
+");"
+)
+
 
 #################
 ### Load data ###
@@ -239,7 +245,7 @@ for directoryname in directorynames:
 			executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
 				filename + ".metadata' INTO TABLE nepc.cs "
 				"(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
-				"SET id = " + str(cs_id) + ", "
+				"SET cs_id = " + str(cs_id) + ", "
 				"specie_id = (select id from nepc.species where name = @specie), "
 				"process_id = (select id from nepc.processes where name = @process), "
 				"lhsA_id = (select id from nepc.states where name LIKE @lhsA), "
