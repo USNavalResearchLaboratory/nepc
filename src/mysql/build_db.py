@@ -60,7 +60,7 @@ mycursor.execute("CREATE TABLE `nepc`.`states`("
 ");"
 )
 
-mycursor.execute("CREATE TABLE `nepc`.`model`("
+mycursor.execute("CREATE TABLE `nepc`.`models`("
 "	`model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
 "	`name` VARCHAR(40) NOT NULL ,"
 "	`long_name` VARCHAR(240) NOT NULL ,"
@@ -132,9 +132,12 @@ mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
 ### Load data ###
 #################
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'processes.tsv'"   
+mycursor.execute("LOAD DATA LOCAL INFILE 'processes.tsv'"
 "	INTO TABLE nepc.processes"
 "	IGNORE 2 LINES;")
+
+mycursor.execute("LOAD DATA LOCAL INFILE 'models.tsv'"
+"	INTO TABLE nepc.models;")
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'species.tsv'"
 "	INTO TABLE nepc.species;")
@@ -229,17 +232,16 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv'"
 "	specie_id = (select max(id) from nepc.species where name = 'N2+');"
 )
 
-directorynames = [userHome + "/projects/cs/data/raw/ext/n2/itikawa/",
-	userHome + "/projects/cs/data/raw/ext/n2/zipf/"]
+directorynames = [userHome + "/projects/nepc/data/raw/ext/n2/itikawa/", userHome + "/projects/nepc/data/raw/ext/n2/zipf/"]
 
+cs_id = 1
 for directoryname in directorynames:
 	directory = os.fsencode(directoryname)
 
-	cs_id = 1
 	for file in os.listdir(directory):
 		filename = os.fsdecode(file)
 		#print(directoryname + filename + "\n")
-		if filename.endswith(".metadata"):
+		if filename.endswith(".metadata") or filename.endswith(".models"):
 			continue
 		else:
 			executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
@@ -253,6 +255,12 @@ for directoryname in directorynames:
 				"rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
 				"rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
 	
+			executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+				filename + ".models' INTO TABLE nepc.models2cs "
+				"(@model) "
+				"SET cs_id = " + str(cs_id) + ", "
+				"model_id = (select model_id from nepc.models where name LIKE @model);")
+
 			executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
 				filename + "' INTO TABLE nepc.csdata "
 				"(id,e,sigma) "
@@ -261,6 +269,8 @@ for directoryname in directorynames:
 			#print("executeTextCS: " + executeTextCS + "\n")
 			#print("executeTextCSDATA: " + executeTextCSDATA + "\n")
 			mycursor.execute(executeTextCS)
+			if os.path.exists(directoryname + filename + '.models'):
+				mycursor.execute(executeTextCSMODELS)
 			mycursor.execute(executeTextCSDATA)
 			cs_id = cs_id + 1
 
@@ -272,6 +282,8 @@ nepc.printTable(mycursor, "species")
 nepc.printTable(mycursor, "processes")
 nepc.printTable(mycursor, "states")
 nepc.printTable(mycursor, "cs")
+nepc.printTable(mycursor, "models")
+nepc.printTable(mycursor, "models2cs")
 #printTable(mycurcor, "csdata") 
 
 #TODO: unit test to check for correct number of rows in csdata

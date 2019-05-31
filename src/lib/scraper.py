@@ -85,3 +85,8 @@ def writeCSToFile(filename,dataArray,specie,process,units_e,units_sigma,ref,
     writeDataToFile(dataArray,filename)
     writeMetaDataToFile(filename+".metadata",specie,process,units_e,units_sigma,ref,lhsA,lhsB,rhsA,rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu)
 
+def writeModelsToFile(filename, modelsArray):
+    f = open(filename, "x")
+    for i in range(len(modelsArray)):
+        f.write(str(modelsArray[i])+"\n")
+    f.close()
