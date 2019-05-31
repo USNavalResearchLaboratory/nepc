@@ -4,7 +4,8 @@ def connect():
     config = {
         'user': 'nepc',
         'password': 'nepc',
-        'host': '132.250.158.124',
+        'host': 'localhost',
+        #'host': '132.250.158.124',
         'database': 'nepc',
         'raise_on_warnings': True
     }
@@ -24,3 +25,19 @@ def countTableRows(cursor, table):
     for x in cursor:
         print(x) 
 
+def model(cursor, modelName):
+    cursor.execute("SELECT cs.cs_id as cs_id " +
+               "FROM cs " +
+               "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
+               "JOIN models m ON (m2cs.model_id = m.model_id) " +
+               "WHERE m.name LIKE '" + modelName + "'" )
+    csArray = cursor.fetchall()
+    for csItem in csArray:
+        cs_id = csItem[0]
+        #print(cs_id)
+        cursor.execute("SELECT * FROM cs WHERE cs_id = " + str(cs_id))
+        csMetadata = cursor.fetchall()[0]
+        print(csMetadata)
+        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " + str(cs_id))
+        csData = cursor.fetchall()
+        print(csData)
