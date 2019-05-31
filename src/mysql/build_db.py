@@ -60,6 +60,14 @@ mycursor.execute("CREATE TABLE `nepc`.`states`("
 ");"
 )
 
+mycursor.execute("CREATE TABLE `nepc`.`models`("
+"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+"	`name` VARCHAR(40) NOT NULL ,"
+"	`long_name` VARCHAR(240) NOT NULL ,"
+"	PRIMARY KEY(`id`)"
+");"
+)
+
 mycursor.execute("CREATE TABLE `nepc`.`cs`("
 "	`id` INT UNSIGNED NOT NULL, "
 "	`specie_id` INT UNSIGNED NOT NULL, "
@@ -111,6 +119,8 @@ mycursor.execute("CREATE TABLE `nepc`.`csdata`("
 "		ON DELETE RESTRICT ON UPDATE CASCADE"
 ");"
 )
+
+#TODO: models2cs mapping
 
 #################
 ### Load data ###
