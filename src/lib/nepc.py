@@ -1,11 +1,15 @@
 import mysql.connector
 
-def connect():
+def connect(local=False):
+    if (local==True):
+        hostname = 'localhost'
+    else:
+        hostname = '132.250.158.124'
+
     config = {
         'user': 'nepc',
         'password': 'nepc',
-        'host': 'localhost',
-        #'host': '132.250.158.124',
+        'host': hostname,
         'database': 'nepc',
         'raise_on_warnings': True
     }
