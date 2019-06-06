@@ -207,11 +207,10 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
 "			)"
 "		)"
 "	),"
-"	specie_id = (select max(id) from nepc.species where name = 'N2');"
-)
+"	specie_id = (select max(id) from nepc.species where name = 'N2');")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv'"
-"	INTO TABLE nepc.states"
+mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
+                 "INTO TABLE nepc.states "
 "	IGNORE 1 LINES"
 "	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)"
 "	SET configuration = JSON_OBJECT("
@@ -236,43 +235,43 @@ directorynames = [userHome + "/projects/nepc/data/raw/ext/n2/itikawa/", userHome
 
 cs_id = 1
 for directoryname in directorynames:
-	directory = os.fsencode(directoryname)
+    directory = os.fsencode(directoryname)
 
-	for file in os.listdir(directory):
-		filename = os.fsdecode(file)
-		#print(directoryname + filename + "\n")
-		if filename.endswith(".metadata") or filename.endswith(".models"):
-			continue
-		else:
-			executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-				filename + ".metadata' INTO TABLE nepc.cs "
-				"(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
-				"SET cs_id = " + str(cs_id) + ", "
-				"specie_id = (select id from nepc.species where name = @specie), "
-				"process_id = (select id from nepc.processes where name = @process), "
-				"lhsA_id = (select id from nepc.states where name LIKE @lhsA), "
-				"lhsB_id = (select id from nepc.states where name LIKE @lhsB), "
-				"rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
-				"rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
-	
-			executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-				filename + ".models' INTO TABLE nepc.models2cs "
-				"(@model) "
-				"SET cs_id = " + str(cs_id) + ", "
-				"model_id = (select model_id from nepc.models where name LIKE @model);")
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        #print(directoryname + filename + "\n")
+        if filename.endswith(".metadata") or filename.endswith(".models"):
+            continue
+        else:
+            executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+                             filename + ".metadata' INTO TABLE nepc.cs "
+                             "(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
+                             "SET cs_id = " + str(cs_id) + ", "
+                             "specie_id = (select id from nepc.species where name = @specie), "
+                             "process_id = (select id from nepc.processes where name = @process), "
+                             "lhsA_id = (select id from nepc.states where name LIKE @lhsA), "
+                             "lhsB_id = (select id from nepc.states where name LIKE @lhsB), "
+                             "rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
+                             "rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
 
-			executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-				filename + "' INTO TABLE nepc.csdata "
-				"(id,e,sigma) "
-				"SET cs_id = " + str(cs_id) + ";")
-	
-			#print("executeTextCS: " + executeTextCS + "\n")
-			#print("executeTextCSDATA: " + executeTextCSDATA + "\n")
-			mycursor.execute(executeTextCS)
-			if os.path.exists(directoryname + filename + '.models'):
-				mycursor.execute(executeTextCSMODELS)
-			mycursor.execute(executeTextCSDATA)
-			cs_id = cs_id + 1
+            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+                                   filename + ".models' INTO TABLE nepc.models2cs "
+                                   "(@model) "
+                                   "SET cs_id = " + str(cs_id) + ", "
+                                   "model_id = (select model_id from nepc.models where name LIKE @model);")
+
+            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+                                 filename + "' INTO TABLE nepc.csdata "
+                                 "(id,e,sigma) "
+                                 "SET cs_id = " + str(cs_id) + ";")
+
+            #print("executeTextCS: " + executeTextCS + "\n")
+            #print("executeTextCSDATA: " + executeTextCSDATA + "\n")
+            mycursor.execute(executeTextCS)
+            if os.path.exists(directoryname + filename + '.models'):
+                mycursor.execute(executeTextCSMODELS)
+                mycursor.execute(executeTextCSDATA)
+                cs_id = cs_id + 1
 
 mydb.commit()
 
