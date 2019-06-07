@@ -260,7 +260,7 @@ for directoryname in directorynames:
                                    "SET cs_id = " + str(cs_id) + ", "
                                    "model_id = (select model_id from nepc.models where name LIKE @model);")
 
-            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname + 
+            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname +
                                  filename + "' INTO TABLE nepc.csdata "
                                  "(id,e,sigma) "
                                  "SET cs_id = " + str(cs_id) + ";")
@@ -277,16 +277,16 @@ mydb.commit()
 
 mycursor.execute("use nepc;")
 
-nepc.printTable(mycursor, "species")
-nepc.printTable(mycursor, "processes")
-nepc.printTable(mycursor, "states")
-nepc.printTable(mycursor, "cs")
-nepc.printTable(mycursor, "models")
-nepc.printTable(mycursor, "models2cs")
-#printTable(mycurcor, "csdata") 
+nepc.print_table(mycursor, "species")
+nepc.print_table(mycursor, "processes")
+nepc.print_table(mycursor, "states")
+nepc.print_table(mycursor, "cs")
+nepc.print_table(mycursor, "models")
+nepc.print_table(mycursor, "models2cs")
+#printTable(mycurcor, "csdata")
 
 #TODO: unit test to check for correct number of rows in csdata
-nepc.countTableRows(mycursor, "csdata")
+nepc.count_table_rows(mycursor, "csdata")
 
 mycursor.close()
 

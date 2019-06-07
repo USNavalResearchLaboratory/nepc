@@ -270,9 +270,27 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
         if process == '' or model[i]['process'] == process:
             #FIXME: allow for varying electrons, hv, v, j on rhs and lhs
             #TODO: add lpu and upu to plots
-            lhs_items = ["e$^-$", model[i]['lhsA_long'], model[i]['lhsB_long']]
+
+            #FIXME: refactor the next two blocks of code into a method
+            e_on_lhs = model[i]['e_on_lhs']
+            if e_on_lhs == 0:
+                lhs_e_text = None
+            elif e_on_lhs == 1:
+                lhs_e_text = "e$^-$"
+            else:
+                lhs_e_text = str(e_on_lhs) + "e$^-$"
+
+            e_on_rhs = model[i]['e_on_rhs']
+            if e_on_rhs == 0:
+                rhs_e_text = None
+            elif e_on_rhs == 1:
+                rhs_e_text = "e$^-$"
+            else:
+                rhs_e_text = str(e_on_rhs) + "e$^-$"
+
+            lhs_items = [lhs_e_text, model[i]['lhsA_long'], model[i]['lhsB_long']]
             lhs_text = " + ".join(item for item in lhs_items if item)
-            rhs_items = [model[i]['rhsA_long'], model[i]['rhsB_long'], "e$^-$"]
+            rhs_items = [model[i]['rhsA_long'], model[i]['rhsB_long'], rhs_e_text]
             rhs_text = " + ".join(item for item in rhs_items if item)
             label_items = [model[i]['process'], ": ",
                            lhs_text,

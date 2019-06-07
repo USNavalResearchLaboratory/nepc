@@ -168,6 +168,23 @@ def model(cursor, model_name):
             `long_name` of rhsA state from `states` table
         "rhsB_long" : str
             `long_name` of rhsB state from `states` table
+        "e_on_lhs" : int
+            number of electrons on lhs
+        "e_on_rhs" : int
+            number of electrons on rhs
+        "hv_on_lhs" : int
+            photon on lhs? (0 or 1)
+        "hv_on_rhs" : int
+            photon on rhs? (0 or 1)
+        "v_on_lhs" : int
+            vibrational energy level on lhs? (0 or 1)
+        "v_on_rhs" : int
+            vibrational energy level on rhs? (0 or 1)
+        "j_on_lhs" : int
+            rotational energy level on lhs? (0 or 1)
+        "j_on_rhs" : int
+            rotational energy level on rhs? (0 or 1)
+
 
     """
     cs_dicts = []
@@ -190,7 +207,11 @@ def model(cursor, model_name):
                        "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, A.`lhs_j`, A.`rhs_j`, "
                        "A.`background`, A.`lpu`, A.`upu`, "
                        "D.`long_name`, E.`long_name`, "
-                       "F.`long_name`, G.`long_name` "
+                       "F.`long_name`, G.`long_name`, "
+                       "C.`lhs_e`, C.`rhs_e`, "
+                       "C.`lhs_hv`, C.`rhs_hv`, "
+                       "C.`lhs_v`, C.`rhs_v`, "
+                       "C.`lhs_j`, C.`rhs_j` "
                        "FROM `cs` AS A "
                        "LEFT JOIN `species` AS B "
                        "ON B.`id` = A.`specie_id` "
@@ -236,6 +257,14 @@ def model(cursor, model_name):
                          "lhsA_long":metadata[18],
                          "lhsB_long":metadata[19],
                          "rhsA_long":metadata[20],
-                         "rhsB_long":metadata[21]})
+                         "rhsB_long":metadata[21],
+                         "e_on_lhs":metadata[22],
+                         "e_on_rhs":metadata[23],
+                         "hv_on_lhs":metadata[24],
+                         "hv_on_rhs":metadata[25],
+                         "v_on_lhs":metadata[26],
+                         "v_on_rhs":metadata[27],
+                         "j_on_lhs":metadata[28],
+                         "j_on_rhs":metadata[29]})
 
     return cs_dicts

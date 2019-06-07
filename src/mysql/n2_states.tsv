@@ -1,7 +1,7 @@
 	2sigma_u	1pi_u	3sigma_g	1pi_g	3sigma_u	3ssigma_g	name	long_name
 							N2	N${}_2$
-	2	4	2	0	0	0	N2(X1Sigmag+)	N${}_2$(X ${}^1\Sigma_g^+$)
-	2	3	2	1	0	0	N2(A3Sigmau+)	N${}_2$(A ${}^3\Sigma_u^+$)
+	2	4	2	0	0	0	N2(X1Sigmag+)	N${}_2$(X ${}^1\\Sigma_g^+$)
+	2	3	2	1	0	0	N2(A3Sigmau+)	N${}_2$(A ${}^3\\Sigma_u^+$)
 	2	4	1	1	0	0	N2(B3Pig)	N${}_2$(B ${}^3\Pi_g$)
 	2	3	2	1	0	0	N2(W3Deltau)	N${}_2$(W ${}^3\Delta_u$)
 	2	3	2	1	0	0	N2(Bp3Sigmau-)	N${}_2$($\text{B}^\p\;{}^3\Sigma_u^-$)
