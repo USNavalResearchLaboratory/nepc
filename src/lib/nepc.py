@@ -1,7 +1,66 @@
+"""Access the NRL Evaluated Plasma Chemistry (NEPC) database
+
+Utilize the NEPC MySQL database by:
+    - establishing a connection to the database
+    - printing tables and the number of rows in tables
+    - accessing a pre-defined plasma chemistry model (PCM, collection
+    of cross sections)
+
+Notes
+-----
+- [nepc] refers to the base directory of the nepc repository.
+- [nepc.wiki] refers to the base directory of the wiki associated with
+the nepc repository.
+
+Examples
+--------
+Establish a connection to the NEPC database running on the
+production server:
+
+    cnx, cursor = connect()
+
+Establish a connection to the NEPC database running on the
+local machine:
+
+    cnx, cursor = connect(local=True)
+
+TODO
+----
+- plot: one or more cross-section datasets; an entire PCM; particular
+        processes within a PCM; particular species/states within a PCM
+        or the entire NEPC database
+- consolidate: consolidate cross section data for a particular specie/state
+               and process
+- inspect: visualize aspects of a PCM such as
+              - lpu/upu
+              - processes and species/states/quantum numbers included
+- background: standardize the background information documented for each cross
+              section dataset. Perhaps include additional fields like location
+              of data (table/figure number in reference).
+
+"""
 import mysql.connector
 
 def connect(local=False):
-    if (local==True):
+    """Establish a connection to NEPC MySQL database
+
+    Parameters
+    ----------
+    local : bool
+        Use a copy of NEPC on localhost; otherwise use the production
+        server (default False).
+
+    Returns
+    -------
+    cnx : MySQLConnection
+        A connection to the NEPC MySQL database
+    cursor : MySQLCursor
+        A MySQLCursor object that can execute operations such as SQL
+        statements. `cursor` interacts with the NEPC server using the
+        `cnx` connection
+    """
+
+    if local:
         hostname = 'localhost'
     else:
         hostname = '132.250.158.124'
@@ -16,19 +75,101 @@ def connect(local=False):
     cursor = cnx.cursor()
     return cnx, cursor
 
-def printTable(cursor, table):
+def print_table(cursor, table):
+    """Print a table in a MySQL database
+
+    Parameters
+    ----------
+    cnx : MySQLConnection
+        A connection to the NEPC MySQL database (see nepc.connect)
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    """
     print("\n=========================\n " + table + ":\n=========================")
     cursor.execute("select * from " + table + ";")
-    for x in cursor:
-        print(x)
+    for item in cursor:
+        print(item)
 
-def countTableRows(cursor, table):
+def count_table_rows(cursor, table):
+    """Print the number of rows in a MySQL table
+
+    Parameters
+    ----------
+    cnx : MySQLConnection
+        A connection to the NEPC MySQL database (see nepc.connect)
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    """
     print("\nRows in " + table + ": ")
     cursor.execute("select count(*) from " + table + ";")
-    for x in cursor:
-        print(x)
+    for item in cursor:
+        print(item)
 
 def model(cursor, model_name):
+    """Return a plasma chemistry model from the NEPC MySQL database
+
+    Parameters
+    ----------
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    model_name :str
+        The name of a NEPC model (see [nepc.wiki]/models
+
+    Returns
+    -------
+    cs_dicts : list of dict
+    A list of dictionaries containing cross section data and
+    metadata from NEPC database.  The structure of each cross section dictionary:
+        "cs_id" : int
+            id of the cross section in `cs` and `csdata` tables
+        "specie" : str
+            `name` of specie from `species` table
+        "process" : str
+            `name` of process from `processes` table
+        "units_e" : float
+            units of electron energy list "e" in eV
+        "units_sigma" : float
+            units of cross section list "sigma" in m^2
+        "ref" : str
+            `ref` from `cs` table corresponding to entry in '[nepc]/models/ref.bib'
+        "lhsA" : str
+            `name` of lhsA state from `states` table
+        "lhsB" : str
+            `name` of lhsB state from `states` table
+        "rhsA" : str
+            `name` of rhsA state from `states` table
+        "rhsB" : str
+            `name` of rhsB state from `states` table
+        "wavelength" : float
+            wavelength of photon involved in process in nanometers (nm)
+        "lhs_v" : int
+            vibrational energy level of lhs specie
+        "rhs_v" : int
+            vibrational energy level of rhs specie
+        "lhs_j" : int
+            rotational energy level of lhs specie
+        "rhs_j" : int
+            rotational energy level of rhs specie
+        "background" : str
+            background text describing origin of data and other important info
+        "lpu" : float
+            lower percent uncertainty
+        "upu" : float
+            upper percent uncertainty
+        "e" : list of float
+            electron energy
+        "sigma" : list of float
+            cross section
+        "lhsA_long" : str
+            `long_name` of lhsA state from `states` table
+        "lhsB_long" : str
+            `long_name` of lhsB state from `states` table
+        "rhsA_long" : str
+            `long_name` of rhsA state from `states` table
+        "rhsB_long" : str
+            `long_name` of rhsB state from `states` table
+
+    """
     cs_dicts = []
     cursor.execute("SELECT cs.cs_id as cs_id " +
                    "FROM cs " +
@@ -47,7 +188,9 @@ def model(cursor, model_name):
                        "D.`name`, E.`name`, "
                        "F.`name`, G.`name`, "
                        "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, A.`lhs_j`, A.`rhs_j`, "
-                       "A.`background`, A.`lpu`, A.`upu` "
+                       "A.`background`, A.`lpu`, A.`upu`, "
+                       "D.`long_name`, E.`long_name`, "
+                       "F.`long_name`, G.`long_name` "
                        "FROM `cs` AS A "
                        "LEFT JOIN `species` AS B "
                        "ON B.`id` = A.`specie_id` "
@@ -66,9 +209,9 @@ def model(cursor, model_name):
         metadata = cursor.fetchall()[0]
 
         cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " + str(cs_id))
-        cs = cursor.fetchall()
-        e = [i[0] for i in cs]
-        sigma = [i[1] for i in cs]
+        cross_section = cursor.fetchall()
+        e_energy = [i[0] for i in cross_section]
+        sigma = [i[1] for i in cross_section]
 
         cs_dicts.append({"cs_id":metadata[0],
                          "specie":metadata[1],
@@ -88,7 +231,11 @@ def model(cursor, model_name):
                          "background":metadata[15],
                          "lpu":metadata[16],
                          "upu":metadata[17],
-                         "e":e,
-                         "sigma":sigma})
+                         "e":e_energy,
+                         "sigma":sigma,
+                         "lhsA_long":metadata[18],
+                         "lhsB_long":metadata[19],
+                         "rhsA_long":metadata[20],
+                         "rhsB_long":metadata[21]})
 
     return cs_dicts
