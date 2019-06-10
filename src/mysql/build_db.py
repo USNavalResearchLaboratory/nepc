@@ -6,11 +6,11 @@ import nepc
 #TODO: add threshold table
 #TODO: add reference table
 
-userHome = config.userHome()
+HOME = config.userHome()
 
 mydb = mysql.connector.connect(
-	host='localhost',
-	option_files=userHome + '/.mysql/defaults'
+    host='localhost',
+    option_files=HOME + '/.mysql/defaults'
 )
 
 mycursor = mydb.cursor()
@@ -21,12 +21,11 @@ mycursor.execute("SET default_storage_engine = INNODB;")
 
 
 mycursor.execute("CREATE TABLE `nepc`.`species`("
-"	`id` INT UNSIGNED NOT NULL auto_increment ,"
-"	`name` VARCHAR(40) NOT NULL ,"
-"	`long_name` VARCHAR(100) NOT NULL ,"
-"	PRIMARY KEY(`id`)"
-");"
-)
+                 "`id` INT UNSIGNED NOT NULL auto_increment ,"
+                 "`name` VARCHAR(40) NOT NULL ,"
+                 "`long_name` VARCHAR(100) NOT NULL ,"
+                 "PRIMARY KEY(`id`)"
+                 ");")
 
 mycursor.execute("CREATE TABLE `nepc`.`processes`("
 "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
@@ -228,10 +227,10 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
 "			)"
 "		)"
 "	),"
-"	specie_id = (select max(id) from nepc.species where name = 'N2+');"
-)
+"	specie_id = (select max(id) from nepc.species where name = 'N2+');")
 
-directorynames = [userHome + "/projects/nepc/data/raw/ext/n2/itikawa/", userHome + "/projects/nepc/data/raw/ext/n2/zipf/"]
+directorynames = [HOME + "/projects/nepc/data/raw/ext/n2/itikawa/", 
+                  HOME + "/projects/nepc/data/raw/ext/n2/zipf/"]
 
 cs_id = 1
 for directoryname in directorynames:
@@ -239,12 +238,12 @@ for directoryname in directorynames:
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        #print(directoryname + filename + "\n")
-        if filename.endswith(".metadata") or filename.endswith(".models"):
+        filename_wo_ext = filename.rsplit( ".", 1 )[ 0 ]
+        if filename.endswith(".met") or filename.endswith(".mod"): 
             continue
         else:
-            executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-                             filename + ".metadata' INTO TABLE nepc.cs "
+            executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
+                             filename_wo_ext + ".met' INTO TABLE nepc.cs "
                              "(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
                              "SET cs_id = " + str(cs_id) + ", "
                              "specie_id = (select id from nepc.species where name = @specie), "
@@ -254,24 +253,26 @@ for directoryname in directorynames:
                              "rhsA_id = (select id from nepc.states where name LIKE @rhsA), "
                              "rhsB_id = (select id from nepc.states where name LIKE @rhsB);")
 
-            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname + 
-                                   filename + ".models' INTO TABLE nepc.models2cs "
+            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname +
+                                   filename_wo_ext + ".mod' INTO TABLE nepc.models2cs "
                                    "(@model) "
                                    "SET cs_id = " + str(cs_id) + ", "
                                    "model_id = (select model_id from nepc.models where name LIKE @model);")
 
             executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                                 filename + "' INTO TABLE nepc.csdata "
+                                 filename_wo_ext + ".dat' INTO TABLE nepc.csdata "
                                  "(id,e,sigma) "
                                  "SET cs_id = " + str(cs_id) + ";")
 
-            #print("executeTextCS: " + executeTextCS + "\n")
-            #print("executeTextCSDATA: " + executeTextCSDATA + "\n")
             mycursor.execute(executeTextCS)
-            if os.path.exists(directoryname + filename + '.models'):
+
+            mycursor.execute(executeTextCSDATA)
+
+            if os.path.exists(directoryname + filename_wo_ext + '.mod'):
                 mycursor.execute(executeTextCSMODELS)
-                mycursor.execute(executeTextCSDATA)
-                cs_id = cs_id + 1
+
+            cs_id = cs_id + 1
+
 
 mydb.commit()
 
