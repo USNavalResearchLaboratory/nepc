@@ -13,6 +13,7 @@ dependencies:
   - python=3.7.2
   - scipy=1.2.1
   - matplotlib
+  - pytest=4.6.2
   - pip:
     - mysql-connector-python==8.0.11
     - pdfminer.six==20181108

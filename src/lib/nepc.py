@@ -91,7 +91,7 @@ def print_table(cursor, table):
         print(item)
 
 def count_table_rows(cursor, table):
-    """Print the number of rows in a MySQL table
+    """return the number of rows in a MySQL table
 
     Parameters
     ----------
@@ -100,10 +100,9 @@ def count_table_rows(cursor, table):
     cursor : MySQLCursor
         A MySQLCursor object (see nepc.connect)
     """
-    print("\nRows in " + table + ": ")
     cursor.execute("select count(*) from " + table + ";")
-    for item in cursor:
-        print(item)
+    table_rows = cursor.fetchall()
+    return table_rows[0][0]
 
 def model(cursor, model_name):
     """Return a plasma chemistry model from the NEPC MySQL database

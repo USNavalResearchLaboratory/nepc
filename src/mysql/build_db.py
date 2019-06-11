@@ -2,6 +2,12 @@ import os
 import mysql.connector
 import config
 import nepc
+from subprocess import check_output
+
+DBUG = True
+
+def wc(filename):
+    return int(check_output(["wc", "-l", filename]).split()[0])
 
 #TODO: add threshold table
 #TODO: add reference table
@@ -229,19 +235,23 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
 "	),"
 "	specie_id = (select max(id) from nepc.species where name = 'N2+');")
 
-directorynames = [HOME + "/projects/nepc/data/raw/ext/n2/itikawa/", 
-                  HOME + "/projects/nepc/data/raw/ext/n2/zipf/"]
+directorynames = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
+                  HOME + "/projects/nepc/data/formatted/n2/zipf/"]
 
 cs_id = 1
+cs_lines = 0
 for directoryname in directorynames:
     directory = os.fsencode(directoryname)
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        filename_wo_ext = filename.rsplit( ".", 1 )[ 0 ]
-        if filename.endswith(".met") or filename.endswith(".mod"): 
+        filename_wo_ext = filename.rsplit(".", 1)[0]
+        if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
+            cs_lines += wc(directoryname + filename)
+            #print(filename + ": " + str(file_lines))
+
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
                              filename_wo_ext + ".met' INTO TABLE nepc.cs "
                              "(@temp,@specie,@process,units_e,units_sigma,ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,rhs_v,lhs_j,rhs_j,background,lpu,upu) "
@@ -278,16 +288,23 @@ mydb.commit()
 
 mycursor.execute("use nepc;")
 
-nepc.print_table(mycursor, "species")
-nepc.print_table(mycursor, "processes")
-nepc.print_table(mycursor, "states")
-nepc.print_table(mycursor, "cs")
-nepc.print_table(mycursor, "models")
-nepc.print_table(mycursor, "models2cs")
+#nepc.print_table(mycursor, "species")
+#nepc.print_table(mycursor, "processes")
+#nepc.print_table(mycursor, "states")
+#nepc.print_table(mycursor, "cs")
+#nepc.print_table(mycursor, "models")
+#nepc.print_table(mycursor, "models2cs")
 #printTable(mycurcor, "csdata")
 
-#TODO: unit test to check for correct number of rows in csdata
-nepc.count_table_rows(mycursor, "csdata")
+if DBUG:
+    #TODO: perhaps do testing in a more elegant way
+
+    def test_lines_equals_rows(lines, table):
+        "test that all of the lines in cs datafiles made it to the cs table"
+        assert lines == nepc.count_table_rows(mycursor, table), table + ": failed"
+        return table + ": passed"
+
+    print(test_lines_equals_rows(cs_lines, 'csdata'))
 
 mycursor.close()
 
