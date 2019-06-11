@@ -1,8 +1,8 @@
 import os
+from subprocess import check_output
 import mysql.connector
 import config
 import nepc
-from subprocess import check_output
 
 DBUG = True
 
