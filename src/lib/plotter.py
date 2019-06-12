@@ -210,7 +210,8 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
                     xlim_param_dict={'auto':True},
                     ylim_param_dict={'auto':True},
                     ylog=False, xlog=False, show_legend=True,
-                    filename='default.png'):
+                    filename='default.png',
+                    max_plots=10):
     """
     A helper function to plot cross sections from a NEPC model on one plot.
 
@@ -244,6 +245,8 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
     xlim(ylim)_param_dict: dict
         dictionary of kwargs to pass to ax.set_x(y)lim
 
+    max_plots : int
+        maximum number of plots to put on graph
 
     Returns
     -------
@@ -266,7 +269,12 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
     ax.tick_params(direction='in', which='both',
                    bottom=True, top=True, left=True, right=True)
 
-    for i in range(len(model)):
+    if len(model) > max_plots:
+        last_plot = max_plots
+    else:
+        last_plot = len(model)
+
+    for i in range(last_plot):
         if process == '' or model[i]['process'] == process:
             #FIXME: allow for varying electrons, hv, v, j on rhs and lhs
             #TODO: add lpu and upu to plots
