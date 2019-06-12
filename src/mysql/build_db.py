@@ -6,8 +6,9 @@ import nepc
 
 DBUG = True
 
-def wc(filename):
-    return int(check_output(["wc", "-l", filename]).split()[0])
+def wc_fxn(file_to_count):
+    "return the number of lines in a file using wc"
+    return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
 #TODO: add threshold table
 #TODO: add reference table
@@ -235,12 +236,13 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
 "	),"
 "	specie_id = (select max(id) from nepc.species where name = 'N2+');")
 
-directorynames = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
-                  HOME + "/projects/nepc/data/formatted/n2/zipf/"]
+DIR_NAMES = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
+             HOME + "/projects/nepc/data/formatted/n2/zipf/",
+             HOME + "/projects/nepc/data/formatted/n/zatsarinny/"]
 
 cs_id = 1
 cs_lines = 0
-for directoryname in directorynames:
+for directoryname in DIR_NAMES:
     directory = os.fsencode(directoryname)
 
     for file in os.listdir(directory):
@@ -249,7 +251,7 @@ for directoryname in directorynames:
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
-            cs_lines += wc(directoryname + filename)
+            cs_lines += wc_fxn(directoryname + filename)
             #print(filename + ": " + str(file_lines))
 
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
@@ -294,7 +296,8 @@ mycursor.execute("use nepc;")
 #nepc.print_table(mycursor, "cs")
 #nepc.print_table(mycursor, "models")
 #nepc.print_table(mycursor, "models2cs")
-#printTable(mycurcor, "csdata")
+print("csdata has " + str(nepc.count_table_rows(mycursor, "csdata")) +
+      " lines")
 
 if DBUG:
     #TODO: perhaps do testing in a more elegant way
