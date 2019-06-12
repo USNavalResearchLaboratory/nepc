@@ -19,7 +19,7 @@ def rmfile(filename):
 	if os.path.exists(filename):
 		os.remove(filename)
 	else:
-		print(filename + " does not exist")     
+		print(filename + " does not exist")
 
 def mkdir(outdir):
     try:
@@ -81,12 +81,12 @@ def getColumnStrings(pdf,pageNumber,cropDimArray,locateTables=False,omitRegexp='
 	return data
 
 
-
-def writeDataToFile(dataArray,filename):
-	f = open(filename, "x")
-	for i in range(len(dataArray)): 
-		f.write("\t"+str(dataArray[i,0])+"\t"+str(dataArray[i,1])+"\n")
-	f.close()
+#TODO: standardize filenames; build them in the write functions
+def writeDataToFile(dataArray, filename):
+    f = open(filename, "x")
+    for i in range(len(dataArray)):
+        f.write("\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
+    f.close()
 
 def writeMetaDataToFile(filename,specie,process,units_e,units_sigma,ref,
                         lhsA='\\N',lhsB='\\N',rhsA='\\N',rhsB='\\N',wavelength='\\N',lhs_v='\\N',rhs_v='\\N',lhs_j='\\N',rhs_j='\\N',background='\\N',lpu='\\N',upu='\\N'):
