@@ -6,12 +6,14 @@ import nepc
 
 DBUG = True
 
+
 def wc_fxn(file_to_count):
     "return the number of lines in a file using wc"
     return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
-#TODO: add threshold table
-#TODO: add reference table
+
+# TODO: add threshold table
+# TODO: add reference table
 
 HOME = config.userHome()
 
@@ -34,45 +36,45 @@ mycursor.execute("CREATE TABLE `nepc`.`species`("
                  "PRIMARY KEY(`id`)"
                  ");")
 
-mycursor.execute("CREATE TABLE `nepc`.`processes`("
-"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
-"	`name` VARCHAR(40) NOT NULL ,"
-"	`long_name` VARCHAR(240) NOT NULL ,"
-"	`lhs` INT,"
-"	`rhs` INT,"
-"	`lhs_e` INT,"
-"	`rhs_e` INT,"
-"	`lhs_hv` INT,"
-"	`rhs_hv` INT,"
-"	`lhs_v` INT,"
-"	`rhs_v` INT,"
-"	`lhs_j` INT,"
-"	`rhs_j` INT,"
-"	PRIMARY KEY(`id`)"
-");"
-)
+mycursor.execute("CREATE TABLE `nepc`.`processes`( "
+                 "`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+                 "`name` VARCHAR(40) NOT NULL, "
+                 "`long_name` VARCHAR(240) NOT NULL, "
+                 "`lhs` INT, "
+                 "`rhs` INT, "
+                 "`lhs_e` INT, "
+                 "`rhs_e` INT, "
+                 "`lhs_hv` INT, "
+                 "`rhs_hv` INT, "
+                 "`lhs_v` INT, "
+                 "`rhs_v` INT, "
+                 "`lhs_j` INT, "
+                 "`rhs_j` INT, "
+                 "PRIMARY KEY(`id`) "
+                 ");"
+                 )
 
 mycursor.execute("CREATE TABLE `nepc`.`states`("
-"	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
-"	`specie_id` INT UNSIGNED NOT NULL ,"
-"	`name` VARCHAR(100) NOT NULL ,"
-"	`long_name` VARCHAR(100) NOT NULL ,"
-"	`configuration` JSON NOT NULL ,"
-"	PRIMARY KEY(`id`) ,"
-"	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
-"	CONSTRAINT `specie_id_STATES` FOREIGN KEY(`specie_id`) "
-"		REFERENCES `nepc`.`species`(`id`) "
-"		ON DELETE RESTRICT ON UPDATE CASCADE"
-");"
-)
+                 "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+                 "	`specie_id` INT UNSIGNED NOT NULL ,"
+                 "	`name` VARCHAR(100) NOT NULL ,"
+                 "	`long_name` VARCHAR(100) NOT NULL ,"
+                 "	`configuration` JSON NOT NULL ,"
+                 "	PRIMARY KEY(`id`) ,"
+                 "	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
+                 "	CONSTRAINT `specie_id_STATES` FOREIGN KEY(`specie_id`) "
+                 "		REFERENCES `nepc`.`species`(`id`) "
+                 "		ON DELETE RESTRICT ON UPDATE CASCADE"
+                 ");"
+                 )
 
 mycursor.execute("CREATE TABLE `nepc`.`models`("
-"	`model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
-"	`name` VARCHAR(40) NOT NULL ,"
-"	`long_name` VARCHAR(240) NOT NULL ,"
-"	PRIMARY KEY(`model_id`)"
-");"
-)
+                 "	`model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+                 "	`name` VARCHAR(40) NOT NULL ,"
+                 "	`long_name` VARCHAR(240) NOT NULL ,"
+                 "	PRIMARY KEY(`model_id`)"
+                 ");"
+                 )
 
 mycursor.execute("CREATE TABLE `nepc`.`cs`("
 "	`cs_id` INT UNSIGNED NOT NULL, "
@@ -178,7 +180,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
 mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
 "	INTO TABLE nepc.states"
 "	IGNORE 1 LINES"
-"	(id,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,name,long_name)"
+"	(id,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p,name,long_name)"
 "	SET configuration = JSON_OBJECT("
 "		JSON_OBJECT('order', "
 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', '3d','4s', '4p')"

@@ -1,14 +1,15 @@
 """Plot cross section data from NEPC and LxCat
 
 """
-#from cycler import cycler
+# from cycler import cycler
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def lxcat_plot_zats(ax, processes, plot_line_style_list,
-                    plot_param_dict={'linewidth':1},
-                    xlim_param_dict={'auto':True},
-                    ylim_param_dict={'auto':True},
+                    plot_param_dict={'linewidth': 1},
+                    xlim_param_dict={'auto': True},
+                    ylim_param_dict={'auto': True},
                     ylog=False, xlog=False, show_legend=True,
                     filename='default.png'):
     """
@@ -62,14 +63,16 @@ def lxcat_plot_zats(ax, processes, plot_line_style_list,
 
     for i in range(len(processes)):
         process_np = np.array(processes[i]['data'])
-        ax.plot(process_np[..., 0], process_np[..., 1]/1E-20, plot_line_style_list[i],
-                **plot_param_dict,
-                label='{}'.format(processes[i]['process']))
-                                       #processes[i]['filename']))
+        ax.plot(
+            process_np[..., 0],
+            process_np[..., 1] / 1E-20, plot_line_style_list[i],
+            **plot_param_dict, label='{}'.format(processes[i]['process']))
+        # processes[i]['filename']))
 
     if show_legend:
         ax.legend(fontsize=8, ncol=1, loc='best', frameon=False)
-        #ax.legend(box='best', bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
+        # ax.legend(box='best', bbox_to_anchor=(0.5, 0.75), ncol=1,
+        #           loc='center left')
 
     plt.savefig(filename)
 
@@ -77,7 +80,7 @@ def lxcat_plot_zats(ax, processes, plot_line_style_list,
 
 
 def lxcat_plot_zats_top6(ax, processes,
-                         plot_param_dict={'linewidth':1},
+                         plot_param_dict={'linewidth': 1},
                          ylog=False, xlog=False, show_legend=True):
     """
     A helper function to plot list of six LxCat cross sections of a given
@@ -112,7 +115,8 @@ def lxcat_plot_zats_top6(ax, processes,
     if xlog:
         plt.xscale('log')
 
-    fig, ax = plt.subplots(len(processes), sharex=False, sharey=False, figsize=(5,10))
+    fig, ax = plt.subplots(len(processes), sharex=False,
+                           sharey=False, figsize=(5, 10))
 
     for i in range(len(processes)):
         if i == len(processes)/2:
@@ -132,10 +136,11 @@ def lxcat_plot_zats_top6(ax, processes,
 
     return ax
 
+
 def n_plot_zats(ax, data, process, plot_line_style,
-                plot_param_dict={'linewidth':0.8},
-                xlim_param_dict={'auto':True},
-                ylim_param_dict={'auto':True},
+                plot_param_dict={'linewidth': 0.8},
+                xlim_param_dict={'auto': True},
+                ylim_param_dict={'auto': True},
                 ylog=False, xlog=False, show_legend=True,
                 filename='default.png'):
     """
@@ -194,21 +199,23 @@ def n_plot_zats(ax, data, process, plot_line_style,
             plot_line_style,
             **plot_param_dict,
             label='{}'.format(process))
-                                       #processes[i]['filename']))
+    # processes[i]['filename']))
 
     if show_legend:
         ax.legend(fontsize=8, ncol=1, loc='best', frameon=False)
-        #ax.legend(box='best', bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
+        # ax.legend(box='best', bbox_to_anchor=(0.5, 0.75),
+        #           ncol=1, loc='center left')
 
     plt.savefig(filename)
 
     return ax
 
+
 def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
                     process='',
-                    plot_param_dict={'linewidth':1},
-                    xlim_param_dict={'auto':True},
-                    ylim_param_dict={'auto':True},
+                    plot_param_dict={'linewidth': 1},
+                    xlim_param_dict={'auto': True},
+                    ylim_param_dict={'auto': True},
                     ylog=False, xlog=False, show_legend=True,
                     filename='default.png',
                     max_plots=10):
@@ -269,17 +276,16 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
     ax.tick_params(direction='in', which='both',
                    bottom=True, top=True, left=True, right=True)
 
-    if len(model) > max_plots:
-        last_plot = max_plots
-    else:
-        last_plot = len(model)
+    plot_num = 0
+    for i in range(len(model)):
+        if plot_num > max_plots:
+            continue
+        elif process == '' or model[i]['process'] == process:
+            plot_num += 1
+            # FIXME: allow for varying electrons, hv, v, j on rhs and lhs
+            # TODO: add lpu and upu to plots
 
-    for i in range(last_plot):
-        if process == '' or model[i]['process'] == process:
-            #FIXME: allow for varying electrons, hv, v, j on rhs and lhs
-            #TODO: add lpu and upu to plots
-
-            #FIXME: refactor the next two blocks of code into a method
+            # FIXME: refactor the next two blocks of code into a method
             e_on_lhs = model[i]['e_on_lhs']
             if e_on_lhs == 0:
                 lhs_e_text = None
@@ -296,9 +302,15 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
             else:
                 rhs_e_text = str(e_on_rhs) + "e$^-$"
 
-            lhs_items = [lhs_e_text, model[i]['lhsA_long'], model[i]['lhsB_long']]
+            lhs_items = [
+                lhs_e_text,
+                model[i]['lhsA_long'],
+                model[i]['lhsB_long']]
             lhs_text = " + ".join(item for item in lhs_items if item)
-            rhs_items = [model[i]['rhsA_long'], model[i]['rhsB_long'], rhs_e_text]
+            rhs_items = [
+                model[i]['rhsA_long'],
+                model[i]['rhsB_long'],
+                rhs_e_text]
             rhs_text = " + ".join(item for item in rhs_items if item)
             label_items = [model[i]['process'], ": ",
                            lhs_text,
@@ -310,12 +322,15 @@ def plot_nepc_model(ax, model, units_sigma, units_sigma_tex,
             ax.plot(e_np, sigma_np*model[i]['units_sigma']/units_sigma,
                     **plot_param_dict,
                     label='{}'.format(label_text))
+            i += 1
 
     if show_legend:
-        #FIXME: put legend outside of plot box
-        ax.legend(fontsize=8, ncol=1, loc='best', frameon=False)
-        #ax.legend(box='best', bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
+        # FIXME: put legend outside of plot box
+        ax.legend(fontsize=12, ncol=2, frameon=False,
+                  bbox_to_anchor=(1.0, 1.0))
+        # ax.legend(box='best',
+        #           bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
 
-    plt.savefig(filename)
+    # plt.savefig(filename)
 
     return ax

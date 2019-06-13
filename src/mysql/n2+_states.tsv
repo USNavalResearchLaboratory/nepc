@@ -1,12 +1,12 @@
 	2sigma_u	1pi_u	3sigma_g	1pi_g	3sigma_u	3ssigma_g	name	long_name
 							N2+	N${}_2^+$
-	2	3	1	1	0	?	N2+(C2Sigmau+)	N${}^+_2$(C ${}^2\Sigma_u^+$)
-	1	4	2	0	0	?	N2+(C2Sigmau+)	N${}^+_2$(C ${}^2\Sigma_u^+$)
-	1	4	2	0	0	?	N2+(B2Sigmau+)	N${}^+_2$(B ${}^2\Sigma_u^+$)
-	2	3	1	1	0	?	N2+(B2Sigmau+)	N${}^+_2$(B ${}^2\Sigma_u^+$)
-	2	3	2	0	0	?	N2+(A2Piu)	N${}^+_2$(A $^2\Pi_u$)
-	2	4	1	0	0	?	N2+(X2Sigmag+)	N${}^+_2$(X ${}^2\Sigma_g^+$)
-	2	2	2	1	0	?	N2+(D2Pig)	N${}^+_2$(D ${}^2\Pi_g$)
-	2	4	0	1	0	?	N2+(D2Pig)	N${}^+_2$(D ${}^2\Pi_g$)
+	2	3	1	1	0		N2+(C2Sigmau+)	N${}^+_2$ (C ${}^2\\Sigma_u^+$)
+	1	4	2	0	0		N2+(C2Sigmau+)	N${}^+_2$ (C ${}^2\\Sigma_u^+$)
+	1	4	2	0	0		N2+(B2Sigmau+)	N${}^+_2$ (B ${}^2\\Sigma_u^+$)
+	2	3	1	1	0		N2+(B2Sigmau+)	N${}^+_2$ (B ${}^2\\Sigma_u^+$)
+	2	3	2	0	0		N2+(A2Piu)	N${}^+_2$ (A $^2\\Pi_u$)
+	2	4	1	0	0		N2+(X2Sigmag+)	N${}^+_2$ (X ${}^2\\Sigma_g^+$)
+	2	2	2	1	0		N2+(D2Pig)	N${}^+_2$ (D ${}^2\\Pi_g$)
+	2	4	0	1	0		N2+(D2Pig)	N${}^+_2$ (D ${}^2\\Pi_g$)
 							
 							

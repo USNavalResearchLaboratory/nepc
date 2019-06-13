@@ -39,10 +39,13 @@ TODO
               of data (table/figure number in reference).
 
 """
+from pandas import DataFrame
 import mysql.connector
+
 
 def connect(local=False):
     """Establish a connection to NEPC MySQL database
+
 
     Parameters
     ----------
@@ -75,34 +78,40 @@ def connect(local=False):
     cursor = cnx.cursor()
     return cnx, cursor
 
+
 def print_table(cursor, table):
     """Print a table in a MySQL database
 
     Parameters
     ----------
-    cnx : MySQLConnection
-        A connection to the NEPC MySQL database (see nepc.connect)
     cursor : MySQLCursor
         A MySQLCursor object (see nepc.connect)
     """
-    print("\n=========================\n " + table + ":\n=========================")
+    print("\n====================\n " + table + ":\n====================")
     cursor.execute("select * from " + table + ";")
     for item in cursor:
         print(item)
+
 
 def count_table_rows(cursor, table):
     """return the number of rows in a MySQL table
 
     Parameters
     ----------
-    cnx : MySQLConnection
-        A connection to the NEPC MySQL database (see nepc.connect)
     cursor : MySQLCursor
         A MySQLCursor object (see nepc.connect)
+    table : str
+        Name of a table in the MySQL database
+
+    Return
+    ------
+        : int
+    Number of rows in table
     """
     cursor.execute("select count(*) from " + table + ";")
     table_rows = cursor.fetchall()
     return table_rows[0][0]
+
 
 def model(cursor, model_name):
     """Return a plasma chemistry model from the NEPC MySQL database
@@ -118,7 +127,8 @@ def model(cursor, model_name):
     -------
     cs_dicts : list of dict
     A list of dictionaries containing cross section data and
-    metadata from NEPC database.  The structure of each cross section dictionary:
+    metadata from NEPC database.  The structure of each cross section
+    dictionary:
         "cs_id" : int
             id of the cross section in `cs` and `csdata` tables
         "specie" : str
@@ -130,7 +140,8 @@ def model(cursor, model_name):
         "units_sigma" : float
             units of cross section list "sigma" in m^2
         "ref" : str
-            `ref` from `cs` table corresponding to entry in '[nepc]/models/ref.bib'
+            `ref` from `cs` table corresponding to entry in
+            '[nepc]/models/ref.bib'
         "lhsA" : str
             `name` of lhsA state from `states` table
         "lhsB" : str
@@ -203,7 +214,8 @@ def model(cursor, model_name):
                        "A.`units_e`, A.`units_sigma`, A.`ref`, "
                        "D.`name`, E.`name`, "
                        "F.`name`, G.`name`, "
-                       "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, A.`lhs_j`, A.`rhs_j`, "
+                       "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, "
+                       "A.`lhs_j`, A.`rhs_j`, "
                        "A.`background`, A.`lpu`, A.`upu`, "
                        "D.`long_name`, E.`long_name`, "
                        "F.`long_name`, G.`long_name`, "
@@ -228,42 +240,85 @@ def model(cursor, model_name):
 
         metadata = cursor.fetchall()[0]
 
-        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " + str(cs_id))
+        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
+                       str(cs_id))
         cross_section = cursor.fetchall()
         e_energy = [i[0] for i in cross_section]
         sigma = [i[1] for i in cross_section]
 
-        cs_dicts.append({"cs_id":metadata[0],
-                         "specie":metadata[1],
-                         "process":metadata[2],
-                         "units_e":metadata[3],
-                         "units_sigma":metadata[4],
-                         "ref":metadata[5],
-                         "lhsA":metadata[6],
-                         "lhsB":metadata[7],
-                         "rhsA":metadata[8],
-                         "rhsB":metadata[9],
-                         "wavelength":metadata[10],
-                         "lhs_v":metadata[11],
-                         "rhs_v":metadata[12],
-                         "lhs_j":metadata[13],
-                         "rhs_j":metadata[14],
-                         "background":metadata[15],
-                         "lpu":metadata[16],
-                         "upu":metadata[17],
-                         "e":e_energy,
-                         "sigma":sigma,
-                         "lhsA_long":metadata[18],
-                         "lhsB_long":metadata[19],
-                         "rhsA_long":metadata[20],
-                         "rhsB_long":metadata[21],
-                         "e_on_lhs":metadata[22],
-                         "e_on_rhs":metadata[23],
-                         "hv_on_lhs":metadata[24],
-                         "hv_on_rhs":metadata[25],
-                         "v_on_lhs":metadata[26],
-                         "v_on_rhs":metadata[27],
-                         "j_on_lhs":metadata[28],
-                         "j_on_rhs":metadata[29]})
+        cs_dicts.append({"cs_id": metadata[0],
+                         "specie": metadata[1],
+                         "process": metadata[2],
+                         "units_e": metadata[3],
+                         "units_sigma": metadata[4],
+                         "ref": metadata[5],
+                         "lhsA": metadata[6],
+                         "lhsB": metadata[7],
+                         "rhsA": metadata[8],
+                         "rhsB": metadata[9],
+                         "wavelength": metadata[10],
+                         "lhs_v": metadata[11],
+                         "rhs_v": metadata[12],
+                         "lhs_j": metadata[13],
+                         "rhs_j": metadata[14],
+                         "background": metadata[15],
+                         "lpu": metadata[16],
+                         "upu": metadata[17],
+                         "e": e_energy,
+                         "sigma": sigma,
+                         "lhsA_long": metadata[18],
+                         "lhsB_long": metadata[19],
+                         "rhsA_long": metadata[20],
+                         "rhsB_long": metadata[21],
+                         "e_on_lhs": metadata[22],
+                         "e_on_rhs": metadata[23],
+                         "hv_on_lhs": metadata[24],
+                         "hv_on_rhs": metadata[25],
+                         "v_on_lhs": metadata[26],
+                         "v_on_rhs": metadata[27],
+                         "j_on_lhs": metadata[28],
+                         "j_on_rhs": metadata[29]})
 
     return cs_dicts
+
+
+def table_as_df(cursor, table, columns="*"):
+    """Return a MySQL table as a pandas DataFrame
+
+    Parameters
+    ----------
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    table : str
+        The name of a table in the MySQL database
+    columns : list of strings
+        Which columns to get. If None, then get all columns.
+
+    Return
+    ------
+        : DataFrame
+    table in the form of a pandas DataFrame
+    """
+    column_text = ", ".join(columns)
+    cursor.execute("SELECT " + column_text + " FROM " + table)
+    return DataFrame(cursor.fetchall())
+
+
+def model_summary_df(model):
+    """Return a summary of a NEPC model as a DataFrame
+
+    Parameters
+    ----------
+    model : list of dicts
+        See the model method above
+
+    Returns
+    -------
+        : DataFrame
+        A DataFrame with containing the processes, range of electron energies,
+        lpu/upu's for the model
+    """
+    summary_list = []
+    for cs in model:
+        summary_list.append([cs["process"], cs["specie"]])
+    return DataFrame(summary_list)
