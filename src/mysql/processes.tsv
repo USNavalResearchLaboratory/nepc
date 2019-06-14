@@ -14,9 +14,8 @@ id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
 	c_deexcitation_j	Collisional induced de-excitation (rotational)	1	1	1	1	0	1	0	0	1	1
 	c_deexcitation_vj	Collisional induced de-excitation (vibrational and rotational)	1	1	1	1	0	1	1	1	1	1
 	super_elastic	Super elastic collisions	1	1	1	1	0	0	0	0	0	0
-	ionization_total	Total ionization cross section	1	0	1	2	0	0	0	0	0	0
-	ionization_partial	Partial ionization cross section	1	1	1	2	0	0	0	0	0	0
-	ionization	Ionization	1	1	1	2	0	0	0	0	0	0
+	ionization	Total ionization	1	1	1	2	0	0	0	0	0	0
+	ionization_partial	Ionization cross section	1	1	1	2	0	0	0	0	0	0
 	ionization_excitation_v	Ionization with excitation (vib)	1	1	1	2	0	0	1	1	0	0
 	ionization_excitation_j	Ionization with excitation (rot)	1	1	1	2	0	0	0	0	1	1
 	ionization_excitation_vj	Ionization with excitation (vib and rot)	1	1	1	2	0	0	1	1	1	1
@@ -25,18 +24,17 @@ id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
 	detachment	Detachment	1	1	1	2	0	0	0	0	0	0
 	recombination	Recombination	1	1	1	0	0	0	0	0	0	0
 	three_body_recombination	Three-body collision recombination	1	1	1	0	0	0	0	0	0	0
-	dissociation_total	Total dissociation cross section	1	0	1	1	0	0	0	0	0	0
-	dissociation	Dissociation	1	2	1	1	0	0	0	0	0	0
+	dissociation	Total dissociation cross section	1	2	1	1	0	0	0	0	0	0
+	dissociation_partial	Dissociation cross section	1	2	1	1	0	0	0	0	0	0
 	dissociation_excitation_v	Dissociation with excitation (vibrational)	1	2	1	1	0	0	0	1	0	0
 	dissociation_excitation_j	Dissociation with excitation (rotational)	1	2	1	1	0	0	0	0	0	1
 	dissociation_excitation_vj	Dissociation with excitation (vibrational and rotational)	1	2	1	1	0	0	0	1	0	1
-	d_ionization_total	Total dissociative ionization	1	0	1	2	0	0	0	0	0	0
-	d_ionization	Dissociative ionization	1	2	1	2	0	0	0	0	0	0
+	d_ionization	Total dissociative ionization	1	2	1	2	0	0	0	0	0	0
+	d_ionization_partial	Dissociative ionization	1	2	1	2	0	0	0	0	0	0
 	d_ionization_excitation_v	Dissociative ionization with excitation (vibrational)	1	2	1	2	0	0	1	1	0	0
 	d_ionization_excitation_j	Dissociative ionization with excitation (rotational)	1	2	1	2	0	0	0	0	1	1
 	d_ionization_excitation_vj	Dissociative ionization with excitation (vibrational and rotational)	1	2	1	2	0	0	1	1	1	1
 	ion_pair	Ion pair formation	1	2	1	1	0	0	0	0	0	0
 	dissociative_attachment	Dissociative attachment	1	2	1	0	0	0	0	0	0	0
 	momentum	Elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
-	momentum_v	Inelastic momentum transfer with vibrational excitation	1	1	1	1	0	0	1	1	0	0
 	total	Total electron scattering cross section	1	1	1	1	0	0	0	0	0	0

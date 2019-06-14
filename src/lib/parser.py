@@ -1,8 +1,13 @@
+# import sys
+import re
+import numpy as np
+import logging
+from decimal import Decimal
 """
 Adapted from BOLOS (https://github.com/aluque/bolos). Adaptations:
 - replaced 'next()' with '__next__()' for Python 3
-- broke out large comments block to add separate dictionary entry for 'process',
-  param, species, comment, etc.
+- broke out large comments block to add separate dictionary entry for
+  'process', param, species, comment, etc.
 - compined 'comment' block if present to 'process' as parenthetical
   (particularly useful to catch momentum-transfer elastic processes)
 """
@@ -15,15 +20,11 @@ Most user would only use the method :func:`parse` in this module, which is
 documented below.
 """
 
-import sys
-import re
-import numpy as np
-import logging
-from decimal import Decimal
-
 RE_NL = re.compile('\n')
+
+
 def parse(fp, filename, has_arg=True):
-    """ Parses a BOLSIG+ cross-sections file.  
+    """ Parses a BOLSIG+ cross-sections file.
 
     Parameters
     ----------
@@ -64,17 +65,19 @@ def parse(fp, filename, has_arg=True):
             d['kind'] = key
             d['filename'] = filename
 
-            #new code to add separate entries for process, param, etc
+            # new code to add separate entries for process, param, etc
             comments = [s.strip() for s in RE_NL.split(d['comments'])]
             for i in range(len(comments)):
-                key, value = comments[i].split(':',1)
-                key = key.lower().replace('.','')
+                key, value = comments[i].split(':', 1)
+                key = key.lower().replace('.', '')
                 value = value.lstrip()
                 d[key] = value
 
             # add 'comment' to 'process'
             if 'comment' in d.keys():
-                d['process'] = d['process'] + ' (' + d['comment'].lower().replace('.','') + ')'
+                comment_fixed = d['comment'].lower().replace('.', '')
+                d['process'] = d['process'] + ' (' + comment_fixed + ')'
+                del comment_fixed
                 del d['comment']
 
             del d['comments']
@@ -89,8 +92,11 @@ def parse(fp, filename, has_arg=True):
     return processes
 
 
-# BOLSIG+'s user guide says that the separators must consist of at least five dashes
+# BOLSIG+'s user guide says that the separators must consist of at least
+# five dashes
 RE_SEP = re.compile("-----+")
+
+
 def _read_until_sep(fp):
     """ Reads lines from fp until a we find a separator line. """
     lines = []
@@ -103,7 +109,7 @@ def _read_until_sep(fp):
 
 
 def _read_block(fp, has_arg=True):
-    """ Reads data of a process, contained in a block. 
+    """ Reads data of a process, contained in a block.
     has_arg indicates wether we have to read an argument line"""
     target = fp.__next__().strip()
     if has_arg:
@@ -115,14 +121,16 @@ def _read_block(fp, has_arg=True):
 
     logging.debug("Read process '%s'" % target)
     data = np.loadtxt(_read_until_sep(fp))
-    #data = np.loadtxt(_read_until_sep(fp)).tolist()
+    # data = np.loadtxt(_read_until_sep(fp)).tolist()
 
     return target, arg, comments, data
 
 #
 # Specialized funcion for each keyword. They all return dictionaries with the
 # relevant attibutes.
-# 
+#
+
+
 def _read_momentum(fp, has_arg=True):
     """ Reads a MOMENTUM or EFFECTIVE block. """
     target, arg, comments, data = _read_block(fp, has_arg=has_arg)
@@ -134,7 +142,10 @@ def _read_momentum(fp, has_arg=True):
 
     return d
 
-RE_ARROW = re.compile('<?->')    
+
+RE_ARROW = re.compile('<?->')
+
+
 def _read_excitation(fp, has_arg=True):
     """ Reads an EXCITATION or IONIZATION block. """
     target, arg, comments, data = _read_block(fp, has_arg=has_arg)
@@ -147,7 +158,8 @@ def _read_excitation(fp, has_arg=True):
 
     if (has_arg):
         if '<->' in target.split():
-            threshold, weight_ratio = float(arg.split()[0]), float(arg.split()[1])
+            threshold, weight_ratio = (float(arg.split()[0]),
+                                       float(arg.split()[1]))
             d['weight_ratio'] = weight_ratio
         else:
             threshold = float(arg.split()[0])
@@ -182,6 +194,7 @@ KEYWORDS = {"MOMENTUM": _read_momentum,
             "IONIZATION": _read_excitation,
             "ATTACHMENT": _read_attachment}
 
+
 def lxcat(filename,
           process_type,
           process,
@@ -192,7 +205,7 @@ def lxcat(filename,
           updated,
           columns,
           data):
-    with open(filename,'w') as fp:
+    with open(filename, 'w') as fp:
         fp.write(process_type+"\n")
         fp.write(process+"\n")
         fp.write(" "+'{:.6e}'.format(Decimal(threshold))+"\n")
@@ -203,12 +216,6 @@ def lxcat(filename,
         fp.write("COLUMNS: "+columns+"\n")
         fp.write("-----------------------------\n")
         for i in range(len(data)):
-            fp.write('{:.10e}    {:.7e}\n'.format(Decimal(data[i,0]),
-                                                 Decimal(data[i,1]/1.0e20)))
+            fp.write('{:.10e}    {:.7e}\n'.format(Decimal(data[i, 0]),
+                                                  Decimal(data[i, 1]/1.0e20)))
         fp.write("-----------------------------\n\n")
-
-
-
-
-
-

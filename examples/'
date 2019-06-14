@@ -294,14 +294,10 @@ def plot_nepc_model(ax, model, units_sigma,
             sigma_upper_np = sigma_np*(1 + upu)
             sigma_lower_np = sigma_np*(1 - lpu)
             p = ax.plot(e_np, sigma_np*model[i]['units_sigma']/units_sigma,
-                        **plot_param_dict,
-                        label='{}'.format(label_text))
-            if model[i]['upu'] is None or model[i]['lpu'] is None:
-                fill_color = 'grey'
-            else:
-                fill_color = p[0].get_color()
+                    **plot_param_dict,
+                    label='{}'.format(label_text))
             ax.fill_between(e_np, sigma_lower_np, sigma_upper_np,
-                            color=fill_color, alpha=0.4)
+                            color=p.get_color(), alpha=0.4)
 
             i += 1
 

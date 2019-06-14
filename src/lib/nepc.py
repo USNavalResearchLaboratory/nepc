@@ -304,21 +304,76 @@ def table_as_df(cursor, table, columns="*"):
     return DataFrame(cursor.fetchall())
 
 
+def reaction_latex(cs):
+    """Return the LaTeX for the reaction from a nepc cross section
+
+    Arguments
+    ---------
+    cs : dict
+        A nepc cross section dictionary
+
+    Returns
+    -------
+    reaction : str
+        The LaTeX for a nepc cross section reaction
+    """
+    # FIXME: allow for varying electrons, hv, v, j on rhs and lhs
+    e_on_lhs = cs['e_on_lhs']
+    if e_on_lhs == 0:
+        lhs_e_text = None
+    elif e_on_lhs == 1:
+        lhs_e_text = "e$^-$"
+    else:
+        lhs_e_text = str(e_on_lhs) + "e$^-$"
+
+    e_on_rhs = cs['e_on_rhs']
+    if e_on_rhs == 0:
+        rhs_e_text = None
+    elif e_on_rhs == 1:
+        rhs_e_text = "e$^-$"
+    else:
+        rhs_e_text = str(e_on_rhs) + "e$^-$"
+
+    lhs_items = [lhs_e_text,
+                 cs['lhsA_long'],
+                 cs['lhsB_long']]
+    lhs_text = " + ".join(item for item in lhs_items if item)
+    rhs_items = [
+                cs['rhsA_long'],
+                cs['rhsB_long'],
+                rhs_e_text]
+    rhs_text = " + ".join(item for item in rhs_items if item)
+    reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
+    return reaction
+
+
 def model_summary_df(model):
     """Return a summary of a NEPC model as a DataFrame
 
     Parameters
     ----------
     model : list of dicts
-        See the model method above
+    See the model method above
 
     Returns
     -------
-        : DataFrame
-        A DataFrame with containing the processes, range of electron energies,
-        lpu/upu's for the model
+    : DataFrame
+    A DataFrame with containing the processes, range of electron energies,
+    lpu/upu's for the model
     """
     summary_list = []
+
+    headers = ["specie", "process", "reaction", "E_lower", "E_upper",
+               "sigma_max", "lpu", "upu"]
+
     for cs in model:
-        summary_list.append([cs["process"], cs["specie"]])
-    return DataFrame(summary_list)
+        reaction = reaction_latex(cs)
+        e_lower = round(min(cs["e"]), 2)
+        e_upper = round(max(cs["e"]), 2)
+        summary_list.append([cs["specie"], cs["process"], reaction,
+                             e_lower, e_upper,
+                             cs["units_sigma"]*max(cs["sigma"]),
+                             cs["lpu"], cs["upu"]])
+
+    cs_df = DataFrame(summary_list, columns=headers)
+    return cs_df

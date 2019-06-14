@@ -1,7 +1,23 @@
-#from Laher & Gilmore (1991)
-states_N2 = ["N2(X1Sigmag+)","N2(A3Sigmau+)","N2(B3Pig)","N2(W3Deltau)","N2(Bp3Sigmau-)",
-             "N2(ap1Sigmau-)","N2(a1Pig)","N2(w1Deltau)","N2(C3Piu)","N2(E3Sigmag+)","N2(D3Sigmau+)"]
-states_N2p = ["N2+(X2Sigmag+)","N2+(A2Piu)","N2+(B2Sigmau+)","N2+(C2Sigmau+)"]
+"""Constants for use in nepc"""
+# from Laher & Gilmore (1991)
+states_N2 = [
+    "N2(X1Sigmag+)",
+    "N2(A3Sigmau+)",
+    "N2(B3Pig)",
+    "N2(W3Deltau)",
+    "N2(Bp3Sigmau-)",
+    "N2(ap1Sigmau-)",
+    "N2(a1Pig)",
+    "N2(w1Deltau)",
+    "N2(C3Piu)",
+    "N2(E3Sigmag+)",
+    "N2(D3Sigmau+)"]
+states_N2p = [
+    "N2+(X2Sigmag+)",
+    "N2+(A2Piu)",
+    "N2+(B2Sigmau+)",
+    "N2+(C2Sigmau+)"]
+
 
 vib_constants_N2 = [[0.0, 2358.57, 14.324, -2.26E-3, -2.4E-4, 0],
                     [49754.8, 1460.48, 13.775, -1.175E-2, 1.41E-4, -7.29E-5],
