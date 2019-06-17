@@ -219,3 +219,18 @@ def lxcat(filename,
             fp.write('{:.10e}    {:.7e}\n'.format(Decimal(data[i, 0]),
                                                   Decimal(data[i, 1]/1.0e20)))
         fp.write("-----------------------------\n\n")
+
+
+def states_file_to_list(filename):
+    """read states (short and long) from nepc formatted states file"""
+    with open(filename) as f:
+        states_lines = f.readlines()[1:]
+
+    states_list = []
+    for line in states_lines:
+        states_list.append(line.split('\t'))
+
+    states = [states_list[i][9] for i in range(1, len(states_list))]
+    states_long = [states_list[i][10] for i in range(1, len(states_list))]
+
+    return states, states_long
