@@ -113,22 +113,44 @@ def count_table_rows(cursor, table):
     return table_rows[0][0]
 
 
-def model(cursor, model_name):
-    """Return a plasma chemistry model from the NEPC MySQL database
+def cs_metadata(cursor, cs_id):
+    """Get metadata for cross section in the NEPC database"""
+    cursor.execute("SELECT A.`cs_id` , "
+                   "B.`name` , "
+                   "C.`name` , "
+                   "A.`units_e`, A.`units_sigma`, A.`ref`, "
+                   "D.`name`, E.`name`, "
+                   "F.`name`, G.`name`, "
+                   "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, "
+                   "A.`lhs_j`, A.`rhs_j`, "
+                   "A.`background`, A.`lpu`, A.`upu`, "
+                   "D.`long_name`, E.`long_name`, "
+                   "F.`long_name`, G.`long_name`, "
+                   "C.`lhs_e`, C.`rhs_e`, "
+                   "C.`lhs_hv`, C.`rhs_hv`, "
+                   "C.`lhs_v`, C.`rhs_v`, "
+                   "C.`lhs_j`, C.`rhs_j` "
+                   "FROM `cs` AS A "
+                   "LEFT JOIN `species` AS B "
+                   "ON B.`id` = A.`specie_id` "
+                   "LEFT JOIN `processes` AS C "
+                   "ON C.`id` = A.`process_id` "
+                   "LEFT JOIN `states` AS D "
+                   "ON D.`id` = A.`lhsA_id` "
+                   "LEFT JOIN `states` AS E "
+                   "ON E.`id` = A.`lhsB_id` "
+                   "LEFT JOIN `states` AS F "
+                   "ON F.`id` = A.`rhsA_id` "
+                   "LEFT JOIN `states` AS G "
+                   "ON G.`id` = A.`rhsB_id` "
+                   "WHERE A.`cs_id` = " + str(cs_id))
 
-    Parameters
-    ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
-    model_name :str
-        The name of a NEPC model (see [nepc.wiki]/models
+    return cursor.fetchall()[0]
 
-    Returns
-    -------
-    cs_dicts : list of dict
-    A list of dictionaries containing cross section data and
-    metadata from NEPC database.  The structure of each cross section
-    dictionary:
+
+def cs_dict_constructor(metadata, e_energy, sigma):
+    """Return a cs_dict given metadata, e_energy, and sigma data
+
         "cs_id" : int
             id of the cross section in `cs` and `csdata` tables
         "specie" : str
@@ -194,8 +216,57 @@ def model(cursor, model_name):
             rotational energy level on lhs? (0 or 1)
         "j_on_rhs" : int
             rotational energy level on rhs? (0 or 1)
+    """
+    return {"cs_id": metadata[0],
+            "specie": metadata[1],
+            "process": metadata[2],
+            "units_e": metadata[3],
+            "units_sigma": metadata[4],
+            "ref": metadata[5],
+            "lhsA": metadata[6],
+            "lhsB": metadata[7],
+            "rhsA": metadata[8],
+            "rhsB": metadata[9],
+            "wavelength": metadata[10],
+            "lhs_v": metadata[11],
+            "rhs_v": metadata[12],
+            "lhs_j": metadata[13],
+            "rhs_j": metadata[14],
+            "background": metadata[15],
+            "lpu": metadata[16],
+            "upu": metadata[17],
+            "e": e_energy,
+            "sigma": sigma,
+            "lhsA_long": metadata[18],
+            "lhsB_long": metadata[19],
+            "rhsA_long": metadata[20],
+            "rhsB_long": metadata[21],
+            "e_on_lhs": metadata[22],
+            "e_on_rhs": metadata[23],
+            "hv_on_lhs": metadata[24],
+            "hv_on_rhs": metadata[25],
+            "v_on_lhs": metadata[26],
+            "v_on_rhs": metadata[27],
+            "j_on_lhs": metadata[28],
+            "j_on_rhs": metadata[29]}
 
 
+def model(cursor, model_name):
+    """Return a plasma chemistry model from the NEPC MySQL database
+
+    Parameters
+    ----------
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    model_name :str
+        The name of a NEPC model (see [nepc.wiki]/models
+
+    Returns
+    -------
+    cs_dicts : list of dict
+        A list of dictionaries containing cross section data and
+        metadata from NEPC database.  See cs_dict_constructor for the structure
+        of each cross section dictionary.
     """
     cs_dicts = []
     cursor.execute("SELECT cs.cs_id as cs_id " +
@@ -208,37 +279,7 @@ def model(cursor, model_name):
     for cs_item in cs_array:
         cs_id = cs_item[0]
 
-        cursor.execute("SELECT A.`cs_id` , "
-                       "B.`name` , "
-                       "C.`name` , "
-                       "A.`units_e`, A.`units_sigma`, A.`ref`, "
-                       "D.`name`, E.`name`, "
-                       "F.`name`, G.`name`, "
-                       "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, "
-                       "A.`lhs_j`, A.`rhs_j`, "
-                       "A.`background`, A.`lpu`, A.`upu`, "
-                       "D.`long_name`, E.`long_name`, "
-                       "F.`long_name`, G.`long_name`, "
-                       "C.`lhs_e`, C.`rhs_e`, "
-                       "C.`lhs_hv`, C.`rhs_hv`, "
-                       "C.`lhs_v`, C.`rhs_v`, "
-                       "C.`lhs_j`, C.`rhs_j` "
-                       "FROM `cs` AS A "
-                       "LEFT JOIN `species` AS B "
-                       "ON B.`id` = A.`specie_id` "
-                       "LEFT JOIN `processes` AS C "
-                       "ON C.`id` = A.`process_id` "
-                       "LEFT JOIN `states` AS D "
-                       "ON D.`id` = A.`lhsA_id` "
-                       "LEFT JOIN `states` AS E "
-                       "ON E.`id` = A.`lhsB_id` "
-                       "LEFT JOIN `states` AS F "
-                       "ON F.`id` = A.`rhsA_id` "
-                       "LEFT JOIN `states` AS G "
-                       "ON G.`id` = A.`rhsB_id` "
-                       "WHERE A.`cs_id` = " + str(cs_id))
-
-        metadata = cursor.fetchall()[0]
+        metadata = cs_metadata(cursor, cs_id)
 
         cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
                        str(cs_id))
@@ -377,3 +418,113 @@ def model_summary_df(model):
 
     cs_df = DataFrame(summary_list, columns=headers)
     return cs_df
+
+
+def cs_subset(cursor,
+              sigma_cutoff=None,
+              specie=None,
+              process=None,
+              lhsA=None, lhsB=None,
+              rhsA=None, rhsB=None,
+              ref=None,
+              DBUG=False):
+    """Return a subset of cross sections from the NEPC MySQL database
+
+    Parameters
+    ----------
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    sigma_cutoff : float
+        If provided, only cross sections with a sigma value above
+        sigma_cutoff will be returned.
+
+    NOTE: one or more of the following parameters must be set
+
+    specie : str
+        `name` of specie from `species` table
+    process : str
+        `name` of process from `processes` table
+    lhsA : str
+        `name` of lhsA state from `states` table
+    lhsB : str
+        `name` of lhsB state from `states` table
+    rhsA : str
+        `name` of rhsA state from `states` table
+    rhsB : str
+        `name` of rhsB state from `states` table
+    ref : str
+        `ref` from `cs` table corresponding to entry in
+        '[nepc]/models/ref.bib'
+
+    Returns
+    -------
+    cs_dicts : list of dict
+        A list of dictionaries containing cross section data and
+        metadata from NEPC database matching the criteria noted above.
+        See cs_dict_constructor for the structure of each cross section
+        dictionary.
+
+
+    """
+    cs_dicts = []
+    if specie is None and process is None and ref is None:
+        raise Exception("You must specify the specie, process or " +
+                        "ref in cs_subset to narrow the search results.")
+
+    execute_text = ("SELECT cs_id FROM cs")
+    join_text = []
+    where_text = []
+
+    if specie is not None:
+        join_text.append("LEFT JOIN species s ON (cs.specie_id = s.id)")
+        where_text.append("s.name LIKE '" + specie + "'")
+    if process is not None:
+        join_text.append("LEFT JOIN processes p ON (cs.process_id = p.id)")
+        where_text.append("p.name LIKE '" + process + "'")
+    if lhsA is not None:
+        join_text.append("LEFT JOIN states lhsAs ON (cs.lhsA_id = lhsAs.id)")
+        where_text.append("lhsAs.name LIKE '" + lhsA + "'")
+    if lhsB is not None:
+        join_text.append("LEFT JOIN states lhsBs ON (cs.lhsB_id = lhsBs.id)")
+        where_text.append("lhsBs.name LIKE '" + lhsB + "'")
+    if rhsA is not None:
+        join_text.append("LEFT JOIN states rhsAs ON (cs.rhsA_id = rhsAs.id)")
+        where_text.append("rhsAs.name LIKE '" + rhsA + "'")
+    if rhsB is not None:
+        join_text.append("LEFT JOIN states rhsBs ON (cs.rhsB_id = rhsBs.id)")
+        where_text.append("rhsBs.name LIKE '" + rhsB + "'")
+    if ref is not None:
+        where_text.append("cs.ref LIKE '" + ref + "'")
+
+    where_text_joined = ""
+    if len(where_text) > 0:
+        where_text_joined = "WHERE " + " AND ".join(where_text)
+
+    execute_text = " ".join([execute_text,
+                             " ".join(join_text),
+                             where_text_joined])
+    if DBUG:
+        print("Executing the following MySQL string: " + execute_text)
+
+    cursor.execute(execute_text)
+
+    cs_array = cursor.fetchall()
+    if DBUG:
+        print("Got the following list of cs_id's: " + str(cs_array))
+
+    for cs_item in cs_array:
+        cs_id = cs_item[0]
+
+        metadata = cs_metadata(cursor, cs_id)
+
+        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
+                       str(cs_id))
+        cross_section = cursor.fetchall()
+        e_energy = [i[0] for i in cross_section]
+        sigma = [i[1] for i in cross_section]
+        units_sigma = metadata[4]
+
+        if sigma_cutoff is None or max(sigma) * units_sigma > sigma_cutoff:
+            cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
+
+    return cs_dicts
