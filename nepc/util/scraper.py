@@ -4,6 +4,12 @@ import os
 import shutil
 import numpy as np
 from IPython import display
+from subprocess import check_output
+
+
+def wc_fxn(file_to_count):
+    "return the number of lines in a file using wc"
+    return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
 
 def getPDF(pdfFilename):

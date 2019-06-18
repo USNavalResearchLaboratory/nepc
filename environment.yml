@@ -14,6 +14,7 @@ dependencies:
         - scipy=1.2.1
         - matplotlib
         - tabulate=0.8.3
+        - pytest
         - pip=19.0.3
         - pip:
                 - mysql-connector-python==8.0.11

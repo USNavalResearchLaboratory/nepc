@@ -15,5 +15,10 @@ setup(
 
     license='',
 
-    packages=['nepc.util']
+    packages=['nepc.util'],
+
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"]
+
+
 )

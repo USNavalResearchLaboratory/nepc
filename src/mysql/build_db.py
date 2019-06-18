@@ -1,16 +1,10 @@
 import os
-from subprocess import check_output
 import mysql.connector
-import config
-import nepc
+from nepc import nepc
+from nepc.util import config
+from nepc.util import scraper
 
 DBUG = True
-
-
-def wc_fxn(file_to_count):
-    "return the number of lines in a file using wc"
-    return int(check_output(["wc", "-l", file_to_count]).split()[0])
-
 
 # TODO: add threshold table
 # TODO: add reference table
@@ -159,7 +153,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
                  "	(id,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p,name,long_name)"
                  "	SET configuration = JSON_OBJECT("
                  "		JSON_OBJECT('order', "
-                 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', '3d', '4s', '4p')"
+                 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', "
+                 "                     '3d', '4s', '4p')"
                  "		),"
                  "		JSON_OBJECT('occupations',"
                  "			JSON_OBJECT("
@@ -258,7 +253,7 @@ for directoryname in DIR_NAMES:
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
-            cs_lines += wc_fxn(directoryname + filename)
+            cs_lines += scraper.wc_fxn(directoryname + filename)
             # print(filename + ": " + str(file_lines))
 
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
