@@ -4,7 +4,7 @@
 # from cycler import cycler
 import numpy as np
 import matplotlib.pyplot as plt
-import nepc
+from nepc import nepc
 
 
 def lxcat_plot_zats(ax, processes, plot_line_style_list,

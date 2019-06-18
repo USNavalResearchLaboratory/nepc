@@ -12,3 +12,5 @@
 __pycache__/
 
 tmp/
+
+nepc.egg-info/
