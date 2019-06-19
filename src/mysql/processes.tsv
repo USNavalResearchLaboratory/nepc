@@ -1,6 +1,7 @@
 "From Meichsner, 2013, Table 3.7. Excitations (vibrational, rotational) applied to first LHS or RHS specie"
 id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
-	elastic	Elastic electron scattering	1	1	1	1	0	0	0	0	0	0
+	elastic	Total elastic electron scattering	1	1	1	1	0	0	0	0	0	0
+	elastic_partial	Partial elastic electron scattering	1	1	1	1	0	0	0	0	0	0
 	excitation	"Excitation of atoms (electronic), inelastic electron scattering"	1	1	1	1	0	0	0	0	0	0
 	excitation_v	"Excitation of atoms (electronic + vibrational), inelastic electron scattering"	1	1	1	1	0	0	1	1	0	0
 	excitation_j	"Excitation of atoms (electronic + rotational), inelastic electron scattering"	1	1	1	1	0	0	0	0	1	1
@@ -30,11 +31,12 @@ id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
 	dissociation_excitation_j	Dissociation with excitation (rotational)	1	2	1	1	0	0	0	0	0	1
 	dissociation_excitation_vj	Dissociation with excitation (vibrational and rotational)	1	2	1	1	0	0	0	1	0	1
 	d_ionization	Total dissociative ionization	1	2	1	2	0	0	0	0	0	0
-	d_ionization_partial	Dissociative ionization	1	2	1	2	0	0	0	0	0	0
+	d_ionization_partial	Partial dissociative ionization	1	2	1	2	0	0	0	0	0	0
 	d_ionization_excitation_v	Dissociative ionization with excitation (vibrational)	1	2	1	2	0	0	1	1	0	0
 	d_ionization_excitation_j	Dissociative ionization with excitation (rotational)	1	2	1	2	0	0	0	0	1	1
 	d_ionization_excitation_vj	Dissociative ionization with excitation (vibrational and rotational)	1	2	1	2	0	0	1	1	1	1
 	ion_pair	Ion pair formation	1	2	1	1	0	0	0	0	0	0
 	dissociative_attachment	Dissociative attachment	1	2	1	0	0	0	0	0	0	0
-	momentum	Elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
+	momentum	Total elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
+	momentum_partial	Partial elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
 	total	Total electron scattering cross section	1	1	1	1	0	0	0	0	0	0

@@ -113,6 +113,16 @@ def count_table_rows(cursor, table):
     return table_rows[0][0]
 
 
+def cs_e_sigma(cursor, cs_id):
+    cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
+                   str(cs_id))
+    cross_section = cursor.fetchall()[0]
+    print(cross_section)
+    e_energy = [i[0] for i in cross_section]
+    sigma = [i[1] for i in cross_section]
+    return e_energy, sigma
+
+
 def cs_metadata(cursor, cs_id):
     """Get metadata for cross section in the NEPC database"""
     cursor.execute("SELECT A.`cs_id` , "
@@ -145,7 +155,7 @@ def cs_metadata(cursor, cs_id):
                    "ON G.`id` = A.`rhsB_id` "
                    "WHERE A.`cs_id` = " + str(cs_id))
 
-    return cursor.fetchall()[0]
+    return cursor.fetchall()
 
 
 def cs_dict_constructor(metadata, e_energy, sigma):
@@ -275,50 +285,16 @@ def model(cursor, model_name):
                    "JOIN models m ON (m2cs.model_id = m.model_id) " +
                    "WHERE m.name LIKE '" + model_name + "'")
     cs_array = cursor.fetchall()
+    print(str(cs_array))
 
     for cs_item in cs_array:
         cs_id = cs_item[0]
 
         metadata = cs_metadata(cursor, cs_id)
 
-        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
-                       str(cs_id))
-        cross_section = cursor.fetchall()
-        e_energy = [i[0] for i in cross_section]
-        sigma = [i[1] for i in cross_section]
+        e_energy, sigma = cs_e_sigma(cursor, cs_id)
 
-        cs_dicts.append({"cs_id": metadata[0],
-                         "specie": metadata[1],
-                         "process": metadata[2],
-                         "units_e": metadata[3],
-                         "units_sigma": metadata[4],
-                         "ref": metadata[5],
-                         "lhsA": metadata[6],
-                         "lhsB": metadata[7],
-                         "rhsA": metadata[8],
-                         "rhsB": metadata[9],
-                         "wavelength": metadata[10],
-                         "lhs_v": metadata[11],
-                         "rhs_v": metadata[12],
-                         "lhs_j": metadata[13],
-                         "rhs_j": metadata[14],
-                         "background": metadata[15],
-                         "lpu": metadata[16],
-                         "upu": metadata[17],
-                         "e": e_energy,
-                         "sigma": sigma,
-                         "lhsA_long": metadata[18],
-                         "lhsB_long": metadata[19],
-                         "rhsA_long": metadata[20],
-                         "rhsB_long": metadata[21],
-                         "e_on_lhs": metadata[22],
-                         "e_on_rhs": metadata[23],
-                         "hv_on_lhs": metadata[24],
-                         "hv_on_rhs": metadata[25],
-                         "v_on_lhs": metadata[26],
-                         "v_on_rhs": metadata[27],
-                         "j_on_lhs": metadata[28],
-                         "j_on_rhs": metadata[29]})
+        cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
 
     return cs_dicts
 

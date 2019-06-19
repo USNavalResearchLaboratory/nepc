@@ -2,7 +2,6 @@ import os
 import mysql.connector
 from nepc import nepc
 from nepc.util import config
-from nepc.util import scraper
 
 DBUG = True
 
@@ -169,7 +168,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
                  "			)"
                  "		)"
                  "	),"
-                 "	specie_id = (select max(id) from nepc.species where name = 'N');"
+                 "	specie_id = (select max(id) from nepc.species "
+                 "               where name = 'N');"
                  )
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
@@ -178,7 +178,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
                  "	(id,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p,name,long_name)"
                  "	SET configuration = JSON_OBJECT("
                  "		JSON_OBJECT('order', "
-                 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', '3d','4s', '4p')"
+                 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', "
+                 "                     '3d','4s', '4p')"
                  "		),"
                  "		JSON_OBJECT('occupations',"
                  "			JSON_OBJECT("
@@ -193,7 +194,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
                  "			)"
                  "		)"
                  "	),"
-                 "	specie_id = (select max(id) from nepc.species where name = 'N+');"
+                 "	specie_id = (select max(id) from nepc.species"
+                 "               where name = 'N+');"
                  )
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
@@ -202,7 +204,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
                  "	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)"
                  "	SET configuration = JSON_OBJECT("
                  "		JSON_OBJECT('order', "
-                 "			JSON_ARRAY('2sigma_u', '1pi_u', '3sigma_g', '1pi_g', '3sigma_u', '3ssigma_g')"
+                 "			JSON_ARRAY('2sigma_u', '1pi_u', '3sigma_g',"
+                 "                     '1pi_g', '3sigma_u', '3ssigma_g')"
                  "		),"
                  "		JSON_OBJECT('occupations',"
                  "			JSON_OBJECT("
@@ -215,7 +218,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
                  "			)"
                  "		)"
                  "	),"
-                 "	specie_id = (select max(id) from nepc.species where name = 'N2');")
+                 "	specie_id = (select max(id) from nepc.species "
+                 "               where name = 'N2');")
 
 mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
                  "INTO TABLE nepc.states "
@@ -223,7 +227,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
                  "	(id,@o1,@o2,@o3,@o4,@o5,@o6,name,long_name)"
                  "	SET configuration = JSON_OBJECT("
                  "		JSON_OBJECT('order', "
-                 "			JSON_ARRAY('2sigma_u', '1pi_u', '3sigma_g', '1pi_g', '3sigma_u', '3ssigma_g')"
+                 "			JSON_ARRAY('2sigma_u', '1pi_u', '3sigma_g', "
+                 "                     '1pi_g', '3sigma_u', '3ssigma_g')"
                  "		),"
                  "		JSON_OBJECT('occupations',"
                  "			JSON_OBJECT("
@@ -236,14 +241,14 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
                  "			)"
                  "		)"
                  "	),"
-                 "	specie_id = (select max(id) from nepc.species where name = 'N2+');")
+                 "	specie_id = (select max(id) from nepc.species "
+                 "               where name = 'N2+');")
 
 DIR_NAMES = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
              HOME + "/projects/nepc/data/formatted/n2/zipf/",
              HOME + "/projects/nepc/data/formatted/n/zatsarinny/"]
 
 cs_id = 1
-cs_lines = 0
 for directoryname in DIR_NAMES:
     directory = os.fsencode(directoryname)
 
@@ -253,9 +258,6 @@ for directoryname in DIR_NAMES:
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
-            cs_lines += scraper.wc_fxn(directoryname + filename)
-            # print(filename + ": " + str(file_lines))
-
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
                              filename_wo_ext + ".met' INTO TABLE nepc.cs "
                              "(@temp,@specie,@process,units_e,units_sigma,"
@@ -276,13 +278,17 @@ for directoryname in DIR_NAMES:
                              "  where name LIKE @rhsB);")
 
             executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                                   filename_wo_ext + ".mod' INTO TABLE nepc.models2cs "
+                                   filename_wo_ext +
+                                   ".mod' INTO TABLE nepc.models2cs "
                                    "(@model) "
                                    "SET cs_id = " + str(cs_id) + ", "
-                                   "model_id = (select model_id from nepc.models where name LIKE @model);")
+                                   "model_id = (select model_id "
+                                   "            from nepc.models "
+                                   "            where name LIKE @model);")
 
             executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                                 filename_wo_ext + ".dat' INTO TABLE nepc.csdata "
+                                 filename_wo_ext +
+                                 ".dat' INTO TABLE nepc.csdata "
                                  "(id,e,sigma) "
                                  "SET cs_id = " + str(cs_id) + ";")
 
@@ -308,17 +314,6 @@ mycursor.execute("use nepc;")
 # nepc.print_table(mycursor, "models2cs")
 print("csdata has " + str(nepc.count_table_rows(mycursor, "csdata")) +
       " lines")
-
-if DBUG:
-    # TODO: perhaps do testing in a more elegant way
-
-    def test_lines_equals_rows(lines, table):
-        "test that all of the lines in cs datafiles made it to the cs table"
-        assert lines == nepc.count_table_rows(mycursor, table), table + \
-            ": failed"
-        return table + ": passed"
-
-    print(test_lines_equals_rows(cs_lines, 'csdata'))
 
 mycursor.close()
 
