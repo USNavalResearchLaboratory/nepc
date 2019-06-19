@@ -5,7 +5,7 @@ from nepc.util import scraper
 
 HOME = config.userHome()
 
-cnx, cursor = nepc.connect(local=True)
+cnx, cursor = nepc.connect(local=False)
 
 DIR_NAMES = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
              HOME + "/projects/nepc/data/formatted/n2/zipf/",
