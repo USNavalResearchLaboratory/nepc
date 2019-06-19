@@ -116,8 +116,8 @@ def count_table_rows(cursor, table):
 def cs_e_sigma(cursor, cs_id):
     cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
-    cross_section = cursor.fetchall()[0]
-    print(cross_section)
+    cross_section = cursor.fetchall()
+    # print(cross_section)
     e_energy = [i[0] for i in cross_section]
     sigma = [i[1] for i in cross_section]
     return e_energy, sigma
@@ -155,7 +155,7 @@ def cs_metadata(cursor, cs_id):
                    "ON G.`id` = A.`rhsB_id` "
                    "WHERE A.`cs_id` = " + str(cs_id))
 
-    return cursor.fetchall()
+    return list(cursor.fetchall()[0])
 
 
 def cs_dict_constructor(metadata, e_energy, sigma):
@@ -285,14 +285,18 @@ def model(cursor, model_name):
                    "JOIN models m ON (m2cs.model_id = m.model_id) " +
                    "WHERE m.name LIKE '" + model_name + "'")
     cs_array = cursor.fetchall()
-    print(str(cs_array))
+    # print(str(cs_array))
 
     for cs_item in cs_array:
         cs_id = cs_item[0]
+        # print(str(cs_id))
 
         metadata = cs_metadata(cursor, cs_id)
+        # print(type(metadata))
 
         e_energy, sigma = cs_e_sigma(cursor, cs_id)
+        # print(e_energy)
+        # print(sigma)
 
         cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
 
