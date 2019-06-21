@@ -2,6 +2,7 @@ from nepc import nepc
 import pandas as pd
 
 # TODO: make a test database for testing purposes and check actual values
+# FIXME:
 
 cnx, cursor = nepc.connect(local=True)
 metadata = nepc.cs_metadata(cursor, 1)
