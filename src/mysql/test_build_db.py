@@ -3,6 +3,9 @@ from nepc.util import config
 import os
 from nepc.util import scraper
 
+# TODO: test that all values in [nepc]/data are in the nepc database
+# TODO: make a test database for testing purposes and check actual values
+
 HOME = config.userHome()
 
 cnx, cursor = nepc.connect(local=False)

@@ -3,7 +3,7 @@ import re
 import os
 import shutil
 import numpy as np
-from IPython import display
+from IPython.display import display
 from subprocess import check_output
 
 

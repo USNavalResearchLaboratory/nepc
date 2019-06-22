@@ -1,9 +1,6 @@
 from nepc import nepc
 import pandas as pd
 
-# TODO: make a test database for testing purposes and check actual values
-# FIXME:
-
 cnx, cursor = nepc.connect(local=False)
 metadata = nepc.cs_metadata(cursor, 1)
 e_energy, sigma = nepc.cs_e_sigma(cursor, 1)
