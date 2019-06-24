@@ -1,11 +1,19 @@
 from nepc import nepc
 import pandas as pd
+import pytest
 
-cnx, cursor = nepc.connect(local=False)
-metadata = nepc.cs_metadata(cursor, 1)
-e_energy, sigma = nepc.cs_e_sigma(cursor, 1)
-cs_dict = nepc.cs_dict_constructor(metadata, e_energy, sigma)
-angus = nepc.model(cursor, "angus")
+
+@pytest.fixture(scope="module")
+def nepc_connection(local):
+    cnx, cursor = nepc.connect(local=False)
+    metadata = nepc.cs_metadata(cursor, 1)
+    e_energy, sigma = nepc.cs_e_sigma(cursor, 1)
+    cs_dict = nepc.cs_dict_constructor(metadata, e_energy, sigma)
+    angus = nepc.model(cursor, "angus")
+    yield cnx, cursor, metadata, e_energy, sigma, cs_dict, angus
+    print("close nepc connection")
+    cursor.close()
+    cnx.close()
 
 
 def test_count_table_rows():
