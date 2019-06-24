@@ -18,3 +18,5 @@ nepc.egg-info/
 .eggs/
 
 .coverage
+
+pytestdebug.log
