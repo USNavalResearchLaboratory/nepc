@@ -260,6 +260,7 @@ for directoryname in DIR_NAMES:
         else:
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
                              filename_wo_ext + ".met' INTO TABLE nepc.cs "
+                             "IGNORE 1 LINES "
                              "(@temp,@specie,@process,units_e,units_sigma,"
                              "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
                              "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
@@ -289,6 +290,7 @@ for directoryname in DIR_NAMES:
             executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname +
                                  filename_wo_ext +
                                  ".dat' INTO TABLE nepc.csdata "
+                                 "IGNORE 1 LINES "
                                  "(id,e,sigma) "
                                  "SET cs_id = " + str(cs_id) + ";")
 

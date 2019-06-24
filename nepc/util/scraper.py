@@ -107,6 +107,7 @@ def getColumnStrings(pdf, pageNumber, cropDimArray,
 # TODO: standardize filenames; build them in the write functions
 def writeDataToFile(dataArray, filename):
     f = open(filename, "x")
+    f.write("\t".join(['', 'e_energy', 'sigma']) + "\n")
     for i in range(len(dataArray)):
         f.write("\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
     f.close()
@@ -118,6 +119,26 @@ def writeMetaDataToFile(
         rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N', lpu='\\N',
         upu='\\N'):
     f = open(filename, "x")
+    f.write(
+        "\t".join(
+            ('',
+             'specie',
+             'process',
+             'units_e',
+             'units_sigma',
+             'ref',
+             'lhsA',
+             'lhsB',
+             'rhsA',
+             'rhsB',
+             'wavelength',
+             'lhs_v',
+             'rhs_v',
+             'lhs_j',
+             'rhs_j',
+             'background',
+             'lpu',
+             'upu')) + "\n")
     f.write(
         "\t".join(
             ('',

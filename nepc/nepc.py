@@ -43,7 +43,7 @@ from pandas import DataFrame
 import mysql.connector
 
 
-def connect(local=False):
+def connect(local=False, DBUG=False):
     """Establish a connection to NEPC MySQL database
 
 
@@ -67,6 +67,9 @@ def connect(local=False):
         hostname = 'localhost'
     else:
         hostname = '132.250.158.124'
+
+    if DBUG:
+        print("\nUsing NEPC database on " + hostname)
 
     config = {'user': 'nepc',
               'password': 'nepc',

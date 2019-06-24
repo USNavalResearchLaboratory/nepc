@@ -13,13 +13,13 @@ DIR_NAMES = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
              HOME + "/projects/nepc/data/formatted/n/zatsarinny/"]
 
 
-def nepc_connect(local):
-    cnx, cursor = nepc.connect(local)
+def nepc_connect(local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
     return cnx, cursor
 
 
-def test_csdata_lines(local):
-    cnx, cursor = nepc_connect(local)
+def test_csdata_lines(local, dbug):
+    cnx, cursor = nepc_connect(local, dbug)
     cs_lines = 0
     for directoryname in DIR_NAMES:
         directory = os.fsencode(directoryname)
@@ -29,7 +29,8 @@ def test_csdata_lines(local):
             if filename.endswith(".met") or filename.endswith(".mod"):
                 continue
             else:
-                cs_lines += scraper.wc_fxn(directoryname + filename)
+                # subtract 1 to account for header
+                cs_lines += scraper.wc_fxn(directoryname + filename) - 1
 
     assert cs_lines == nepc.count_table_rows(cursor, "csdata")
     cursor.close()
