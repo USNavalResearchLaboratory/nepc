@@ -1,4 +1,7 @@
 from setuptools import setup
+from nepc.util import config
+
+HOME = config.userHome()
 
 setup(
 

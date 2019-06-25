@@ -10,5 +10,9 @@ def userHome():
         return '/home/' + user + '/'
 
 
+def nepc_home():
+    return os.environ.get('NEPC_HOME')
+
+
 def removeCRs(mystring):
     return mystring.replace('\n', ' ').replace('\r', '')

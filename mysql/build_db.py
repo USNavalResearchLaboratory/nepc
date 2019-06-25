@@ -9,6 +9,7 @@ DBUG = True
 # TODO: add reference table
 
 HOME = config.userHome()
+NEPC_HOME = config.nepc_home()
 
 mydb = mysql.connector.connect(
     host='localhost',
@@ -244,22 +245,37 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
                  "	specie_id = (select max(id) from nepc.species "
                  "               where name = 'N2+');")
 
-DIR_NAMES = [HOME + "/projects/nepc/data/formatted/n2/itikawa/",
-             HOME + "/projects/nepc/data/formatted/n2/zipf/",
-             HOME + "/projects/nepc/data/formatted/n/zatsarinny/"]
+DIR_NAMES = ["/data/formatted/n2/itikawa/",
+             "/data/formatted/n2/zipf/",
+             "/data/formatted/n/zatsarinny/"]
 
 cs_id = 1
+f_cs_dat_file = open('cs_dat_file.tsv', 'w')
+f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
 for directoryname in DIR_NAMES:
-    directory = os.fsencode(directoryname)
+    directory = os.fsencode(NEPC_HOME + directoryname)
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         filename_wo_ext = filename.rsplit(".", 1)[0]
+        mod_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".mod"])
+        met_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".met"])
+        dat_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".dat"])
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
-            executeTextCS = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                             filename_wo_ext + ".met' INTO TABLE nepc.cs "
+            f_cs_dat_file.write(
+                "\t".join([str(cs_id),
+                           directoryname + str(filename)]) + "\n"
+            )
+            executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
+                             "' INTO TABLE nepc.cs "
                              "IGNORE 1 LINES "
                              "(@temp,@specie,@process,units_e,units_sigma,"
                              "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
@@ -278,18 +294,16 @@ for directoryname in DIR_NAMES:
                              "rhsB_id = (select id from nepc.states "
                              "  where name LIKE @rhsB);")
 
-            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                                   filename_wo_ext +
-                                   ".mod' INTO TABLE nepc.models2cs "
+            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
+                                   "' INTO TABLE nepc.models2cs "
                                    "(@model) "
                                    "SET cs_id = " + str(cs_id) + ", "
                                    "model_id = (select model_id "
                                    "            from nepc.models "
                                    "            where name LIKE @model);")
 
-            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + directoryname +
-                                 filename_wo_ext +
-                                 ".dat' INTO TABLE nepc.csdata "
+            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + dat_file +
+                                 "' INTO TABLE nepc.csdata "
                                  "IGNORE 1 LINES "
                                  "(id,e,sigma) "
                                  "SET cs_id = " + str(cs_id) + ";")
@@ -298,24 +312,27 @@ for directoryname in DIR_NAMES:
 
             mycursor.execute(executeTextCSDATA)
 
-            if os.path.exists(directoryname + filename_wo_ext + '.mod'):
+            if os.path.exists(mod_file):
                 mycursor.execute(executeTextCSMODELS)
 
             cs_id = cs_id + 1
 
+f_cs_dat_file.close()
 
 mydb.commit()
 
 mycursor.execute("use nepc;")
 
-# nepc.print_table(mycursor, "species")
-# nepc.print_table(mycursor, "processes")
-# nepc.print_table(mycursor, "states")
-# nepc.print_table(mycursor, "cs")
-# nepc.print_table(mycursor, "models")
-# nepc.print_table(mycursor, "models2cs")
-print("csdata has " + str(nepc.count_table_rows(mycursor, "csdata")) +
-      " lines")
+# TODO: refactor to create function that prints details of database,
+# querying the database for the tables contained therein and then
+# summarizing the contents of each table
+print("\nBuilt NEPC database:\n====================")
+for table in ["species", "processes", "states", "cs", "models",
+              "models2cs", "csdata"]:
+    print(table +
+          " has " + str(nepc.count_table_rows(mycursor, table)) +
+          " lines")
+print("====================\n")
 
 mycursor.close()
 
