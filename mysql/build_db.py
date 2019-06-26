@@ -335,7 +335,8 @@ mycursor.execute("use nepc;")
 if DBUG:
     t1 = time.time()
     elapsed = t1-t0
-    print("\nBuilt NEPC database in " + elapsed + ":\n")
+    print("\nBuilt NEPC database in " + str(round(elapsed, 2)) + " sec:\n"
+          "===============================================")
 else:
     print("\nBuilt NEPC database:\n")
 
@@ -344,7 +345,7 @@ for table in ["species", "processes", "states", "cs", "models",
     print(table +
           " has " + str(nepc.count_table_rows(mycursor, table)) +
           " lines")
-print("====================\n")
+print("===============================================\n")
 
 mycursor.close()
 
