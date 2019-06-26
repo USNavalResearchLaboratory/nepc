@@ -3,7 +3,13 @@ import mysql.connector
 from nepc import nepc
 from nepc.util import config
 
+# TODO: set DBUG as an option to `python build_db.py` like pytest
 DBUG = True
+
+if DBUG:
+    import time
+    t0 = time.time()
+
 
 # TODO: add threshold table
 # TODO: add reference table
@@ -326,7 +332,13 @@ mycursor.execute("use nepc;")
 # TODO: refactor to create function that prints details of database,
 # querying the database for the tables contained therein and then
 # summarizing the contents of each table
-print("\nBuilt NEPC database:\n====================")
+if DBUG:
+    t1 = time.time()
+    elapsed = t1-t0
+    print("\nBuilt NEPC database in " + elapsed + ":\n")
+else:
+    print("\nBuilt NEPC database:\n")
+
 for table in ["species", "processes", "states", "cs", "models",
               "models2cs", "csdata"]:
     print(table +
