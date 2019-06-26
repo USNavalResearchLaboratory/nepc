@@ -1,3 +1,5 @@
 *1 linguist-documentation
 *2 linguist-documentation
 *3 linguist-documentation
+
+*.yml text eol=lf
