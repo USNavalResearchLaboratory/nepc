@@ -69,7 +69,7 @@ def test_cs_dict_constructor(local, dbug):
 
 # TODO: make this test complete
 def test_model(local, dbug):
-    """Verify nepc returns a model"""
+    """Verify nepc returns a model."""
     cnx, cursor = nepc_connect(local, dbug)
     angus = nepc.model(cursor, "angus")
     assert type(angus) is list
