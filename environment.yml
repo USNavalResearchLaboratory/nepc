@@ -21,4 +21,4 @@ dependencies:
                 - mysql-connector-python==8.0.11
                 - pdfminer.six==20181108
                 - pdfplumber==0.5.11
-                - doorstop=1.5
+                - doorstop==1.5

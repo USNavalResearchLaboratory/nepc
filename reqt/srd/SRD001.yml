@@ -5,4 +5,5 @@ links: []
 normative: true
 ref: ''
 reviewed: d819700c1ebd33ded6bf40f82258b976
-text: ''
+text: |
+  The nepc module shall have a function that gets a model from the database.
