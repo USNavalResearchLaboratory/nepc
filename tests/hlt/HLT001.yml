@@ -1,10 +1,8 @@
 active: true
 derived: false
-level: 2.0
-links:
-- SRD001: 8d8f9a24eb01418a1aeafa684030af04
+level: 1.0
+links: []
 normative: true
-ref: Verify nepc returns a model.
+ref: ''
 reviewed: 7d8376f76d550ddb5a0489f4f55981eb
-text: |
-  Verify nepc returns a model:
+text: ''

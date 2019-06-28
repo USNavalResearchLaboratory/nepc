@@ -6,4 +6,5 @@ normative: true
 ref: ''
 reviewed: 8d8f9a24eb01418a1aeafa684030af04
 text: |
-  nepc **shall** return a collection of cross sections (called a model)
+  The NEPC project **shall** provide a nepc module for accessing the
+  NEPC database.
