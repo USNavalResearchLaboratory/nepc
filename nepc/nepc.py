@@ -371,36 +371,93 @@ def reaction_latex(cs):
     return reaction
 
 
-def model_summary_df(model):
+def model_summary_df(model, lower=None, upper=None):
     """Return a summary of a NEPC model as a DataFrame
 
     Parameters
     ----------
     model : list of dicts
-    See the model method above
+        See the model method above
+    lower : int
+        lower bound of model index to include in summary
+    upper : int
+        upper bound of model index to include in summary
 
     Returns
     -------
-    : DataFrame
-    A DataFrame with containing the processes, range of electron energies,
-    lpu/upu's for the model
+    cs_df : pandas DataFrame
+        A DataFrame containing the cs_id, process,
+        range of electron energies (E_lower, E_upper),
+        maximum sigma (sigma_max), and
+        lpu/upu's for each cross section in the model
     """
     summary_list = []
 
-    headers = ["specie", "process", "reaction", "E_lower", "E_upper",
+    headers = ["cs_id", "specie", "process", "reaction", "E_lower", "E_upper",
                "sigma_max", "lpu", "upu"]
 
+    min_e_lower = 10000
+    max_e_upper = 0
+    max_peak_sigma = 0
+    min_peak_sigma = 1
+    max_lpu = 0.000000001
+    max_upu = 0.000000001
     for cs in model:
         reaction = reaction_latex(cs)
         e_lower = round(min(cs["e"]), 2)
         e_upper = round(max(cs["e"]), 2)
-        summary_list.append([cs["specie"], cs["process"], reaction,
+        if e_lower < min_e_lower:
+            min_e_lower = e_lower
+        if e_upper > max_e_upper:
+            max_e_upper = e_upper
+        cs_peak_sigma = max(cs["sigma"])
+        if cs_peak_sigma > max_peak_sigma:
+            max_peak_sigma = cs_peak_sigma
+        if cs_peak_sigma < min_peak_sigma:
+            min_peak_sigma = cs_peak_sigma
+        cs_lpu = cs["lpu"]
+        cs_upu = cs["upu"]
+        if cs_lpu is not None and cs_lpu > max_lpu:
+            max_lpu = cs_lpu
+        if cs_upu is not None and cs_upu > max_upu:
+            max_upu = cs_upu
+        summary_list.append([cs["cs_id"],
+                             cs["specie"], cs["process"], reaction,
                              e_lower, e_upper,
-                             cs["units_sigma"]*max(cs["sigma"]),
-                             cs["lpu"], cs["upu"]])
+                             cs["units_sigma"]*cs_peak_sigma,
+                             cs_lpu, cs_upu])
+
+    e_mid = (e_lower + e_lower)/2
 
     cs_df = DataFrame(summary_list, columns=headers)
-    return cs_df
+    cs_df = (cs_df.sort_values(by=["E_lower", "reaction"])
+             .reset_index(drop=True))
+    if upper is None:
+        upper = len(cs_df)
+    if lower is None:
+        lower = 0
+    return (cs_df.loc[lower:upper]
+            .style
+            .bar(subset=['E_upper'],
+                 align='mid',
+                 color='green',
+                 vmin=e_mid,
+                 vmax=max_e_upper)
+            .background_gradient(subset=['sigma_max'],
+                                 cmap='plasma',
+                                 low=min_peak_sigma,
+                                 high=max_peak_sigma)
+            .highlight_null('red'))
+
+
+""".background_gradient(subset=['lpu'],
+                                 cmap='plasma',
+                                 low=0,
+                                 high=max_lpu)
+            .background_gradient(subset=['upu'],
+                                 cmap='plasma',
+                                 low=0,
+                                 high=max_upu)"""
 
 
 def cs_subset(cursor,
