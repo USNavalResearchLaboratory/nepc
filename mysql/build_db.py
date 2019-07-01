@@ -278,7 +278,7 @@ for directoryname in DIR_NAMES:
         else:
             f_cs_dat_file.write(
                 "\t".join([str(cs_id),
-                           directoryname + str(filename)]) + "\n"
+                           directoryname + str(filename_wo_ext)]) + "\n"
             )
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
                              "' INTO TABLE nepc.cs "

@@ -46,7 +46,7 @@ def test_data_entered(local, dbug):
     for index, row in cs_dat_files.iterrows():
         cs_id = row['cs_id']
         dat_file = row['filename']
-        df = pd.read_csv(NEPC_HOME + dat_file, delimiter='\t',
+        df = pd.read_csv(NEPC_HOME + dat_file + '.dat', delimiter='\t',
                          usecols=['e_energy', 'sigma'])
         e_energy, sigma = nepc.cs_e_sigma(cursor, cs_id)
         assert e_energy == pytest.approx(df['e_energy'].tolist())
