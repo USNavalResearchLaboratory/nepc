@@ -108,7 +108,7 @@ def test_reaction_latex(local, dbug):
 def test_model_summary_df(local, dbug):
     cnx, cursor = nepc_connect(local, dbug)
     angus = nepc.model(cursor, "angus")
-    assert type(nepc.model_summary_df(angus)) is pd.DataFrame
+    assert type(nepc.model_summary_df(angus)) is pd.io.formats.style.Styler
     cursor.close()
     cnx.close()
 
