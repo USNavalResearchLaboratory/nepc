@@ -335,6 +335,8 @@ for directoryname in DIR_NAMES:
 
 f_cs_dat_file.close()
 
+mydb.commit()
+
 mycursor.execute("use nepc;")
 
 # TODO: refactor to create function that prints details of database,
