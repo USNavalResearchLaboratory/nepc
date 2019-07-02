@@ -2,14 +2,17 @@ import os
 import mysql.connector
 from nepc import nepc
 from nepc.util import config
+import argparse
+import platform
 
-# TODO: set DBUG as an option to `python build_db.py` like pytest
-DBUG = True
+parser = argparse.ArgumentParser(description='Build the NEPC database.')
+parser.add_argument('--debug', action='store_true',
+                    help='print additional debug info')
+args = parser.parse_args()
 
-if DBUG:
+if args.debug:
     import time
     t0 = time.time()
-
 
 # TODO: add threshold table
 # TODO: add reference table
@@ -255,9 +258,16 @@ DIR_NAMES = ["/data/formatted/n2/itikawa/",
              "/data/formatted/n2/zipf/",
              "/data/formatted/n/zatsarinny/"]
 
-cs_id = 1
-f_cs_dat_file = open('cs_dat_file.tsv', 'w')
+
+if platform.node() == 'ppdadamsonlinux':
+    cs_dat_filename = "cs_datfile_prod.tsv"
+else:
+    cs_dat_filename = "cs_datfile_local.tsv"
+
+f_cs_dat_file = open(cs_dat_filename, 'w')
 f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
+
+cs_id = 1
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
 
@@ -325,14 +335,12 @@ for directoryname in DIR_NAMES:
 
 f_cs_dat_file.close()
 
-mydb.commit()
-
 mycursor.execute("use nepc;")
 
 # TODO: refactor to create function that prints details of database,
 # querying the database for the tables contained therein and then
 # summarizing the contents of each table
-if DBUG:
+if args.debug:
     t1 = time.time()
     elapsed = t1-t0
     print("\nBuilt NEPC database in " + str(round(elapsed, 2)) + " sec:\n"

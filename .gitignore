@@ -20,3 +20,5 @@ nepc.egg-info/
 .coverage
 
 pytestdebug.log
+
+mysql/cs_datfile_local.tsv

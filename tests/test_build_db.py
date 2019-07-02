@@ -4,6 +4,7 @@ from nepc.util import scraper
 import pandas as pd
 import os
 import pytest
+import platform
 
 # TODO: test that all values in [nepc]/data are in the nepc database
 # TODO: make a test database for testing purposes and check actual values
@@ -41,8 +42,13 @@ def test_csdata_lines(local, dbug):
 
 def test_data_entered(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
-    cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_dat_file.tsv',
-                               delimiter='\t')
+    if local is False or platform.node() == 'ppdadamsonlinux':
+        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
+                                   delimiter='\t')
+    else:
+        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_local.tsv',
+                                   delimiter='\t')
+
     for index, row in cs_dat_files.iterrows():
         cs_id = row['cs_id']
         dat_file = row['filename']
