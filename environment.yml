@@ -16,6 +16,7 @@ dependencies:
         - tabulate=0.8.3
         - pytest
         - pytest-cov
+        - ftfy=5.5.1
         - pip=19.0.3
         - pip:
                 - mysql-connector-python==8.0.11
