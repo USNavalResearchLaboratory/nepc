@@ -178,3 +178,15 @@ def writeModelsToFile(filename, modelsArray):
     for i in range(len(modelsArray)):
         f.write(str(modelsArray[i])+"\n")
     f.close()
+
+
+def get_states(filename):
+    """Get name's and long_name's from state.tsv file"""
+    with open(filename) as f:
+        states_lines = f.readlines()[1:]
+
+    states = []
+    for line in states_lines:
+        states.append(line.split('\t'))
+    return ([states[i][1] for i in range(len(states))],
+            [states[i][2] for i in range(len(states))])
