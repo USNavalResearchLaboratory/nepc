@@ -1,4 +1,5 @@
 before_script:
+  - export PATH="/opt/anaconda3/bin:$PATH"
   - conda activate nepc
 
 tests:
