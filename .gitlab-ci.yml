@@ -9,4 +9,4 @@ tests:
     - mysql
     - python
   script:
-    - pytest
+    - pytest --cov=nepc tests/
