@@ -25,3 +25,4 @@ dependencies:
                 - pdfplumber==0.5.11
                 - doorstop==1.5
                 - pylint-exit
+                - anybadge
