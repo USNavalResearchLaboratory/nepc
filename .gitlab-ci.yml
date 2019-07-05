@@ -3,5 +3,9 @@ before_script:
 
 tests:
   stage: test
+  tags:
+    - linux
+    - mysql
+    - python
   script:
     - pytest
