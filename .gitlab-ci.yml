@@ -2,7 +2,11 @@ before_script:
   - export NEPC_HOME=$CI_PROJECT_DIR
   - conda activate nepc
 
-tests:
+stages:
+  - test
+  - lint
+
+pytest:
   stage: test
   tags:
     - linux
@@ -10,3 +14,11 @@ tests:
     - python
   script:
     - pytest --cov=nepc tests/
+
+pylint:
+  stage: lint
+  tags:
+    - linux
+    - python
+  script:
+    - pylint nepc/
