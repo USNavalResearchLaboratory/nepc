@@ -21,4 +21,4 @@ pylint:
     - linux
     - python
   script:
-    - pylint nepc/
+    - pylint nepc/ || pylint-exit $?
