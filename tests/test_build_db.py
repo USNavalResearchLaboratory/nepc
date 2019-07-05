@@ -7,6 +7,8 @@ import pytest
 import platform
 # TODO: fix the database encoding and remove ftfy from here and environment
 from ftfy import fix_encoding
+# TODO: remove dependence on csv; put function in scraper that uses built-in
+#       readlines function
 import csv
 
 # TODO: test that all values in [nepc]/data are in the nepc database
