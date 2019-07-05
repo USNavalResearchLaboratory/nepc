@@ -1,0 +1,7 @@
+before_script:
+  - conda activate nepc
+
+tests:
+  stage: test
+  script:
+    - pytest
