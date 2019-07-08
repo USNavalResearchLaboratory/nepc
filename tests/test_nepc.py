@@ -1,6 +1,7 @@
 from nepc import nepc
 import pandas as pd
 import mysql.connector
+import pytest
 
 
 # The following is from a failed attempt to use pytest_mysql
@@ -24,7 +25,13 @@ def nepc_connect(local, dbug):
 
 
 def test_connect(local, dbug):
-    cnx, cursor = nepc.connect(local, dbug)
+    if local is False:
+        cnx, cursor = nepc.connect(local=False, DBUG=dbug)
+        assert type(cnx) is mysql.connector.connection.MySQLConnection
+        assert type(cursor) is mysql.connector.cursor.MySQLCursor
+        cursor.close()
+        cnx.close()
+    cnx, cursor = nepc.connect(local=True, DBUG=dbug)
     assert type(cnx) is mysql.connector.connection.MySQLConnection
     assert type(cursor) is mysql.connector.cursor.MySQLCursor
     cursor.close()
@@ -135,3 +142,13 @@ def test_cs_subset(local, dbug):
         if max(cs["sigma"]) < sigma_max:
             sigma_max = max(cs["sigma"])
     assert sigma_max > sigma_cutoff
+    cursor.close()
+    cnx.close()
+
+
+def test_cs_subset_exception(local, dbug):
+    cnx, cursor = nepc_connect(local, dbug)
+    with pytest.raises(Exception):
+        assert(nepc.cs_subset(cursor))
+    cursor.close()
+    cnx.close()

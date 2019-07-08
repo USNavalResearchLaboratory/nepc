@@ -3,6 +3,8 @@ before_script:
   - conda env remove --name nepc
   - conda env create -f environment.yml
   - conda activate nepc
+  - pip install pylint-exit
+  - pip install anybadge
   - pip install -e .
 
 stages:

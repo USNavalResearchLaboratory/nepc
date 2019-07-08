@@ -68,7 +68,7 @@ def connect(local=False, DBUG=False):
     else:
         hostname = '132.250.158.124'
 
-    if DBUG:
+    if DBUG:  # pragma: no cover
         print("\nUsing NEPC database on " + hostname)
 
     config = {'user': 'nepc',
@@ -80,20 +80,6 @@ def connect(local=False, DBUG=False):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     return cnx, cursor
-
-
-def print_table(cursor, table):
-    """Print a table in a MySQL database
-
-    Parameters
-    ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
-    """
-    print("\n====================\n " + table + ":\n====================")
-    cursor.execute("select * from " + table + ";")
-    for item in cursor:
-        print(item)
 
 
 def count_table_rows(cursor, table):
@@ -544,13 +530,13 @@ def cs_subset(cursor,
     execute_text = " ".join([execute_text,
                              " ".join(join_text),
                              where_text_joined])
-    if DBUG:
+    if DBUG:  # pragma: no cover
         print("Executing the following MySQL string: " + execute_text)
 
     cursor.execute(execute_text)
 
     cs_array = cursor.fetchall()
-    if DBUG:
+    if DBUG:  # pragma: no cover
         print("Got the following list of cs_id's: " + str(cs_array))
 
     for cs_item in cs_array:

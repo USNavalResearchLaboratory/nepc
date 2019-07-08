@@ -2,6 +2,7 @@ import os
 import sys
 
 
+# TODO: remove userHome from nepc
 def userHome():
     user = os.environ.get('USER')
     if sys.platform == 'darwin':

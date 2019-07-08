@@ -15,14 +15,11 @@ dependencies:
         - matplotlib
         - tabulate=0.8.3
         - pytest
-        - pytest-cov
         - pylint
-        - ftfy=5.5.1
+        - pytest-cov
         - pip=19.0.3
         - pip:
                 - mysql-connector-python==8.0.11
                 - pdfminer.six==20181108
                 - pdfplumber==0.5.11
                 - doorstop==1.5
-                - pylint-exit
-                - anybadge
