@@ -28,7 +28,9 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 mycursor.execute("DROP DATABASE IF EXISTS `nepc`;")
-mycursor.execute("CREATE DATABASE IF NOT EXISTS `nepc`;")
+mycursor.execute("CREATE DATABASE IF NOT EXISTS `nepc` "
+                 "CHARACTER SET utf8 "
+                 "COLLATE utf8_general_ci;")
 mycursor.execute("SET default_storage_engine = INNODB;")
 
 
