@@ -171,7 +171,7 @@ def _read_excitation(fp, has_arg=True):
 
 def _read_attachment(fp, has_arg=False):
     """ Reads an ATTACHMENT block. """
-    target, arg, comments, data = _read_block(fp, has_arg=False)
+    target, _, comments, data = _read_block(fp, has_arg=False)
 
     d = dict(comments=comments,
              data=data,
