@@ -1,5 +1,6 @@
 from nepc import nepc
 import pandas as pd
+import mysql.connector
 
 
 # The following is from a failed attempt to use pytest_mysql
@@ -20,6 +21,14 @@ import pandas as pd
 def nepc_connect(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     return cnx, cursor
+
+
+def test_connect(local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    assert type(cnx) is mysql.connector.connection.MySQLConnection
+    assert type(cursor) is mysql.connector.cursor.MySQLCursor
+    cursor.close()
+    cnx.close()
 
 
 def test_count_table_rows(local, dbug):

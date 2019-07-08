@@ -19,6 +19,7 @@ if args.debug:
 
 HOME = config.userHome()
 NEPC_HOME = config.nepc_home()
+NEPC_MYSQL = NEPC_HOME + "/mysql/"
 
 mydb = mysql.connector.connect(
     host='localhost',
@@ -148,17 +149,17 @@ mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
 # TODO: refactor code to read each type of file...standardize somehow...
 # difficult to do given that electronic states differ
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'processes.tsv' "
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/processes.tsv' "
                  "INTO TABLE nepc.processes "
                  "IGNORE 2 LINES;")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'models.tsv' "
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/models.tsv' "
                  "INTO TABLE nepc.models;")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'species.tsv' "
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/species.tsv' "
                  "INTO TABLE nepc.species;")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/n_states.tsv'"
                  "	INTO TABLE nepc.states"
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)"
@@ -184,7 +185,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n_states.tsv'"
                  "               where name = 'N');"
                  )
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/n+_states.tsv'"
                  "	INTO TABLE nepc.states"
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)"
@@ -210,7 +211,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n+_states.tsv'"
                  "               where name = 'N+');"
                  )
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n++_states.tsv'"
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/n++_states.tsv'"
                  "	INTO TABLE nepc.states"
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)"
@@ -236,7 +237,7 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n++_states.tsv'"
                  "               where name = 'N++');"
                  )
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/n2_states.tsv'"
                  "	INTO TABLE nepc.states"
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@o1,@o2,@o3,@o4,@o5,@o6)"
@@ -259,7 +260,9 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2_states.tsv'"
                  "	specie_id = (select max(id) from nepc.species "
                  "               where name = 'N2');")
 
-mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
+mydb.commit()
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/n2+_states.tsv' "
                  "INTO TABLE nepc.states "
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@o1,@o2,@o3,@o4,@o5,@o6)"
@@ -282,6 +285,8 @@ mycursor.execute("LOAD DATA LOCAL INFILE 'n2+_states.tsv' "
                  "	specie_id = (select max(id) from nepc.species "
                  "               where name = 'N2+');")
 
+mydb.commit()
+
 DIR_NAMES = ["/data/formatted/n2/itikawa/",
              "/data/formatted/n2/zipf/",
              "/data/formatted/n/zatsarinny/"]
@@ -299,6 +304,8 @@ cs_id = 1
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
 
+    # TODO: speed up by reading data into memory and using the
+    #       MySQLCursor.executemany() method
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         filename_wo_ext = filename.rsplit(".", 1)[0]

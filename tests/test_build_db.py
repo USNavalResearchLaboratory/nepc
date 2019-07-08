@@ -5,8 +5,6 @@ import pandas as pd
 import os
 import pytest
 import platform
-# TODO: fix the database encoding and remove ftfy from here and environment
-from ftfy import fix_encoding
 # TODO: remove dependence on csv; put function in scraper that uses built-in
 #       readlines function
 import csv
@@ -107,7 +105,6 @@ def test_meta_entered(local, dbug):
 
         meta_db = [nepc.cs_metadata(cursor, cs_id)[i]
                    for i in list(range(1, 18))]
-        meta_db[14] = fix_encoding(meta_db[14])
         for i in range(len(meta_cols)):
             if (type(meta_db[i]) is float):
                 assert (pytest.approx(meta_disk[i]) ==
