@@ -1,8 +1,8 @@
 before_script:
   - export NEPC_HOME=$CI_PROJECT_DIR
   - conda env create -f environment.yml
-  - pip install -e .
   - conda activate nepc
+  - pip install -e .
 
 stages:
   - test
