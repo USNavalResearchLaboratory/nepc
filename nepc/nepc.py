@@ -117,6 +117,7 @@ def count_table_rows(cursor, table):
 
 
 def cs_e_sigma(cursor, cs_id):
+    """get e_energy and sigma data for a given cs_id from NEPC database"""
     cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
     cross_section = cursor.fetchall()
@@ -328,12 +329,12 @@ def table_as_df(cursor, table, columns="*"):
     return DataFrame(cursor.fetchall())
 
 
-def reaction_latex(cs):
+def reaction_latex(cs_dict):
     """Return the LaTeX for the reaction from a nepc cross section
 
     Arguments
     ---------
-    cs : dict
+    cs_dict : dict
         A nepc cross section dictionary
 
     Returns
@@ -342,7 +343,7 @@ def reaction_latex(cs):
         The LaTeX for a nepc cross section reaction
     """
     # FIXME: allow for varying electrons, hv, v, j on rhs and lhs
-    e_on_lhs = cs['e_on_lhs']
+    e_on_lhs = cs_dict['e_on_lhs']
     if e_on_lhs == 0:
         lhs_e_text = None
     elif e_on_lhs == 1:
@@ -350,7 +351,7 @@ def reaction_latex(cs):
     else:
         lhs_e_text = str(e_on_lhs) + "e$^-$"
 
-    e_on_rhs = cs['e_on_rhs']
+    e_on_rhs = cs_dict['e_on_rhs']
     if e_on_rhs == 0:
         rhs_e_text = None
     elif e_on_rhs == 1:
@@ -359,12 +360,12 @@ def reaction_latex(cs):
         rhs_e_text = str(e_on_rhs) + "e$^-$"
 
     lhs_items = [lhs_e_text,
-                 cs['lhsA_long'],
-                 cs['lhsB_long']]
+                 cs_dict['lhsA_long'],
+                 cs_dict['lhsB_long']]
     lhs_text = " + ".join(item for item in lhs_items if item)
     rhs_items = [
-                cs['rhsA_long'],
-                cs['rhsB_long'],
+                cs_dict['rhsA_long'],
+                cs_dict['rhsB_long'],
                 rhs_e_text]
     rhs_text = " + ".join(item for item in rhs_items if item)
     reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
@@ -537,7 +538,7 @@ def cs_subset(cursor,
         where_text.append("cs.ref LIKE '" + ref + "'")
 
     where_text_joined = ""
-    if len(where_text) > 0:
+    if where_text:
         where_text_joined = "WHERE " + " AND ".join(where_text)
 
     execute_text = " ".join([execute_text,
