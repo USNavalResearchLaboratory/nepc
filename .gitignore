@@ -11,6 +11,8 @@
 
 __pycache__/
 
+.pytest_cache
+
 tmp/
 
 nepc.egg-info/
