@@ -8,4 +8,4 @@ ref: ''
 reviewed: f01b8eba39ac1f8719ba04a2bc5ce291
 text: |
   The nepc.connect function **shall** establish a connection to the production
-  or a local copy of the NEPC database.
+  or a local copy of the official NEPC database.
