@@ -1,0 +1,25 @@
+Undocumented Python objects
+===========================
+nepc.util.config
+----------------
+Functions:
+ * nepc_home
+ * removeCRs
+ * userHome
+
+nepc.util.scraper
+-----------------
+Functions:
+ * getColumnStrings
+ * getPDF
+ * getTableData
+ * get_column_data
+ * mkdir
+ * rmdir
+ * rmfile
+ * textArrayToFloatArray
+ * writeCSToFile
+ * writeDataToFile
+ * writeMetaDataToFile
+ * writeModelsToFile
+
