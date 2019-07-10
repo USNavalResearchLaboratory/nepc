@@ -15,8 +15,17 @@ for anyone interested in plasma chemistry with a background in physics at the gr
 
 ## Getting Started
 
-For more information on how to get started with NEPC, please take a look at this 
-[link](http://predator.nrl.navy.mil/padamson/nepc/wikis/home).
+NEPC works best within a conda environment (`environment.yml` file provided). Also, if you are going to build the
+database yourself, you will need MySQL. To get started:
+
+```console
+git clone predator.nrl.navy.mil/padamson/nepc/
+cd nepc
+conda env create -f environment.yml # create the nepc conda environment 
+conda activate nepc
+pip install -e . # install the nepc package and sub-packages into the nepc conda environment
+pytest tests/test_nepc.py # verify it works
+```
 
 ## Built With
 
