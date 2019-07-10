@@ -43,4 +43,4 @@ sphinx:
   script:
     - cd doc
     - make html
-    - rsync -rlt _build/html/ /srv/shiny-server/nepc/doc/ --delete
+    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
