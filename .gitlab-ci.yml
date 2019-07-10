@@ -36,7 +36,7 @@ sphinx:
     - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
     - echo "docstr-coverage score was $score"
     - anybadge --label=doc --value=$score --suffix='%%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
-artifacts:
+  artifacts:
     paths:
       - public/docstr_coverage.svg
 
