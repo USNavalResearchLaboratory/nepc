@@ -3,7 +3,7 @@
 [![pipeline status](http://predator.nrl.navy.mil/padamson/nepc/badges/master/pipeline.svg)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 [![coverage report](http://predator.nrl.navy.mil/padamson/nepc/badges/master/coverage.svg)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 [![pylint report](http://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/public/pylint.svg?job=pylint)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
-[![docstr-coverage report](http://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/public/docstr-coverage.svg?job=sphinx)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
+[![docstr-coverage report](http://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/public/docstr_coverage.svg?job=sphinx)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 
 The NRL Evaluated Plasma Chemistry (NEPC) project involves building of a 
 database of evaluated electron-scattering cross-sections from various sources as well as 
