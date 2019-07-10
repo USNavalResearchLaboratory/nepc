@@ -10,8 +10,8 @@ before_script:
 
 stages:
   - pytest
-  - pylint
   - sphinx
+  - pylint
 
 pytest:
   stage: pytest
@@ -21,6 +21,24 @@ pytest:
     - python
   script:
     - pytest --cov=nepc tests/
+
+sphinx:
+  stage: sphinx
+  tags:
+    - linux
+    - python
+  script:
+    - cd $NEPC_HOME/doc
+    - make html
+    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
+    - cd $NEPC_HOME
+    - docstr-coverage nepc | tee docstr.txt
+    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
+    - echo "docstr-coverage score was $score"
+    - anybadge --label=doc --value=$score --suffix='%%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
+artifacts:
+    paths:
+      - public/docstr_coverage.svg
 
 pylint:
   stage: pylint
@@ -36,20 +54,3 @@ pylint:
     paths:
       - public/pylint.svg
 
-sphinx:
-  stage: sphinx
-  tags:
-    - linux
-    - python
-  script:
-    - cd $NEPC_HOME/doc
-    - make html
-    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
-    - cd $NEPC_HOME
-    - docstr-coverage nepc | tee docstr.txt
-    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
-    - echo "docstr-coverage score was $score"
-    - anybadge -v $score -l doc -file public/docstr_coverage.svg 50=red 60=orange 80=yellow 90=green
-  artifacts:
-    paths:
-      - public/docstr_coverage.svg
