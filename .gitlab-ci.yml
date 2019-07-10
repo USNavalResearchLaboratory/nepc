@@ -10,6 +10,7 @@ before_script:
 stages:
   - test
   - lint
+  - doc
 
 pytest:
   stage: test
@@ -33,3 +34,13 @@ pylint:
   artifacts:
     paths:
       - public/pylint.svg
+
+pytest:
+  stage: doc
+  tags:
+    - linux
+    - python
+  script:
+    - cd doc
+    - make html
+    - rsync --delete _build/html/ /srv/shiny-server/nepc/doc/
