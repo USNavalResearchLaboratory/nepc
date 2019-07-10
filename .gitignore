@@ -24,3 +24,5 @@ nepc.egg-info/
 pytestdebug.log
 
 mysql/cs_datfile_local.tsv
+
+_build/

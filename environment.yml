@@ -18,6 +18,7 @@ dependencies:
         - pylint
         - pytest-cov
         - pip=19.0.3
+        - sphinx
         - pip:
                 - mysql-connector-python==8.0.11
                 - pdfminer.six==20181108
