@@ -47,7 +47,7 @@ sphinx:
     - 'rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete'
     - 'cd $NEPC_HOME'
     - 'docstr-coverage nepc | tee docstr.txt'
-    - "score=$(sed -n 's/^Total docstring coverage: \([-0-9.]*\)\/.*/\1/p' docstr.txt)"
+    - score=$(sed -n 's/^Total docstring coverage: \([-0-9.]*\)\/.*/\1/p' docstr.txt)
     - 'echo "docstr-coverage score was $score"'
     - "anybadge --value=$score --file=public/docstr_coverage.svg doc"
   artifacts:
