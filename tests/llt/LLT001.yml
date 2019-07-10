@@ -1,8 +1,10 @@
 active: true
 derived: false
 level: 5.0
-links: []
+links:
+- SDD001: c14cd5ed42ffcbc5cbe7fbedc90294c9
 normative: true
 ref: ''
 reviewed: a0f95f00b26547e53cb2771be498dab7
-text: ''
+text: |
+  Verify when nepc.connect() is called that a connection is set up with a local copy of the official MySQL database, or the database itself

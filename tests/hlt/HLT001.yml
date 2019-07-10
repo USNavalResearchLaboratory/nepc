@@ -1,8 +1,10 @@
 active: true
 derived: false
 level: 1.0
-links: []
+links:
+- SRD001: a5a01093d2c80564e354af48eaa5ff65
 normative: true
 ref: ''
 reviewed: 7d8376f76d550ddb5a0489f4f55981eb
-text: ''
+text: |
+  Verify that an error is reported when the nepc module is unable to access the MySQL database

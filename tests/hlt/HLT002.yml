@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 1.1
+links:
+- SRD002: 0d4af653adb2ab3caefa699679819b3d
+normative: true
+ref: ''
+reviewed: 4dc340fd0595238d730acbdf2c9456d5
+text: |
+  Verify that the nepc Python module returns a collection of cross sections, or a model in the proper format

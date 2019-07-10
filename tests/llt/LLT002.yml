@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 5.1
+links:
+- SDD002: 2bd126be4ac7d74406caffa4f15ad03b
+normative: true
+ref: ''
+reviewed: 5d34d37294f12d8325ffc8bea7345073
+text: |
+  Verify that the nepc.model() method returns a pre-defined list of cross section dictionaries, or a model, with the right data type for each column or section of the model
