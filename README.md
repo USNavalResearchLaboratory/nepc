@@ -15,8 +15,13 @@ for anyone interested in plasma chemistry with a background in physics at the gr
 
 ## Getting Started
 
-For more information on how to get started with NEPC, please take a look at this 
-[link](http://predator.nrl.navy.mil/padamson/nepc/wikis/home).
+In order to be able to use nepc, make sure that you have Anaconda downloaded, and that conda is included. Additionally, make sure that you have Ubuntu downloaded and working.
+
+*  Clone nepc using the git command `git clone "predator.nrl.navy.mil/padamson/nepc/"`
+*  Next, use the command `conda env create -f environment.yml` to create the development environment based on the files included - which is for the sake of version control.
+*  Activate the environment just created with `conda activate nepc`. You'll have to do this everytime you use nepc.
+*  Now you'll have to download the nepc package inside nepc, using this command: `pip install -e .`
+*  To check to see if it works feel free to use the command `pytest` to verify if all of the tests have passed.
 
 ## Built With
 
