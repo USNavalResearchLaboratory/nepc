@@ -52,4 +52,4 @@ sphinx:
     - anybadge --value=$score --file=public/docstr_coverage.svg doc
   artifacts:
     paths:
-      - public/docstr-coverage.svg
+      - public/docstr_coverage.svg
