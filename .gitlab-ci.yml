@@ -8,12 +8,12 @@ before_script:
   - pip install -e .
 
 stages:
-  - test
-  - lint
-  - doc
+  - pytest
+  - pylint
+  - sphinx
 
 pytest:
-  stage: test
+  stage: pytest
   tags:
     - linux
     - mysql
@@ -22,7 +22,7 @@ pytest:
     - pytest --cov=nepc tests/
 
 pylint:
-  stage: lint
+  stage: pylint
   tags:
     - linux
     - python
@@ -35,12 +35,12 @@ pylint:
     paths:
       - public/pylint.svg
 
-pytest:
-  stage: doc
+sphinx:
+  stage: sphinx
   tags:
     - linux
     - python
   script:
     - cd doc
     - make html
-    - rsync --delete _build/html/ /srv/shiny-server/nepc/doc/
+    - rsync _build/html/ /srv/shiny-server/nepc/doc/ --delete
