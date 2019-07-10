@@ -11,7 +11,7 @@ before_script:
 stages:
   - pytest
   - pylint
-  - sphinx
+#  - sphinx
 
 pytest:
   stage: pytest
@@ -36,20 +36,20 @@ pylint:
     paths:
       - public/pylint.svg
 
-sphinx:
-  stage: sphinx
-  tags:
-    - linux
-    - python
-  script:
-    - 'cd $NEPC_HOME/doc'
-    - 'make html'
-    - 'rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete'
-    - 'cd $NEPC_HOME'
-    - 'docstr-coverage nepc | tee docstr.txt'
-    - score=$(sed -n 's/^Total docstring coverage: \([-0-9.]*\)\/.*/\1/p' docstr.txt)
-    - 'echo "docstr-coverage score was $score"'
-    - "anybadge --value=$score --file=public/docstr_coverage.svg doc"
-  artifacts:
-    paths:
-      - public/docstr_coverage.svg
+#sphinx:
+#  stage: sphinx
+#  tags:
+#    - linux
+#    - python
+#  script:
+#    - 'cd $NEPC_HOME/doc'
+#    - 'make html'
+#    - 'rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete'
+#    - 'cd $NEPC_HOME'
+#    - 'docstr-coverage nepc | tee docstr.txt'
+#    - score=$(sed -n 's/^Total docstring coverage: \([-0-9.]*\)\/.*/\1/p' docstr.txt)
+#    - 'echo "docstr-coverage score was $score"'
+#    - "anybadge --value=$score --file=public/docstr_coverage.svg doc"
+#  artifacts:
+#    paths:
+#      - public/docstr_coverage.svg
