@@ -5,7 +5,7 @@
 [![pylint report](http://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/public/pylint.svg?job=pylint)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 [![docstr-coverage report](http://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/public/docstr-coverage.svg?job=sphinx)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 
-NEPC, standing for NRL Evaluated Plasma Chemistry, is a project involving the building of a 
+The NRL Evaluated Plasma Chemistry (NEPC) project involves building of a 
 database of evaluated electron-scattering cross-sections from various sources as well as 
 tools to access and visualize the data. Data can be accessed, raw and formatted, through the 
 "data" directory, while other directories of the project are used for builing and accessing 
