@@ -1,5 +1,5 @@
 """Tests the thomson.py module"""
-import thomson
+from nepc.methods import thomson
 
 # TODO: create a constants file with all the constants we're going to use
 # TODO: test with a set of real values
