@@ -5,6 +5,7 @@ before_script:
   - conda activate nepc
   - pip install pylint-exit
   - pip install anybadge
+  - pip install docstr-coverage
   - pip install -e .
 
 stages:
@@ -44,3 +45,11 @@ sphinx:
     - cd doc
     - make html
     - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
+    - cd ..
+    - docstr-coverage nepc > docstr.txt
+    - score=$(sed -n 's/^Total docstring coverage: \([-0-9.]*\)\/.*/\1/p' docstr.txt)
+    - echo "docstr-coverage score was $score"
+    - anybadge --value=$score --file=public/docstr-coverage.svg doc
+  artifacts:
+    paths:
+      - public/docstr-coverage.svg

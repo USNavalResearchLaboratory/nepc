@@ -9,10 +9,22 @@ Welcome to NEPC's documentation!
 .. automodule:: nepc.nepc 
     :members:
 
-.. automodule:: nepc.methods
+.. automodule:: nepc.methods.thomson
     :members:
 
-.. automodule:: nepc.util
+.. automodule:: nepc.util.config
+    :members:
+    
+.. automodule:: nepc.util.constants
+    :members:
+
+.. automodule:: nepc.util.parser
+    :members:
+    
+.. automodule:: nepc.util.plotter
+    :members:
+
+.. automodule:: nepc.util.scraper
     :members:
 
 .. toctree::
