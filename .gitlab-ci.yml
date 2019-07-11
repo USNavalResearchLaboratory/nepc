@@ -24,7 +24,7 @@ doorstop:
     - cat doorstop.txt
     - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
     - echo "doorstop had $warnings warnings"
-    - anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 2=yellow
+    - anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 10=yellow
     - doorstop publish all /srv/shiny-server/nepc/reqt
   artifacts:
     paths:
