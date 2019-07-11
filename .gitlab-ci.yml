@@ -9,12 +9,21 @@ before_script:
   - pip install -e .
 
 stages:
-  - pytest
-  - sphinx
-  - pylint
+  - reqt
+  - test
+  - doc
+  - lint
+
+doorstop:
+  stage: reqt
+  tags:
+    - linux
+    - python
+  script:
+    - doorstop
 
 pytest:
-  stage: pytest
+  stage: test
   tags:
     - linux
     - mysql
@@ -23,7 +32,7 @@ pytest:
     - pytest --cov=nepc tests/
 
 sphinx:
-  stage: sphinx
+  stage: doc
   tags:
     - linux
     - python
@@ -41,7 +50,7 @@ sphinx:
       - public/docstr_coverage.svg
 
 pylint:
-  stage: pylint
+  stage: lint
   tags:
     - linux
     - python
