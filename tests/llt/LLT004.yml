@@ -7,4 +7,4 @@ normative: true
 ref: ''
 reviewed: null
 text: |
-  Verify that when test_data_entered is called, data entered in the database by a contributor matches requirements of species, processes, models, and states outlined in their specific tsv files, along with data already present in the database.
+  Verify that when test_possibilities is called, requirements of species, processes, models, and states outlined in their specific tsv files are being entered into the test database for use to check against what a user may enter.
