@@ -21,6 +21,7 @@ doorstop:
     - python
   script:
     - doorstop
+    - doorstop publish all /srv/shiny-server/nepc/reqt
 
 pytest:
   stage: test
