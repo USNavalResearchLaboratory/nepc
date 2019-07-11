@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 1.4
+links:
+- SRD005: null
+normative: true
+ref: ''
+reviewed: null
+text: |
+  The nepc.build function **shall** build a database based on information inputted by a contributor, along with the data that was already present, through object orientation.

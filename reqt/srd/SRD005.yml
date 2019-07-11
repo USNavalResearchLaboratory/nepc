@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 1.4
+links: []
+normative: true
+ref: ''
+reviewed: null
+text: |
+  The nepc project **shall** include a way for contributors to add new electron cross-sections to the database.
+

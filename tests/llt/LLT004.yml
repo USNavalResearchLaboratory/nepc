@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 5.3
+links:
+- SDD005: null
+normative: true
+ref: ''
+reviewed: null
+text: |
+  Verify that when test_data_entered is called, data entered in the database by a contributor matches requirements of species, processes, models, and states outlined in their specific tsv files, along with data already present in the database.
