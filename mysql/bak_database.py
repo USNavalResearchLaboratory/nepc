@@ -17,8 +17,8 @@ if args.debug:
 # TODO: add threshold table
 # TODO: add reference table
 
-HOME = config.home/nehakrispykreme
-NEPC_HOME = config.home/nehakrispykreme/projects/nepc/nehawork
+HOME = config.userHome()
+NEPC_HOME = config.nepc_home()
 NEPC_MYSQL = NEPC_HOME + "/mysql/"
 
 mydb = mysql.connector.connect(
@@ -140,16 +140,6 @@ mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
                  ");"
                  )
 
-def getKeys(di):
-    li = []
-    for k, v in di:
-        li.append(k)
-    return li
-def getValues(di):
-    li = []
-    for k, v in di:
-        li.append(v)
-    return li
 
 #############
 # Load data #
@@ -164,11 +154,11 @@ for i in range(0, len(nonstates)):
     mycursor.execute("LOAD DATA LOCAL INFILE'" + NEPC_MYSQL + '"/' + nonstates[i] + ".tsv' "
             "INTO TABLE " + "nepc." + nonstates[i])
     if i == 1:
-        mycursor.execute("LOAD DATA LOCAL INFILE" + NEPC_MYSQL + '"/' + nonstates[i] + ".tsv' "
-            		 "INTO TABLE " + "nepc." + nonstates[i] +
-            	         "IGNORE 2 LINES")
+        mycursor.execute("LOAD DATA LOCAL INFILE'" + NEPC_MYSQL + '"/' + nonstates[i] + ".tsv' "
+            "INTO TABLE " + "nepc." + nonstates[i]
+            "IGNORE 2 LINES;")
 for i in states:
-    mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i +
+    mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i
                  "	INTO TABLE nepc.states"
                  "	IGNORE 1 LINES"
                  "	(id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)"
@@ -230,7 +220,7 @@ for directoryname in DIR_NAMES:
             continue
         else:
             f_cs_dat_file.write(
-                    "\t".join([str(cs_id),
+                "\t".join([str(cs_id),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
             #lists all of the headers used for met, mod and dat files
@@ -238,34 +228,33 @@ for directoryname in DIR_NAMES:
             dat_cols = ['id', 'e', 'sigma']
             mod_cols['@model']
             #lists types of files - a list of lists will be used
-            mod_dict = {mod_file: mod_cols}
-            dat_dict = {dat_file:dat_cols}
-            met_dict = {met_file:met_cols}
-            filetype = [{met_dict:'nepc.cs'}, {dat_dict:'nepc.csdata'}]  #executemany has been shown to work for lists of dictionaries - unsure of if this would work with lists of dictionaries containing lists and dictionaries within them
-            exCS = ("LOAD DATA LOCAL INFILE '" + getKeys(filetype[0]) +  #FIXME: instead of using filetype[0], actually find a way to iterate through the file so that executemany will work 
-                    "' INTO TABLE  " + getValues(filetype[0]) + 
-                    "IGNORE 1 LINES "
-                    "(filetype.getKeys().getValues()) " 
-                    "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
-            
-            atSign = []
-            for key, val in filetype:
-                for k, v in key:
-                    if ('@' in key.get(k)):
-                       atSign.append(v)
-            if (len(atSign) == 0):
-                exCS = exCS + ";"
-            for i in range(0, len(atSign)):
-                if atSign[i] == '@lhsA' or atSign[i] == '@rhsA' or atSign[i] == '@lhsB' or atSign[i] == '@rhsB':
-                    exCS = exCS + "(" + atSign[i][1:atSign[i].index("_")] + " id = (select id from nepc.states "
-                    "  where name LIKE " + atSign[i] + ")"
-                else:
-                    exCS = exCS + "(" + atSign[i][1:atSign[i].index("_")] + " id = (select id from nepc." + atSign[i][1:atSign[i].index("_")]
-                    "  where name = " + atSign[i] + ")"
-                if i == len(atSign) - 1:
-                    exCS = exCS + ","
-                else:
-                    exCS = exCS + ";"
+            mod_dict = (mod_file: mod_cols)
+            dat_dict = (dat_file:dat_cols)
+            met_dict = (met_file:met_cols)
+            filetype = [met_dict:'nepc.cs', dat_dict:'nepc.csdata', mod_dict:'nepc.models2cs']
+                executeTextCS = ("LOAD DATA LOCAL INFILE '" + filetype.keys().keys() +
+                             "' INTO TABLE  " + filetype.values() +
+                             "IGNORE 1 LINES "
+                             "(filetype.keys().values()) " #should take in all of the headers as listed as values in dat_dict and met_dict
+                             #TODO: convert list object to tuple or whatever should be in SQL headers for it to work
+                             "SET cs_id = " + str(cs_id) + ", "
+                             "DECLARE @cnt INT = 0;"
+                             "WHILE @cnt < LENGTH(filetype.keys().values().length) "                             "(CASE WHEN filetype.keys().values()[@cnt] = @specie OR
+                             filetype.keys().values[@cnt] = @process THEN"
+                             #TODO: find a way to object orient next few lines - so anything with @ symbol included in it will have special condition, and otherwise continue - can do with python but not SQL. 
+                             #TODO: in the end, make sure this case applies to all kinds of files (maybe except for models) so that we can use executemany()
+                             "(specie_id = (select id from nepc.species "
+                             "  where name = @specie), "
+                             "process_id = (select id from nepc.processes "
+                             "  where name = @process), )"
+                             "lhsA_id = (select id from nepc.states "
+                             "  where name LIKE @lhsA), "
+                             "lhsB_id = (select id from nepc.states "
+                             "  where name LIKE @lhsB), "
+                             "rhsA_id = (select id from nepc.states "
+                             "  where name LIKE @rhsA), "
+                             "rhsB_id = (select id from nepc.states "
+                             "  where name LIKE @rhsB);")
 
             executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
                                    "' INTO TABLE nepc.models2cs "
@@ -274,8 +263,16 @@ for directoryname in DIR_NAMES:
                                    "model_id = (select model_id "
                                    "            from nepc.models "
                                    "            where name LIKE @model);")
-            
-            mycursor.executemany(exCS, filetype)
+
+            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + dat_file +
+                                 "' INTO TABLE nepc.csdata "
+                                 "IGNORE 1 LINES "
+                                 "(id,e,sigma) "
+                                 "SET cs_id = " + str(cs_id) + ";")
+
+            mycursor.execute(executeTextCS)
+
+            mycursor.execute(executeTextCSDATA)
 
             if os.path.exists(mod_file):
                 mycursor.execute(executeTextCSMODELS)
@@ -291,26 +288,6 @@ mycursor.execute("use nepc;")
 # TODO: refactor to create function that prints details of database,
 # querying the database for the tables contained therein and then
 # summarizing the contents of each table
-
-def table_exists (tablename):
-    mycursor.execute("""
-        SELECT COUNT (*)
-        FROM information_schema.tables
-        WHERE table_name = '{0}'
-        """.format(tablename.replace('\'','\'\'')))
-    if mycursor.fetchone()[0] == 1:
-        return True
-    return False
-
-    
-def contents_of_db():
-    for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
-        if table_exists(table):
-            print (table + " has " + str(nepc.count_table_rows(mycursor, table)) + " lines")
-        print("===============================================\n")
-       
-
-  
 if args.debug:
     t1 = time.time()
     elapsed = t1-t0
@@ -319,7 +296,12 @@ if args.debug:
 else:
     print("\nBuilt NEPC database:\n")
 
-contents_of_db()
+for table in ["species", "processes", "states", "cs", "models",
+              "models2cs", "csdata"]:
+    print(table +
+          " has " + str(nepc.count_table_rows(mycursor, table)) +
+          " lines")
+print("===============================================\n")
 
 mycursor.close()
 
