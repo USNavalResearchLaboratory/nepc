@@ -1,4 +1,4 @@
-"""from nepc import nepc
+from nepc import nepc
 import os
 from nepc.util import config
 import argparse
@@ -24,20 +24,20 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-mycursor.execute("DROP DATABASE IF EXISTS `test_nepc`;")
-mycursor.execute("CREATE DATABASE IF NOT EXISTS `test_nepc` "
+mycursor.execute("DROP DATABASE IF EXISTS `test`;")
+mycursor.execute("CREATE DATABASE IF NOT EXISTS `test` "
                  "CHARACTER SET utf8 "
                  "COLLATE utf8_general_ci;")
 mycursor.execute("SET default_storage_engine = INNODB;")
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_species`("
+mycursor.execute("CREATE TABLE `test`.`test_species`("
                  "`test_id` INT UNSIGNED NOT NULL auto_increment ,"
                  "`test_name` VARCHAR(40) NOT NULL ,"
                  "`test_long_name` VARCHAR(100) NOT NULL ,"
                  "PRIMARY KEY(`test_id`)"
                  ");")
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_processes`( "
+mycursor.execute("CREATE TABLE `test`.`test_processes`( "
                  "`test_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
                  "`test_name` VARCHAR(40) NOT NULL, "
                  "`test_long_name` VARCHAR(240) NOT NULL, "
@@ -55,7 +55,7 @@ mycursor.execute("CREATE TABLE `test_nepc`.`test_processes`( "
                  ");"
                  )
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_states`("
+mycursor.execute("CREATE TABLE `test`.`test_states`("
                  "	`test_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
                  "	`test_specie_id` INT UNSIGNED NOT NULL ,"
                  "	`test_name` VARCHAR(100) NOT NULL ,"
@@ -70,7 +70,7 @@ mycursor.execute("CREATE TABLE `test_nepc`.`test_states`("
                  )
 
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_models`("
+mycursor.execute("CREATE TABLE `test`.`test_models`("
                  "	`test_model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
                  "	`test_name` VARCHAR(40) NOT NULL ,"
                  "	`test_long_name` VARCHAR(240) NOT NULL ,"
@@ -78,7 +78,7 @@ mycursor.execute("CREATE TABLE `test_nepc`.`test_models`("
                  ");"
                  )
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_cs`("
+mycursor.execute("CREATE TABLE `test`.`test_cs`("
                  "	`test_cs_id` INT UNSIGNED NOT NULL, "
                  "	`test_specie_id` INT UNSIGNED NOT NULL, "
                  "	`test_process_id` INT UNSIGNED NOT NULL, "
@@ -101,23 +101,23 @@ mycursor.execute("CREATE TABLE `test_nepc`.`test_cs`("
                  "	INDEX `TEST_SPECIE_ID`(`specie_id` ASC) ,"
                  "	INDEX `TEST_PROCESS_ID`(`process_id` ASC) ,"
                  "	CONSTRAINT `TEST_SPECIE_ID_CS` FOREIGN KEY(`test_specie_id`)"
-                 "		REFERENCES `test_nepc`.`test_species`(`id`)"
+                 "		REFERENCES `test`.`test_species`(`id`)"
                  "		ON DELETE RESTRICT ON UPDATE CASCADE,"
                  "	CONSTRAINT `TEST_PROCESS_ID_CS` FOREIGN KEY(`test_process_id`)"
-                 "		REFERENCES `test_nepc`.`test_processes`(`id`)"
+                 "		REFERENCES `test`.`test_processes`(`id`)"
                  "		ON DELETE RESTRICT ON UPDATE CASCADE,"
                  "	CONSTRAINT `TEST_LHSA_ID_CS` FOREIGN KEY(`test_lhsA_id`)"
-                 "		REFERENCES `test_nepc`.`test_states`(`id`),"
+                 "		REFERENCES `test`.`test_states`(`id`),"
                  "	CONSTRAINT `TEST_LHSB_ID_CS` FOREIGN KEY(`test_lhsB_id`)"
-                 "		REFERENCES `test_nepc`.`test_states`(`id`),"
+                 "		REFERENCES `test`.`test_states`(`id`),"
                  "	CONSTRAINT `TEST_RHSA_ID_CS` FOREIGN KEY(`test_rhsA_id`)"
-                 "		REFERENCES `test_nepc`.`test_states`(`id`),"
+                 "		REFERENCES `test`.`test_states`(`id`),"
                  "	CONSTRAINT `TEST_RHSB_ID_CS` FOREIGN KEY(`test_rhsB_id`)"
-                 "		REFERENCES `test_nepc`.`test_states`(`id`)"
+                 "		REFERENCES `test`.`test_states`(`id`)"
                  ");"
                  )
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_csdata`("
+mycursor.execute("CREATE TABLE `test`.`test_csdata`("
                  "	`test_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"
                  "	`test_cs_id` INT UNSIGNED NOT NULL ,"
                  "	`test_e` DOUBLE NOT NULL ,"
@@ -125,17 +125,47 @@ mycursor.execute("CREATE TABLE `test_nepc`.`test_csdata`("
                  "	PRIMARY KEY(`id`) ,"
                  "	INDEX `TEST_CS_ID`(`test_cs_id` ASC) ,"
                  "	CONSTRAINT `TEST_CS_ID_CSDATA` FOREIGN KEY(`test_cs_id`)"
-                 "		REFERENCES `test_nepc`.`test_cs`(`test_cs_id`)"
+                 "		REFERENCES `test`.`test_cs`(`test_cs_id`)"
                  "		ON DELETE RESTRICT ON UPDATE CASCADE"
                  ");"
                  )
 
-mycursor.execute("CREATE TABLE `test_nepc`.`test_models2cs`("
+mycursor.execute("CREATE TABLE `test`.`test_models2cs`("
                  "	`test_cs_id` INT UNSIGNED NOT NULL ,"
                  "	`test_model_id` INT UNSIGNED NOT NULL ,"
                  "	PRIMARY KEY pk_models2cs (test_cs_id, test_model_id)"
                  ");"
                  )
-"""
+#############
+# Load data #
+#############
 
+# TODO: refactor code to read each type of file...standardize somehow...
+# difficult to do given that electronic states differ
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/processes.tsv' "
+                         "INTO TABLE nepc.processes "
+                                          "IGNORE 2 LINES;")
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/models.tsv' "
+                         "INTO TABLE nepc.models;")
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/species.tsv' "
+                         "INTO TABLE nepc.species;")
+#############
+# Load data #
+#############
+
+# TODO: refactor code to read each type of file...standardize somehow...
+# difficult to do given that electronic states differ
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/processes.tsv' "
+                         "INTO TABLE nepc.processes "
+                                          "IGNORE 2 LINES;")
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/models.tsv' "
+                         "INTO TABLE nepc.models;")
+
+mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/species.tsv' "
+                         "INTO TABLE nepc.species;")
 

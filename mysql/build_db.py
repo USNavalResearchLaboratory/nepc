@@ -242,8 +242,8 @@ for directoryname in DIR_NAMES:
             dat_dict = {dat_file:dat_cols}
             met_dict = {met_file:met_cols}
             filetype = [{met_dict:'nepc.cs'}, {dat_dict:'nepc.csdata'}]  #executemany has been shown to work for lists of dictionaries - unsure of if this would work with lists of dictionaries containing lists and dictionaries within them
-            exCS = ("LOAD DATA LOCAL INFILE '" + getKeys(filetype[0]) +  #FIXME: instead of using filetype[0], actually find a way to iterate through the file so that executemany will work 
-                    "' INTO TABLE  " + getValues(filetype[0]) + 
+            exCS = ("LOAD DATA LOCAL INFILE '" + getKeys(filetype) +  #FIXME: instead of using filetype[0], actually find a way to iterate through the file so that executemany will work 
+                    "' INTO TABLE  " + getValues(filetype) + 
                     "IGNORE 1 LINES "
                     "(filetype.getKeys().getValues()) " 
                     "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
