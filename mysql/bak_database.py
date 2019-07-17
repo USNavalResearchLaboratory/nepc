@@ -299,10 +299,4 @@ else:
 for table in ["species", "processes", "states", "cs", "models",
               "models2cs", "csdata"]:
     print(table +
-          " has " + str(nepc.count_table_rows(mycursor, table)) +
-          " lines")
-print("===============================================\n")
-
-mycursor.close()
-
-mydb.close()
+          " has " + str(nepc.count_table_rows(mycursor, table))
