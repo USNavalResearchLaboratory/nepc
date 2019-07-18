@@ -148,7 +148,7 @@ mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
 # TODO: refactor code to read each type of file...standardize somehow... - became standardized to a degree
 # difficult to do given that electronic states differ
 def broad_cats():
-    return ["processes", "models", "states"]
+    return ["processes", "models", "species"]
 
 def print_list_elems(lst):
     answer = ''
@@ -156,7 +156,7 @@ def print_list_elems(lst):
         answer = answer + i + ","
     return answer
 
-def met_headers(): 
+def met_headers():
     return ['@temp', '@specie', '@process', 'units_e', 'units_sigma', 'ref', '@lhsA', '@lhsB', '@rhsA', '@rhsB', 'wavelength', 'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j', 'background', 'lpu', 'upu']
 
 def dat_headers():
@@ -180,15 +180,21 @@ def construct_headers(column):
     elif column in dat_headers:
         return (dat_file, "csdata", column)
 
-states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'", "/n2+_states.tsv'", "/n2_states.tsv'"]
+# states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'", "/n2+_states.tsv'", "/n2_states.tsv'"]
+states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'"]
 beg_exec = '' #beginning statement to execute, used to make code shorter + more readable
 for i in broad_cats():
     beg_exec = beg_exec + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + ".tsv'" + " INTO TABLE " + "nepc." + i
-    if i == 'models':
-        beg_exec = beg_exec + "IGNORE 2 LINES;"
+    if i == 'processes':
+        beg_exec = beg_exec + " IGNORE 2 LINES; "
     else:
         beg_exec = beg_exec + "; "
+if args.debug:
+    print(beg_exec)
 mycursor.execute(beg_exec, multi = True) #query created earlier executed
+
+
+
 for i in states:
     mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i +
                  "	INTO TABLE nepc.states"
@@ -213,7 +219,12 @@ for i in states:
                  "		)"
                  "	),"
                  "	specie_id = (select max(id) from nepc.species "
+                 "               where name = 'N'", multi=True)
+
+    """
+                 "	specie_id = (select max(id) from nepc.species "
                  "               where name = " + "'" + i[1:i.index('_')].upper() + "'" + ");", multi = True)
+                 """
 mydb.commit()
 
 DIR_NAMES = ["/data/formatted/n2/itikawa/",
@@ -254,22 +265,22 @@ for directoryname in DIR_NAMES:
                     "\t".join([str(cs_id),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
- 
+
             #lists all of the headers used for met, mod and dat files
                         #lists types of files - a list of lists will be used
             filetype = [met_file, dat_file]
             tablename = ['cs', 'csdata']
-            exCS = '' 
+            exCS = ''
             for i in range (0, noOfFileTypes()):
-                exCS = exCS + ("LOAD DATA LOCAL INFILE '" + filetype[i]+ 
-                    "' INTO TABLE  " + "nepc" + tablename[i] + 
-                    "IGNORE 1 LINES ") 
+                exCS = exCS + ("LOAD DATA LOCAL INFILE '" + filetype[i]+
+                    "' INTO TABLE  " + "nepc" + tablename[i] +
+                    "IGNORE 1 LINES ")
                 if filetype[i] == met_file:
                     exCS = (exCS + "(" + print_list_elems(met_headers()) + ") "
                     "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
                 else:
                     exCS = (exCS + "(" + print_list_elems(dat_headers()) + ") "
-                    "SET cs_id = " + str(cs_id) + ", ") 
+                    "SET cs_id = " + str(cs_id) + ", ")
             atSign = []
             for i in met_headers():
                 if ('@' in i):
@@ -295,7 +306,7 @@ for directoryname in DIR_NAMES:
                                    "model_id = (select model_id "
                                    "            from nepc.models "
                                    "            where name LIKE @model);")
-            
+
             mycursor.execute(exCS, multi = True) #currently temporary w/ how it is designed, make this an executemany later
 
             if os.path.exists(mod_file):
@@ -322,15 +333,15 @@ def table_exists (tablename):
         return True
     return False
 
-    
+
 def contents_of_db():
     for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
         if table_exists(table):
             print (table + " has " + str(nepc.count_table_rows(mycursor, table)) + " lines")
         print("===============================================\n")
-       
 
-  
+
+
 if args.debug:
     t1 = time.time()
     elapsed = t1-t0
