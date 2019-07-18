@@ -18,8 +18,8 @@ if args.debug:
 # TODO: add threshold table
 # TODO: add reference table
 
-HOME = config.home/nehakrispykreme
-NEPC_HOME = config.home/nehakrispykreme/projects/nepc/nehawork
+HOME = config.userHome()
+NEPC_HOME = config.nepc_home()
 NEPC_MYSQL = NEPC_HOME + "/mysql/"
 
 mydb = mysql.connector.connect(
@@ -141,32 +141,54 @@ mycursor.execute("CREATE TABLE `nepc`.`models2cs`("
                  ");"
                  )
 
-def getKeys(di):
-    li = []
-    for k, v in di:
-        li.append(k)
-    return li
-def getValues(di):
-    li = []
-    for k, v in di:
-        li.append(v)
-    return li
-
 #############
 # Load data #
 #############
 
 # TODO: refactor code to read each type of file...standardize somehow... - became standardized to a degree
 # difficult to do given that electronic states differ
-nonstates = ["processes", "models", "states"]
+def broad_cats():
+    return ["processes", "models", "states"]
+
+def print_list_elems(lst):
+    answer = ''
+    for i in lst:
+        answer = answer + i + ","
+    return answer
+
+def met_headers(): 
+    return ['@temp', '@specie', '@process', 'units_e', 'units_sigma', 'ref', '@lhsA', '@lhsB', '@rhsA', '@rhsB', 'wavelength', 'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j', 'background', 'lpu', 'upu']
+
+def dat_headers():
+    return ['id', 'e', 'sigma']
+
+def all_headers():
+    total_heads = met_headers()
+    for i in dat_headers():
+        total_heads.append(i)
+    return total_heads
+
+def number_of_columns():
+    return len(all_headers())
+
+def noOfFileTypes():
+    return 2 #for dat and met
+
+def construct_headers(column):
+    if column in met_headers:
+        return (met_file, "cs", column)
+    elif column in dat_headers:
+        return (dat_file, "csdata", column)
+
 states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'", "/n2+_states.tsv'", "/n2_states.tsv'"]
 beg_exec = '' #beginning statement to execute, used to make code shorter + more readable
-for i in nonstates:
-    beg_exec = beg_exec + "LOAD DATA LOCAL INFILE'" + NEPC_MYSQL + '"/' + i + ".tsv' "
-            "INTO TABLE " + "nepc." + i
+for i in broad_cats():
+    beg_exec = beg_exec + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + ".tsv'" + " INTO TABLE " + "nepc." + i
     if i == 'models':
-        beg_exec = beg_exec + "IGNORE 2 LINES"
-mycursor.execute(beg_exec) #query created earlier executed
+        beg_exec = beg_exec + "IGNORE 2 LINES;"
+    else:
+        beg_exec = beg_exec + "; "
+mycursor.execute(beg_exec, multi = True) #query created earlier executed
 for i in states:
     mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i +
                  "	INTO TABLE nepc.states"
@@ -191,8 +213,7 @@ for i in states:
                  "		)"
                  "	),"
                  "	specie_id = (select max(id) from nepc.species "
-                 "               where name = i[1:2].upper());"
-                 )
+                 "               where name = " + "'" + i[1:i.index('_')].upper() + "'" + ");", multi = True)
 mydb.commit()
 
 DIR_NAMES = ["/data/formatted/n2/itikawa/",
@@ -233,33 +254,35 @@ for directoryname in DIR_NAMES:
                     "\t".join([str(cs_id),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
+ 
             #lists all of the headers used for met, mod and dat files
-            met_cols = ['@temp', '@specie', '@process', 'units_e', 'units_sigma', 'ref', '@lhsA', '@lhsB', '@rhsA', '@rhsB', 'wavelength', 'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j', 'background', 'lpu', 'upu']
-            dat_cols = ['id', 'e', 'sigma']
-            #lists types of files - a list of lists will be used
-            dat_dict = {dat_file:dat_cols}
-            met_dict = {met_file:met_cols}
-            filetype = [{met_dict:'nepc.cs'}, {dat_dict:'nepc.csdata'}]  #executemany has been shown to work for lists of dictionaries - unsure of if this would work with lists of dictionaries containing lists and dictionaries within them
-            exCS = ("LOAD DATA LOCAL INFILE '" + getKeys(filetype) +  #FIXME: instead of using filetype[0], actually find a way to iterate through the file so that executemany will work 
-                    "' INTO TABLE  " + getValues(filetype) + 
-                    "IGNORE 1 LINES "
-                    "(filetype.getKeys().getValues()) " 
+                        #lists types of files - a list of lists will be used
+            filetype = [met_file, dat_file]
+            tablename = ['cs', 'csdata']
+            exCS = '' 
+            for i in range (0, noOfFileTypes()):
+                exCS = exCS + ("LOAD DATA LOCAL INFILE '" + filetype[i]+ 
+                    "' INTO TABLE  " + "nepc" + tablename[i] + 
+                    "IGNORE 1 LINES ") 
+                if filetype[i] == met_file:
+                    exCS = (exCS + "(" + print_list_elems(met_headers()) + ") "
                     "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
-            
+                else:
+                    exCS = (exCS + "(" + print_list_elems(dat_headers()) + ") "
+                    "SET cs_id = " + str(cs_id) + ", ") 
             atSign = []
-            for key, val in filetype:
-                for k, v in key:
-                    if ('@' in key.get(k)):
-                       atSign.append(v)
+            for i in met_headers():
+                if ('@' in i):
+                    atSign.append(i)
             if (len(atSign) == 0):
                 exCS = exCS + ";"
             for i in range(0, len(atSign)):
                 if atSign[i] == '@lhsA' or atSign[i] == '@rhsA' or atSign[i] == '@lhsB' or atSign[i] == '@rhsB':
-                    exCS = exCS + "(" + atSign[i][1:atSign[i].index("_")] + " id = (select id from nepc.states "
+                    exCS = exCS + "(" + atSign[i][1:] + "_id = (select id from nepc.states "
                     "  where name LIKE " + atSign[i] + ")"
                 else:
-                    exCS = exCS + "(" + atSign[i][1:atSign[i].index("_")] + " id = (select id from nepc." + atSign[i][1:atSign[i].index("_")]
-                    "  where name = " + atSign[i] + ")"
+                    exCS = (exCS + "(" + atSign[i][1:] + "_id = (select id from nepc." + atSign[i][1:]
+                    + "  where name = " + atSign[i] + ")")
                 if i == len(atSign) - 1:
                     exCS = exCS + ","
                 else:
@@ -273,7 +296,7 @@ for directoryname in DIR_NAMES:
                                    "            from nepc.models "
                                    "            where name LIKE @model);")
             
-            mycursor.executemany(exCS, filetype)
+            mycursor.execute(exCS, multi = True) #currently temporary w/ how it is designed, make this an executemany later
 
             if os.path.exists(mod_file):
                 mycursor.execute(executeTextCSMODELS)
@@ -292,10 +315,9 @@ mycursor.execute("use nepc;")
 
 def table_exists (tablename):
     mycursor.execute("""
-        SELECT COUNT (*)
-        FROM information_schema.tables
-        WHERE table_name = '{0}'
-        """.format(tablename.replace('\'','\'\'')))
+        SELECT count(*)
+        FROM information_schema.TABLES
+        WHERE table_name = """ + "'" + tablename + "'")
     if mycursor.fetchone()[0] == 1:
         return True
     return False
