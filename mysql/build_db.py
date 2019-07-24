@@ -33,7 +33,10 @@ mycursor.execute("DROP DATABASE IF EXISTS `nepc`;")
 mycursor.execute("CREATE DATABASE IF NOT EXISTS `nepc` "
                  "CHARACTER SET utf8 "
                  "COLLATE utf8_general_ci;")
+
 mycursor.execute("SET default_storage_engine = INNODB;")
+
+mycursor.execute("use nepc;") #NEHA EDIT
 
 mycursor.execute("CREATE TABLE `nepc`.`species`("
                  "`id` INT UNSIGNED NOT NULL auto_increment ,"
@@ -153,7 +156,10 @@ def broad_cats():
 def print_list_elems(lst):
     answer = ''
     for i in lst:
-        answer = answer + i + ","
+        if i != lst[len(lst)-1]:
+            answer = answer + i + ","
+        else:
+            answer = answer + i
     return answer
 
 def met_headers():
@@ -180,51 +186,35 @@ def construct_headers(column):
     elif column in dat_headers:
         return (dat_file, "csdata", column)
 
+def multi_iteration(results):
+    if args.debug:
+        print (results)
+    for cur in results:
+        print('cursor:', cur)
+        if cur.with_rows:
+            print('results:', cur.fetchall())
+
 # states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'", "/n2+_states.tsv'", "/n2_states.tsv'"]
-states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'"]
+n_states = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'"]
+n2_states = ["/n2+_states.tsv'", "/n2_states.tsv'"]
 beg_exec = '' #beginning statement to execute, used to make code shorter + more readable
 for i in broad_cats():
-    beg_exec = beg_exec + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + ".tsv'" + " INTO TABLE " + "nepc." + i
+    beg_exec = beg_exec + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + ".tsv' " + "\nINTO TABLE " + "nepc." + i
     if i == 'processes':
-        beg_exec = beg_exec + " IGNORE 2 LINES; "
+        beg_exec = beg_exec + " " + "\nIGNORE 2 LINES;"
     else:
-        beg_exec = beg_exec + "; "
+        beg_exec = beg_exec + ";"
 if args.debug:
     print(beg_exec)
-mycursor.execute(beg_exec, multi = True) #query created earlier executed
-
-
-
-for i in states:
-    mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i +
-                 "	INTO TABLE nepc.states"
-                 "	IGNORE 1 LINES"
-                 "	(id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)"
-                 "	SET configuration = JSON_OBJECT("
-                 "		JSON_OBJECT('order', "
-                 "			JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', "
-                 "                     '3d', '4s', '4p')"
-                 "		),"
-                 "		JSON_OBJECT('occupations',"
-                 "			JSON_OBJECT("
-                 "				'2s',@2s,"
-                 "				'2p',@2p,"
-                 "				'CoreTerm',@CoreTerm,"
-                 "				'3s',@3s,"
-                 "				'3p',@3p,"
-                 "				'3d',@3d,"
-                 "				'4s',@4s,"
-                 "				'4p',@4p"
-                 "			)"
-                 "		)"
-                 "	),"
-                 "	specie_id = (select max(id) from nepc.species "
-                 "               where name = 'N'", multi=True)
-
-    """
-                 "	specie_id = (select max(id) from nepc.species "
-                 "               where name = " + "'" + i[1:i.index('_')].upper() + "'" + ");", multi = True)
-                 """
+results = mycursor.execute(beg_exec, multi = True) #query created earlier executed
+multi_iteration(results)
+state_query = ''
+for i in n_states:
+    state_query = (state_query + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + "    INTO TABLE nepc.states" + "     IGNORE 1 LINES" + "      (id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)" + "      SET configuration = JSON_OBJECT(" + "          JSON_OBJECT('order', " + "              JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', " + "              '3d', '4s', '4p')" + "              )," + "          JSON_OBJECT('occupations'," + "          JSON_OBJECT(" + "				'2s',@2s," + "				'2p',@2p," + "				'CoreTerm',@CoreTerm," + "				'3s',@3s," + "				'3p',@3p," + "				'3d',@3d," + "				'4s',@4s," + "				'4p',@4p" + "			)" + "		)" + "	)," + "	specie_id = (select max(id) from nepc.species " + "               where name = " + "'" + i[1:i.index('_')].upper() + "'" + ");")
+for i in n2_states:
+    state_query = (state_query + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i + "    INTO TABLE nepc.states" + "     IGNORE 1 LINES" + "      (id,name,long_name,@o1,@o2,@o3,@o4,@o5,@o6)" + "      SET configuration = JSON_OBJECT(" + "          JSON_OBJECT('order', " + "              JSON_ARRAY('2sigma_u', '1pi_u', '1pi_g', '3sigma_u', '3ssigma_g')" + "              )," + "          JSON_OBJECT('occupations'," + "          JSON_OBJECT(" + "				'2sigma_u',@o1," + "				'1pi_u',@o2," + "				'3sigma_g',@o3," + "				'1pi_g',@o4," + "				'3sigma_u',@o5," + "				'3ssigma_g',@o6" + "			)" + "		)" + "	)," + "	specie_id = (select max(id) from nepc.species " + "               where name = " + "'" + i[1:i.index('_')].upper() + "'" + ");") 
+state_results = mycursor.execute(state_query, multi = True)
+multi_iteration(state_results)
 mydb.commit()
 
 DIR_NAMES = ["/data/formatted/n2/itikawa/",
@@ -270,55 +260,72 @@ for directoryname in DIR_NAMES:
                         #lists types of files - a list of lists will be used
             filetype = [met_file, dat_file]
             tablename = ['cs', 'csdata']
-            exCS = ''
             for i in range (0, noOfFileTypes()):
-                exCS = exCS + ("LOAD DATA LOCAL INFILE '" + filetype[i]+
-                    "' INTO TABLE  " + "nepc" + tablename[i] +
-                    "IGNORE 1 LINES ")
+                exCS = '' + ("LOAD DATA LOCAL INFILE '" + filetype[i]+ "' INTO TABLE  " + "nepc." + tablename[i] + " IGNORE 1 LINES ")
                 if filetype[i] == met_file:
                     exCS = (exCS + "(" + print_list_elems(met_headers()) + ") "
                     "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
+                    atSign = []
+                    for i in met_headers():
+                        if ('@' in i and i != '@temp'):
+                            atSign.append(i)
+                        if (len(atSign) == 0 and i == met_headers()[1]): #disregards @temp here
+                            exCS = exCS + ";"
+                    for i in range(0, len(atSign)):
+                        if atSign[i] == '@lhsA' or atSign[i] == '@rhsA' or atSign[i] == '@lhsB' or atSign[i] == '@rhsB':
+                            exCS = exCS + atSign[i][1:] + "_id = (select id from nepc.states  where name LIKE " + atSign[i] + ")"
+                            if i != len(atSign) - 1:
+                                exCS = exCS + ", "
+                            else: 
+                                exCS = exCS + ";"
+                                if args.debug:
+                                    print (exCS)
+                        elif atSign[i] == '@process':
+                            exCS = (exCS + atSign[i][1:] + "_id = (select id from nepc." + atSign[i][1:] + "es" + "  where name = " + atSign[i]+ ")")
+                            if i != len(atSign) - 1: 
+                                exCS = exCS + ", "
+                                #mycursor.execute("print n 'process_id'")
+                            else: 
+                                exCS = exCS + ";"
+
+                        elif atSign[i] != '@specie':
+                            exCS = (exCS + atSign[i][1:] + "_id = (select id from nepc." + atSign[i][1:] + "  where name = " + atSign[i]+ ")")
+                            if i != len(atSign) - 1: 
+                                exCS = exCS + ", " 
+                            else: 
+                                exCS = exCS + ";"
+                        else:
+                            exCS = (exCS + atSign[i][1:] + "_id = (select id from nepc." + atSign[i][1:] + "s"
+                    + " where name = " + atSign[i] + ")")
+                            if i != (len(atSign) - 1): 
+                                exCS = exCS + ", "
+                            else: 
+                                exCS = exCS + ";"
                 else:
                     exCS = (exCS + "(" + print_list_elems(dat_headers()) + ") "
-                    "SET cs_id = " + str(cs_id) + ", ")
-            atSign = []
-            for i in met_headers():
-                if ('@' in i):
-                    atSign.append(i)
-            if (len(atSign) == 0):
-                exCS = exCS + ";"
-            for i in range(0, len(atSign)):
-                if atSign[i] == '@lhsA' or atSign[i] == '@rhsA' or atSign[i] == '@lhsB' or atSign[i] == '@rhsB':
-                    exCS = exCS + "(" + atSign[i][1:] + "_id = (select id from nepc.states "
-                    "  where name LIKE " + atSign[i] + ")"
-                else:
-                    exCS = (exCS + "(" + atSign[i][1:] + "_id = (select id from nepc." + atSign[i][1:]
-                    + "  where name = " + atSign[i] + ")")
-                if i == len(atSign) - 1:
-                    exCS = exCS + ","
-                else:
-                    exCS = exCS + ";"
+                    "SET cs_id = " + str(cs_id) + "; ")
+                    if args.debug:
+                        print (exCS)
+            
+                res = mycursor.execute(exCS, multi = True) #currently temporary w/ how it is designed, make this an executemany later
+                multi_iteration(res)
+                mydb.commit()
 
-            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
-                                   "' INTO TABLE nepc.models2cs "
-                                   "(@model) "
-                                   "SET cs_id = " + str(cs_id) + ", "
-                                   "model_id = (select model_id "
-                                   "            from nepc.models "
-                                   "            where name LIKE @model);")
+        executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
+                                "' INTO TABLE nepc.models2cs "
+                                "(@model) "
+                                "SET cs_id = " + str(cs_id) + ", "
+                                "model_id = (select model_id "
+                                "            from nepc.models "
+                                "            where name LIKE @model);")
 
-            mycursor.execute(exCS, multi = True) #currently temporary w/ how it is designed, make this an executemany later
-
-            if os.path.exists(mod_file):
-                mycursor.execute(executeTextCSMODELS)
-
-            cs_id = cs_id + 1
+        if os.path.exists(mod_file):
+            mycursor.execute(executeTextCSMODELS)
+        cs_id = cs_id + 1
 
 f_cs_dat_file.close()
 
 mydb.commit()
-
-mycursor.execute("use nepc;")
 
 # TODO: refactor to create function that prints details of database,
 # querying the database for the tables contained therein and then
