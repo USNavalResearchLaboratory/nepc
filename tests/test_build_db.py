@@ -2,6 +2,7 @@ from nepc import nepc
 from nepc.util import config
 from nepc.util import scraper
 import pandas as pd
+from pandas.util.testing import assert_frame_equal
 import os
 import pytest
 import platform
@@ -39,6 +40,24 @@ def test_csdata_lines(local, dbug):
                 cs_lines += scraper.wc_fxn(directoryname + filename) - 1
 
     assert cs_lines == nepc.count_table_rows(cursor, "csdata")
+    cursor.close()
+    cnx.close()
+
+
+def test_species_entered(local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    cs_species_file = pd.read_csv (NEPC_HOME + '/mysql/species.tsv', delimiter = '\t')
+    cs_species = nepc.table_as_df(cursor, "species")
+    assert_frame_equal(cs_species, cs_species_file)
+    cursor.close()
+    cnx.close()
+
+
+def test_processes_entered(local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    cs_processes_file = pd.read_csv (NEPC_HOME + '/mysql/processes.tsv', delimiter = '\t')
+    cs_processes = nepc.table_as_df(cursor, "processes")
+    assert_frame_equal(cs_processes, cs_processes_file)
     cursor.close()
     cnx.close()
 
