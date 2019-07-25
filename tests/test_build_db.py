@@ -44,27 +44,85 @@ def test_csdata_lines(local, dbug):
     cnx.close()
 
 
-def test_species_entered(local, dbug):
+def test_species_entered(local, dbug): #for the species table
     cnx, cursor = nepc.connect(local, dbug)
-    cs_species_file = pd.read_csv (NEPC_HOME + '/mysql/species.tsv', delimiter = '\t')
+    cs_species_file = pd.read_csv (NEPC_HOME + '/mysql/species.tsv', delimiter = '\t', index_col = False)
     cs_species = nepc.table_as_df(cursor, "species")
-    assert_frame_equal(cs_species, cs_species_file)
+    dblist = []
+    filelist = []
+    for index, row in cs_species.iterrows():
+        for i in row:
+            if type(i) is int:
+                break
+            else:
+                dblist.append(i)
+    for index, row in cs_species_file.iterrows():
+        for i in row:
+            if type(i) is float or type(i) is int:
+                break
+            else:
+                filelist.append(i)
+    assert dblist == filelist
     cursor.close()
     cnx.close()
 
-
-def test_processes_entered(local, dbug):
+#TODO: currently only tests the strings, not the 0, 1, and 2 values (non-indexes)
+def test_processes_entered(local, dbug): #for the processes table
     cnx, cursor = nepc.connect(local, dbug)
     cs_processes_file = pd.read_csv (NEPC_HOME + '/mysql/processes.tsv', delimiter = '\t')
+    headers = ['id', 'short', 'long', 'LHS', 'RHS', 'LHS_e', 'RHS_e', 'LHS_hv', 'RHS_hv', 'LHS_v', 'RHS_v', 'LHS_j', 'RHS_j']
+
+    print ("From the file \n")
+    print (cs_processes_file.to_string())
+
     cs_processes = nepc.table_as_df(cursor, "processes")
-    assert_frame_equal(cs_processes, cs_processes_file)
+    print ("\n From the database \n")
+    print (cs_processes.to_string())
+    dblist_str = []
+    filelist_str = []
+    for index, row in cs_processes.iterrows():
+        for i in range (0, len(row)):
+            if type(row[i]) is int or row[i] in headers: #3 is a temporary value (since we know that the non-indexes would most likely be 0s, 1s, or 2s
+                break
+            else:
+                dblist_str.append(row[i])
+    for index, row in cs_processes_file.iterrows():
+        for i in row:
+            if type(i) is float or type(i) is int or i in headers or i.isdigit():
+                break
+            else:
+                filelist_str.append(i)
+    assert dblist_str == filelist_str
     cursor.close()
     cnx.close()
 
+
+def test_models_entered(local, dbug): #for the models table
+    cnx, cursor = nepc.connect(local, dbug)
+    cs_models_file = pd.read_csv (NEPC_HOME + '/mysql/models.tsv', delimiter = '\t')
+    cs_models = nepc.table_as_df (cursor, "models")
+    dblist = []
+    filelist = []
+    for index, row in cs_models.iterrows():
+        for i in row:
+            if type(i) is int:
+                break
+            else:
+                dblist.append(i)
+    for index, row in cs_models_file.iterrows():
+        for i in row:
+            if type(i) is float or type(i) is int:
+                break
+            else:
+                filelist.append(i)
+    assert dblist == filelist
+    cursor.close()
+    cnx.close()
+    
 
 # TODO: use @pytest.mark.parametrize decorator to turn this into N tests
 #       instead of N asserts in one test
-def test_data_entered(local, dbug):
+def test_data_entered(local, dbug): #for the csdata table
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
@@ -87,7 +145,7 @@ def test_data_entered(local, dbug):
 
 # TODO: use @pytest.mark.parametrize decorator to turn this into N tests
 #       instead of N asserts in one test
-def test_meta_entered(local, dbug):
+def test_meta_entered(local, dbug): #for the cs table
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
