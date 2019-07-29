@@ -153,7 +153,41 @@ mycursor.execute("CREATE TABLE `test`.`models2cs`("
                  "	PRIMARY KEY pk_models2cs (cs_id, model_id)"
                  ");"
                  )
+def broad_cats():
+    return ["processes", "models", "species"]
 
+def print_list_elems(lst):
+    answer = ''
+    for i in lst:
+        if i != lst[len(lst)-1]:
+            answer = answer + i + ","
+        else:
+            answer = answer + i
+    return answer
+
+def met_headers():
+    return ['@temp', '@specie', '@process', 'units_e', 'units_sigma', 'ref', '@lhsA', '@lhsB', '@rhsA', '@rhsB', 'wavelength', 'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j', 'background', 'lpu', 'upu']
+
+def dat_headers():
+    return ['id', 'e', 'sigma']
+
+def all_headers():
+    total_heads = met_headers()
+    for i in dat_headers():
+        total_heads.append(i)
+    return total_heads
+
+def number_of_columns():
+    return len(all_headers())
+
+def noOfFileTypes():
+    return 2 #for dat and met
+
+def construct_headers(column):
+    if column in met_headers:
+        return (met_file, "cs", column)
+    elif column in dat_headers:
+        return (dat_file, "csdata", column)
 
 def multi_iteration(results):
     if args.debug:
@@ -223,6 +257,58 @@ for directoryname in DIR_NAMES:
                     "\t".join([str(cs_id),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
+
+        filetype = [met_file, dat_file]
+        tablename = ['cs', 'csdata']
+        for i in range (0, noOfFileTypes()):
+            exCS = '' + ("LOAD DATA LOCAL INFILE '" + filetype[i]+ "' INTO TABLE  " + "test." + tablename[i] + " IGNORE 1 LINES ")
+            if filetype[i] == met_file:
+                exCS = (exCS + "(" + print_list_elems(met_headers()) + ") "
+                "SET cs_id = " + str(cs_id) + ", ") #should take in all of the headers as listed as values in dat_dict and met_dict
+                atSign = []
+                for i in met_headers():
+                    if ('@' in i and i != '@temp'):
+                        atSign.append(i)
+                    if (len(atSign) == 0 and i == met_headers()[1]): #disregards @temp here
+                        exCS = exCS + ";"
+                for i in range(0, len(atSign)):
+                    if atSign[i] == '@lhsA' or atSign[i] == '@rhsA' or atSign[i] == '@lhsB' or atSign[i] == '@rhsB':
+                        exCS = exCS + atSign[i][1:] + "_id = (select id from test.states  where name LIKE " + atSign[i] + ")"
+                        if i != len(atSign) - 1:
+                            exCS = exCS + ", "
+                        else: 
+                            exCS = exCS + ";"
+                            if args.debug:
+                                print (exCS)
+                    elif atSign[i] == '@process':
+                        exCS = (exCS + atSign[i][1:] + "_id = (select id from test." + atSign[i][1:] + "es" + "  where name = " + atSign[i]+ ")")
+                        if i != len(atSign) - 1: 
+                            exCS = exCS + ", "
+                            #mycursor.execute("print n 'process_id'")
+                        else: 
+                            exCS = exCS + ";"
+
+                    elif atSign[i] != '@specie':
+                        exCS = (exCS + atSign[i][1:] + "_id = (select id from test." + atSign[i][1:] + "  where name = " + atSign[i]+ ")")
+                        if i != len(atSign) - 1: 
+                            exCS = exCS + ", " 
+                        else: 
+                            exCS = exCS + ";"
+                    else:
+                        exCS = (exCS + atSign[i][1:] + "_id = (select id from test." + atSign[i][1:] + "s" + " where name = " + atSign[i] + ")")
+                        if i != (len(atSign) - 1): 
+                            exCS = exCS + ", "
+                        else: 
+                            exCS = exCS + ";"
+            else:
+                exCS = (exCS + "(" + print_list_elems(dat_headers()) + ") "
+                "SET cs_id = " + str(cs_id) + "; ")
+                if args.debug:
+                    print (exCS)
+            
+            res = mycursor.execute(exCS, multi = True) #currently temporary w/ how it is designed, make this an executemany later
+            multi_iteration(res)
+            mydb.commit()
 
      
 
@@ -338,12 +424,42 @@ def test_models2cs_entered (local, dbug):
     cursor.close()
     cnx.close()
 
+
 def test_models2cs_number_of_rows (local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows (cursor, "models2cs") == nepc.count_table_rows (mycursor, "models2cs")
     cursor.close()
     cnx.close()
 
+
+def test_cs_entered (local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    test_cs = nepc.table_as_df (mycursor, "cs")
+    file_cs = nepc.table_as_df (cursor, "cs")
+    assert_frame_equal (test_cs, file_cs)
+    cursor.close()
+    cnx.close()
+
+
+def test_cs_number_of_rows (local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    assert nepc.count_table_rows (cursor, "cs") == nepc.count_table_rows (mycursor, "cs")
+    cursor.close()
+    cnx.close()
+
+def test_csdata_entered (local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    test_csdata = nepc.table_as_df (mycursor, "csdata")
+    file_csdata = nepc.table_as_df (cursor, "csdata")
+    assert_frame_equal (test_csdata, file_csdata)
+    cursor.close()
+    cnx.close()
+
+def test_csdata_number_of_rows(local, dbug):
+    cnx, cursor = nepc.connect(local, dbug)
+    assert nepc.count_table_rows (cursor, "csdata") == nepc.count_table_rows (mycursor, "csdata")
+    cursor.close()
+    cnx.close()
 
 
 # TODO: use @pytest.mark.parametrize decorator to turn this into N tests

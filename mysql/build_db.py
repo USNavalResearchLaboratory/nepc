@@ -256,7 +256,6 @@ for directoryname in DIR_NAMES:
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
 
-            #lists all of the headers used for met, mod and dat files
                         #lists types of files - a list of lists will be used
             filetype = [met_file, dat_file]
             tablename = ['cs', 'csdata']
