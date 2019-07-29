@@ -232,7 +232,7 @@ f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
 
 cs_id = 1
 for directoryname in DIR_NAMES:
-    directory = os.fsencode(NEPC_HOME + directoryname)
+    directory = os.fsencode(directoryname)
 
     # TODO: speed up by reading data into memory and using the
     #       MySQLCursor.executemany() method
