@@ -105,23 +105,24 @@ def getColumnStrings(pdf, pageNumber, cropDimArray,
 
 
 # TODO: standardize filenames; build them in the write functions
-def writeDataToFile(dataArray, filename):
+def writeDataToFile(dataArray, filename, start_id): #next start id to use for contributors of data
     f = open(filename, "x")
-    f.write("\t".join(['', 'e_energy', 'sigma']) + "\n")
+    f.write("\t".join(['id', 'e_energy', 'sigma']) + "\n")
     for i in range(len(dataArray)):
-        f.write("\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
+        f.write("\t" + start_id + "\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
+        start_id = start_id + 1
     f.close()
 
 
-def writeMetaDataToFile(
-        filename, specie, process, units_e, units_sigma, ref, lhsA='\\N',
+def writeMetaDataToFile( #id to start with, not too important for metadata b/c only 1 id in files, usually
+        filename, start_id, specie, process, units_e, units_sigma, ref, lhsA='\\N',
         lhsB='\\N', rhsA='\\N', rhsB='\\N', wavelength='\\N', lhs_v='\\N',
         rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N', lpu='\\N',
         upu='\\N'):
     f = open(filename, "x")
     f.write(
         "\t".join(
-            ('',
+            ('id',
              'specie',
              'process',
              'units_e',
@@ -141,7 +142,7 @@ def writeMetaDataToFile(
              'upu')) + "\n")
     f.write(
         "\t".join(
-            ('',
+            (start_id,
              specie,
              process,
              str(units_e),
