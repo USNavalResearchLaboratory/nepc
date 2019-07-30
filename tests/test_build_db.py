@@ -368,12 +368,13 @@ def test_species_number_of_rows(local, dbug):
     cursor.close()
     cnx.close()
 
-    
 def test_processes_entered(local, dbug): #for the processes table
     #FIXME: currently does not add all of the elements in the file
     cnx, cursor = nepc.connect(local, dbug)
     test_processes = nepc.table_as_df (mycursor, "processes")
     cs_processes = nepc.table_as_df (cursor, "processes")
+    if args.debug:
+        print (cs_processes)
     assert_frame_equal(cs_processes, test_processes)
     cursor.close()
     cnx.close()

@@ -206,6 +206,8 @@ for i in broad_cats():
         beg_exec = beg_exec + ";"
 if args.debug:
     print(beg_exec)
+if args.debug:
+    print (nepc.table_as_df(mycursor, "processes"))
 results = mycursor.execute(beg_exec, multi = True) #query created earlier executed
 multi_iteration(results)
 state_query = ''
@@ -232,7 +234,7 @@ f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
 
 cs_id = 1
 for directoryname in DIR_NAMES:
-    directory = os.fsencode(directoryname)
+    directory = os.fsencode(NEPC_HOME + directoryname)
 
     # TODO: speed up by reading data into memory and using the
     #       MySQLCursor.executemany() method
@@ -342,8 +344,7 @@ def table_exists (tablename):
 
 def contents_of_db():
     for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
-        if table_exists(table):
-            print (table + " has " + str(nepc.count_table_rows(mycursor, table)) + " lines")
+        print (table + " has " + str(nepc.count_table_rows(mycursor, table)) + " lines")
         print("===============================================\n")
 
 

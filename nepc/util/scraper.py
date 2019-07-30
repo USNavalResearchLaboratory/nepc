@@ -39,7 +39,7 @@ def mkdir(outdir):
 
 
 def getTableData(pdf, pageNumber, cropDimArray,
-                 locateTables=False, omitRegexp=''):
+                 locateTables=False, omitRegexp='', id_start = 0):
     pg = pdf.pages[pageNumber]
     # data = [[] for i in range(len(cropDimArray))]
     data = np.empty(shape=(0, 2))
