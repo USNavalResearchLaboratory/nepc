@@ -7,7 +7,7 @@ normative: true
 ref: ''
 reviewed: c053e9bb1545b7a26a934455902fcb69
 text: |
-  The nepc.cs_subset method **shall* return a subset of
+  The nepc.cs_subset method *shall* return a subset of
   cross sections from the NEPC database that meet the following
   user provided criteria -
   minumum value of $\sigma$, specie, process, LHS state, RHS state, reference
