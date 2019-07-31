@@ -155,8 +155,7 @@ for i in range(0, len(nonstates)):
             "INTO TABLE " + "nepc." + nonstates[i])
     if i == 1:
         mycursor.execute("LOAD DATA LOCAL INFILE'" + NEPC_MYSQL + '"/' + nonstates[i] + ".tsv' "
-            "INTO TABLE " + "nepc." + nonstates[i]
-            "IGNORE 2 LINES;")
+            "INTO TABLE " + "nepc." + nonstates[i] + "IGNORE 2 LINES;")
 for i in states:
     mycursor.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i
                  "	INTO TABLE nepc.states"
