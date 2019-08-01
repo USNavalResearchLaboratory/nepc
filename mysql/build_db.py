@@ -238,14 +238,15 @@ def construct_headers(column):
 
     Returns
     -------
+    tup : tuple
     A tuple containing the columns that will be used to construct the table
     """
     for metelem in met_headers():
         if column == metelem:
-            return (met_file, "cs", column)
+            tup = (met_file, "cs", column)
         else:
-            continue
-    return (dat_file, "csdata", column)
+            tup = (dat_file, "csdata", column)
+    return tup
 
 def multi_iteration(res):
     """Separate through each different mysql command given a generator object

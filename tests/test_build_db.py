@@ -1,3 +1,5 @@
+"""This module is used for the purposes of testing whether data
+is being entered into the database properly"""
 import csv
 import argparse
 import os
@@ -15,7 +17,7 @@ from nepc.util import scraper
 PARSER = argparse.ArgumentParser(description='Build the test database.')
 PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
-ARGS = PARSER.parse_ARGS()
+ARGS = PARSER.parse_args()
 
 if ARGS.debug:
     import time
@@ -96,7 +98,7 @@ MYCURSOR.execute("CREATE TABLE `test`.`models`("
                  )
 
 MYCURSOR.execute("CREATE TABLE `test`.`cs`("
-                 "	`cs_id` INT UNSIGNED NOT NULL, "
+                 "	`CS_ID` INT UNSIGNED NOT NULL, "
                  "	`specie_id` INT UNSIGNED NOT NULL, "
                  "	`process_id` INT UNSIGNED NOT NULL, "
                  "	`units_e` DOUBLE NOT NULL,"
@@ -114,7 +116,7 @@ MYCURSOR.execute("CREATE TABLE `test`.`cs`("
                  "	`background` VARCHAR(10000) ,"
                  "	`lpu` DOUBLE NULL ,"
                  "	`upu` DOUBLE NULL ,"
-                 "	PRIMARY KEY(`cs_id`) ,"
+                 "	PRIMARY KEY(`CS_ID`) ,"
                  "	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
                  "	INDEX `PROCESS_ID`(`process_id` ASC) ,"
                  "	CONSTRAINT `SPECIE_ID_CS` FOREIGN KEY(`specie_id`)"
@@ -136,21 +138,21 @@ MYCURSOR.execute("CREATE TABLE `test`.`cs`("
 
 MYCURSOR.execute("CREATE TABLE `test`.`csdata`("
                  "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"
-                 "	`cs_id` INT UNSIGNED NOT NULL ,"
+                 "	`CS_ID` INT UNSIGNED NOT NULL ,"
                  "	`e` DOUBLE NOT NULL ,"
                  "	`sigma` DOUBLE NOT NULL ,"
                  "	PRIMARY KEY(`id`) ,"
-                 "	INDEX `CS_ID`(`cs_id` ASC) ,"
-                 "	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`cs_id`)"
-                 "		REFERENCES `test`.`cs`(`cs_id`)"
+                 "	INDEX `CS_ID`(`CS_ID` ASC) ,"
+                 "	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`CS_ID`)"
+                 "		REFERENCES `test`.`cs`(`CS_ID`)"
                  "		ON DELETE RESTRICT ON UPDATE CASCADE"
                  ");"
                  )
 
 MYCURSOR.execute("CREATE TABLE `test`.`models2cs`("
-                 "	`cs_id` INT UNSIGNED NOT NULL ,"
+                 "	`CS_ID` INT UNSIGNED NOT NULL ,"
                  "	`model_id` INT UNSIGNED NOT NULL ,"
-                 "	PRIMARY KEY pk_models2cs (cs_id, model_id)"
+                 "	PRIMARY KEY pk_models2cs (CS_ID, model_id)"
                  ");"
                  )
 def broad_cats():
@@ -177,11 +179,11 @@ def print_list_elems(lst):
     A string containing all of the elements of lst, separated by commas
     """
     answer = ''
-    for i in lst:
-        if i != lst[len(lst)-1]:
-            answer = answer + i + ","
+    for lst_elem in lst:
+        if lst_elem != lst[len(lst)-1]:
+            answer = answer + lst_elem + ","
         else:
-            answer = answer + i
+            answer = answer + lst_elem
     return answer
 
 def met_headers():
@@ -212,8 +214,8 @@ def all_headers():
     List containing the combination of met_headers() and dat_headers()
     """
     total_heads = met_headers()
-    for i in dat_headers():
-        total_heads.append(i)
+    for dat_elem in dat_headers():
+        total_heads.append(dat_elem)
     return total_heads
 
 def number_of_columns():
@@ -235,7 +237,6 @@ def no_of_file_types():
 
 def construct_headers(column):
     """Returns the three headers used to construct the table
-    
     Parameters
     ----------
     column : str
@@ -243,24 +244,25 @@ def construct_headers(column):
 
     Returns
     -------
+    tup : tuple
     A tuple containing the columns that will be used to construct the table
     """
-    if column in met_headers:
-        return (met_file, "cs", column)
-    elif column in dat_headers:
-        return (dat_file, "csdata", column)
-
-def multi_iteration(results):
+    if column in met_headers():
+        tup = (met_file, "cs", column)
+    else:
+        tup = (dat_file, "csdata", column)
+    return tup
+def multi_iteration(resu):
     """Separate through each different mysql command given a generator object
     Parameters
     ----------
     res : a generator object that will be returned when using mycursor.execute (multi=True)"""
     if ARGS.debug:
-        print(results)
-    for cur in results:
+        print(resu)
+    for cur in resu:
         print('cursor:', cur)
         if cur.with_rows:
-            print('results:', cur.fetchall())
+            print('RESULTS:', cur.fetchall())
 
 
 N_STATES = ["/N_STATES.tsv'", "/n+_states.tsv'", "/n++_states.tsv'"]
@@ -275,8 +277,8 @@ for i in broad_cats():
         BEG_EXEC = BEG_EXEC + ";"
 if ARGS.debug:
     print(BEG_EXEC)
-results = MYCURSOR.execute(BEG_EXEC, multi=True) #query created earlier executed
-multi_iteration(results)
+RESULTS = MYCURSOR.execute(BEG_EXEC, multi=True) #query created earlier executed
+multi_iteration(RESULTS)
 STATE_QUERY = ''
 for i in N_STATES:
     STATE_QUERY = (STATE_QUERY + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + i +
@@ -337,9 +339,9 @@ else:
 
 F_CS_DAT_FILE = None
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
-F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
+F_CS_DAT_FILE.write("\t".join(["CS_ID", "filename"]) + "\n")
 
-cs_id = 1
+CS_ID = 1
 
 for directoryname in DIR_NAMES:
     directory = os.fsencode(directoryname)
@@ -360,7 +362,7 @@ for directoryname in DIR_NAMES:
             continue
         else:
             F_CS_DAT_FILE.write(
-                "\t".join([str(cs_id), directoryname + str(filename_wo_ext)]) + "\n"
+                "\t".join([str(CS_ID), directoryname + str(filename_wo_ext)]) + "\n"
             )
 
         filetype = [met_file, dat_file]
@@ -371,55 +373,55 @@ for directoryname in DIR_NAMES:
                          " IGNORE 1 LINES ")
             if filetype[i] == met_file:
                 exCS = (exCS + "(" + print_list_elems(met_headers()) + ") "
-                        "SET cs_id = " + str(cs_id) + ", ")
+                        "SET CS_ID = " + str(CS_ID) + ", ")
                 atSign = []
-                for i in met_headers():
-                    if ('@' in i and i != '@temp'):
-                        atSign.append(i)
-                    if (len(atSign) == 0 and i == met_headers()[1]): #disregards @temp here
+                for ind in met_headers():
+                    if ('@' in ind and ind != '@temp'):
+                        atSign.append(ind)
+                    if (not atSign and ind == met_headers()[1]): #disregards @temp here
                         exCS = exCS + ";"
-                for i in range(0, len(atSign)):
-                    if (atSign[i] == '@lhsA' or atSign[i] == '@rhsA'
-                            or atSign[i] == '@lhsB' or atSign[i] == '@rhsB'):
-                        exCS = (exCS + atSign[i][1:] +
+                for inde in range(0, len(atSign)):
+                    if (atSign[inde] == '@lhsA' or atSign[inde] == '@rhsA'
+                            or atSign[inde] == '@lhsB' or atSign[inde] == '@rhsB'):
+                        exCS = (exCS + atSign[inde][1:] +
                                 "_id = (select id from test.states  where name LIKE " +
-                                atSign[i] + ")")
-                        if i != len(atSign) - 1:
+                                atSign[inde] + ")")
+                        if inde != len(atSign) - 1:
                             exCS = exCS + ", "
                         else:
                             exCS = exCS + ";"
                             if ARGS.debug:
                                 print(exCS)
-                    elif atSign[i] == '@process':
-                        exCS = (exCS + atSign[i][1:] +
+                    elif atSign[inde] == '@process':
+                        exCS = (exCS + atSign[inde][1:] +
                                 "_id = (select id from test." +
-                                atSign[i][1:] + "es" +
-                                "  where name = " + atSign[i]+ ")")
-                        if i != len(atSign) - 1:
+                                atSign[inde][1:] + "es" +
+                                "  where name = " + atSign[inde]+ ")")
+                        if inde != len(atSign) - 1:
                             exCS = exCS + ", "
                             #MYCURSOR.execute("print n 'process_id'")
                         else:
                             exCS = exCS + ";"
 
-                    elif atSign[i] != '@specie':
-                        exCS = (exCS + atSign[i][1:] +
+                    elif atSign[inde] != '@specie':
+                        exCS = (exCS + atSign[inde][1:] +
                                 "_id = (select id from test." +
-                                atSign[i][1:] + "  where name = " + atSign[i]+ ")")
-                        if i != len(atSign) - 1:
+                                atSign[inde][1:] + "  where name = " + atSign[inde]+ ")")
+                        if inde != len(atSign) - 1:
                             exCS = exCS + ", "
                         else:
                             exCS = exCS + ";"
                     else:
-                        exCS = (exCS + atSign[i][1:] +
-                                "_id = (select id from test." + atSign[i][1:] +
-                                "s" + " where name = " + atSign[i] + ")")
-                        if i != (len(atSign) - 1):
+                        exCS = (exCS + atSign[inde][1:] +
+                                "_id = (select id from test." + atSign[inde][1:] +
+                                "s" + " where name = " + atSign[inde] + ")")
+                        if inde != (len(atSign) - 1):
                             exCS = exCS + ", "
                         else:
                             exCS = exCS + ";"
             else:
                 exCS = (exCS + "(" + print_list_elems(dat_headers()) + ") "
-                        "SET cs_id = " + str(cs_id) + "; ")
+                        "SET CS_ID = " + str(CS_ID) + "; ")
                 if ARGS.debug:
                     print(exCS)
             res = MYCURSOR.execute(exCS, multi=True)
@@ -428,14 +430,14 @@ for directoryname in DIR_NAMES:
         executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
                                "' INTO TABLE test.models2cs "
                                "(@model) "
-                               "SET cs_id = " + str(cs_id) + ", "
+                               "SET CS_ID = " + str(CS_ID) + ", "
                                "model_id = (select model_id "
                                "            from test.models "
                                "            where name LIKE @model);")
 
         if os.path.exists(mod_file):
             MYCURSOR.execute(executeTextCSMODELS)
-        cs_id = cs_id + 1
+        CS_ID = CS_ID + 1
 
 F_CS_DAT_FILE.close()
 
@@ -445,29 +447,50 @@ MYDB.commit()
 #===============TEST FUNCTIONS=====================
 #TODO: refactor funcs w/ pytest.mark.parametrize() to reduce duplicate lines of code
 def nepc_connect(local, dbug):
+    """Establishes a connection with the NEPC database
+
+    Parameters
+    ----------
+    local : boolean
+    Checks whether the database is locally based or based off of 'ppdadamsonlinux'
+    dbug : boolean
+    Checks whether debug mode is on or off
+
+    Returns
+    -------
+    cnx : connection
+    A connection to the official NEPC MySQL database
+    cursor : MySQLCursor
+    A MySQLCursor object for executing SQL queries"""
     cnx, cursor = nepc.connect(local, dbug)
     return cnx, cursor
 
 
 def test_csdata_lines(local, dbug):
+    """Checks whether the table cs_data in the database has the correct
+    number of rows"""
     cnx, cursor = nepc_connect(local, dbug)
     cs_lines = 0
-    for directoryname in DIR_NAMES:
-        directory = os.fsencode(directoryname)
-
+    for dirname in DIR_NAMES:
+        direc = os.fsencode(dirname)
+        if ARGS.debug:
+            print(direc)
+            #for sake of improving pylint score
         for file in os.listdir(directory):
-            filename = os.fsdecode(file)
-            if filename.endswith(".met") or filename.endswith(".mod"):
+            filen = os.fsdecode(file)
+            if filen.endswith(".met") or filen.endswith(".mod"):
                 continue
             else:
                 # subtract 1 to account for header
-                cs_lines += scraper.wc_fxn(directoryname + filename) - 1
+                cs_lines += scraper.wc_fxn(dirname + filen) - 1
 
     assert cs_lines == nepc.count_table_rows(cursor, "csdata")
     cursor.close()
     cnx.close()
 
 def test_species_entered(local, dbug): #for the species table
+    """Checks whether the species table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_species = nepc.table_as_df(MYCURSOR, "species")
     cs_species = nepc.table_as_df(cursor, "species")
@@ -476,6 +499,8 @@ def test_species_entered(local, dbug): #for the species table
     cnx.close()
 
 def test_species_number_of_rows(local, dbug):
+    """Checks whether the species table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows(cursor, "species") == nepc.count_table_rows(MYCURSOR, "species")
     cursor.close()
@@ -483,6 +508,8 @@ def test_species_number_of_rows(local, dbug):
 
 def test_processes_entered(local, dbug): #for the processes table
     #FIXME: currently does not add all of the elements in the file
+    """Checks whether the processes table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_processes = nepc.table_as_df(MYCURSOR, "processes")
     cs_processes = nepc.table_as_df(cursor, "processes")
@@ -493,6 +520,8 @@ def test_processes_entered(local, dbug): #for the processes table
     cnx.close()
 
 def test_processes_number_of_rows(local, dbug):
+    """Checks whether the processes table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     processes_rows = nepc.count_table_rows(cursor, "processes")
     t_processes_rows = nepc.count_table_rows(MYCURSOR, "processes")
@@ -501,7 +530,9 @@ def test_processes_number_of_rows(local, dbug):
     cnx.close()
 
 
-def test_models_entered(local, dbug): #for the models table - actually works
+def test_models_entered(local, dbug):
+    """Checks whether the models table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_models = nepc.table_as_df(MYCURSOR, "models")
     cs_models = nepc.table_as_df(cursor, "models")
@@ -511,6 +542,8 @@ def test_models_entered(local, dbug): #for the models table - actually works
 
 
 def test_models_number_of_rows(local, dbug):
+    """Checks whether the models table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows(cursor, "models") == nepc.count_table_rows(MYCURSOR, "models")
     cursor.close()
@@ -518,6 +551,8 @@ def test_models_number_of_rows(local, dbug):
 
 
 def test_states_entered(local, dbug):
+    """Checks whether the states table in the NEPC database
+    has the same value as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_states = nepc.table_as_df(MYCURSOR, "states")
     cs_states = nepc.table_as_df(cursor, "states")
@@ -527,12 +562,16 @@ def test_states_entered(local, dbug):
 
 
 def test_states_number_of_rows(local, dbug):
+    """Checks whether the states table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows(cursor, "states") == nepc.count_table_rows(MYCURSOR, "states")
     cursor.close()
     cnx.close()
 
 def test_models2cs_entered(local, dbug):
+    """Checks whether the models2cs table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_models2cs = nepc.table_as_df(MYCURSOR, "models2cs")
     cs_models2cs = nepc.table_as_df(cursor, "models2cs")
@@ -542,6 +581,8 @@ def test_models2cs_entered(local, dbug):
 
 
 def test_models2cs_number_of_rows(local, dbug):
+    """Checks whether the models2cs table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     models2cs_nepc = nepc.count_table_rows(cursor, "models2cs")
     assert models2cs_nepc == nepc.count_table_rows(MYCURSOR, "models2cs")
@@ -550,6 +591,8 @@ def test_models2cs_number_of_rows(local, dbug):
 
 
 def test_cs_entered(local, dbug):
+    """Checks whether the CS table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_cs = nepc.table_as_df(MYCURSOR, "cs")
     file_cs = nepc.table_as_df(cursor, "cs")
@@ -559,12 +602,16 @@ def test_cs_entered(local, dbug):
 
 
 def test_cs_number_of_rows(local, dbug):
+    """Checks whether the CS table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows(cursor, "cs") == nepc.count_table_rows(MYCURSOR, "cs")
     cursor.close()
     cnx.close()
 
 def test_csdata_entered(local, dbug):
+    """Checks whether the csdata table in the NEPC database
+    has the same values as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     test_csdata = nepc.table_as_df(MYCURSOR, "csdata")
     file_csdata = nepc.table_as_df(cursor, "csdata")
@@ -573,6 +620,8 @@ def test_csdata_entered(local, dbug):
     cnx.close()
 
 def test_csdata_number_of_rows(local, dbug):
+    """Checks whether the csdata table in the NEPC database
+    has the same number of rows as in the file"""
     cnx, cursor = nepc.connect(local, dbug)
     assert nepc.count_table_rows(cursor, "csdata") == nepc.count_table_rows(MYCURSOR, "csdata")
     cursor.close()
@@ -582,6 +631,9 @@ def test_csdata_number_of_rows(local, dbug):
 # TODO: use @pytest.mark.parametrize decorator to turn this into N tests
 #       instead of N asserts in one test
 def test_data_entered(local, dbug): #for the csdata table
+    """Checks whether the csdata in the NEPC database
+    has the same values as in the file,
+    testing each specific column"""
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
@@ -591,13 +643,13 @@ def test_data_entered(local, dbug): #for the csdata table
                                    delimiter='\t')
 
     for index, row in cs_dat_files.iterrows():
-        cs_id = row['cs_id']
-        dat_file = row['filename']
-        df = pd.read_csv(NEPC_HOME + dat_file + '.dat', delimiter='\t',
-                         usecols=['e_energy', 'sigma'])
-        e_energy, sigma = nepc.cs_e_sigma(cursor, cs_id)
-        assert e_energy == pytest.approx(df['e_energy'].tolist())
-        assert sigma == pytest.approx(df['sigma'].tolist())
+        csid = row['cs_id']
+        datfile_row = row['filename']
+        df_conv = pd.read_csv(NEPC_HOME + datfile_row + '.dat', delimiter='\t',
+                              usecols=['e_energy', 'sigma'])
+        e_energy, sigma = nepc.cs_e_sigma(cursor, csid)
+        assert e_energy == pytest.approx(df_conv['e_energy'].tolist())
+        assert sigma == pytest.approx(df_conv['sigma'].tolist())
     cursor.close()
     cnx.close()
 
@@ -605,6 +657,9 @@ def test_data_entered(local, dbug): #for the csdata table
 # TODO: use @pytest.mark.parametrize decorator to turn this into N tests
 #       instead of N asserts in one test
 def test_meta_entered(local, dbug): #for the cs table
+    """Checks whether the cs table in the NEPC database
+    has the same values as in the file,
+    testing each specific column"""
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
@@ -618,10 +673,10 @@ def test_meta_entered(local, dbug): #for the cs table
             #just to increase pylint score
             print(index)
             print(cnx)
-        cs_id = row['cs_id']
+        csid_row = row['CS_ID']
         met_file = row['filename']
         if dbug:
-            print(cs_id, met_file)
+            print(csid_row, met_file)
 
         meta_cols = ['specie', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
@@ -629,8 +684,8 @@ def test_meta_entered(local, dbug): #for the cs table
                      'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j',
                      'background', 'lpu', 'upu']
 
-        with open(NEPC_HOME + met_file + ".met", 'r', newline='') as f:
-            reader = csv.reader(f, delimiter='\t')
+        with open(NEPC_HOME + met_file + ".met", 'r', newline='') as fil:
+            reader = csv.reader(fil, delimiter='\t')
             next(reader)
             meta_disk = list(reader)[0]
         meta_disk = [meta_disk[i] for i in list(range(1, 18))]
@@ -642,7 +697,7 @@ def test_meta_entered(local, dbug): #for the cs table
             meta_disk[i] = (int(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
-        meta_db = [nepc.cs_metadata(cursor, cs_id)[i]
+        meta_db = [nepc.cs_metadata(cursor, csid_row)[i]
                    for i in list(range(1, 18))]
         for i in range(len(meta_cols)):
             if type(meta_db[i]) is float:
