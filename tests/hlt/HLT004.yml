@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 1.4
+links:
+- SRD005: ca9faa8dde435722d097dc7246b45b53
+normative: true
+ref: ''
+reviewed: 4069bb0da47620cc5236dedcc7dafd03
+text: |
+  Verify that an error is reported when data entered in the database by a contributor fails to match data requirements specified in the nepc project.

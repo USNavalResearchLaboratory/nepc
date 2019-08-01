@@ -105,23 +105,24 @@ def getColumnStrings(pdf, pageNumber, cropDimArray,
 
 
 # TODO: standardize filenames; build them in the write functions
-def writeDataToFile(dataArray, filename):
+def writeDataToFile(dataArray, filename, start_csdata_id):
     f = open(filename, "x")
-    f.write("\t".join(['', 'e_energy', 'sigma']) + "\n")
+    f.write("\t".join(['csdata_id', 'e_energy', 'sigma']) + "\n")
     for i in range(len(dataArray)):
-        f.write("\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
+        f.write(start_csdata_id + "\t" + str(dataArray[i, 0]) + "\t" + str(dataArray[i, 1]) + "\n")
+        start_id = start_id + 1
     f.close()
 
 
 def writeMetaDataToFile(
-        filename, specie, process, units_e, units_sigma, ref, lhsA='\\N',
+        filename, cs_id, specie, process, units_e, units_sigma, ref, lhsA='\\N',
         lhsB='\\N', rhsA='\\N', rhsB='\\N', wavelength='\\N', lhs_v='\\N',
         rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N', lpu='\\N',
         upu='\\N'):
     f = open(filename, "x")
     f.write(
         "\t".join(
-            ('',
+            ('cs_id',
              'specie',
              'process',
              'units_e',
@@ -141,7 +142,7 @@ def writeMetaDataToFile(
              'upu')) + "\n")
     f.write(
         "\t".join(
-            ('',
+            (cs_id,
              specie,
              process,
              str(units_e),
@@ -163,12 +164,12 @@ def writeMetaDataToFile(
 
 
 def writeCSToFile(
-        filename, dataArray, specie, process, units_e, units_sigma, ref,
+        filename, dataArray, cs_id, start_csdata_id, specie, process, units_e, units_sigma, ref,
         lhsA='\\N', lhsB='\\N', rhsA='\\N', rhsB='\\N', wavelength='\\N',
         lhs_v='\\N', rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N',
         lpu='\\N', upu='\\N'):
-    writeDataToFile(dataArray, filename+".dat")
-    writeMetaDataToFile(filename+".met", specie, process, units_e, units_sigma,
+    writeDataToFile(dataArray, filename+".dat", start_csdata_id)
+    writeMetaDataToFile(filename+".met", cs_id, specie, process, units_e, units_sigma,
                         ref, lhsA, lhsB, rhsA, rhsB, wavelength, lhs_v, rhs_v,
                         lhs_j, rhs_j, background, lpu, upu)
 
