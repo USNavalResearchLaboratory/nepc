@@ -6,8 +6,8 @@ setup(
 
     version='0.1',
 
-    description='Access and explore the NEPC database.',
-    long_description=('Access and explore the NRL Evaluated Plasma ' +
+    description='Build, access, and explore the NEPC database.',
+    long_description=('Build, access, and explore the NRL Evaluated Plasma ' +
                       'Chemistry database.'),
 
     authors='Paul Adamson, Darr...',
@@ -15,7 +15,7 @@ setup(
 
     license='',
 
-    packages=['nepc.util', 'nepc.methods'],
+    packages=['nepc.util', 'nepc.methods', 'nepc.db'],
 
     setup_requires=["pytest-runner"],
     tests_require=["pytest", "pytest-cov"]

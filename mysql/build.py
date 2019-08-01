@@ -1,8 +1,8 @@
+"""Builds the NEPC database"""
 import argparse
 import platform
 import os
 import mysql.connector
-from nepc import nepc
 from nepc.util import config
 
 PARSER = argparse.ArgumentParser(description='Build the NEPC database.')
@@ -14,13 +14,13 @@ if ARGS.debug:
     import time
     T0 = time.time()
 
-# TODO: add threshold table
-# TODO: add reference table
-
 HOME = config.userHome()
 NEPC_HOME = config.nepc_home()
-NEPC_MYSQL = NEPC_HOME + "/mysql/"
+NEPC_DATA = NEPC_HOME + "/data/"
 
+########################
+# Connect to database
+########################
 MYDB = mysql.connector.connect(
     host='localhost',
     option_files=HOME + '/.mysql/defaults'
@@ -35,7 +35,7 @@ MYCURSOR.execute("CREATE DATABASE IF NOT EXISTS `nepc` "
 
 MYCURSOR.execute("SET default_storage_engine = INNODB;")
 
-MYCURSOR.execute("use nepc;") #NEHA EDIT
+MYCURSOR.execute("use nepc;")
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`species`("
                  "`id` INT UNSIGNED NOT NULL ,"
@@ -272,61 +272,38 @@ RESULTS = MYCURSOR.execute(BEG_EXEC, multi=True)
 multi_iteration(RESULTS)
 """
 
-MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/processes.tsv' "
-                 "INTO TABLE nepc.processes "
-                 "IGNORE 2 LINES;")
+TABLES = ["processes", "models", "species"]
 
-if ARGS.debug:
-    print("processes:")
-    print(nepc.table_as_df(MYCURSOR, "processes"))
-
-MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/models.tsv' "
-                 "INTO TABLE nepc.models;")
-
-if ARGS.debug:
-    print("models:")
-    print(nepc.table_as_df(MYCURSOR, "models"))
-
-MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/species.tsv' "
-                 "INTO TABLE nepc.species "
-                 "IGNORE 1 LINES;")
-
-if ARGS.debug:
-    print("species:")
-    print(nepc.table_as_df(MYCURSOR, "species"))
+for table in TABLES:
+    MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + table + ".tsv' "
+                     "INTO TABLE nepc." + table + " IGNORE 1 LINES;")
 
 MYDB.commit()
 
-MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/states.tsv' "
+MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + "/states.tsv' "
                  "INTO TABLE nepc.states "
                  "IGNORE 1 LINES "
                  "(id,@specie,name,long_name) "
                  "set specie_id = (select max(id) from nepc.species where name like @specie);")
 
-if ARGS.debug:
-    print("states:")
-    print(nepc.table_as_df(MYCURSOR, "states"))
-
 MYDB.commit()
 
-DIR_NAMES = ["/data/formatted/n2/itikawa/",
-             "/data/formatted/n2/zipf/",
-             "/data/formatted/n/zatsarinny/"]
+DIR_NAMES = ["/data/cs/n2/itikawa/",
+             "/data/cs/n2/zipf/",
+             "/data/cs/n/zatsarinny/"]
 
 if platform.node() == 'ppdadamsonlinux':
-    cs_dat_filename = "cs_datfile_prod.tsv"
+    CS_DAT_FILENAME = NEPC_DATA + "cs_datfile_prod.tsv"
 else:
-    cs_dat_filename = "cs_datfile_local.tsv"
+    CS_DAT_FILENAME = NEPC_DATA + "cs_datfile_local.tsv"
 
-f_cs_dat_file = open(cs_dat_filename, 'w')
-f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
+F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
+F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
-cs_id = 1
+CS_ID = 1
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
 
-    # TODO: speed up by reading data into memory and using the
-    #       MySQLCursor.executemany() method
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         filename_wo_ext = filename.rsplit(".", 1)[0]
@@ -342,8 +319,8 @@ for directoryname in DIR_NAMES:
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
-            f_cs_dat_file.write(
-                "\t".join([str(cs_id),
+            F_CS_DAT_FILE.write(
+                "\t".join([str(CS_ID),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
@@ -352,7 +329,7 @@ for directoryname in DIR_NAMES:
                              "(@temp,@specie,@process,units_e,units_sigma,"
                              "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
                              "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
-                             "SET cs_id = " + str(cs_id) + ", "
+                             "SET cs_id = " + str(CS_ID) + ", "
                              "specie_id = (select id from nepc.species "
                              "  where name = @specie), "
                              "process_id = (select id from nepc.processes "
@@ -369,7 +346,7 @@ for directoryname in DIR_NAMES:
             executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
                                    "' INTO TABLE nepc.models2cs "
                                    "(@model) "
-                                   "SET cs_id = " + str(cs_id) + ", "
+                                   "SET cs_id = " + str(CS_ID) + ", "
                                    "model_id = (select model_id "
                                    "            from nepc.models "
                                    "            where name LIKE @model);")
@@ -378,7 +355,7 @@ for directoryname in DIR_NAMES:
                                  "' INTO TABLE nepc.csdata "
                                  "IGNORE 1 LINES "
                                  "(id,e,sigma) "
-                                 "SET cs_id = " + str(cs_id) + ";")
+                                 "SET cs_id = " + str(CS_ID) + ";")
 
             MYCURSOR.execute(executeTextCS)
 
@@ -387,18 +364,11 @@ for directoryname in DIR_NAMES:
             if os.path.exists(mod_file):
                 MYCURSOR.execute(executeTextCSMODELS)
 
-            cs_id = cs_id + 1
+            CS_ID = CS_ID + 1
 
-f_cs_dat_file.close()
+F_CS_DAT_FILE.close()
 
 MYDB.commit()
-
-MYCURSOR.execute("use nepc;")
-
-
-
-
-
 
 
 
@@ -520,47 +490,14 @@ F_CS_DAT_FILE.close()
 MYDB.commit()
 """
 
-
-
-def table_exists(tablename):
-    """Checks whether a table exists in the NEPC database
-
-    Parameters
-    ----------
-    tablename : str
-        The name of the table in NEPC
-    Returns
-    -------
-    True or False value : boolean
-        Boolean value of True or False depending on the existence of the table
-        in the NEPC database
-    """
-    MYCURSOR.execute("""
-        SELECT count(*)
-        FROM information_schema.TABLES
-        WHERE table_name = """ + "'" + tablename + "'")
-    if MYCURSOR.fetchone()[0] == 1:
-        return True
-    return False
-
-
-def contents_of_db():
-    """Prints out the number of rows in each table of the NEPC database"""
-    for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
-        print(table + " has " + str(nepc.count_table_rows(MYCURSOR, table)) + " lines")
-        print("===============================================\n")
-
-
-
 if ARGS.debug:
     T1 = time.time()
     ELAPSED = T1-T0
-    print("\nBuilt NEPC database in " + str(round(ELAPSED, 2)) + " sec:\n"
+    print("\nBuilt NEPC database in " + str(round(ELAPSED, 2)) + " sec\n"
           "===============================================")
 else:
-    print("\nBuilt NEPC database:\n")
+    print("\nBuilt NEPC database\n")
 
-contents_of_db()
 
 MYCURSOR.close()
 

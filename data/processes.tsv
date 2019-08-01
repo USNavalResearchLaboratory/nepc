@@ -1,4 +1,3 @@
-"From Meichsner, 2013, Table 3.7. Excitations (vibrational, rotational) applied to first LHS or RHS specie"												
 id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
 1	elastic	Total elastic electron scattering	1	1	1	1	0	0	0	0	0	0
 2	elastic_partial	Partial elastic electron scattering	1	1	1	1	0	0	0	0	0	0

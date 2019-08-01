@@ -13,10 +13,11 @@ import csv
 # TODO: make a test database for testing purposes and check actual values
 
 NEPC_HOME = config.nepc_home()
+NEPC_DATA = NEPC_HOME + "/data/"
 
-DIR_NAMES = [NEPC_HOME + "/data/formatted/n2/itikawa/",
-             NEPC_HOME + "/data/formatted/n2/zipf/",
-             NEPC_HOME + "/data/formatted/n/zatsarinny/"]
+DIR_NAMES = [NEPC_HOME + "/data/cs/n2/itikawa/",
+             NEPC_HOME + "/data/cs/n2/zipf/",
+             NEPC_HOME + "/data/cs/n/zatsarinny/"]
 
 
 def nepc_connect(local, dbug):
@@ -48,10 +49,10 @@ def test_csdata_lines(local, dbug):
 def test_data_entered(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
-        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
+        cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
     else:
-        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_local.tsv',
+        cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_local.tsv',
                                    delimiter='\t')
 
     for index, row in cs_dat_files.iterrows():
@@ -71,10 +72,10 @@ def test_data_entered(local, dbug):
 def test_meta_entered(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
-        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_prod.tsv',
+        cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
     else:
-        cs_dat_files = pd.read_csv(NEPC_HOME + '/mysql/cs_datfile_local.tsv',
+        cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_local.tsv',
                                    delimiter='\t')
 
     for index, row in cs_dat_files.iterrows():
