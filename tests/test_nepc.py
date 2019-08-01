@@ -46,12 +46,12 @@ def test_connect(local, dbug):
     if local is False:
         cnx, cursor = nepc.connect(local=False, DBUG=dbug)
         assert isinstance(cnx, mysql.connector.connection.MySQLConnection)
-        assert isinstance(cnx, mysql.connector.cursor.MySQLCursor)
+        assert isinstance(cursor, mysql.connector.cursor.MySQLCursor)
         cursor.close()
         cnx.close()
     cnx, cursor = nepc.connect(local=True, DBUG=dbug)
     assert isinstance(cnx, mysql.connector.connection.MySQLConnection)
-    assert isinstance(cnx, mysql.connector.cursor.MySQLCursor)
+    assert isinstance(cursor, mysql.connector.cursor.MySQLCursor)
     cursor.close()
     cnx.close()
 
@@ -107,7 +107,7 @@ def test_cs_dict_constructor(local, dbug):
     assert isinstance(cs_dict["specie"], str)
     assert isinstance(cs_dict["units_e"], float)
     assert isinstance(cs_dict["e"], list)
-    assert isinstance(cs_dict["e"], float)
+    assert isinstance(cs_dict["e"][0], float)
     cursor.close()
     cnx.close()
 

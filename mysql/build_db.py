@@ -38,14 +38,14 @@ MYCURSOR.execute("SET default_storage_engine = INNODB;")
 MYCURSOR.execute("use nepc;") #NEHA EDIT
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`species`("
-                 "`id` INT UNSIGNED NOT NULL auto_increment ,"
+                 "`id` INT UNSIGNED NOT NULL ,"
                  "`name` VARCHAR(40) NOT NULL ,"
                  "`long_name` VARCHAR(100) NOT NULL ,"
                  "PRIMARY KEY(`id`)"
                  ");")
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`processes`( "
-                 "`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+                 "`id` INT UNSIGNED NOT NULL , "
                  "`name` VARCHAR(40) NOT NULL, "
                  "`long_name` VARCHAR(240) NOT NULL, "
                  "`lhs` INT, "
@@ -62,22 +62,22 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`processes`( "
                  ");"
                  )
 
-MYCURSOR.execute("CREATE TABLE `nepc`.`states`("
-                 "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
-                 "	`specie_id` INT UNSIGNED NOT NULL ,"
-                 "	`name` VARCHAR(100) NOT NULL ,"
-                 "	`long_name` VARCHAR(100) NOT NULL ,"
-                 "	`configuration` JSON NOT NULL ,"
-                 "	PRIMARY KEY(`id`) ,"
-                 "	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
-                 "	CONSTRAINT `specie_id_STATES` FOREIGN KEY(`specie_id`) "
-                 "		REFERENCES `nepc`.`species`(`id`) "
-                 "		ON DELETE RESTRICT ON UPDATE CASCADE"
+MYCURSOR.execute("CREATE TABLE `nepc`.`states`( "
+                 "`id` INT UNSIGNED NOT NULL, "
+                 "`specie_id` INT UNSIGNED NOT NULL, "
+                 "`name` VARCHAR(100) NOT NULL, "
+                 "`long_name` VARCHAR(100) NOT NULL, "
+                 "`configuration` JSON NOT NULL, "
+                 "PRIMARY KEY(`id`), "
+                 "INDEX `SPECIE_ID`(`specie_id` ASC), "
+                 "CONSTRAINT `specie_id_STATES` FOREIGN KEY(`specie_id`) "
+                 "REFERENCES `nepc`.`species`(`id`) "
+                 "ON DELETE RESTRICT ON UPDATE CASCADE "
                  ");"
                  )
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`models`("
-                 "	`model_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"
+                 "	`model_id` INT UNSIGNED NOT NULL ,"
                  "	`name` VARCHAR(40) NOT NULL ,"
                  "	`long_name` VARCHAR(240) NOT NULL ,"
                  "	PRIMARY KEY(`model_id`)"
@@ -85,7 +85,7 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`models`("
                  )
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`cs`("
-                 "	`CS_ID` INT UNSIGNED NOT NULL, "
+                 "	`CS_ID` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
                  "	`specie_id` INT UNSIGNED NOT NULL, "
                  "	`process_id` INT UNSIGNED NOT NULL, "
                  "	`units_e` DOUBLE NOT NULL,"
@@ -125,21 +125,21 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`cs`("
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`csdata`("
                  "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"
-                 "	`CS_ID` INT UNSIGNED NOT NULL ,"
+                 "	`cs_id` INT UNSIGNED NOT NULL ,"
                  "	`e` DOUBLE NOT NULL ,"
                  "	`sigma` DOUBLE NOT NULL ,"
                  "	PRIMARY KEY(`id`) ,"
-                 "	INDEX `CS_ID`(`CS_ID` ASC) ,"
-                 "	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`CS_ID`)"
-                 "		REFERENCES `nepc`.`cs`(`CS_ID`)"
+                 "	INDEX `cs_id`(`cs_id` ASC) ,"
+                 "	CONSTRAINT `CS_ID_CSDATA` FOREIGN KEY(`cs_id`)"
+                 "		REFERENCES `nepc`.`cs`(`cs_id`)"
                  "		ON DELETE RESTRICT ON UPDATE CASCADE"
                  ");"
                  )
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`models2cs`("
-                 "	`CS_ID` INT UNSIGNED NOT NULL ,"
+                 "	`cs_id` INT UNSIGNED NOT NULL ,"
                  "	`model_id` INT UNSIGNED NOT NULL ,"
-                 "	PRIMARY KEY pk_models2cs (CS_ID, model_id)"
+                 "	PRIMARY KEY pk_models2cs (cs_id, model_id)"
                  ");"
                  )
 
@@ -230,7 +230,7 @@ def no_of_file_types():
 
 def construct_headers(column):
     """Returns the three headers used to construct the table
-    
+
     Parameters
     ----------
     column : str
@@ -252,15 +252,14 @@ def multi_iteration(res):
     """Separate through each different mysql command given a generator object
     Parameters
     ----------
-    res : a generator object that will be returned when using mycursor.execute (multi=True)"""
+    res : a generator object that will be returned when using MYCURSOR.execute (multi=True)"""
     for cur in res:
         print('cursor:', cur)
         if cur.with_rows:
             print('results:', cur.fetchall())
 
-N_STATES = ["/n_states.tsv'", "/n+_states.tsv'", "/n++_states.tsv'"]
-N2_STATES = ["/n2+_states.tsv'", "/n2_states.tsv'"]
-BEG_EXEC = '' #beginning statement to execute, used to make code shorter + more readable
+"""
+BEG_EXEC = ''
 for i in broad_cats():
     BEG_EXEC = ('' + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL
                 + i + ".tsv' " + "\nINTO TABLE " + "nepc." + i)
@@ -268,62 +267,142 @@ for i in broad_cats():
         BEG_EXEC = BEG_EXEC + " " + "\nIGNORE 2 LINES;"
     else:
         BEG_EXEC = BEG_EXEC + ";"
-RESULTS = MYCURSOR.execute(BEG_EXEC, multi=True) #query created earlier executed
+print(BEG_EXEC)
+RESULTS = MYCURSOR.execute(BEG_EXEC, multi=True)
 multi_iteration(RESULTS)
-STATE_QUERY = ''
-for i in N_STATES:
-    STATE_QUERY = (STATE_QUERY + "LOAD DATA LOCAL INFILE '" +
-                   NEPC_MYSQL + i + "    INTO TABLE nepc.states" +
-                   "     IGNORE 1 LINES" +
-                   "      (id,name,long_name,@2s,@2p,@CoreTerm,@3s,@3p,@3d,@4s,@4p)" +
-                   "      SET configuration = JSON_OBJECT(" +
-                   "          JSON_OBJECT('order', " +
-                   "              JSON_ARRAY('2s', '2p', 'CoreTerm', '3s', '3p', " +
-                   "              '3d', '4s', '4p')" + "              )," +
-                   "          JSON_OBJECT('occupations'," +
-                   "          JSON_OBJECT(" +
-                   "				'2s',@2s," +
-                   "				'2p',@2p," +
-                   "				'CoreTerm',@CoreTerm," +
-                   "				'3s',@3s," +
-                   "				'3p',@3p," +
-                   "				'3d',@3d," +
-                   "				'4s',@4s," +
-                   "				'4p',@4p" +
-                   "			)" + "		)" +
-                   "	)," +
-                   "	specie_id = (select max(id) from nepc.species " +
-                   "               where name = " + "'" +
-                   i[1:i.index('_')].upper() + "'" + ");")
-for i in N2_STATES:
-    STATE_QUERY = (STATE_QUERY + "LOAD DATA LOCAL INFILE '" + NEPC_MYSQL +
-                   i + "    INTO TABLE nepc.states" +
-                   "     IGNORE 1 LINES" +
-                   "      (id,name,long_name,@o1,@o2,@o3,@o4,@o5,@o6)" +
-                   "      SET configuration = JSON_OBJECT(" +
-                   "          JSON_OBJECT('order', " +
-                   "              JSON_ARRAY('2sigma_u', " +
-                   "'1pi_u', '1pi_g', '3sigma_u', '3ssigma_g')" +
-                   "              )," +
-                   "          JSON_OBJECT('occupations'," +
-                   "          JSON_OBJECT(" +
-                   "				'2sigma_u',@o1," +
-                   "				'1pi_u',@o2," +
-                   "				'3sigma_g',@o3," +
-                   "				'1pi_g',@o4," +
-                   "				'3sigma_u',@o5," +
-                   "				'3ssigma_g',@o6" +
-                   "			)" +
-                   "		)" +
-                   "	)," +
-                   "	specie_id = (select max(id) from nepc.species " +
-                   "               where name = " +
-                   "'" + i[1:i.index('_')].upper() + "'" +
-                   ");")
-STATE_RESULTS = MYCURSOR.execute(STATE_QUERY, multi=True)
-multi_iteration(STATE_RESULTS)
+"""
+
+MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/processes.tsv' "
+                 "INTO TABLE nepc.processes "
+                 "IGNORE 2 LINES;")
+
+if ARGS.debug:
+    print("processes:")
+    print(nepc.table_as_df(MYCURSOR, "processes"))
+
+MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/models.tsv' "
+                 "INTO TABLE nepc.models;")
+
+if ARGS.debug:
+    print("models:")
+    print(nepc.table_as_df(MYCURSOR, "models"))
+
+MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/species.tsv' "
+                 "INTO TABLE nepc.species "
+                 "IGNORE 1 LINES;")
+
+if ARGS.debug:
+    print("species:")
+    print(nepc.table_as_df(MYCURSOR, "species"))
+
 MYDB.commit()
 
+MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_MYSQL + "/states.tsv' "
+                 "INTO TABLE nepc.states "
+                 "IGNORE 1 LINES "
+                 "(id,@specie,name,long_name) "
+                 "set specie_id = (select max(id) from nepc.species where name like @specie);")
+
+if ARGS.debug:
+    print("states:")
+    print(nepc.table_as_df(MYCURSOR, "states"))
+
+MYDB.commit()
+
+DIR_NAMES = ["/data/formatted/n2/itikawa/",
+             "/data/formatted/n2/zipf/",
+             "/data/formatted/n/zatsarinny/"]
+
+if platform.node() == 'ppdadamsonlinux':
+    cs_dat_filename = "cs_datfile_prod.tsv"
+else:
+    cs_dat_filename = "cs_datfile_local.tsv"
+
+f_cs_dat_file = open(cs_dat_filename, 'w')
+f_cs_dat_file.write("\t".join(["cs_id", "filename"]) + "\n")
+
+cs_id = 1
+for directoryname in DIR_NAMES:
+    directory = os.fsencode(NEPC_HOME + directoryname)
+
+    # TODO: speed up by reading data into memory and using the
+    #       MySQLCursor.executemany() method
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        filename_wo_ext = filename.rsplit(".", 1)[0]
+        mod_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".mod"])
+        met_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".met"])
+        dat_file = "".join([os.fsdecode(directory),
+                            filename_wo_ext,
+                            ".dat"])
+        if filename.endswith(".met") or filename.endswith(".mod"):
+            continue
+        else:
+            f_cs_dat_file.write(
+                "\t".join([str(cs_id),
+                           directoryname + str(filename_wo_ext)]) + "\n"
+            )
+            executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
+                             "' INTO TABLE nepc.cs "
+                             "IGNORE 1 LINES "
+                             "(@temp,@specie,@process,units_e,units_sigma,"
+                             "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
+                             "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
+                             "SET cs_id = " + str(cs_id) + ", "
+                             "specie_id = (select id from nepc.species "
+                             "  where name = @specie), "
+                             "process_id = (select id from nepc.processes "
+                             "  where name = @process), "
+                             "lhsA_id = (select id from nepc.states "
+                             "  where name LIKE @lhsA), "
+                             "lhsB_id = (select id from nepc.states "
+                             "  where name LIKE @lhsB), "
+                             "rhsA_id = (select id from nepc.states "
+                             "  where name LIKE @rhsA), "
+                             "rhsB_id = (select id from nepc.states "
+                             "  where name LIKE @rhsB);")
+
+            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
+                                   "' INTO TABLE nepc.models2cs "
+                                   "(@model) "
+                                   "SET cs_id = " + str(cs_id) + ", "
+                                   "model_id = (select model_id "
+                                   "            from nepc.models "
+                                   "            where name LIKE @model);")
+
+            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + dat_file +
+                                 "' INTO TABLE nepc.csdata "
+                                 "IGNORE 1 LINES "
+                                 "(id,e,sigma) "
+                                 "SET cs_id = " + str(cs_id) + ";")
+
+            MYCURSOR.execute(executeTextCS)
+
+            MYCURSOR.execute(executeTextCSDATA)
+
+            if os.path.exists(mod_file):
+                MYCURSOR.execute(executeTextCSMODELS)
+
+            cs_id = cs_id + 1
+
+f_cs_dat_file.close()
+
+MYDB.commit()
+
+MYCURSOR.execute("use nepc;")
+
+
+
+
+
+
+
+
+"""
 DIR_NAMES = ["/data/formatted/n2/itikawa/",
              "/data/formatted/n2/zipf/",
              "/data/formatted/n/zatsarinny/"]
@@ -335,7 +414,7 @@ else:
     CS_DAT_FILENAME = "cs_datfile_local.tsv"
 
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
-F_CS_DAT_FILE.write("\t".join(["CS_ID", "filename"]) + "\n")
+F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
 CS_ID = 1
 for directoryname in DIR_NAMES:
@@ -439,6 +518,9 @@ for directoryname in DIR_NAMES:
 F_CS_DAT_FILE.close()
 
 MYDB.commit()
+"""
+
+
 
 def table_exists(tablename):
     """Checks whether a table exists in the NEPC database
