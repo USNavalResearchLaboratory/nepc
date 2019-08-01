@@ -112,6 +112,9 @@ def cs_e_sigma(cursor, cs_id):
     sigma = [i[1] for i in cross_section]
     return e_energy, sigma
 
+def species_name_longname (cursor, cs_id):
+    #TODO: get name and long name given cs_id 
+    return 0 #temporary
 
 def cs_metadata(cursor, cs_id):
     """Get metadata for cross section in the NEPC database"""

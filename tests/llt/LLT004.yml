@@ -1,0 +1,10 @@
+active: true
+derived: false
+level: 5.4
+links:
+- SDD005: 6aad5fcd9309b7bd02c5010319b0c12d
+normative: true
+ref: ''
+reviewed: 856709bba1ce3d57e28ae2b1db28f761
+text: |
+  Verify that when test_possibilities is called, requirements of species, processes, models, and states outlined in their specific tsv files are being entered into the test database for use to check against what a user may enter.

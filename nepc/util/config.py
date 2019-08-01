@@ -12,7 +12,7 @@ def userHome():
 
 
 def nepc_home():
-    return os.environ.get('NEPC_HOME')
+    return '/home/neha/nepc'
 
 
 def removeCRs(mystring):
