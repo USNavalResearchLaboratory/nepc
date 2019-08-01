@@ -39,7 +39,7 @@ def mkdir(outdir):
 
 
 def getTableData(pdf, pageNumber, cropDimArray,
-                 locateTables=False, omitRegexp='', id_start = 0):
+                 locateTables=False, omitRegexp=''):
     pg = pdf.pages[pageNumber]
     # data = [[] for i in range(len(cropDimArray))]
     data = np.empty(shape=(0, 2))
@@ -105,24 +105,24 @@ def getColumnStrings(pdf, pageNumber, cropDimArray,
 
 
 # TODO: standardize filenames; build them in the write functions
-def writeDataToFile(dataArray, filename, start_id): #next start id to use for contributors of data
+def writeDataToFile(dataArray, filename, start_csdata_id):
     f = open(filename, "x")
-    f.write("\t".join(['id', 'e_energy', 'sigma']) + "\n")
+    f.write("\t".join(['csdata_id', 'e_energy', 'sigma']) + "\n")
     for i in range(len(dataArray)):
-        f.write("\t" + start_id + "\t"+str(dataArray[i, 0])+"\t"+str(dataArray[i, 1])+"\n")
+        f.write(start_csdata_id + "\t" + str(dataArray[i, 0]) + "\t" + str(dataArray[i, 1]) + "\n")
         start_id = start_id + 1
     f.close()
 
 
-def writeMetaDataToFile( #id to start with, not too important for metadata b/c only 1 id in files, usually
-        filename, start_id, specie, process, units_e, units_sigma, ref, lhsA='\\N',
+def writeMetaDataToFile(
+        filename, cs_id, specie, process, units_e, units_sigma, ref, lhsA='\\N',
         lhsB='\\N', rhsA='\\N', rhsB='\\N', wavelength='\\N', lhs_v='\\N',
         rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N', lpu='\\N',
         upu='\\N'):
     f = open(filename, "x")
     f.write(
         "\t".join(
-            ('id',
+            ('cs_id',
              'specie',
              'process',
              'units_e',
@@ -142,7 +142,7 @@ def writeMetaDataToFile( #id to start with, not too important for metadata b/c o
              'upu')) + "\n")
     f.write(
         "\t".join(
-            (start_id,
+            (cs_id,
              specie,
              process,
              str(units_e),
@@ -164,12 +164,12 @@ def writeMetaDataToFile( #id to start with, not too important for metadata b/c o
 
 
 def writeCSToFile(
-        filename, dataArray, specie, process, units_e, units_sigma, ref,
+        filename, dataArray, cs_id, start_csdata_id, specie, process, units_e, units_sigma, ref,
         lhsA='\\N', lhsB='\\N', rhsA='\\N', rhsB='\\N', wavelength='\\N',
         lhs_v='\\N', rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N',
         lpu='\\N', upu='\\N'):
-    writeDataToFile(dataArray, filename+".dat")
-    writeMetaDataToFile(filename+".met", specie, process, units_e, units_sigma,
+    writeDataToFile(dataArray, filename+".dat", start_csdata_id)
+    writeMetaDataToFile(filename+".met", cs_id, specie, process, units_e, units_sigma,
                         ref, lhsA, lhsB, rhsA, rhsB, wavelength, lhs_v, rhs_v,
                         lhs_j, rhs_j, background, lpu, upu)
 
