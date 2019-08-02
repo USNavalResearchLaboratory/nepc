@@ -1,0 +1,2 @@
+	specie	process	units_e	units_sigma	ref	lhsA	lhsB	rhsA	rhsB	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
+	N2	ionization_excitation_v	1	m	thomson	N2(ap1Sigmau-)	\N	N2+(B2Sigmau+)	\N	7	6	\N	\N	\N	\N	\N	\N
