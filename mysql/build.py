@@ -4,6 +4,7 @@ import platform
 import os
 import mysql.connector
 from nepc.util import config
+from nepc.util import scraper
 
 PARSER = argparse.ArgumentParser(description='Build the NEPC database.')
 PARSER.add_argument('--debug', action='store_true',
@@ -300,7 +301,6 @@ else:
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
 F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
-CS_ID = 1
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
 
@@ -313,9 +313,13 @@ for directoryname in DIR_NAMES:
         met_file = "".join([os.fsdecode(directory),
                             filename_wo_ext,
                             ".met"])
+
         dat_file = "".join([os.fsdecode(directory),
                             filename_wo_ext,
                             ".dat"])
+
+        CS_ID = scraper.get_cs_id_from_met_file(met_file)
+
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
@@ -326,7 +330,7 @@ for directoryname in DIR_NAMES:
             executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
                              "' INTO TABLE nepc.cs "
                              "IGNORE 1 LINES "
-                             "(@temp,@specie,@process,units_e,units_sigma,"
+                             "(cs_id,@specie,@process,units_e,units_sigma,"
                              "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
                              "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
                              "SET cs_id = " + str(CS_ID) + ", "
@@ -363,8 +367,6 @@ for directoryname in DIR_NAMES:
 
             if os.path.exists(mod_file):
                 MYCURSOR.execute(executeTextCSMODELS)
-
-            CS_ID = CS_ID + 1
 
 F_CS_DAT_FILE.close()
 

@@ -101,8 +101,8 @@ def remove_unnecessary(lst):
 
 #TODO: look at neha's version to see if it can be incorporated
 def get_table_data(pdf,
-        page_number, crop_dim_array,
-        locate_tables=False, omit_regex=''):
+                   page_number, crop_dim_array,
+                   locate_tables=False, omit_regex=''):
     """Get the table data from a pdf
 
     Parameters
@@ -118,21 +118,21 @@ def get_table_data(pdf,
     data : N-dimensional array
     An N-dimensional array containing all of the table data
     from the pdf"""
-    pg = pdf.pages[page_number]
+    pages = pdf.pages[page_number]
     # data = [[] for i in range(len(crop_dim_array))]
     data = np.empty(shape=(0, 2))
     for i in range(len(crop_dim_array)):
-        pgCropped = pg.crop(crop_dim_array[i])
+        page_cropped = pages.crop(crop_dim_array[i])
         if (locate_tables):
-            display(pgCropped.to_image().reset().draw_rects(pgCropped.chars))
+            display(page_cropped.to_image().reset().draw_rects(page_cropped.chars))
         else:
-            textSpaceDelim = pgCropped.extract_text().split("\n")
-            for j in range(len(textSpaceDelim)):
+            text_space_delim = page_cropped.extract_text().split("\n")
+            for j in range(len(text_space_delim)):
                 if (omit_regex == '' or not(
-                        bool(re.search(omit_regex, textSpaceDelim[j])))):
-                    textArray = textSpaceDelim[j].split(' ')
-                    data = np.append(data, [[float(textArray[0]),
-                                             float(textArray[1])]], axis=0)
+                        bool(re.search(omit_regex, text_space_delim[j])))):
+                    text_array = text_space_delim[j].split(' ')
+                    data = np.append(data, [[float(text_array[0]),
+                                             float(text_array[1])]], axis=0)
     return data
 
 
@@ -476,3 +476,13 @@ def get_states(filename):
         states.append(line.split('\t'))
     return ([states[i][2] for i in range(len(states))],
             [states[i][3] for i in range(len(states))])
+
+
+def get_cs_id_from_met_file(filename):
+    """Get cs_id from second line, first column of .met file"""
+    with open(filename) as met_file:
+        met_lines = met_file.readlines()[1:]
+
+    for line in met_lines:
+        metadata = line.split('\t')
+    return metadata[0]

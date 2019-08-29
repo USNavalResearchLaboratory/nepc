@@ -3,7 +3,7 @@ import mysql.connector
 from nepc import nepc
 from nepc.util import config
 
-HOME = config.userHome()
+HOME = config.user_home()
 
 ########################
 # Connect to database

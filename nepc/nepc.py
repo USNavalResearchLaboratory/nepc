@@ -23,21 +23,6 @@ Establish a connection to the NEPC database running on the
 local machine:
 
     cnx, cursor = connect(local=True)
-
-TODO
-----
-- plot: one or more cross-section datasets; an entire PCM; particular
-        processes within a PCM; particular species/states within a PCM
-        or the entire NEPC database
-- consolidate: consolidate cross section data for a particular specie/state
-               and process
-- inspect: visualize aspects of a PCM such as
-              - lpu/upu
-              - processes and species/states/quantum numbers included
-- background: standardize the background information documented for each cross
-              section dataset. Perhaps include additional fields like location
-              of data (table/figure number in reference).
-
 """
 from pandas import DataFrame
 import mysql.connector
