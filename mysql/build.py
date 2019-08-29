@@ -14,7 +14,7 @@ if ARGS.debug:
     import time
     T0 = time.time()
 
-HOME = config.userHome()
+HOME = config.user_home()
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/data/"
 

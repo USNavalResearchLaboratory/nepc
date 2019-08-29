@@ -1,1 +1,0 @@
-../../src/lib/scraper.py

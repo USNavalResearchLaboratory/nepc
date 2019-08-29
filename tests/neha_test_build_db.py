@@ -11,8 +11,7 @@ from pandas.util.testing import assert_frame_equal
 from nepc import nepc
 from nepc.util import config
 from nepc.util import scraper
-# TODO: remove dependence on csv; put function in scraper that uses built-in
-#       readlines function
+
 PARSER = argparse.ArgumentParser(description='Build the test database.')
 PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
@@ -41,7 +40,6 @@ DIR_NAMES = [NEPC_HOME + "/data/formatted/n2/itikawa/",
              NEPC_HOME + "/data/formatted/n2/zipf/",
              NEPC_HOME + "/data/formatted/n/zatsarinny/"]
 
-HOME = config.userHome()
 NEPC_HOME = config.nepc_home()
 NEPC_MYSQL = NEPC_HOME + "/mysql/"
 
@@ -465,7 +463,6 @@ DIR_NAMES = [NEPC_HOME + "/data/formatted/n2/itikawa/",
              NEPC_HOME + "/data/formatted/n/zatsarinny/"]
 
 #===============TEST FUNCTIONS=====================
-#TODO: refactor funcs w/ pytest.mark.parametrize() to reduce duplicate lines of code
 def nepc_connect(local, dbug):
     """Establishes a connection with the NEPC database
 
@@ -484,6 +481,38 @@ def nepc_connect(local, dbug):
     A MySQLCursor object for executing SQL queries"""
     cnx, cursor = nepc.connect(local, dbug)
     return cnx, cursor
+
+@pytest.mark.parametrize("nepc_table, test_table", [
+    (nepc.table_as_df(cursor, "species"), nepc.table_as_df(MYCURSOR, "species")),
+    (nepc.table_as_df(cursor, "processes"), nepc.table_as_df(MYCURSOR, "processes")),
+    (nepc.table_as_df(cursor, "models"), nepc.table_as_df(MYCURSOR, "models")),
+    (nepc.table_as_df(cursor, "models2cs"), nepc.table_as_df(MYCURSOR, "models2cs"))
+    , (nepc.table_as_df(cursor, "cs"), nepc.table_as_df(MYCURSOR, "cs")),
+    (nepc.table_as_df(cursor, "states"), nepc.table_as_df(MYCURSOR, "states")),
+    (nepc.table_as_df(cursor, "csdata"), nepc.table_as_df(MYCURSOR, "csdata"))])
+def test_lines(local, dbug, test_table, nepc_table):
+    """Checks whether the table cs_data in the database has the correct
+    number of rows"""
+    cnx, cursor = nepc.connect(local, dbug)
+    assert_frame_equal(test_table, nepc_table)
+    cursor.close()
+    cnx.close()
+
+@pytest.mark.parametrize("nepc_table, test_table", [
+    (nepc.table_as_df(cursor, "species"), nepc.table_as_df(MYCURSOR, "species")),
+    (nepc.table_as_df(cursor, "processes"), nepc.table_as_df(MYCURSOR, "processes")),
+    (nepc.table_as_df(cursor, "models"), nepc.table_as_df(MYCURSOR, "models")),
+    (nepc.table_as_df(cursor, "models2cs"), nepc.table_as_df(MYCURSOR, "models2cs"))
+    , (nepc.table_as_df(cursor, "cs"), nepc.table_as_df(MYCURSOR, "cs")),
+    (nepc.table_as_df(cursor, "states"), nepc.table_as_df(MYCURSOR, "states")),
+    (nepc.table_as_df(cursor, "csdata"), nepc.table_as_df(MYCURSOR, "csdata"))])
+def test_number_of_lines(local, dbug, test_table, nepc_table):
+    """Checks whether the table cs_data in the database has the correct
+    number of rows"""
+    cnx, cursor = nepc.connect(local, dbug)
+    assert nepc.count_table_rows(test_table) == nepc_count_table_rows(nepc_table)
+    cursor.close()
+    cnx.close()
 
 
 def test_csdata_lines(local, dbug):
@@ -647,8 +676,6 @@ def test_csdata_number_of_rows(local, dbug):
     cnx.close()
 
 
-# TODO: use @pytest.mark.parametrize decorator to turn this into N tests
-#       instead of N asserts in one test
 def test_data_entered(local, dbug): #for the csdata table
     """Checks whether the csdata in the NEPC database
     has the same values as in the file,
@@ -673,8 +700,6 @@ def test_data_entered(local, dbug): #for the csdata table
     cnx.close()
 
 
-# TODO: use @pytest.mark.parametrize decorator to turn this into N tests
-#       instead of N asserts in one test
 def test_meta_entered(local, dbug): #for the cs table
     """Checks whether the cs table in the NEPC database
     has the same values as in the file,

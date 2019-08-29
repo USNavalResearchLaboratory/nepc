@@ -1,2 +1,2 @@
-	specie	process	units_e	units_sigma	ref	lhsA	lhsB	rhsA	rhsB	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
-	N	excitation	1.0	1e-20	wang2014	N_2s22p2_3P_3s_4P	\N	N_2s22p2_1D_3s_2D	\N	\N	\N	\N	\N	\N	From BSR calculations. Raw data provided by Zatsarinny.	\N	\N
+cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
+117	N	excitation	1.0	1e-20	wang2014	N_2s22p2_3P_3s_4P	\N	N_2s22p2_1D_3s_2D	\N	\N	\N	\N	\N	\N	From BSR calculations. Raw data provided by Zatsarinny.	\N	\N
