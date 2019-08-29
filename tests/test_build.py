@@ -10,7 +10,6 @@ import platform
 import csv
 
 # TODO: test that all values in [nepc]/data are in the nepc database
-# TODO: make a test database for testing purposes and check actual values
 
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/data/"
@@ -44,8 +43,6 @@ def test_csdata_lines(local, dbug):
     cnx.close()
 
 
-# TODO: use @pytest.mark.parametrize decorator to turn this into N tests
-#       instead of N asserts in one test
 def test_data_entered(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':
@@ -67,8 +64,6 @@ def test_data_entered(local, dbug):
     cnx.close()
 
 
-# TODO: use @pytest.mark.parametrize decorator to turn this into N tests
-#       instead of N asserts in one test
 def test_meta_entered(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     if local is False or platform.node() == 'ppdadamsonlinux':

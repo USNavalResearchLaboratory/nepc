@@ -62,8 +62,8 @@ def parse(file_pointer, filename, has_arg=True):
 
             # new code to add separate entries for process, param, etc
             comments = [s.strip() for s in RE_NL.split(file_dict['comments'])]
-            for i in range(len(comments)):
-                key, value = comments[i].split(':', 1)
+            for elem in enumerate(comments):
+                key, value = elem.split(':', 1)
                 key = key.lower().replace('.', '')
                 value = value.lstrip()
                 file_dict[key] = value
@@ -183,7 +183,6 @@ KEYWORDS = {"MOMENTUM": _read_momentum,
             "ATTACHMENT": _read_attachment}
 
 
-# TODO: refactor to take in dictionary instead of 10 variables
 def lxcat(filename, process_type, process, threshold, species, process_long,
           parameter, updated, columns, data):
     """Writes file in lxCat format."""

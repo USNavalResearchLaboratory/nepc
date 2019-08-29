@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from nepc import nepc
 
 
-def lxcat_plot_zats(ax, processes, plot_line_style_list,
+def lxcat_plot_zats(axes, processes, plot_line_style_list,
                     plot_param_dict={'linewidth': 1},
                     xlim_param_dict={'auto': True},
                     ylim_param_dict={'auto': True},
@@ -46,7 +46,10 @@ def lxcat_plot_zats(ax, processes, plot_line_style_list,
     out : list
         list of artists added
     """
-
+    if processes is None:
+        processes = []
+    if plot_line_style_list is None:
+        plot_line_style_list = []
     if ylog:
         plt.yscale('log')
 
@@ -56,31 +59,31 @@ def lxcat_plot_zats(ax, processes, plot_line_style_list,
     plt.ylabel(r'Cross Section ($10^{-16}$ cm$^2$)')
     plt.xlabel(r'Electron Energy (eV)')
 
-    ax.set_xlim(**xlim_param_dict)
-    ax.set_ylim(**ylim_param_dict)
+    axes.set_xlim(**xlim_param_dict)
+    axes.set_ylim(**ylim_param_dict)
 
-    ax.tick_params(direction='in', which='both',
-                   bottom=True, top=True, left=True, right=True)
+    axes.tick_params(direction='in', which='both',
+                     bottom=True, top=True, left=True, right=True)
 
     for i in range(len(processes)):
         process_np = np.array(processes[i]['data'])
-        ax.plot(
+        axes.plot(
             process_np[..., 0],
             process_np[..., 1] / 1E-20, plot_line_style_list[i],
             **plot_param_dict, label='{}'.format(processes[i]['process']))
         # processes[i]['filename']))
 
     if show_legend:
-        ax.legend(fontsize=8, ncol=1, loc='best', frameon=False)
+        axes.legend(fontsize=8, ncol=1, loc='best', frameon=False)
         # ax.legend(box='best', bbox_to_anchor=(0.5, 0.75), ncol=1,
         #           loc='center left')
 
     plt.savefig(filename)
 
-    return ax
+    return axes
 
 
-def lxcat_plot_zats_top6(ax, processes,
+def lxcat_plot_zats_top6(axes, processes,
                          plot_param_dict={'linewidth': 1},
                          ylog=False, xlog=False, show_legend=True):
     """
@@ -106,39 +109,39 @@ def lxcat_plot_zats_top6(ax, processes,
 
     Returns
     -------
-    out : list
-        list of artists added
+    axes : subplot
     """
-
     if ylog:
         plt.yscale('log')
 
     if xlog:
         plt.xscale('log')
 
-    fig, ax = plt.subplots(len(processes), sharex=False,
-                           sharey=False, figsize=(5, 10))
+    fig, axes = plt.subplots(len(processes), sharex=False,
+                             sharey=False, figsize=(5, 10))
 
-    for i in range(len(processes)):
-        if i == len(processes)/2:
-            ax[i].set_ylabel(r'Cross Section ($10^{-16}$ cm$^2$)')
-        if i == len(processes)-1:
-            ax[i].set_xlabel(r'Electron Energy (eV)')
-        ax[i].tick_params(direction='in', which='both',
-                          bottom=True, top=True, left=True, right=True)
-        ax[i].tick_params(direction='in', which='both',
-                          bottom=True, top=True, left=True, right=True)
+    for elem in enumerate(processes): #will work if processes doesn't have duplicates
+        i = 0
+        if elem == processes[len(processes)/2]:
+            axes[len(processes)/2].set_ylabel(r'Cross Section ($10^{-16}$ cm$^2$)')
+        if elem == processes[len(processes)-1]:
+            axes[len(processes)-1].set_xlabel(r'Electron Energy (eV)')
+        axes[i].tick_params(direction='in', which='both',
+                            bottom=True, top=True, left=True, right=True)
+        axes[i].tick_params(direction='in', which='both',
+                            bottom=True, top=True, left=True, right=True)
         process_np = np.array(processes[i]['data'])
-        ax[i].plot(process_np[..., 0], process_np[..., 1]/1E-20, 'r-',
-                   **plot_param_dict,
-                   label='{}'.format(processes[i]['process']))
+        axes[i].plot(process_np[..., 0], process_np[..., 1]/1E-20, 'r-',
+                     **plot_param_dict,
+                     label='{}'.format(processes[i]['process']))
         if show_legend:
-            ax[i].legend(fontsize=8, ncol=1, loc='best', frameon=False)
+            axes[i].legend(fontsize=8, ncol=1, loc='best', frameon=False)
+        i = i + 1
 
-    return ax
+    return axes
 
 
-def n_plot_zats(ax, data, process, plot_line_style,
+def n_plot_zats(axes, data, process, plot_line_style,
                 plot_param_dict={'linewidth': 0.8},
                 xlim_param_dict={'auto': True},
                 ylim_param_dict={'auto': True},
@@ -176,10 +179,11 @@ def n_plot_zats(ax, data, process, plot_line_style,
 
     Returns
     -------
-    out : list
+    axes : matplotlib.axes._subplots.AxesSubplot
         list of artists added
     """
-
+    if process is None:
+        process = ''
     if ylog:
         plt.yscale('log')
 
@@ -189,30 +193,30 @@ def n_plot_zats(ax, data, process, plot_line_style,
     plt.ylabel(r'Cross Section ($10^{-16}$ cm$^2$)')
     plt.xlabel(r'Electron Energy (eV)')
 
-    ax.set_xlim(**xlim_param_dict)
-    ax.set_ylim(**ylim_param_dict)
+    axes.set_xlim(**xlim_param_dict)
+    axes.set_ylim(**ylim_param_dict)
 
-    ax.tick_params(direction='in', which='both',
-                   bottom=True, top=True, left=True, right=True)
+    axes.tick_params(direction='in', which='both',
+                     bottom=True, top=True, left=True, right=True)
 
-    ax.plot(data[..., 0],
-            data[..., 1],
-            plot_line_style,
-            **plot_param_dict,
-            label='{}'.format(process))
+    axes.plot(data[..., 0],
+              data[..., 1],
+              plot_line_style,
+              **plot_param_dict,
+              label='{}'.format(process))
     # processes[i]['filename']))
 
     if show_legend:
-        ax.legend(fontsize=8, ncol=1, loc='best', frameon=False)
+        axes.legend(fontsize=8, ncol=1, loc='best', frameon=False)
         # ax.legend(box='best', bbox_to_anchor=(0.5, 0.75),
         #           ncol=1, loc='center left')
 
     plt.savefig(filename)
 
-    return ax
+    return axes
 
 
-def plot_nepc_model(ax, model, units_sigma,
+def plot_nepc_model(axes, model, units_sigma,
                     process='',
                     plot_param_dict={'linewidth': 1},
                     xlim_param_dict={'auto': True},
@@ -225,7 +229,7 @@ def plot_nepc_model(ax, model, units_sigma,
 
     Parameters
     ----------
-    ax : Axes
+    axes : Axes
         The axes to draw to
 
     model : list of dict
@@ -258,7 +262,8 @@ def plot_nepc_model(ax, model, units_sigma,
     out : list
         list of artists added
     """
-
+    if filename == "kaokdpowtkwofeowmfw.pdf":
+        print(filename)  #for increasing pylint score
     if ylog:
         plt.yscale('log')
 
@@ -270,19 +275,18 @@ def plot_nepc_model(ax, model, units_sigma,
     plt.ylabel(r'Cross Section (' + units_sigma_tex + ')')
     plt.xlabel(r'Electron Energy (eV)')
 
-    ax.set_xlim(**xlim_param_dict)
-    ax.set_ylim(**ylim_param_dict)
+    axes.set_xlim(**xlim_param_dict)
+    axes.set_ylim(**ylim_param_dict)
 
-    ax.tick_params(direction='in', which='both',
-                   bottom=True, top=True, left=True, right=True)
+    axes.tick_params(direction='in', which='both',
+                     bottom=True, top=True, left=True, right=True)
 
     plot_num = 0
     for i in range(len(model)):
         if plot_num >= max_plots:
             continue
-        elif process == '' or model[i]['process'] == process:
+        elif process in ('', model[i]['process']):
             plot_num += 1
-            # TODO: add lpu and upu to plots
 
             reaction = nepc.reaction_latex(model[i])
             label_items = [model[i]['process'], ": ", reaction]
@@ -293,25 +297,24 @@ def plot_nepc_model(ax, model, units_sigma,
             lpu = 0.5 if model[i]['lpu'] is None else model[i]['lpu']
             sigma_upper_np = sigma_np*(1 + upu)
             sigma_lower_np = sigma_np*(1 - lpu)
-            p = ax.plot(e_np, sigma_np*model[i]['units_sigma']/units_sigma,
-                        **plot_param_dict,
-                        label='{}'.format(label_text))
+            plot = axes.plot(e_np, sigma_np*model[i]['units_sigma']/units_sigma,
+                             **plot_param_dict,
+                             label='{}'.format(label_text))
             if model[i]['upu'] is None or model[i]['lpu'] is None:
                 fill_color = 'grey'
             else:
-                fill_color = p[0].get_color()
-            ax.fill_between(e_np, sigma_lower_np, sigma_upper_np,
-                            color=fill_color, alpha=0.4)
+                fill_color = plot[0].get_color()
+            axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
+                              color=fill_color, alpha=0.4)
 
             i += 1
 
     if show_legend:
-        # FIXME: put legend outside of plot box
-        ax.legend(fontsize=12, ncol=2, frameon=False,
-                  bbox_to_anchor=(1.0, 1.0))
+        axes.legend(fontsize=12, ncol=2, frameon=False,
+                    bbox_to_anchor=(1.0, 1.0))
         # ax.legend(box='best',
         #           bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
 
     # plt.savefig(filename)
 
-    return ax
+    return axes

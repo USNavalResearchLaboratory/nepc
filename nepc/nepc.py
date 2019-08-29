@@ -112,6 +112,24 @@ def cs_e_sigma(cursor, cs_id):
     sigma = [i[1] for i in cross_section]
     return e_energy, sigma
 
+def cs_e(cursor, cs_id):
+    """get e_energy only for a given cs_id from NEPC database"""
+    cursor.execute("SELECT e FROM csdata WHERE cs_id = " +
+                   str(cs_id))
+    cross_section = cursor.fetchall()
+    # print(cross_section)
+    e_energy = [i[0] for i in cross_section]
+    return e_energy
+
+def cs_sigma(cursor, cs_id):
+    """get sigma only for a given cs_id from NEPC database"""
+    cursor.execute("SELECT sigma FROM csdata WHERE cs_id = " +
+                   str(cs_id))
+    cross_section = cursor.fetchall()
+    # print(cross_section)
+    sigma = [i[1] for i in cross_section]
+    return sigma
+
 
 def cs_metadata(cursor, cs_id):
     """Get metadata for cross section in the NEPC database"""
@@ -358,12 +376,12 @@ def reaction_latex(cs_dict):
     return reaction
 
 
-def model_summary_df(model, lower=None, upper=None):
+def model_summary_df(nepc_model, lower=None, upper=None):
     """Return a summary of a NEPC model as a DataFrame
 
     Parameters
     ----------
-    model : list of dicts
+    nepc_model : list of dicts
         See the model method above
     lower : int
         lower bound of model index to include in summary
@@ -389,7 +407,7 @@ def model_summary_df(model, lower=None, upper=None):
     min_peak_sigma = 1
     max_lpu = 0.000000001
     max_upu = 0.000000001
-    for cs in model:
+    for cs in nepc_model:
         reaction = reaction_latex(cs)
         e_lower = round(min(cs["e"]), 2)
         e_upper = round(max(cs["e"]), 2)
@@ -445,7 +463,6 @@ def model_summary_df(model, lower=None, upper=None):
                                  cmap='plasma',
                                  low=0,
                                  high=max_upu)"""
-
 
 def cs_subset(cursor,
               sigma_cutoff=None,
