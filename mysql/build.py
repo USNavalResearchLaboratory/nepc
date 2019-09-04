@@ -1,11 +1,12 @@
 """Builds the NEPC database"""
 import argparse
 import platform
-import os
+# import os
 import mysql.connector
+import csv
 from nepc import nepc
 from nepc.util import config
-from nepc.util import scraper
+# from nepc.util import scraper
 
 PARSER = argparse.ArgumentParser(description='Build the NEPC database.')
 PARSER.add_argument('--debug', action='store_true',
@@ -19,6 +20,18 @@ if ARGS.debug:
 HOME = config.user_home()
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/data/"
+
+
+def print_table(table):
+    """print a table
+    ARGUMENT
+    ========
+    table: str
+    """
+    MYCURSOR.execute("SELECT * FROM " + table + ";")
+    table_data = MYCURSOR.fetchall()
+    for row in table_data:
+        print(row)
 
 
 def print_timestep(stage):
@@ -157,12 +170,16 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`csdata`("
                  ");"
                  )
 
+MYDB.commit()
+
 MYCURSOR.execute("CREATE TABLE `nepc`.`models2cs`("
                  "	`cs_id` INT UNSIGNED NOT NULL ,"
                  "	`model_id` INT UNSIGNED NOT NULL ,"
                  "	PRIMARY KEY pk_models2cs (cs_id, model_id)"
                  ");"
                  )
+
+MYDB.commit()
 
 if ARGS.debug:
     print_timestep("created all tables")
@@ -171,27 +188,51 @@ if ARGS.debug:
 # Load data #
 #############
 
-TABLES = ["processes", "models", "species"]
+TABLES = [("processes",
+           "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"),
+          ("models",
+           "(%s, %s, %s)"),
+          ("species",
+           "(%s, %s, %s)")]
 
 for table in TABLES:
-    MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + table + ".tsv' "
-                     "INTO TABLE nepc." + table + " IGNORE 1 LINES;")
+    table_name = table[0]
+    table_format = table[1]
+    with open(NEPC_DATA + table_name + '.tsv', 'r') as tsvin:
+        tsvin = csv.reader(tsvin, delimiter='\t')
+        row_number = 1
+        for row in tsvin:
+            if row_number > 1:
+                MYCURSOR.execute("INSERT INTO " + table_name +
+                                 " VALUES " + table_format, row)
+            row_number = row_number + 1
+    MYDB.commit()
     if ARGS.debug:
-        print_timestep("loaded data into " + table + " table")
+        print_timestep("loaded data into " + table_name + " table")
+
+print_table("species")
+
+with open(NEPC_DATA + 'states.tsv', 'r') as tsvin:
+    tsvin = csv.reader(tsvin, delimiter='\t')
+    row_number = 1
+    for row in tsvin:
+        if row_number > 1:
+            MYCURSOR.execute("INSERT INTO states "
+                             "(id, specie_id, name, long_name) "
+                             "VALUES (%s, 1, %s, %s);",
+                             (row[0], row[2], row[3]))
+            MYCURSOR.execute("UPDATE states "
+                             "SET specie_id = (SELECT id "
+                             "FROM nepc.species WHERE NAME = %s) "
+                             "WHERE id=%s;",
+                             (row[1], row[0]))
+        row_number = row_number + 1
 
 MYDB.commit()
-
-MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + "/states.tsv' "
-                 "INTO TABLE nepc.states "
-                 "IGNORE 1 LINES "
-                 "(id,@specie,name,long_name) "
-                 "set specie_id = (select max(id) "
-                 "from nepc.species where name like @specie);")
 
 if ARGS.debug:
     print_timestep("loaded data into states table")
-
-MYDB.commit()
+    print_table("states")
 
 DIR_NAMES = ["/data/cs/n2/itikawa/",
              "/data/cs/n2/zipf/",
@@ -205,6 +246,29 @@ else:
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
 F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
+insertCS = ("INSERT INTO cs "
+            "(cs_id,specie,process,units_e,units_sigma,"
+            "ref,lhsA,lhsB,rhsA,rhsB,wavelength,lhs_v,"
+            "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, "
+            "%s, %s, %s, %s, %s, %s, %s, %s, %s);")
+
+updateCSspecie_id = ("UPDATE cs "
+                     "SET specie_id = (SELECT id FROM nepc.species "
+                     "WHERE NAME = %s) "
+                     "WHERE id=%s;")
+
+"""
+                 "process_id = (select id from nepc.processes "
+                 "  where name = @process), "
+                 "lhsA_id = (select id from nepc.states "
+                 "  where name LIKE @lhsA), "
+                 "lhsB_id = (select id from nepc.states "
+                 "  where name LIKE @lhsB), "
+                 "rhsA_id = (select id from nepc.states "
+                 "  where name LIKE @rhsA), "
+                 "rhsB_id = (select id from nepc.states "
+                 "  where name LIKE @rhsB);")
 executeTextCS = ("LOAD DATA LOCAL INFILE %s "
                  "INTO TABLE nepc.cs "
                  "IGNORE 1 LINES "
@@ -238,6 +302,7 @@ executeTextCSMODELS = ("LOAD DATA LOCAL INFILE %s "
                        "model_id = (select model_id "
                        "            from nepc.models "
                        "            where name LIKE @model);")
+
 
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
@@ -284,6 +349,7 @@ for directoryname in DIR_NAMES:
 F_CS_DAT_FILE.close()
 
 MYDB.commit()
+"""
 
 if ARGS.debug:
     print_timestep("loaded data into cs, csdata, and models2cs tables")
