@@ -20,6 +20,18 @@ HOME = config.user_home()
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/data/"
 
+def print_timestep(stage):
+    """print stage and elapsed time
+
+    ARGUMENT
+    ========
+    stage: str
+    """
+    current_time = time.time()
+    elapsed = current_time-T0
+    print("\n" + stage + ": " + str(round(elapsed, 2)) + " sec\n"
+          "===============================================")
+
 ########################
 # Connect to database
 ########################
@@ -28,9 +40,13 @@ MYDB = mysql.connector.connect(
     option_files=HOME + '/.mysql/defaults'
 )
 
+if ARGS.debug:
+    print_timestep("connected to MySQL")
+
 MYCURSOR = MYDB.cursor()
 
 MYCURSOR.execute("DROP DATABASE IF EXISTS `nepc`;")
+
 MYCURSOR.execute("CREATE DATABASE IF NOT EXISTS `nepc` "
                  "CHARACTER SET utf8 "
                  "COLLATE utf8_general_ci;")
@@ -144,6 +160,9 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`models2cs`("
                  ");"
                  )
 
+if ARGS.debug:
+    print_timestep("created all tables")
+
 #############
 # Load data #
 #############
@@ -153,6 +172,8 @@ TABLES = ["processes", "models", "species"]
 for table in TABLES:
     MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + table + ".tsv' "
                      "INTO TABLE nepc." + table + " IGNORE 1 LINES;")
+    if ARGS.debug:
+        print_timestep("loaded data into " + table + " table")
 
 MYDB.commit()
 
@@ -161,6 +182,9 @@ MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + "/states.tsv' "
                  "IGNORE 1 LINES "
                  "(id,@specie,name,long_name) "
                  "set specie_id = (select max(id) from nepc.species where name like @specie);")
+
+if ARGS.debug:
+    print_timestep("loaded data into states table")
 
 MYDB.commit()
 
@@ -247,17 +271,16 @@ F_CS_DAT_FILE.close()
 
 MYDB.commit()
 
+if ARGS.debug:
+    print_timestep("loaded data into cs, csdata, and models2cs tables")
 
 if ARGS.debug:
-    T1 = time.time()
-    ELAPSED = T1-T0
-    print("\nBuilt NEPC database in " + str(round(ELAPSED, 2)) + " sec\n"
-          "===============================================")
+    print_timestep("built NEPC database")
     for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
         print(table + " has " + str(nepc.count_table_rows(MYCURSOR, table)) + " rows")
         print("===============================================\n")
 else:
-    print("\nBuilt NEPC database\n")
+    print("\nbuilt NEPC database\n")
 
 
 MYCURSOR.close()
