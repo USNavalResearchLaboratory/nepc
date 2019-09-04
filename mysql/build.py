@@ -20,6 +20,7 @@ HOME = config.user_home()
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/data/"
 
+
 def print_timestep(stage):
     """print stage and elapsed time
 
@@ -32,9 +33,12 @@ def print_timestep(stage):
     print("\n" + stage + ": " + str(round(elapsed, 2)) + " sec\n"
           "===============================================")
 
+
 ########################
 # Connect to database
 ########################
+
+
 MYDB = mysql.connector.connect(
     host='localhost',
     option_files=HOME + '/.mysql/defaults'
@@ -181,7 +185,8 @@ MYCURSOR.execute("LOAD DATA LOCAL INFILE '" + NEPC_DATA + "/states.tsv' "
                  "INTO TABLE nepc.states "
                  "IGNORE 1 LINES "
                  "(id,@specie,name,long_name) "
-                 "set specie_id = (select max(id) from nepc.species where name like @specie);")
+                 "set specie_id = (select max(id) "
+                 "from nepc.species where name like @specie);")
 
 if ARGS.debug:
     print_timestep("loaded data into states table")
@@ -200,72 +205,81 @@ else:
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
 F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
+executeTextCS = ("LOAD DATA LOCAL INFILE %s "
+                 "INTO TABLE nepc.cs "
+                 "IGNORE 1 LINES "
+                 "(cs_id,@specie,@process,units_e,units_sigma,"
+                 "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
+                 "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
+                 "SET cs_id = %s, "
+                 "specie_id = (select id from nepc.species "
+                 "  where name = @specie), "
+                 "process_id = (select id from nepc.processes "
+                 "  where name = @process), "
+                 "lhsA_id = (select id from nepc.states "
+                 "  where name LIKE @lhsA), "
+                 "lhsB_id = (select id from nepc.states "
+                 "  where name LIKE @lhsB), "
+                 "rhsA_id = (select id from nepc.states "
+                 "  where name LIKE @rhsA), "
+                 "rhsB_id = (select id from nepc.states "
+                 "  where name LIKE @rhsB);")
+
+executeTextCSDATA = ("LOAD DATA LOCAL INFILE %s "
+                     "INTO TABLE nepc.csdata "
+                     "IGNORE 1 LINES "
+                     "(id,e,sigma) "
+                     "SET cs_id = %s;")
+
+executeTextCSMODELS = ("LOAD DATA LOCAL INFILE %s "
+                       "INTO TABLE nepc.models2cs "
+                       "(@model) "
+                       "SET cs_id = %s, "
+                       "model_id = (select model_id "
+                       "            from nepc.models "
+                       "            where name LIKE @model);")
+
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
 
+    met_data = []
+    dat_data = []
+    mod_data = []
+
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        filename_wo_ext = filename.rsplit(".", 1)[0]
-        mod_file = "".join([os.fsdecode(directory),
-                            filename_wo_ext,
-                            ".mod"])
-        met_file = "".join([os.fsdecode(directory),
-                            filename_wo_ext,
-                            ".met"])
-
-        dat_file = "".join([os.fsdecode(directory),
-                            filename_wo_ext,
-                            ".dat"])
-
-        CS_ID = scraper.get_cs_id_from_met_file(met_file)
-
         if filename.endswith(".met") or filename.endswith(".mod"):
             continue
         else:
+            filename_wo_ext = filename.rsplit(".", 1)[0]
+            mod_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".mod"])
+            met_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".met"])
+
+            dat_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".dat"])
+
+            CS_ID = scraper.get_cs_id_from_met_file(met_file)
+
             F_CS_DAT_FILE.write(
                 "\t".join([str(CS_ID),
                            directoryname + str(filename_wo_ext)]) + "\n"
             )
-            executeTextCS = ("LOAD DATA LOCAL INFILE '" + met_file +
-                             "' INTO TABLE nepc.cs "
-                             "IGNORE 1 LINES "
-                             "(cs_id,@specie,@process,units_e,units_sigma,"
-                             "ref,@lhsA,@lhsB,@rhsA,@rhsB,wavelength,lhs_v,"
-                             "rhs_v,lhs_j,rhs_j,background,lpu,upu) "
-                             "SET cs_id = " + str(CS_ID) + ", "
-                             "specie_id = (select id from nepc.species "
-                             "  where name = @specie), "
-                             "process_id = (select id from nepc.processes "
-                             "  where name = @process), "
-                             "lhsA_id = (select id from nepc.states "
-                             "  where name LIKE @lhsA), "
-                             "lhsB_id = (select id from nepc.states "
-                             "  where name LIKE @lhsB), "
-                             "rhsA_id = (select id from nepc.states "
-                             "  where name LIKE @rhsA), "
-                             "rhsB_id = (select id from nepc.states "
-                             "  where name LIKE @rhsB);")
 
-            executeTextCSMODELS = ("LOAD DATA LOCAL INFILE '" + mod_file +
-                                   "' INTO TABLE nepc.models2cs "
-                                   "(@model) "
-                                   "SET cs_id = " + str(CS_ID) + ", "
-                                   "model_id = (select model_id "
-                                   "            from nepc.models "
-                                   "            where name LIKE @model);")
-
-            executeTextCSDATA = ("LOAD DATA LOCAL INFILE '" + dat_file +
-                                 "' INTO TABLE nepc.csdata "
-                                 "IGNORE 1 LINES "
-                                 "(id,e,sigma) "
-                                 "SET cs_id = " + str(CS_ID) + ";")
-
-            MYCURSOR.execute(executeTextCS)
-
-            MYCURSOR.execute(executeTextCSDATA)
-
+            met_data.append((met_file, str(CS_ID)))
+            dat_data.append((dat_file, str(CS_ID)))
             if os.path.exists(mod_file):
-                MYCURSOR.execute(executeTextCSMODELS)
+                mod_data.append((mod_file, str(CS_ID)))
+
+    MYCURSOR.executemany(executeTextCS, met_data)
+
+    MYCURSOR.executemany(executeTextCSDATA, dat_data)
+
+    MYCURSOR.executemany(executeTextCSMODELS, mod_data)
 
 F_CS_DAT_FILE.close()
 
@@ -276,9 +290,10 @@ if ARGS.debug:
 
 if ARGS.debug:
     print_timestep("built NEPC database")
-    for table in ["species", "processes", "states", "cs", "models", "models2cs", "csdata"]:
-        print(table + " has " + str(nepc.count_table_rows(MYCURSOR, table)) + " rows")
-        print("===============================================\n")
+    for table in ["species", "processes", "states", "cs", "models",
+                  "models2cs", "csdata"]:
+        print(table + ": " + str(nepc.count_table_rows(MYCURSOR, table)) +
+              " rows")
 else:
     print("\nbuilt NEPC database\n")
 
