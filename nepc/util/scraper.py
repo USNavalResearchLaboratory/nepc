@@ -442,8 +442,8 @@ def write_models_to_file(filename, models_array):
     models_array: arr of strs
     A list of models that should be added to the filename"""
     model_f = open(filename, "x")
-    for elem in enumerate(models_array):
-        model_f.write(str(elem)+"\n")
+    for i in range(len(models_array)):
+        model_f.write(models_array[i])
     model_f.close()
 
 
