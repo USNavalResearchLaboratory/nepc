@@ -12,9 +12,10 @@ def nepc_connect(local, dbug):
     Parameters
     ----------
     local : boolean
-    Checks whether the database is locally based or based off of 'ppdadamsonlinux'
+        Checks whether the database is locally based or based off
+        of 'ppdadamsonlinux'
     dbug : boolean
-    Checks whether debug mode is on or off
+        Checks whether debug mode is on or off
 
     Returns
     -------
@@ -23,27 +24,26 @@ def nepc_connect(local, dbug):
     cursor : MySQLCursor
     A MySQLCursor object for executing SQL queries"""
     cnx, cursor = nepc.connect(local, dbug)
+    print(type(cnx))
+    print(type(cursor))
     yield [cnx, cursor]
     cursor.close()
     cnx.close()
+
 
 def nonfix_nepc_connect(local, dbug):
     cnx, cursor = nepc.connect(local, dbug)
     return cnx, cursor
 
-def test_connect(local, dbug):
+
+def test_connect(nepc_connect):
     """Verify that nepc.connect() method connects to the NEPC
     database when local is True and when local is False"""
-    cnx, cursor = nonfix_nepc_connect(local, dbug)
-    if local is False:
-        cnx, cursor = nepc.connect(local=False, DBUG=dbug)
-        assert isinstance(cnx, mysql.connector.connection.MySQLConnection)
-        assert isinstance(cursor, mysql.connector.cursor.MySQLCursor)
-    cnx, cursor = nepc.connect(local=True, DBUG=dbug)
-    assert isinstance(cnx, mysql.connector.connection.MySQLConnection)
-    assert isinstance(cursor, mysql.connector.cursor.MySQLCursor)
-    cursor.close()
-    cnx.close()
+    assert isinstance(nepc_connect[0],
+                      mysql.connector.connection_cext.CMySQLConnection)
+    assert isinstance(nepc_connect[1],
+                      mysql.connector.cursor_cext.CMySQLCursor)
+
 
 def test_count_table_rows(nepc_connect):
     """Verify that nepc.count_table_rows returns an integer value"""
@@ -95,7 +95,8 @@ def test_table_as_df(nepc_connect):
     table used as an argument"""
     statef = nepc.table_as_df(nepc_connect[1], "states")
     assert isinstance(statef, pd.DataFrame)
-    processf = nepc.table_as_df(nepc_connect[1], "processes", columns=["id", "name"])
+    processf = nepc.table_as_df(nepc_connect[1], "processes",
+                                columns=["id", "name"])
     assert isinstance(processf, pd.DataFrame)
 
 
@@ -113,7 +114,8 @@ def test_cs_subset(nepc_connect):
     """Verify that nepc.cs_subset returns a proper
     subset of cross sections from the NEPC MySQL database"""
     sigma_cutoff = 1E-21
-    cs_subset = nepc.cs_subset(nepc_connect[1], specie="N", process="excitation",
+    cs_subset = nepc.cs_subset(nepc_connect[1], specie="N",
+                               process="excitation",
                                ref='wang2014', lhsA='N_2s22p3_4So',
                                sigma_cutoff=sigma_cutoff)
     assert isinstance(cs_subset, list)
