@@ -9,6 +9,7 @@ import numpy as np
 import pdfplumber
 from nepc.util import config
 
+
 def wc_fxn(file_to_count):
     "return the number of lines in a file using wc"
     return int(check_output(["wc", "-l", file_to_count]).split()[0])
@@ -71,14 +72,14 @@ def mkdir(outdir):
     except OSError as excep:
         print("Error: %s - %s." % (excep.filename, excep.strerror))
 
+
 def remove_unnecessary(lst):
     """Removes unnecessary elements from
     a list"""
     for i in lst:
         if i == '':
             lst.remove(i)
-
-"""def reader(fil_name, delimiter=''):
+    """def reader(fil_name, delimiter=''):
     ""Given a file name, return a list containing each line
     w/ the delimiter separating each line""
     fil = open(fil_name, mode='r', newline=delimiter)
@@ -96,10 +97,11 @@ def remove_unnecessary(lst):
                 newlst.append(toappend)
                 toappend = ''
         else: toappend = toappend + str_fi[i]
-        i = i + 1    
+        i = i + 1
     return remove_unnecessary(newlst)"""
 
-#TODO: look at neha's version to see if it can be incorporated
+
+# TODO: look at neha's version to see if it can be incorporated
 def get_table_data(pdf,
                    page_number, crop_dim_array,
                    locate_tables=False, omit_regex=''):
@@ -124,7 +126,8 @@ def get_table_data(pdf,
     for i in range(len(crop_dim_array)):
         page_cropped = pages.crop(crop_dim_array[i])
         if (locate_tables):
-            display(page_cropped.to_image().reset().draw_rects(page_cropped.chars))
+            display(page_cropped.to_image().reset().draw_rects(
+                page_cropped.chars))
         else:
             text_space_delim = page_cropped.extract_text().split("\n")
             for j in range(len(text_space_delim)):
@@ -171,6 +174,7 @@ def get_table_data(pdf, page_number, crop_dim_array,
                                              float(text_array[1])]], axis=0)
     return data
 """
+
 
 def get_column_data(pdf, page_number, crop_dim_array,
                     locate_tables=False, omit_regex=''):
@@ -249,7 +253,7 @@ def text_array_to_float_array(text_array, omit_regexp=''):
 
 
 def get_column_strings(pdf, page_number, crop_dim_array,
-                     locate_tables=False, omit_regex=''):
+                       locate_tables=False, omit_regex=''):
     pg = pdf.pages[page_number]
     data = []
     pgCropped = pg.crop(crop_dim_array)
@@ -329,11 +333,12 @@ def write_data_to_file(data_array, filename, start_csdata_id):
     return csdata_id
 
 
-def write_metadata_to_file(
-        filename, cs_id, specie, process, units_e, units_sigma, ref, lhs_a='\\N',
-        lhs_b='\\N', rhs_a='\\N', rhs_b='\\N', wavelength='\\N', lhs_v='\\N',
-        rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N', lpu='\\N',
-        upu='\\N'):
+def write_metadata_to_file(filename, cs_id, specie, process,
+                           units_e, units_sigma, ref,
+                           lhs_a='\\N', lhs_b='\\N',
+                           rhs_a='\\N', rhs_b='\\N', wavelength='-1',
+                           lhs_v=-1, rhs_v=-1, lhs_j=-1, rhs_j=-1,
+                           background='\\N', lpu='-1', upu='-1'):
     """Write out metadata to the file called filename
 
     Parameters
@@ -415,20 +420,24 @@ def write_next_id_to_file(
     id_file.close()
 
 
-def write_cs_to_file(
-        filename, data_array, cs_id, start_csdata_id, specie, process, units_e, units_sigma, ref,
-        lhs_a='\\N', lhs_b='\\N', rhs_a='\\N', rhs_b='\\N', wavelength='\\N',
-        lhs_v='\\N', rhs_v='\\N', lhs_j='\\N', rhs_j='\\N', background='\\N',
-        lpu='\\N', upu='\\N'):
+def write_cs_to_file(filename, data_array, cs_id, start_csdata_id, specie,
+                     process, units_e, units_sigma, ref,
+                     lhs_a='\\N', lhs_b='\\N', rhs_a='\\N', rhs_b='\\N',
+                     wavelength='-1',
+                     lhs_v=-1, rhs_v=-1, lhs_j=-1, rhs_j=-1,
+                     background='\\N', lpu='-1', upu='-1'):
     """Write both the cross-section data and metadata to a file
     Parameters
     ----------
     Contains a combination of parameters from write_data_to_file and
     write_metadata_to_file"""
-    next_csdata_id = write_data_to_file(data_array, filename+".dat", start_csdata_id)
-    next_cs_id = write_metadata_to_file(filename+".met", cs_id, specie, process, units_e, units_sigma,
-            ref, lhs_a, lhs_b, rhs_a, rhs_b, wavelength, lhs_v, rhs_v,
-            lhs_j, rhs_j, background, lpu, upu)
+    next_csdata_id = write_data_to_file(data_array, filename+".dat",
+                                        start_csdata_id)
+    next_cs_id = write_metadata_to_file(filename+".met", cs_id, specie,
+                                        process, units_e, units_sigma,
+                                        ref, lhs_a, lhs_b, rhs_a, rhs_b,
+                                        wavelength, lhs_v, rhs_v,
+                                        lhs_j, rhs_j, background, lpu, upu)
     return (next_cs_id, next_csdata_id)
 
 
@@ -442,8 +451,9 @@ def write_models_to_file(filename, models_array):
     models_array: arr of strs
     A list of models that should be added to the filename"""
     model_f = open(filename, "x")
+    model_f.write("model_name\n")
     for i in range(len(models_array)):
-        model_f.write(models_array[i])
+        model_f.write(models_array[i] + "\n")
     model_f.close()
 
 
