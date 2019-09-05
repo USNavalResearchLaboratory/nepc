@@ -1,5 +1,7 @@
 before_script:
   - export NEPC_HOME=$CI_PROJECT_DIR
+  - conda env remove --name nepc
+  - conda env create -f environment.yml
   - conda activate nepc
   - pip install pylint-exit
   - pip install anybadge
