@@ -1,4 +1,4 @@
-id	short	long	LHS	RHS	LHS_e	RHS_e	LHS_hv	RHS_hv	LHS_v	RHS_v	LHS_j	RHS_j
+id	name	long_name	lhs	rhs	lhs_e	rhs_e	lhs_hv	rhs_hv	lhs_v	rhs_v	lhs_j	rhs_j
 1	elastic	Total elastic electron scattering	1	1	1	1	0	0	0	0	0	0
 2	elastic_partial	Partial elastic electron scattering	1	1	1	1	0	0	0	0	0	0
 3	excitation	"Excitation of atoms (electronic), inelastic electron scattering"	1	1	1	1	0	0	0	0	0	0

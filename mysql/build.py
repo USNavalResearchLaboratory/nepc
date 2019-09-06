@@ -3,23 +3,23 @@ import argparse
 import platform
 import os
 import mysql.connector
-import csv
 import pandas as pd
 from nepc import nepc
 from nepc.util import config
-from nepc.util import scraper
+import time
 
-# NA_VALUES = ['\\N']
 NA_VALUES = []
-MAX_CS = 2000000
 PARSER = argparse.ArgumentParser(description='Build the NEPC database.')
 PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
 ARGS = PARSER.parse_args()
 
 if ARGS.debug:
-    import time
-    T0 = time.time()
+    MAX_CS = 50
+else:
+    MAX_CS = 2000000
+
+T0 = time.time()
 
 HOME = config.user_home()
 NEPC_HOME = config.nepc_home()
@@ -58,20 +58,31 @@ def print_timestep(stage):
           "===============================================")
 
 
-########################
-# Connect to database
-########################
+def insert_command(table_name, variable_list):
+    variable_list_str = ", ".join(variable_list)
+    data_format_str = ", ".join(["%s"]*len(variable_list))
+    return ("INSERT INTO " + table_name +
+            "(" + variable_list_str + ") " +
+            "VALUES (" + data_format_str + ");")
 
+
+####################
+# Connect to MySQL #
+####################
 
 MYDB = mysql.connector.connect(
     host='localhost',
     option_files=HOME + '/.mysql/defaults'
 )
 
+MYCURSOR = MYDB.cursor()
+
 if ARGS.debug:
     print_timestep("connected to MySQL")
 
-MYCURSOR = MYDB.cursor()
+##############################
+# Create empty NEPC database #
+##############################
 
 MYCURSOR.execute("DROP DATABASE IF EXISTS `nepc`;")
 
@@ -197,65 +208,100 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`models2cs`("
 MYDB.commit()
 
 if ARGS.debug:
-    print_timestep("created all tables")
+    print_timestep("created empty NEPC database and all tables")
 
 #############
 # Load data #
 #############
 
+PROCESSES_VARIABLE_LIST = ["id", "name", "long_name", "lhs", "rhs",
+                           "lhs_e", "rhs_e", "lhs_hv", "rhs_hv",
+                           "lhs_v", "rhs_v", "lhs_j", "rhs_j"]
+INSERT_COMMAND_PROCESSES = insert_command("processes",
+                                          PROCESSES_VARIABLE_LIST)
+PROCESSES_DTYPE = {"id": int,
+                   "name": str,
+                   "long_name": str,
+                   "lhs": int,
+                   "rhs": int,
+                   "lhs_e": int,
+                   "rhs_e": int,
+                   "lhs_hv": int,
+                   "rhs_hv": int,
+                   "lhs_v": int,
+                   "rhs_v": int,
+                   "lhs_j": int,
+                   "rhs_j": int}
+PROCESSES_FILE = NEPC_DATA + "processes.tsv"
+PROCESSES_DATA_LIST = list(pd.read_csv(PROCESSES_FILE,
+                                       sep='\t',
+                                       dtype=PROCESSES_DTYPE,
+                                       na_values=NA_VALUES).itertuples(
+                                           index=False,
+                                           name=None))
+MYCURSOR.executemany(INSERT_COMMAND_PROCESSES, PROCESSES_DATA_LIST)
+if ARGS.debug:
+    print_timestep("loaded data into processes table")
+    # print_table("processes")
 
-def insert_command(table_name, variable_list):
-    variable_list_str = ", ".join(variable_list)
-    data_format_str = ", ".join(["%s"]*len(variable_list))
-    return ("INSERT INTO " + table_name +
-            "(" + variable_list_str + ") " +
-            "VALUES (" + data_format_str + ");")
+MODELS_VARIABLE_LIST = ["model_id", "name", "long_name"]
+INSERT_COMMAND_MODELS = insert_command("models",
+                                       MODELS_VARIABLE_LIST)
+MODELS_DTYPE = {"model_id": int,
+                "name": str,
+                "long_name": str}
+MODELS_FILE = NEPC_DATA + "models.tsv"
+MODELS_DATA_LIST = list(pd.read_csv(MODELS_FILE,
+                                    sep='\t',
+                                    dtype=MODELS_DTYPE,
+                                    na_values=NA_VALUES).itertuples(
+                                        index=False,
+                                        name=None))
+MYCURSOR.executemany(INSERT_COMMAND_MODELS, MODELS_DATA_LIST)
+if ARGS.debug:
+    print_timestep("loaded data into models table")
+    # print_table("models")
 
+SPECIES_VARIABLE_LIST = ["id", "name", "long_name"]
+INSERT_COMMAND_SPECIES = insert_command("species",
+                                        SPECIES_VARIABLE_LIST)
+SPECIES_DTYPE = {"id": int,
+                 "name": str,
+                 "long_name": str}
+SPECIES_FILE = NEPC_DATA + "species.tsv"
+SPECIES_DATA_LIST = list(pd.read_csv(SPECIES_FILE,
+                                     sep='\t',
+                                     dtype=SPECIES_DTYPE,
+                                     na_values=NA_VALUES).itertuples(
+                                         index=False,
+                                         name=None))
+MYCURSOR.executemany(INSERT_COMMAND_SPECIES, SPECIES_DATA_LIST)
+if ARGS.debug:
+    print_timestep("loaded data into species table")
+    # print_table("species")
 
-TABLES = [("processes",
-           "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"),
-          ("models",
-           "(%s, %s, %s)"),
-          ("species",
-           "(%s, %s, %s)")]
+STATES_VARIABLE_LIST = ["id", "name", "long_name", "specie"]
+INSERT_COMMAND_STATES = ("INSERT INTO states "
+                         "SET "
+                         "  id = %s, "
+                         "  name = %s, "
+                         "  long_name = %s, "
+                         "  specie_id = (SELECT id FROM nepc.species "
+                         "              WHERE NAME = %s);")
 
-for table in TABLES:
-    table_name = table[0]
-    table_format = table[1]
-    with open(NEPC_DATA + table_name + '.tsv', 'r') as tsvin:
-        tsvin = csv.reader(tsvin, delimiter='\t')
-        row_number = 1
-        for row in tsvin:
-            if row_number > 1:
-                MYCURSOR.execute("INSERT INTO " + table_name +
-                                 " VALUES " + table_format, row)
-            row_number = row_number + 1
-    MYDB.commit()
-    if ARGS.debug:
-        print_timestep("loaded data into " + table_name + " table")
+STATES_DTYPE = {"id": int,
+                "name": str,
+                "long_name": str,
+                "specie": str}
 
-# print_table("species")
-
-STATES_VARIABLE_LIST = ["id", "specie_id", "name", "long_name"]
-INSERT_COMMAND_STATES = insert_command("states", STATES_VARIABLE_LIST)
-UPDATE_COMMAND_STATES = ("UPDATE states " +
-                         "SET specie_id = (SELECT id " +
-                         "FROM nepc.species WHERE NAME = %s) " +
-                         "WHERE id=%s;")
-
-with open(NEPC_DATA + 'states.tsv', 'r') as tsvin:
-    tsvin = csv.reader(tsvin, delimiter='\t')
-    row_number = 1
-    for row in tsvin:
-        if row_number > 1:
-            MYCURSOR.execute(INSERT_COMMAND_STATES,
-                             (row[0], 1, row[2], row[3]))
-            MYCURSOR.execute(UPDATE_COMMAND_STATES,
-                             (row[1], row[0]))
-        row_number = row_number + 1
-
-MYDB.commit()
-
+STATES_FILE = NEPC_DATA + "states.tsv"
+STATES_DATA_LIST = list(pd.read_csv(STATES_FILE,
+                                    sep='\t',
+                                    dtype=STATES_DTYPE,
+                                    na_values=NA_VALUES).itertuples(
+                                        index=False,
+                                        name=None))
+MYCURSOR.executemany(INSERT_COMMAND_STATES, STATES_DATA_LIST)
 if ARGS.debug:
     print_timestep("loaded data into states table")
     # print_table("states")
@@ -304,18 +350,20 @@ CSDATA_DTYPE = {"csdata_id": int,
                 "sigma": float}
 MOD_DTYPE = {"model_name": str}
 
-
-def insert_table(insert_command_str, data_list):
-    return 0
-
-
-def update_table_ext_id(table_name, ext_table_name, id_value_pair_list):
-    return 0
-
-
-INSERT_COMMAND_CS = insert_command("cs", CS_VARIABLE_LIST)
-UPDATE_COMMAND_CS = ("UPDATE cs " +
+UPDATE_COMMAND_CS = ("INSERT INTO cs " +
                      "SET "
+                     "  cs_id = %s, "
+                     "  units_e = %s, "
+                     "  units_sigma = %s, "
+                     "  ref = %s, "
+                     "  wavelength = %s, "
+                     "  lhs_v = %s, "
+                     "  rhs_v = %s, "
+                     "  lhs_j = %s, "
+                     "  rhs_j = %s, "
+                     "  background = %s, "
+                     "  lpu = %s, "
+                     "  upu = %s, "
                      "  specie_id = (SELECT id FROM nepc.species "
                      "    WHERE NAME=%s), "
                      "  process_id = (select id from nepc.processes "
@@ -327,8 +375,7 @@ UPDATE_COMMAND_CS = ("UPDATE cs " +
                      "  rhsA_id = (select id from nepc.states "
                      "    WHERE NAME=%s), "
                      "  rhsB_id = (select id from nepc.states "
-                     "    WHERE NAME=%s) "
-                     "WHERE cs_id=%s;")
+                     "    WHERE NAME=%s);")
 
 INSERT_COMMAND_CSDATA = insert_command("csdata", CSDATA_VARIABLE_LIST)
 
@@ -343,79 +390,79 @@ file_number = 1
 for directoryname in DIR_NAMES:
     directory = os.fsencode(NEPC_HOME + directoryname)
     for file in os.listdir(directory):
-        if file_number < MAX_CS:
-            filename = os.fsdecode(file)
-            if filename.endswith(".met") or filename.endswith(".mod"):
-                continue
-            else:
-                # print("file_number: " + str(file_number))
-                file_number = file_number + 1
-                filename_wo_ext = filename.rsplit(".", 1)[0]
-                mod_file = "".join([os.fsdecode(directory),
-                                    filename_wo_ext,
-                                    ".mod"])
-                met_file = "".join([os.fsdecode(directory),
-                                    filename_wo_ext,
-                                    ".met"])
+        if file_number >= MAX_CS:
+            print("WARNING: only processed " + str(file_number) +
+                  " cross section files. There appears to be addtional "
+                  "data not processed.")
+            break
+        filename = os.fsdecode(file)
+        if filename.endswith(".met") or filename.endswith(".mod"):
+            continue
+        else:
+            # print("file_number: " + str(file_number))
+            file_number = file_number + 1
+            filename_wo_ext = filename.rsplit(".", 1)[0]
+            mod_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".mod"])
+            met_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".met"])
 
-                dat_file = "".join([os.fsdecode(directory),
-                                    filename_wo_ext,
-                                    ".dat"])
+            dat_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".dat"])
 
-                CS_ID = scraper.get_cs_id_from_met_file(met_file)
+            met_data = pd.read_csv(met_file,
+                                   sep='\t',
+                                   dtype=CS_DTYPE,
+                                   na_values=NA_VALUES)
+            dat_data = pd.read_csv(dat_file,
+                                   sep='\t',
+                                   dtype=CSDATA_DTYPE,
+                                   na_values=NA_VALUES)
 
-                F_CS_DAT_FILE.write(
-                    "\t".join([str(CS_ID),
-                               directoryname + str(filename_wo_ext)]) + "\n"
-                )
+            F_CS_DAT_FILE.write(
+                "\t".join([str(met_data.iloc[0]['cs_id']),
+                           directoryname + str(filename_wo_ext)]) + "\n"
+            )
 
-                met_data = pd.read_csv(met_file,
+            MYCURSOR.execute(UPDATE_COMMAND_CS,
+                             (int(met_data.iloc[0]['cs_id']),
+                              met_data.iloc[0]['units_e'],
+                              met_data.iloc[0]['units_sigma'],
+                              met_data.iloc[0]['ref'],
+                              met_data.iloc[0]['wavelength'],
+                              int(met_data.iloc[0]['lhs_v']),
+                              int(met_data.iloc[0]['rhs_v']),
+                              int(met_data.iloc[0]['lhs_j']),
+                              int(met_data.iloc[0]['rhs_j']),
+                              met_data.iloc[0]['background'],
+                              met_data.iloc[0]['lpu'],
+                              met_data.iloc[0]['upu'],
+                              np_str(met_data, 0, 'specie'),
+                              np_str(met_data, 0, 'process'),
+                              np_str(met_data, 0, 'lhs_a'),
+                              np_str(met_data, 0, 'lhs_b'),
+                              np_str(met_data, 0, 'rhs_a'),
+                              np_str(met_data, 0, 'rhs_b')))
+            dat_data.insert(1, 'cs_id', met_data.iloc[0]['cs_id'])
+            dat_data_list = list(dat_data.itertuples(index=False,
+                                                     name=None))
+            MYCURSOR.executemany(INSERT_COMMAND_CSDATA, dat_data_list)
+
+            if os.path.exists(mod_file):
+                mod_data = pd.read_csv(mod_file,
                                        sep='\t',
-                                       dtype=CS_DTYPE,
+                                       dtype=MOD_DTYPE,
                                        na_values=NA_VALUES)
-                dat_data = pd.read_csv(dat_file,
-                                       sep='\t',
-                                       dtype=CSDATA_DTYPE,
-                                       na_values=NA_VALUES)
-
-                MYCURSOR.execute(INSERT_COMMAND_CS,
-                                 (int(met_data.iloc[0]['cs_id']), 1, 1,
-                                  met_data.iloc[0]['units_e'],
-                                  met_data.iloc[0]['units_sigma'],
-                                  met_data.iloc[0]['ref'], 1, 1, 1, 1,
-                                  met_data.iloc[0]['wavelength'],
-                                  int(met_data.iloc[0]['lhs_v']),
-                                  int(met_data.iloc[0]['rhs_v']),
-                                  int(met_data.iloc[0]['lhs_j']),
-                                  int(met_data.iloc[0]['rhs_j']),
-                                  met_data.iloc[0]['background'],
-                                  met_data.iloc[0]['lpu'],
-                                  met_data.iloc[0]['upu']))
-                MYCURSOR.execute(UPDATE_COMMAND_CS,
-                                 (np_str(met_data, 0, 'specie'),
-                                  np_str(met_data, 0, 'process'),
-                                  np_str(met_data, 0, 'lhs_a'),
-                                  np_str(met_data, 0, 'lhs_b'),
-                                  np_str(met_data, 0, 'rhs_a'),
-                                  np_str(met_data, 0, 'rhs_b'),
-                                  int(met_data.iloc[0]['cs_id'])))
-                MYDB.commit()
-
-                dat_data.insert(1, 'cs_id', met_data.iloc[0]['cs_id'])
-                dat_data_list = list(dat_data.itertuples(index=False,
+                mod_data.insert(0, 'cs_id', met_data.iloc[0]['cs_id'])
+                mod_data_list = list(mod_data.itertuples(index=False,
                                                          name=None))
-                MYCURSOR.executemany(INSERT_COMMAND_CSDATA, dat_data_list)
+                MYCURSOR.executemany(INSERT_COMMAND_MODELS2CS,
+                                     mod_data_list)
 
-                if os.path.exists(mod_file):
-                    mod_data = pd.read_csv(mod_file,
-                                           sep='\t',
-                                           dtype=MOD_DTYPE,
-                                           na_values=NA_VALUES)
-                    mod_data.insert(0, 'cs_id', met_data.iloc[0]['cs_id'])
-                    mod_data_list = list(mod_data.itertuples(index=False,
-                                                             name=None))
-                    MYCURSOR.executemany(INSERT_COMMAND_MODELS2CS,
-                                         mod_data_list)
+            MYDB.commit()
 
 MYDB.commit()
 F_CS_DAT_FILE.close()
@@ -424,15 +471,15 @@ if ARGS.debug:
     print_timestep("loaded data into cs, csdata, and models2cs tables")
     # print_table("cs")
 
-if ARGS.debug:
-    print_timestep("built NEPC database")
-    for table in ["species", "processes", "states", "cs", "models",
-                  "models2cs", "csdata"]:
-        print(table + ": " + str(nepc.count_table_rows(MYCURSOR, table)) +
-              " rows")
-else:
-    print("\nbuilt NEPC database\n")
+print_timestep("built NEPC database")
+for table in ["species", "processes", "states", "cs", "models",
+              "models2cs", "csdata"]:
+    print(table + ": " + str(nepc.count_table_rows(MYCURSOR, table)) +
+          " rows")
 
+####################
+# Close connection #
+####################
 
 MYCURSOR.close()
 
