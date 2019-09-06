@@ -440,16 +440,6 @@ def model_summary_df(nepc_model, lower=None, upper=None):
             .highlight_null('red'))
 
 
-""".background_gradient(subset=['lpu'],
-                                 cmap='plasma',
-                                 low=0,
-                                 high=max_lpu)
-            .background_gradient(subset=['upu'],
-                                 cmap='plasma',
-                                 low=0,
-                                 high=max_upu)"""
-
-
 def cs_subset(cursor,
               sigma_cutoff=None,
               specie=None,
