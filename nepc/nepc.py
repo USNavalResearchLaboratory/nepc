@@ -97,23 +97,23 @@ def cs_e_sigma(cursor, cs_id):
     sigma = [i[1] for i in cross_section]
     return e_energy, sigma
 
+
 def cs_e(cursor, cs_id):
     """get e_energy only for a given cs_id from NEPC database"""
     cursor.execute("SELECT e FROM csdata WHERE cs_id = " +
                    str(cs_id))
     cross_section = cursor.fetchall()
     # print(cross_section)
-    e_energy = [i[0] for i in cross_section]
-    return e_energy
+    return [i[0] for i in cross_section]
+
 
 def cs_sigma(cursor, cs_id):
     """get sigma only for a given cs_id from NEPC database"""
     cursor.execute("SELECT sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
-    cross_section = cursor.fetchall()
-    # print(cross_section)
-    sigma = [i[1] for i in cross_section]
-    return sigma
+    sigma = cursor.fetchall()
+    # print(sigma)
+    return [i[0] for i in sigma]
 
 
 def cs_metadata(cursor, cs_id):
@@ -448,6 +448,7 @@ def model_summary_df(nepc_model, lower=None, upper=None):
                                  cmap='plasma',
                                  low=0,
                                  high=max_upu)"""
+
 
 def cs_subset(cursor,
               sigma_cutoff=None,
