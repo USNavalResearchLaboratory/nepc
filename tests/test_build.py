@@ -19,13 +19,8 @@ DIR_NAMES = [NEPC_HOME + "/data/cs/n2/itikawa/",
              NEPC_HOME + "/data/cs/n/zatsarinny/"]
 
 
-def nepc_connect(local, dbug):
-    cnx, cursor = nepc.connect(local, dbug)
-    return cnx, cursor
-
-
-def test_csdata_lines(local, dbug):
-    cnx, cursor = nepc_connect(local, dbug)
+@pytest.mark.usefixtures("nepc_connect")
+def test_csdata_lines(nepc_connect):
     cs_lines = 0
     for directoryname in DIR_NAMES:
         directory = os.fsencode(directoryname)
@@ -38,13 +33,11 @@ def test_csdata_lines(local, dbug):
                 # subtract 1 to account for header
                 cs_lines += scraper.wc_fxn(directoryname + filename) - 1
 
-    assert cs_lines == nepc.count_table_rows(cursor, "csdata")
-    cursor.close()
-    cnx.close()
+    assert cs_lines == nepc.count_table_rows(nepc_connect[1], "csdata")
 
 
-def test_data_entered(local, dbug):
-    cnx, cursor = nepc.connect(local, dbug)
+@pytest.mark.usefixtures("nepc_connect")
+def test_data_entered(nepc_connect, local):
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
@@ -57,15 +50,13 @@ def test_data_entered(local, dbug):
         dat_file = row['filename']
         df = pd.read_csv(NEPC_HOME + dat_file + '.dat', delimiter='\t',
                          usecols=['e_energy', 'sigma'])
-        e_energy, sigma = nepc.cs_e_sigma(cursor, cs_id)
+        e_energy, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
         assert e_energy == pytest.approx(df['e_energy'].tolist())
         assert sigma == pytest.approx(df['sigma'].tolist())
-    cursor.close()
-    cnx.close()
 
 
-def test_meta_entered(local, dbug):
-    cnx, cursor = nepc.connect(local, dbug)
+@pytest.mark.usefixtures("nepc_connect")
+def test_meta_entered(nepc_connect, local, dbug):
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
@@ -78,7 +69,7 @@ def test_meta_entered(local, dbug):
         met_file = row['filename']
         if dbug:
             print(cs_id, met_file)
-        e, sigma = nepc.cs_e_sigma(cursor, cs_id)
+        e, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
 
         meta_cols = ['specie', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
@@ -99,7 +90,7 @@ def test_meta_entered(local, dbug):
             meta_disk[i] = (int(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
-        meta_db = [nepc.cs_metadata(cursor, cs_id)[i]
+        meta_db = [nepc.cs_metadata(nepc_connect[1], cs_id)[i]
                    for i in list(range(1, 18))]
         for i in range(len(meta_cols)):
             if (type(meta_db[i]) is float):

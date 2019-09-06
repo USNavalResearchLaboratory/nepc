@@ -5,37 +5,7 @@ import pytest
 from nepc import nepc
 
 
-@pytest.fixture
-def nepc_connect(local, dbug):
-    """Establishes a connection with the NEPC database
-
-    Parameters
-    ----------
-    local : boolean
-        Checks whether the database is locally based or based off
-        of 'ppdadamsonlinux'
-    dbug : boolean
-        Checks whether debug mode is on or off
-
-    Returns
-    -------
-    cnx : MySQLConnection
-    A connection to the official NEPC MySQL database
-    cursor : MySQLCursor
-    A MySQLCursor object for executing SQL queries"""
-    cnx, cursor = nepc.connect(local, dbug)
-    print(type(cnx))
-    print(type(cursor))
-    yield [cnx, cursor]
-    cursor.close()
-    cnx.close()
-
-
-def nonfix_nepc_connect(local, dbug):
-    cnx, cursor = nepc.connect(local, dbug)
-    return cnx, cursor
-
-
+@pytest.mark.usefixtures("nepc_connect")
 def test_connect(nepc_connect):
     """Verify that nepc.connect() method connects to the NEPC
     database when local is True and when local is False"""
@@ -45,12 +15,14 @@ def test_connect(nepc_connect):
                       mysql.connector.cursor_cext.CMySQLCursor)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_count_table_rows(nepc_connect):
     """Verify that nepc.count_table_rows returns an integer value"""
     rows = nepc.count_table_rows(nepc_connect[1], "species")
     assert isinstance(rows, int)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_cs_e_sigma(nepc_connect):
     """Verify that nepc.cs_e_sigma returns
     proper formats for the e_energy and sigma values"""
@@ -61,6 +33,7 @@ def test_cs_e_sigma(nepc_connect):
     assert isinstance(sigma[0], float)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_cs_metadata(nepc_connect):
     """Verify that nepc.cs_metadata returns the
     metadata as a list containing an int
@@ -73,6 +46,7 @@ def test_cs_metadata(nepc_connect):
     assert isinstance(metadata[3], float)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_cs_dict_constructor(nepc_connect):
     """Verify that nepc.cs_dict_constructor
     makes a dictionary out of the three terms as
@@ -89,6 +63,7 @@ def test_cs_dict_constructor(nepc_connect):
     assert isinstance(cs_dict["e"][0], float)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_table_as_df(nepc_connect):
     """Verify when nepc.table_as_df is called it
     returns a DataFrame copy of what is included in the
@@ -100,6 +75,7 @@ def test_table_as_df(nepc_connect):
     assert isinstance(processf, pd.DataFrame)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_reaction_latex(nepc_connect):
     """Verify when nepc.reaction_latex is called it
     returns a string representing the LaTeX
@@ -110,6 +86,7 @@ def test_reaction_latex(nepc_connect):
     assert isinstance(nepc.reaction_latex(cs_dict), str)
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_cs_subset(nepc_connect):
     """Verify that nepc.cs_subset returns a proper
     subset of cross sections from the NEPC MySQL database"""
@@ -127,6 +104,7 @@ def test_cs_subset(nepc_connect):
     assert sigma_max > sigma_cutoff
 
 
+@pytest.mark.usefixtures("nepc_connect")
 def test_cs_subset_exception(nepc_connect):
     """When prompted with an exception in test_cs_subset
     verify that nepc.cs_subset does indeed return a value"""

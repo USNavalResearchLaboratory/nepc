@@ -1,6 +1,0 @@
-# This is from a failed attempt to use pytest_mysql
-from pytest_mysql import factories
-
-mysql_nepc_proc = factories.mysql_proc(
-    params="--mysql-user 'nepc' --mysql-passwd='nepc' --mysql-dbname='nepc'",
-    host='localhost', port=3306)
