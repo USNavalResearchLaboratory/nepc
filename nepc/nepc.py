@@ -254,46 +254,46 @@ def cs_dict_constructor(metadata, e_energy, sigma):
             "j_on_rhs": metadata[29]}
 
 
-def model(cursor, model_name):
-    """Return a plasma chemistry model from the NEPC MySQL database
+class Model:
+    """A plasma chemistry model from the NEPC MySQL database"""
+    def __init__(self, cursor, model_name):
+        """
+        Parameters
+        ----------
+        cursor : MySQLCursor
+            A MySQLCursor object (see nepc.connect)
+        model_name :str
+            The name of a NEPC model (see [nepc.wiki]/models
 
-    Parameters
-    ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
-    model_name :str
-        The name of a NEPC model (see [nepc.wiki]/models
+        Attributes 
+        ----------
+        cs: list of dict
+            A list of dictionaries containing cross section data and
+            metadata from the NEPC database.  See cs_dict_constructor 
+            for the structure of each cross section dictionary."""
+        cs_dicts = []
+        cursor.execute("SELECT cs.cs_id as cs_id " +
+                       "FROM cs " +
+                       "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
+                       "JOIN models m ON (m2cs.model_id = m.model_id) " +
+                       "WHERE m.name LIKE '" + model_name + "'")
+        cs_array = cursor.fetchall()
+        # print(str(cs_array))
 
-    Returns
-    -------
-    cs_dicts : list of dict
-        A list of dictionaries containing cross section data and
-        metadata from NEPC database.  See cs_dict_constructor for the structure
-        of each cross section dictionary.
-    """
-    cs_dicts = []
-    cursor.execute("SELECT cs.cs_id as cs_id " +
-                   "FROM cs " +
-                   "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
-                   "JOIN models m ON (m2cs.model_id = m.model_id) " +
-                   "WHERE m.name LIKE '" + model_name + "'")
-    cs_array = cursor.fetchall()
-    # print(str(cs_array))
+        for cs_item in cs_array:
+            cs_id = cs_item[0]
+            # print(str(cs_id))
 
-    for cs_item in cs_array:
-        cs_id = cs_item[0]
-        # print(str(cs_id))
+            metadata = cs_metadata(cursor, cs_id)
+            # print(type(metadata))
 
-        metadata = cs_metadata(cursor, cs_id)
-        # print(type(metadata))
+            e_energy, sigma = cs_e_sigma(cursor, cs_id)
+            # print(e_energy)
+            # print(sigma)
 
-        e_energy, sigma = cs_e_sigma(cursor, cs_id)
-        # print(e_energy)
-        # print(sigma)
+            cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
 
-        cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
-
-    return cs_dicts
+        self.cs = cs_dicts
 
 
 def table_as_df(cursor, table, columns="*"):
