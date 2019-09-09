@@ -333,6 +333,35 @@ def write_data_to_file(data_array, filename, start_csdata_id):
     return csdata_id
 
 
+def write_pd_data_to_file(data_frame, filename, start_csdata_id):
+    """Given a dataframe of csdata, write this to a file in the correct format
+    Parameters
+    ----------
+    data_frame: pandas DataFrame
+    A DataFrame containing cross section data to be entered into the file
+
+    filename: file
+    Name of the file where values of data_frame should be entered
+
+    start_cs_data_id : int
+    The id where the data should be placed
+
+    Return
+    ------
+    csdata_id
+    The next csdata_id to use
+    """
+    csdata_id = start_csdata_id
+    write_f = open(filename, "x")
+    write_f.write("\t".join(['csdata_id', 'e_energy', 'sigma']) + "\n")
+    for i in range(len(data_frame)):
+        write_f.write(str(csdata_id) + "\t" + str(data_frame.iloc[i]['e_energy'])
+                      + "\t" + str(data_frame.iloc[i]['sigma']) + "\n")
+        csdata_id = csdata_id + 1
+    write_f.close()
+    return csdata_id
+
+
 def write_metadata_to_file(filename, cs_id, specie, process,
                            units_e, units_sigma, ref,
                            lhs_a='\\N', lhs_b='\\N',
@@ -484,8 +513,8 @@ def get_states(filename):
     states = []
     for line in states_lines:
         states.append(line.split('\t'))
-    return ([states[i][2] for i in range(len(states))],
-            [states[i][3] for i in range(len(states))])
+    return ([states[i][1] for i in range(len(states))],
+            [states[i][2] for i in range(len(states))])
 
 
 def get_cs_id_from_met_file(filename):
