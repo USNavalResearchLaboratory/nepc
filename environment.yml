@@ -19,6 +19,7 @@ dependencies:
         - pip=19.0.3
         - sphinx
         - pip:
+                - quadpy==0.13.2
                 - pylint
                 - mysql-connector-python==8.0.17
                 - pdfminer.six==20181108
