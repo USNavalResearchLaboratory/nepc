@@ -5,24 +5,14 @@ import mysql.connector
 import nepc
 
 
-def test_connect():
-    """Verify that nepc.connect() method connects to the NEPC
-    database when local is True and when local is False"""
-
-    cnx, cursor = nepc.connect(local=False)
-    assert isinstance(cnx,
+@pytest.mark.usefixtures("nepc_connect")
+def test_connect(nepc_connect):
+    """Verify that nepc.connect() method connects to the NEPC database
+    """
+    assert isinstance(nepc_connect[0],
                       mysql.connector.connection_cext.CMySQLConnection)
-    assert isinstance(cursor,
+    assert isinstance(nepc_connect[1],
                       mysql.connector.cursor_cext.CMySQLCursor)
-    cursor.close()
-    cnx.close()
-    cnx, cursor = nepc.connect(local=True)
-    assert isinstance(cnx,
-                      mysql.connector.connection_cext.CMySQLConnection)
-    assert isinstance(cursor,
-                      mysql.connector.cursor_cext.CMySQLCursor)
-    cursor.close()
-    cnx.close()
 
 
 @pytest.mark.usefixtures("nepc_connect")
