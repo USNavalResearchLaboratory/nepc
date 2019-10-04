@@ -89,10 +89,10 @@ def test_model(nepc_connect):
     """Verify that nepc.model returns a list of dictionaries"""
     # TODO: create a model class and test that we can retrieve it from
     # the NEPC database
-    angus = nepc.Model(nepc_connect[1], "angus")
-    assert isinstance(angus.cs, list)
-    assert isinstance(angus.cs[0], dict)
-    assert isinstance(angus.cs[0]['specie'], str)
+    abc = nepc.Model(nepc_connect[1], "abc")
+    assert isinstance(abc.cs, list)
+    assert isinstance(abc.cs[0], dict)
+    assert isinstance(abc.cs[0]['specie'], str)
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -124,12 +124,12 @@ def test_reaction_latex(nepc_connect):
 def test_model_summary_df(nepc_connect):
     """Verify nepc.model_summary_df returns a dataframe"""
     # TODO: check formatting of summary dataframe
-    angus = nepc.Model(nepc_connect[1], "angus")
-    df = nepc.model_summary_df(angus.cs, lower=0, upper=10)
+    abc = nepc.Model(nepc_connect[1], "abc")
+    df = nepc.model_summary_df(abc.cs, lower=0, upper=10)
     assert isinstance(df, pd.io.formats.style.Styler)
-    df = nepc.model_summary_df(angus.cs, upper=10)
+    df = nepc.model_summary_df(abc.cs, upper=10)
     assert isinstance(df, pd.io.formats.style.Styler)
-    df = nepc.model_summary_df(angus.cs, lower=10)
+    df = nepc.model_summary_df(abc.cs, lower=10)
     assert isinstance(df, pd.io.formats.style.Styler)
 
 
