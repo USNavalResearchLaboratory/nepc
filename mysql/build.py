@@ -136,6 +136,7 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`models`("
                  "	`model_id` INT UNSIGNED NOT NULL ,"
                  "	`name` VARCHAR(40) NOT NULL ,"
                  "	`long_name` VARCHAR(240) NOT NULL ,"
+                 "	`ref` VARCHAR(40) NOT NULL ,"
                  "	PRIMARY KEY(`model_id`)"
                  ");"
                  )
@@ -244,12 +245,13 @@ if ARGS.debug:
     print_timestep("loaded data into processes table")
     # print_table("processes")
 
-MODELS_VARIABLE_LIST = ["model_id", "name", "long_name"]
+MODELS_VARIABLE_LIST = ["model_id", "name", "long_name", "ref"]
 INSERT_COMMAND_MODELS = insert_command("models",
                                        MODELS_VARIABLE_LIST)
 MODELS_DTYPE = {"model_id": int,
                 "name": str,
-                "long_name": str}
+                "long_name": str,
+                "ref": str}
 MODELS_FILE = NEPC_DATA + "models.tsv"
 MODELS_DATA_LIST = list(pd.read_csv(MODELS_FILE,
                                     sep='\t',
@@ -257,10 +259,13 @@ MODELS_DATA_LIST = list(pd.read_csv(MODELS_FILE,
                                     na_values=NA_VALUES).itertuples(
                                         index=False,
                                         name=None))
+if ARGS.debug:
+    print_timestep("loading data into models table")
+    print(MODELS_DATA_LIST)
 MYCURSOR.executemany(INSERT_COMMAND_MODELS, MODELS_DATA_LIST)
 if ARGS.debug:
     print_timestep("loaded data into models table")
-    # print_table("models")
+    print_table("models")
 
 SPECIES_VARIABLE_LIST = ["id", "name", "long_name"]
 INSERT_COMMAND_SPECIES = insert_command("species",
