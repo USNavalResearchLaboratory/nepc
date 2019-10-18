@@ -216,3 +216,74 @@ def fcf(p_list, pp_list,
             i_pp += 1
         i_p += 1
     return psi_p, psi_pp, fcf
+
+
+def print_fcf_calc_ref(fcf_calc, fcf_ref):
+    for i in range(len(fcf_calc)):
+        print('\nv\'/v\'\': {}'.format(i))
+        for j in range(len(fcf_calc[0])):
+            print('{}\t{:.2E}\t{:.2E}'.format(j, fcf_ref[i][j], fcf_calc[i][j]))
+
+
+def fcf_closure(fcf_vp_vpp):
+    vp_len = len(fcf_vp_vpp)
+    vpp_len = len(fcf_vp_vpp[0])
+    closure_vp = np.zeros(vp_len)
+    closure_vpp = np.zeros(vpp_len)
+    for vp in range(vp_len):
+        for vpp in range(vpp_len):
+            closure_vp[vp] += fcf_vp_vpp[vp][vpp]
+            closure_vpp[vpp] += fcf_vp_vpp[vp][vpp]
+
+    print('v\'\tclosure_vp')
+    for vp in range(vp_len):
+        print('{}\t{}'.format(vp, closure_vp[vp]))
+
+    print('\nv\'\'\tclosure_vpp')
+    for vpp in range(vpp_len):
+        print('{}\t{}'.format(vpp, closure_vpp[vpp]))
+
+
+def rmse_calc_ref(fcf_calc, fcf_ref):
+    vp_len = len(fcf_calc)
+    vpp_len = len(fcf_calc[0])
+    sum_squares = 0.0
+    for vp in range(vp_len):
+        for vpp in range(vpp_len):
+            sum_squares += (fcf_calc[vp][vpp] - fcf_ref[vp][vpp])**2
+    return np.sqrt(sum_squares/(vp_len * vpp_len))
+
+
+def off_diagonal_elements(two_d_array):
+    # upper triangle. k=1 excludes the diagonal elements.
+    xu, yu = np.triu_indices_from(two_d_array, k=1)
+    # lower triangle
+    xl, yl = np.tril_indices_from(two_d_array, k=-1)  # Careful, here the offset is -1
+
+    # combine
+    x = np.concatenate((xl, xu))
+    y = np.concatenate((yl, yu))
+
+    return two_d_array[(x,y)]
+
+
+def rmse_off_diagonal_elements(two_d_array):
+    elem = off_diagonal_elements(two_d_array)
+    return np.sqrt(np.sum(elem**2)/len(elem))
+
+
+def incremental_rmse_off_diagonal_elements(two_d_array):
+    for i in range(2,len(two_d_array)+1):
+        incremental_two_d_array = two_d_array[0:i,0:i]
+        print('i: {}; rmse: {}'.format(i, rmse_off_diagonal_elements(incremental_two_d_array)))
+
+
+def rmse_diagonal_elements(two_d_array):
+    elem = np.diagonal(two_d_array)
+    return np.sqrt(np.sum((1.0-elem)**2)/len(elem))
+
+
+def incremental_rmse_diagonal_elements(two_d_array):
+    for i in range(1,len(two_d_array)+1):
+        incremental_two_d_array = two_d_array[0:i,0:i]
+        print('i: {}; rmse: {}'.format(i, rmse_diagonal_elements(incremental_two_d_array)))
