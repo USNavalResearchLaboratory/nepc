@@ -19,6 +19,8 @@ def fcf(p_list, pp_list,
         psi_pp_keep=[[], [], []],
         dbug=False):
 
+    Vr_p = []
+    Vr_pp = []
     psi_p = []
     psi_pp = []
     fcf = []
@@ -27,21 +29,21 @@ def fcf(p_list, pp_list,
     i_p = 0
     for p in p_list:
         fcf.append([])
-        wep=diatomic_constants[p]['we']
-        wexep=diatomic_constants[p]['wexe']
-        Bep=diatomic_constants[p]['Be']
-        rep=diatomic_constants[p]['re']
-        Dep = mp.De(we=wep, wexe=wexep)
+        wep = diatomic_constants[p]['we']
+        wexep = diatomic_constants[p]['wexe']
+        Bep = diatomic_constants[p]['Be']
+        rep = diatomic_constants[p]['re']
+        Dep = diatomic_constants[p]['De']
         little_ap = mp.little_a_20(mu=reduced_mass, De=Dep, we=wep)
 
         i_pp = 0
         for pp in pp_list:
             fcf[i_p].append([])
-            wepp=diatomic_constants[pp]['we']
-            wexepp=diatomic_constants[pp]['wexe']
-            Bepp=diatomic_constants[pp]['Be']
-            repp=diatomic_constants[pp]['re']
-            Depp = mp.De(we=wepp, wexe=wexepp)
+            wepp = diatomic_constants[pp]['we']
+            wexepp = diatomic_constants[pp]['wexe']
+            Bepp = diatomic_constants[pp]['Be']
+            repp = diatomic_constants[pp]['re']
+            Depp = diatomic_constants[pp]['De']
             little_app = mp.little_a_20(mu=reduced_mass, De=Depp, we=wepp)
 
             R_LEN, r_array = mp.r_array(rep, repp, delta_r, k)
@@ -57,7 +59,7 @@ def fcf(p_list, pp_list,
                 r0p = mp.r0_3(re=rep, alpha=alphap)
                 C1p = mp.C1_10(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
                 C2p = mp.C2_11(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
-                D1p = mp.D1_8(De=Dep, little_a=little_ap, re=rep, alpha=alphap) 
+                D1p = mp.D1_8(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
                 D2p = mp.D2_9(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
                 K1p = mp.K1_6(D2=D2p, C2=C2p, wexe=wexep)
                 K2p = mp.K2_7(D1=D1p, C1=C1p, wexe=wexep, K1=K1p)
@@ -108,6 +110,9 @@ def fcf(p_list, pp_list,
                             print("\ncomputing final psi_p")
                         psi_p_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
                         if p in psi_p_keep[0] and vp in psi_p_keep[1] and jp in psi_p_keep[2]:
+                            Vr_p.append({'re': rep,
+                                         'a': little_ap,
+                                         'De': Dep})
                             psi_p.append({'state':p,
                                           'v':vp,
                                           'j':jp,
@@ -130,7 +135,7 @@ def fcf(p_list, pp_list,
                                 if dbug:
                                     print("computing laguerre_pp in loop for n_pp: ", n_pp)
                                 laguerre_pp += (np.int64(-1)**n_pp * binom(vpp, n_pp) *
-                                                power(10, 
+                                                power(10,
                                                       log10(gamma(K2pp-vpp))
                                                       + (vpp - n_pp) * log10(zpp)
                                                       - log10(gamma(K2pp - vpp - n_pp))))
@@ -139,12 +144,15 @@ def fcf(p_list, pp_list,
                                 print("computing final laguerre_pp")
                             laguerre_pp = np.int64(-1)**vpp * laguerre_pp
 
-                            
+
                             if dbug:
                                 print("computing final psi_pp")
                             psi_pp_r = power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp
-                            if (saved_psi_pp[i_pp_vpp_jpp] is False and pp in psi_pp_keep[0] and 
+                            if (saved_psi_pp[i_pp_vpp_jpp] is False and pp in psi_pp_keep[0] and
                                 vpp in psi_pp_keep[1] and jpp in psi_pp_keep[2]):
+                                Vr_pp.append({'re': repp,
+                                              'a': little_app,
+                                              'De': Depp})
                                 psi_pp.append({'state':pp,
                                                'v':vpp,
                                                'j':jpp,
@@ -152,7 +160,7 @@ def fcf(p_list, pp_list,
                                                'psi_r':psi_pp_r})
                                 saved_psi_pp[i_pp_vpp_jpp] = True
                             i_pp_vpp_jpp += 1
-                            #psi_pp[jp][jpp][vp].append(power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp)               
+                            #psi_pp[jp][jpp][vp].append(power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp)
 
 
                             #test_ints([vp, vpp, jp, jpp])
@@ -207,15 +215,15 @@ def fcf(p_list, pp_list,
                                 print("\nK2p, K2pp")
                                 print(K2p, K2pp)
 
-                            #test_floats([Dep, Depp, big_Ap, big_App, alphap, alphapp, 
+                            #test_floats([Dep, Depp, big_Ap, big_App, alphap, alphapp,
                             #             r0p, r0pp, little_ap, little_app, C1p, C1pp, C2p, C2pp,
-                            #             D1p, D1pp, D2p, D2pp, K1p, K1pp, K2p, K2pp, log_normp, log_normpp])                        
+                            #             D1p, D1pp, D2p, D2pp, K1p, K1pp, K2p, K2pp, log_normp, log_normpp])
 
                             fcf[i_p][i_pp][jp][jpp][vp].append(
                                 pow(simps(y=psi_p_r * psi_pp_r, x=r_array), 2))
             i_pp += 1
         i_p += 1
-    return psi_p, psi_pp, fcf
+    return Vr_p, Vr_pp, psi_p, psi_pp, fcf
 
 
 def print_fcf_calc_ref(fcf_calc, fcf_ref):

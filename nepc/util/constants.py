@@ -8,22 +8,26 @@ N2_DIATOMIC_CONSTANTS = {
             'we': np.float64(2358.57),
             'wexe': np.float64(14.324),
             'Be': np.float64(1.99824),
-            're': np.float64(1.09768)},
+            're': np.float64(1.097688),
+            'De': np.float64(79890.0)},
         'N2(A3Sigmau+)': {'Te': np.float64(50203.6),
             'we': np.float64(1460.64),
             'wexe': np.float64(13.87),
             'Be': np.float64(1.4546),
-            're': np.float64(1.2866)},
+            're': np.float64(1.286390),
+            'De': np.float64(29686.0)},
         'N2(B3Pig)': {'Te': np.float64(59619.3),
             'we': np.float64(1733.39),
             'wexe': np.float64(14.122),
             'Be': np.float64(1.6374),
-            're': np.float64(1.2126)},
+            're': np.float64(1.212392),
+            'De': np.float64(39495.0)},
         'N2+(X2Sigmag+)':{'Te': np.float64(125667.5),
             'we': np.float64(2207.00),
             'wexe': np.float64(16.10),
             'Be': np.float64(1.93176),
-            're': np.float64(1.11642)}}
+            're': np.float64(1.116413),
+            'De': np.float64(71373.0)}}
 
 """reduced mass of nitrogen"""
 MU_NITROGEN_KG = 1.16294E-26 # kg
