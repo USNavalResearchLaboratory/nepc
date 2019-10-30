@@ -29,6 +29,7 @@ def fcf(p_list, pp_list,
     i_p = 0
     for p in p_list:
         fcf.append([])
+        Top = diatomic_constants[p]['To']
         wep = diatomic_constants[p]['we']
         wexep = diatomic_constants[p]['wexe']
         Bep = diatomic_constants[p]['Be']
@@ -39,6 +40,7 @@ def fcf(p_list, pp_list,
         i_pp = 0
         for pp in pp_list:
             fcf[i_p].append([])
+            Topp = diatomic_constants[pp]['To']
             wepp = diatomic_constants[pp]['we']
             wexepp = diatomic_constants[pp]['wexe']
             Bepp = diatomic_constants[pp]['Be']
@@ -110,7 +112,10 @@ def fcf(p_list, pp_list,
                             print("\ncomputing final psi_p")
                         psi_p_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
                         if p in psi_p_keep[0] and vp in psi_p_keep[1] and jp in psi_p_keep[2]:
-                            Vr_p.append({'re': rep,
+                            Vr_p.append({'To': Top,
+                                         'we': wep,
+                                         'wexe': wexep,
+                                         're': rep,
                                          'a': little_ap,
                                          'De': Dep})
                             psi_p.append({'state':p,
@@ -150,7 +155,10 @@ def fcf(p_list, pp_list,
                             psi_pp_r = power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp
                             if (saved_psi_pp[i_pp_vpp_jpp] is False and pp in psi_pp_keep[0] and
                                 vpp in psi_pp_keep[1] and jpp in psi_pp_keep[2]):
-                                Vr_pp.append({'re': repp,
+                                Vr_pp.append({'To': Topp,
+                                              'we': wepp,
+                                              'wexe': wexepp,
+                                              're': repp,
                                               'a': little_app,
                                               'De': Depp})
                                 psi_pp.append({'state':pp,

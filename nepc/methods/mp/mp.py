@@ -82,3 +82,8 @@ def r_array(rep, repp, delta_r, k):
     r = ((rep + repp)/2.0 -
          delta_r * np.sinh(1 - np.arange(r_len) * pow(2, 1 - k)) / np.sinh(1))
     return r_len, r
+
+
+def Gv(v, To, we, wexe):
+    Te = To - we/2 + wexe/4
+    return Te + we*(v+1/2) - wexe*(v+1/2)**2
