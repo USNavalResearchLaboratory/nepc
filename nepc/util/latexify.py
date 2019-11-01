@@ -30,8 +30,8 @@ def latexify(fig_width=None, fig_height=None, columns=1):
 
     MAX_HEIGHT_INCHES = 8.0
     if fig_height > MAX_HEIGHT_INCHES:
-        print("WARNING: fig_height too large:" + fig_height + 
-              "so will reduce to" + MAX_HEIGHT_INCHES + "inches.")
+        print("WARNING: fig_height too large:" + str(fig_height) +
+              "so will reduce to" + str(MAX_HEIGHT_INCHES) + "inches.")
         fig_height = MAX_HEIGHT_INCHES
 
     params = {'backend': 'ps',
