@@ -84,6 +84,13 @@ def r_array(rep, repp, delta_r, k):
     return r_len, r
 
 
-def Gv(v, To, we, wexe):
-    Te = To - we/2 + wexe/4
-    return Te + we*(v+1/2) - wexe*(v+1/2)**2
+def Te(To, we, wexe):
+    '''Compute the energy at the minimum of the Morse potential well
+    '''
+    return To - we/2 + wexe/4
+
+
+def Tv(v, To, we, wexe):
+    '''Compute the energy of vibrational quanta v in the Morse potential well
+    '''
+    return Te(To, we, wexe) + we*(v+1/2) - wexe*(v+1/2)**2
