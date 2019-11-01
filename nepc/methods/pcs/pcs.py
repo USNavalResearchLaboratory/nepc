@@ -24,7 +24,7 @@ def universal_function(reduced_energy):
     """based off of Paul's fitting coefficients"""
     return np.float64(47.3 * (reduced_energy - 1)/((reduced_energy + 2.4) * (reduced_energy + 9.2)))
 
-def pcs(p_state, vp, pp_state, vpp, fcf, electron_energy='NaN'):
+def pcs(p_state, pp_state, vp, vpp, fcf, electron_energy='NaN'):
     """returns an array of the partial cross section (m^2) of the respective incident electron energy (eV)"""
     if electron_energy=='NaN':
         electron_energy = incident_ee
@@ -47,7 +47,7 @@ def pcs(p_state, vp, pp_state, vpp, fcf, electron_energy='NaN'):
 
     pcs_list = []
     for i in electron_energy:
-        sigma = np.float64(valence * K_E**2 * PI * ELEMENTARY_CHARGE**4 * universal_function(i/tv_vppvp_ev) * fcf / (tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
+        sigma = np.float64(valence * K_E**2 * PI * ELEMENTARY_CHARGE**4 * universal_function(i/Tv_vppvp_ev) * fcf / (Tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
         pcs_list.append([i, sigma])
 
     return pcs_list
