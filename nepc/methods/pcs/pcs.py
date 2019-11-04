@@ -48,7 +48,10 @@ def pcs(p_state, pp_state, vp, vpp, fcf, electron_energy='NaN'):
     pcs_list = []
     for i in electron_energy:
         sigma = np.float64(valence * K_E**2 * PI * ELEMENTARY_CHARGE**4 * universal_function(i/Tv_vppvp_ev) * fcf / (Tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
-        pcs_list.append([i, sigma])
+        if sigma < 0.0:
+            pcs_list.append([i, 0.0])
+        else:
+            pcs_list.append([i, sigma])
 
     return pcs_list
 
