@@ -27,7 +27,19 @@ N2_DIATOMIC_CONSTANTS = {
             'wexe': np.float64(16.10),
             'Be': np.float64(1.93176),
             're': np.float64(1.116413),
-            'De': np.float64(71373.0)}}
+            'De': np.float64(71373.0)},
+        'N2+(A2Piu)':{'To': np.float64(134683.1),
+            'we': np.float(1903.51),
+            'wexe': np.float(15.029),
+            'Be': np.float64(1.7442),
+            're': np.float64(1.174910),
+            'De': np.float64(62206.0)},
+        'N2+(B2Sigmau+)':{'To': np.float64(151233.5),
+            'we': np.float64(2420.83),
+            'wexe': np.float64(23.851),
+            'Be': np.float64(2.0845),
+            're': np.float64(1.074736),
+            'De': np.float64(45912.0)}}
 
 """reduced mass of nitrogen"""
 MU_NITROGEN_KG = 1.16294E-26 # kg
