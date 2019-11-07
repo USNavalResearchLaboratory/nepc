@@ -20,9 +20,11 @@ incident_ee = np.asarray([16.0,16.5,17.0,17.5,18.0,18.5,19.0,19.5,20.0,20.5,21.0
                           450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,
                           950.0,1000.0])
 
-def universal_function(reduced_energy):
+def universal_function(ej):
     """based off of Paul's fitting coefficients"""
-    return np.float64(47.3 * (reduced_energy - 1)/((reduced_energy + 2.4) * (reduced_energy + 9.2)))
+    return np.float64(47.3 * (ej - 1)/((ej + 2.4) * (ej + 9.2)))
+    #return np.float64(29.05 * (ej - 1.08)/(PI * (ej + 1.22) * (ej + 12.34)))
+    #return np.float64(10.0 * (ej - 1)/(PI * (ej + 1.5) * (ej + 9.0)))
 
 def pcs(p_state, pp_state, vp, vpp, fcf, electron_energy='NaN'):
     """returns an array of the partial cross section (m^2) of the respective incident electron energy (eV)"""
