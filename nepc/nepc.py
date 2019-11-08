@@ -296,6 +296,19 @@ class Model:
         self.cs = cs_dicts
 
 
+    def filter(self, specie=None, process=None, ref=None):
+        """return a subset of the model"""
+        subset_dicts = []
+        if specie is None and process is None and ref is None:
+            raise Exception("You must specify the specie, process or " +
+                            "ref to narrow the search results.")
+        if specie is not None:
+            for i in range(len(self.cs)):
+                if self.cs[i]['specie'] == specie:
+                    subset_dicts.append(self.cs[i])
+        return subset_dicts
+
+
 def table_as_df(cursor, table, columns="*"):
     """Return a MySQL table as a pandas DataFrame
 
