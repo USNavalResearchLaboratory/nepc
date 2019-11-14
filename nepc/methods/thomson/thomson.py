@@ -8,7 +8,7 @@ from scipy.special import gamma as gamma
 from scipy.integrate import simps as simps
 
 
-def fcf(p_list, pp_list,
+def psi_v(p_list, pp_list,
         vp_list, vpp_list,
         jp_list, jpp_list,
         diatomic_constants,
@@ -234,115 +234,94 @@ def fcf(p_list, pp_list,
     return Vr_p, Vr_pp, psi_p, psi_pp, fcf
 
 
-def fcf_v(p_list, pp_list,
-          vp_list, vpp_list,
-          diatomic_constants,
+def fcf_v(vp_max, vpp_max,
+          diatomic_constants_p,
+          diatomic_constants_pp,
           reduced_mass,
           k,
           delta_r,
           dbug=False):
 
-    fcf_p_pp = []
+    Top = diatomic_constants_p['To']
+    wep = diatomic_constants_p['we']
+    wexep = diatomic_constants_p['wexe']
+    Bep = diatomic_constants_p['Be']
+    rep = diatomic_constants_p['re']
+    Dep = diatomic_constants_p['De']
+    little_ap = mp.little_a_20(mu=reduced_mass, De=Dep, we=wep)
 
-    for p in p_list:
-        Top = diatomic_constants[p]['To']
-        wep = diatomic_constants[p]['we']
-        wexep = diatomic_constants[p]['wexe']
-        Bep = diatomic_constants[p]['Be']
-        rep = diatomic_constants[p]['re']
-        Dep = diatomic_constants[p]['De']
-        little_ap = mp.little_a_20(mu=reduced_mass, De=Dep, we=wep)
-        Vr_p_dict = {'To': Top,
-                     'we': wep,
-                     'wexe': wexep,
-                     're': rep,
-                     'a': little_ap,
-                     'De': Dep}
+    Topp = diatomic_constants_pp['To']
+    wepp = diatomic_constants_pp['we']
+    wexepp = diatomic_constants_pp['wexe']
+    Bepp = diatomic_constants_pp['Be']
+    repp = diatomic_constants_pp['re']
+    Depp = diatomic_constants_pp['De']
+    little_app = mp.little_a_20(mu=reduced_mass, De=Depp, we=wepp)
 
-        for pp in pp_list:
-            Topp = diatomic_constants[pp]['To']
-            wepp = diatomic_constants[pp]['we']
-            wexepp = diatomic_constants[pp]['wexe']
-            Bepp = diatomic_constants[pp]['Be']
-            repp = diatomic_constants[pp]['re']
-            Depp = diatomic_constants[pp]['De']
-            little_app = mp.little_a_20(mu=reduced_mass, De=Depp, we=wepp)
-            Vr_pp_dict = {'To': Topp,
-                          'we': wepp,
-                          'wexe': wexepp,
-                          're': repp,
-                          'a': little_app,
-                          'De': Depp}
+    R_LEN, r_array = mp.r_array(rep, repp, delta_r, k)
 
-            R_LEN, r_array = mp.r_array(rep, repp, delta_r, k)
+    jp = 0
+    jpp = 0
+    big_Ap = mp.big_A_5(Be=Bep, j=jp)
+    alphap = mp.alpha_4(big_A=big_Ap, Be=Bep, we=wep)
+    r0p = mp.r0_3(re=rep, alpha=alphap)
+    C1p = mp.C1_10(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
+    C2p = mp.C2_11(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
+    D1p = mp.D1_8(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
+    D2p = mp.D2_9(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
+    K1p = mp.K1_6(D2=D2p, C2=C2p, wexe=wexep)
+    K2p = mp.K2_7(D1=D1p, C1=C1p, wexe=wexep, K1=K1p)
+    zp = K1p * exp(-little_ap * (r_array - r0p))
 
-            if dbug is True:
-                print("rep: ", rep)
-                print("repp: ", repp)
+    big_App = mp.big_A_5(Be=Bepp, j=jpp)
+    alphapp = mp.alpha_4(big_A=big_App, Be=Bepp, we=wepp)
+    r0pp = mp.r0_3(re=repp, alpha=alphapp)
+    C1pp = mp.C1_10(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
+    C2pp = mp.C2_11(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
+    D1pp = mp.D1_8(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
+    D2pp = mp.D2_9(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
+    K1pp = mp.K1_6(D2=D2pp, C2=C2pp, wexe=wexepp)
+    K2pp = mp.K2_7(D1=D1pp, C1=C1pp, wexe=wexepp, K1=K1pp)
+    zpp = K1pp * exp(-little_app * (r_array - r0pp))
 
-            jp = 0
-            jpp = 0
-            big_Ap = mp.big_A_5(Be=Bep, j=jp)
-            alphap = mp.alpha_4(big_A=big_Ap, Be=Bep, we=wep)
-            r0p = mp.r0_3(re=rep, alpha=alphap)
-            C1p = mp.C1_10(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
-            C2p = mp.C2_11(big_A=big_Ap, little_a=little_ap, r0=r0p, alpha=alphap)
-            D1p = mp.D1_8(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
-            D2p = mp.D2_9(De=Dep, little_a=little_ap, re=rep, alpha=alphap)
-            K1p = mp.K1_6(D2=D2p, C2=C2p, wexe=wexep)
-            K2p = mp.K2_7(D1=D1p, C1=C1p, wexe=wexep, K1=K1p)
-            zp = K1p * exp(-little_ap * (r_array - r0p))
+    fcf_vp_vpp = []
+    for vp in np.arange(vp_max+1, dtype=np.int64):
+        fcf_vp_vpp.append([])
+        log_normp = mp.log_norm(little_ap, K2p, vp)
 
-            big_App = mp.big_A_5(Be=Bepp, j=jpp)
-            alphapp = mp.alpha_4(big_A=big_App, Be=Bepp, we=wepp)
-            r0pp = mp.r0_3(re=repp, alpha=alphapp)
-            C1pp = mp.C1_10(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
-            C2pp = mp.C2_11(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
-            D1pp = mp.D1_8(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
-            D2pp = mp.D2_9(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
-            K1pp = mp.K1_6(D2=D2pp, C2=C2pp, wexe=wexepp)
-            K2pp = mp.K2_7(D1=D1pp, C1=C1pp, wexe=wexepp, K1=K1pp)
-            zpp = K1pp * exp(-little_app * (r_array - r0pp))
+        log_psi_p = mp.log_psi(zp, K2p, vp)
 
-            for vp in vp_list:
-                log_normp = mp.log_norm(little_ap, K2p, vp)
+        laguerre_p = np.float64(0) * np.arange(R_LEN)
 
-                log_psi_p = mp.log_psi(zp, K2p, vp)
+        for n_p in np.arange(vp+1, dtype=np.int64):
 
-                laguerre_p = np.float64(0) * np.arange(R_LEN)
+            laguerre_p += (np.int64(-1)**n_p * binom(vp, n_p) *
+                           power(10, log10(gamma(K2p-vp)) +
+                                 (vp - n_p) * log10(zp) -
+                                 log10(gamma(K2p - vp - n_p))))
 
-                for n_p in np.arange(vp+1, dtype=np.int64):
+        laguerre_p = np.int64(-1)**vp * laguerre_p
 
-                    laguerre_p += (np.int64(-1)**n_p * binom(vp, n_p) *
-                                   power(10, log10(gamma(K2p-vp))
-                                   + (vp - n_p) * log10(zp)
-                                   - log10(gamma(K2p - vp - n_p))))
+        psi_p_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
 
-                    laguerre_p = np.int64(-1)**vp * laguerre_p
+        for vpp in np.arange(vpp_max+1, dtype=np.int64):
+            log_normpp = mp.log_norm(little_app, K2pp, vpp)
+            log_psi_pp = mp.log_psi(zpp, K2pp, vpp)
 
-                    psi_p_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
+            laguerre_pp = np.float64(0) * np.arange(R_LEN)
 
-                    for vpp in vpp_list:
-                        log_normpp = mp.log_norm(little_app, K2pp, vpp)
-                        log_psi_pp = mp.log_psi(zpp, K2pp, vpp)
+            for n_pp in np.arange(vpp+1, dtype=np.int64):
+                laguerre_pp += (np.int64(-1)**n_pp * binom(vpp, n_pp) *
+                                power(10, log10(gamma(K2pp-vpp)) +
+                                      (vpp - n_pp) * log10(zpp) -
+                                      log10(gamma(K2pp - vpp - n_pp))))
 
-                        laguerre_pp = np.float64(0) * np.arange(R_LEN)
+            laguerre_pp = np.int64(-1)**vpp * laguerre_pp
 
-                        for n_pp in np.arange(vpp+1, dtype=np.int64):
-                            laguerre_pp += (np.int64(-1)**n_pp * binom(vpp, n_pp) *
-                                            power(10, log10(gamma(K2pp-vpp))
-                                            + (vpp - n_pp) * log10(zpp)
-                                            - log10(gamma(K2pp - vpp - n_pp))))
+            psi_pp_r = power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp
 
-                        laguerre_pp = np.int64(-1)**vpp * laguerre_pp
-
-
-                        psi_pp_r = power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp
-
-                        fcf[vp].append(pow(simps(y=psi_p_r * psi_pp_r, x=r_array), 2))
-            i_pp += 1
-        i_p += 1
-    return Vr_p, Vr_pp, psi_p, psi_pp, fcf
+            fcf_vp_vpp[vp].append(pow(simps(y=psi_p_r * psi_pp_r, x=r_array), 2))
+    return fcf_vp_vpp
 
 
 def print_fcf_calc_ref(fcf_calc, fcf_ref):
