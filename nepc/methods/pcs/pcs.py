@@ -24,7 +24,7 @@ def universal_function(ej, a, b, c):
     """universal function from fit to total cross section data"""
     return np.float64(a * (ej - 1)/((ej + b) * (ej + c)))
 
-def pcs(p_state, pp_state, vp, vpp, fcf, electron_energy=incident_ee, a=47.3, b=2.4, c=9.2):
+def pcs(p_state, pp_state, vp, vpp, fcf, a=47.3, b=2.4, c=9.2, electron_energy=incident_ee):
     """returns an array of the partial cross section (m^2) of the respective incident electron energy (eV)"""
     """default values a, b, c for universal function are from fit to N2 total cross section data"""
 
@@ -47,8 +47,8 @@ def pcs(p_state, pp_state, vp, vpp, fcf, electron_energy=incident_ee, a=47.3, b=
     pcs_list = []
     for i in electron_energy:
         sigma = np.float64(valence * K_E**2 * PI * ELEMENTARY_CHARGE**4 *
-                           universal_function(i/Tv_vppvp_ev, a=a, b=b, c=c) *
-                           fcf / (Tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
+                           universal_function((i/Tv_vppvp_ev), a=a, b=b, c=c) *
+                           np.float64(fcf) / (Tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
         if sigma < 0.0:
             pcs_list.append([i, 0.0])
         else:
