@@ -98,8 +98,9 @@ def fcf_v(vp_max, vpp_max,
     return fcf_vp_vpp
 
 
-def psi_v(vp,
+def psi_v(vp, vpp,
           diatomic_constants_p,
+          diatomic_constants_pp,
           reduced_mass,
           k,
           delta_r,
@@ -113,9 +114,18 @@ def psi_v(vp,
     Dep = diatomic_constants_p['De']
     little_ap = mp.little_a_20(mu=reduced_mass, De=Dep, we=wep)
 
-    R_LEN, r_array = mp.r_array(rep, rep, delta_r, k)
+    Topp = diatomic_constants_pp['To']
+    wepp = diatomic_constants_pp['we']
+    wexepp = diatomic_constants_pp['wexe']
+    Bepp = diatomic_constants_pp['Be']
+    repp = diatomic_constants_pp['re']
+    Depp = diatomic_constants_pp['De']
+    little_app = mp.little_a_20(mu=reduced_mass, De=Depp, we=wepp)
+
+    R_LEN, r_array = mp.r_array(rep, repp, delta_r, k)
 
     jp = 0
+    jpp = 0
     big_Ap = mp.big_A_5(Be=Bep, j=jp)
     alphap = mp.alpha_4(big_A=big_Ap, Be=Bep, we=wep)
     r0p = mp.r0_3(re=rep, alpha=alphap)
@@ -126,6 +136,17 @@ def psi_v(vp,
     K1p = mp.K1_6(D2=D2p, C2=C2p, wexe=wexep)
     K2p = mp.K2_7(D1=D1p, C1=C1p, wexe=wexep, K1=K1p)
     zp = K1p * exp(-little_ap * (r_array - r0p))
+
+    big_App = mp.big_A_5(Be=Bepp, j=jpp)
+    alphapp = mp.alpha_4(big_A=big_App, Be=Bepp, we=wepp)
+    r0pp = mp.r0_3(re=repp, alpha=alphapp)
+    C1pp = mp.C1_10(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
+    C2pp = mp.C2_11(big_A=big_App, little_a=little_app, r0=r0pp, alpha=alphapp)
+    D1pp = mp.D1_8(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
+    D2pp = mp.D2_9(De=Depp, little_a=little_app, re=repp, alpha=alphapp)
+    K1pp = mp.K1_6(D2=D2pp, C2=C2pp, wexe=wexepp)
+    K2pp = mp.K2_7(D1=D1pp, C1=C1pp, wexe=wexepp, K1=K1pp)
+    zpp = K1pp * exp(-little_app * (r_array - r0pp))
 
     log_normp = mp.log_norm(little_ap, K2p, vp)
 
@@ -142,16 +163,38 @@ def psi_v(vp,
 
     laguerre_p = np.int64(-1)**vp * laguerre_p
 
-    psi_v_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
+    psi_p_r = power(10, log_normp) * power(10, log_psi_p) * laguerre_p
 
-    V_r = {'To': Top,
-           'we': wep,
-           'wexe': wexep,
-           'De': Dep,
-           'a': little_ap,
-           're': rep}
+    log_normpp = mp.log_norm(little_app, K2pp, vpp)
+    log_psi_pp = mp.log_psi(zpp, K2pp, vpp)
 
-    return r_array, psi_v_r, V_r
+    laguerre_pp = np.float64(0) * np.arange(R_LEN)
+
+    for n_pp in np.arange(vpp+1, dtype=np.int64):
+        laguerre_pp += (np.int64(-1)**n_pp * binom(vpp, n_pp) *
+                        power(10, log10(gamma(K2pp-vpp)) +
+                              (vpp - n_pp) * log10(zpp) -
+                              log10(gamma(K2pp - vpp - n_pp))))
+
+    laguerre_pp = np.int64(-1)**vpp * laguerre_pp
+
+    psi_pp_r = power(10, log_normpp) * power(10, log_psi_pp) * laguerre_pp
+
+    V_r_p = {'To': Top,
+             'we': wep,
+             'wexe': wexep,
+             'De': Dep,
+             'a': little_ap,
+             're': rep}
+    V_r_pp = {'To': Topp,
+              'we': wepp,
+              'wexe': wexepp,
+              'De': Depp,
+              'a': little_app,
+              're': repp}
+
+    return r_array, psi_p_r, psi_pp_r, V_r_p, V_r_pp
+
 
 def print_fcf_calc_ref(fcf_calc, fcf_ref):
     for i in range(len(fcf_calc)):
