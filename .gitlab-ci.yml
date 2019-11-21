@@ -24,6 +24,7 @@ job1:
     - mysql
     - python
   script:
+    - conda activate nepc
     - pytest --cov=nepc tests/
 
 job2:
@@ -32,6 +33,7 @@ job2:
     - linux
     - python
   script:
+    - conda activate nepc
     - cd $NEPC_HOME/doc
     - make html
     - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
@@ -50,6 +52,7 @@ job3:
     - linux
     - python
   script:
+    - conda activate nepc
     - doorstop >& doorstop.txt
     - cat doorstop.txt
     - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
@@ -66,6 +69,7 @@ job4:
     - linux
     - python
   script:
+    - conda activate nepc
     - pylint --output-format=text nepc/ | tee pylint.txt || pylint-exit $?
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - echo "Pylint score was $score"
