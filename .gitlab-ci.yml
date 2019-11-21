@@ -1,34 +1,21 @@
-before_script:
-  - export NEPC_HOME=$CI_PROJECT_DIR
-  - conda env remove --name nepc
-  - conda env create -f environment.yml
-  - conda activate nepc
-  - pip install pylint-exit
-  - pip install anybadge
-  - pip install docstr-coverage
-  - conda install pylint
-  - pip install -e .
-
 stages:
-  - reqt
   - test
+  - doc
+  - reqt
   - lint
 
-doorstop:
-  stage: reqt
-  tags:
-    - linux
-    - python
+before_script:
+  stage: .pre
   script:
-    - doorstop >& doorstop.txt
-    - cat doorstop.txt
-    - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
-    - echo "doorstop had $warnings warnings"
-      #- anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
-    - doorstop publish all /srv/shiny-server/nepc/reqt
-  artifacts:
-    paths:
-      #- public/doorstop.svg
+    - export NEPC_HOME=$CI_PROJECT_DIR
+    - conda env remove --name nepc
+    - conda env create -f environment.yml
+    - conda activate nepc
+    - pip install pylint-exit
+    - pip install anybadge
+    - pip install docstr-coverage
+    - conda install pylint
+    - pip install -e .
 
 pytest:
   stage: test
@@ -53,9 +40,25 @@ sphinx:
     - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
     - echo "docstr-coverage score was $score"
       #- anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
-  artifacts:
-    paths:
+      #artifacts:
+      #paths:
       #- public/docstr_coverage.svg
+
+doorstop:
+  stage: reqt
+  tags:
+    - linux
+    - python
+  script:
+    - doorstop >& doorstop.txt
+    - cat doorstop.txt
+    - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
+    - echo "doorstop had $warnings warnings"
+      #- anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
+    - doorstop publish all /srv/shiny-server/nepc/reqt
+      #artifacts:
+      #paths:
+      #- public/doorstop.svg
 
 pylint:
   stage: lint
@@ -67,7 +70,7 @@ pylint:
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - echo "Pylint score was $score"
       #- anybadge --value=$score --file=public/pylint.svg pylint
-  artifacts:
-    paths:
+      #artifacts:
+      #paths:
       #- public/pylint.svg
 
