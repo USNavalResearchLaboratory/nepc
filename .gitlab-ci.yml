@@ -1,6 +1,5 @@
 stages:
   - test
-  - doc
   - reqt
   - lint
 
