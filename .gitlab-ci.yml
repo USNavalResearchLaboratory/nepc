@@ -27,25 +27,25 @@ job1:
     - conda activate nepc
     - pytest --cov=nepc tests/
 
-job2:
-  stage: doc
-  tags:
-    - linux
-    - python
-  script:
-    - export NEPC_HOME=$CI_PROJECT_DIR
-    - conda activate nepc
-    - cd $NEPC_HOME/doc
-    - make html
-    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
-    - cd $NEPC_HOME
-    - docstr-coverage nepc | tee docstr.txt
-    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
-    - echo "docstr-coverage score was $score"
-    #anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
-    #artifacts:
-    #paths:
-    #public/docstr_coverage.svg
+#job2:
+#  stage: doc
+#  tags:
+#    - linux
+#    - python
+#  script:
+#    - export NEPC_HOME=$CI_PROJECT_DIR
+#    - conda activate nepc
+#    - cd $NEPC_HOME/doc
+#    - make html
+#    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
+#    - cd $NEPC_HOME
+#    - docstr-coverage nepc | tee docstr.txt
+#    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
+#    - echo "docstr-coverage score was $score"
+#    #anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
+#    #artifacts:
+#    #paths:
+#    #public/docstr_coverage.svg
 
 job3:
   stage: reqt
