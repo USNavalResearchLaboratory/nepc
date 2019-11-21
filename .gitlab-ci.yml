@@ -4,7 +4,7 @@ stages:
   - reqt
   - lint
 
-before_script:
+job0:
   stage: .pre
   script:
     - export NEPC_HOME=$CI_PROJECT_DIR
@@ -17,7 +17,7 @@ before_script:
     - conda install pylint
     - pip install -e .
 
-pytest:
+job1:
   stage: test
   tags:
     - linux
@@ -26,7 +26,7 @@ pytest:
   script:
     - pytest --cov=nepc tests/
 
-sphinx:
+job2:
   stage: doc
   tags:
     - linux
@@ -44,7 +44,7 @@ sphinx:
       #paths:
       #- public/docstr_coverage.svg
 
-doorstop:
+job3:
   stage: reqt
   tags:
     - linux
@@ -60,7 +60,7 @@ doorstop:
       #paths:
       #- public/doorstop.svg
 
-pylint:
+job4:
   stage: lint
   tags:
     - linux
