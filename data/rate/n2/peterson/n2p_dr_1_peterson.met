@@ -1,0 +1,2 @@
+rate_id	specie	process	ref	lhs_a	lhs_b	rhs_a	rhs_b	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	form
+1	N2+	d_recombination	peterson1998	N2+(X2Sigmag+)	\N	N_2s22p3_4So	N_2s22p3_2Do	-1	-1	-1	-1	-1	branching ratio to use for this rate is 0.37	dra

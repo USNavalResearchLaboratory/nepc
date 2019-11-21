@@ -16,8 +16,10 @@ ARGS = PARSER.parse_args()
 
 if ARGS.debug:
     MAX_CS = 50
+    MAX_RATE = 50
 else:
     MAX_CS = 2000000
+    MAX_RATE = 2000000
 
 T0 = time.time()
 
@@ -197,12 +199,74 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`csdata`("
                  ");"
                  )
 
+MYCURSOR.execute("CREATE TABLE `nepc`.`rate`("
+                 "	`rate_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+                 "	`specie_id` INT UNSIGNED NOT NULL, "
+                 "	`process_id` INT UNSIGNED NOT NULL, "
+                 "	`ref` VARCHAR(1000),"
+                 "	`lhsA_id` INT UNSIGNED NULL ,"
+                 "	`lhsB_id` INT UNSIGNED NULL ,"
+                 "	`rhsA_id` INT UNSIGNED NULL ,"
+                 "	`rhsB_id` INT UNSIGNED NULL ,"
+                 "	`wavelength` DOUBLE NULL ,"
+                 "	`lhs_v` INT NULL ,"
+                 "	`rhs_v` INT NULL ,"
+                 "	`lhs_j` INT NULL ,"
+                 "	`rhs_j` INT NULL ,"
+                 "	`background` VARCHAR(10000), "
+                 "      `form` VARCHAR(100) NOT NULL, "
+                 "	PRIMARY KEY(`RATE_ID`) ,"
+                 "	INDEX `SPECIE_ID`(`specie_id` ASC) ,"
+                 "	CONSTRAINT `SPECIE_ID_RATE` FOREIGN KEY(`specie_id`)"
+                 "	REFERENCES `nepc`.`species`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE,"
+                 "	INDEX `PROCESS_ID`(`process_id` ASC) ,"
+                 "	CONSTRAINT `PROCESS_ID_RATE` FOREIGN KEY(`process_id`)"
+                 "	REFERENCES `nepc`.`processes`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE, "
+                 "	CONSTRAINT `LHSA_ID_RATE` FOREIGN KEY(`lhsA_id`)"
+                 "		REFERENCES `nepc`.`states`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE, "
+                 "	CONSTRAINT `LHSB_ID_RATE` FOREIGN KEY(`lhsB_id`)"
+                 "		REFERENCES `nepc`.`states`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE, "
+                 "	CONSTRAINT `RHSA_ID_RATE` FOREIGN KEY(`rhsA_id`)"
+                 "		REFERENCES `nepc`.`states`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE, "
+                 "	CONSTRAINT `RHSB_ID_RATE` FOREIGN KEY(`rhsB_id`)"
+                 "		REFERENCES `nepc`.`states`(`id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE "
+                 ");"
+                 )
+
+MYCURSOR.execute("CREATE TABLE `nepc`.`ratedata`("
+                 "	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"
+                 "	`rate_id` INT UNSIGNED NOT NULL ,"
+                 "	`num` DOUBLE NOT NULL ,"
+                 "	`constant` DOUBLE NOT NULL ,"
+                 "	`lau` DOUBLE NOT NULL ,"
+                 "	`uau` DOUBLE NOT NULL ,"
+                 "	PRIMARY KEY(`id`) ,"
+                 "	INDEX `rate_id`(`rate_id` ASC) ,"
+                 "	CONSTRAINT `RATE_ID_RATEDATA` FOREIGN KEY(`rate_id`)"
+                 "		REFERENCES `nepc`.`rate`(`rate_id`)"
+                 "  ON DELETE RESTRICT ON UPDATE CASCADE "
+                 ");"
+                 )
+
 MYDB.commit()
 
 MYCURSOR.execute("CREATE TABLE `nepc`.`models2cs`("
                  "	`cs_id` INT UNSIGNED NOT NULL ,"
                  "	`model_id` INT UNSIGNED NOT NULL ,"
                  "	PRIMARY KEY pk_models2cs (cs_id, model_id)"
+                 ");"
+                 )
+
+MYCURSOR.execute("CREATE TABLE `nepc`.`models2rate`("
+                 "	`rate_id` INT UNSIGNED NOT NULL ,"
+                 "	`model_id` INT UNSIGNED NOT NULL ,"
+                 "	PRIMARY KEY pk_models2rate (rate_id, model_id)"
                  ");"
                  )
 
@@ -476,9 +540,164 @@ if ARGS.debug:
     print_timestep("loaded data into cs, csdata, and models2cs tables")
     # print_table("cs")
 
+DIR_NAMES = ["/data/rate/n2/peterson/"]
+
+if platform.node() == 'ppdadamsonlinux':
+    RATE_DAT_FILENAME = NEPC_DATA + "rate_datfile_prod.tsv"
+else:
+    RATE_DAT_FILENAME = NEPC_DATA + "rate_datfile_local.tsv"
+
+F_RATE_DAT_FILE = open(RATE_DAT_FILENAME, 'w')
+F_RATE_DAT_FILE.write("\t".join(["rate_id", "filename"]) + "\n")
+
+RATE_VARIABLE_LIST = ["rate_id", "specie_id", "process_id",
+                      "ref",
+                      "lhsA_id", "lhsB_id", "rhsA_id", "rhsB_id",
+                      "wavelength",
+                      "lhs_v", "rhs_v", "lhs_j", "rhs_j", "background",
+                      "form"]
+RATE_DTYPE = {"rate_id": int,
+              "specie": str,
+              "process": str,
+              "ref": str,
+              "lhs_a": str,
+              "lhs_b": str,
+              "rhs_a": str,
+              "rhs_b": str,
+              "wavelength": float,
+              "lhs_v": int,
+              "rhs_v": int,
+              "lhs_j": int,
+              "rhs_j": int,
+              "background": str,
+              "form": str
+              }
+RATEDATA_VARIABLE_LIST = ["id", "rate_id", "num", "constant", "lau", "uau"]
+RATEDATA_DTYPE = {"ratedata_id": int,
+                  "num": int,
+                  "constant": float,
+                  "lau": float,
+                  "uau": float}
+MOD_DTYPE = {"model_name": str}
+
+UPDATE_COMMAND_RATE = ("INSERT INTO rate " +
+                       "SET "
+                     "  rate_id = %s, "
+                     "  ref = %s, "
+                     "  wavelength = %s, "
+                     "  lhs_v = %s, "
+                     "  rhs_v = %s, "
+                     "  lhs_j = %s, "
+                     "  rhs_j = %s, "
+                     "  background = %s, "
+                     "  form = %s, "
+                     "  specie_id = (SELECT id FROM nepc.species "
+                     "    WHERE NAME=%s), "
+                     "  process_id = (select id from nepc.processes "
+                     "    WHERE NAME=%s), "
+                     "  lhsA_id = (select id from nepc.states "
+                     "    WHERE NAME=%s), "
+                     "  lhsB_id = (select id from nepc.states "
+                     "    WHERE NAME=%s), "
+                     "  rhsA_id = (select id from nepc.states "
+                     "    WHERE NAME=%s), "
+                     "  rhsB_id = (select id from nepc.states "
+                     "    WHERE NAME=%s);")
+
+INSERT_COMMAND_RATEDATA = insert_command("ratedata", RATEDATA_VARIABLE_LIST)
+
+INSERT_COMMAND_MODELS2RATE = ("INSERT INTO models2rate "
+                            "SET "
+                            " rate_id=%s, "
+                            " model_id=(SELECT model_id "
+                            "           FROM nepc.models "
+                            "           WHERE NAME=%s);")
+
+file_number = 1
+for directoryname in DIR_NAMES:
+    directory = os.fsencode(NEPC_HOME + directoryname)
+    for file in os.listdir(directory):
+        if file_number >= MAX_RATE:
+            print("WARNING: only processed " + str(file_number) +
+                  " rate files. There appears to be addtional "
+                  "data not processed.")
+            break
+        filename = os.fsdecode(file)
+        if filename.endswith(".met") or filename.endswith(".mod"):
+            continue
+        else:
+            # print("file_number: " + str(file_number))
+            file_number = file_number + 1
+            filename_wo_ext = filename.rsplit(".", 1)[0]
+            mod_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".mod"])
+            met_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".met"])
+
+            dat_file = "".join([os.fsdecode(directory),
+                                filename_wo_ext,
+                                ".dat"])
+
+            met_data = pd.read_csv(met_file,
+                                   sep='\t',
+                                   dtype=RATE_DTYPE,
+                                   na_values=NA_VALUES)
+            dat_data = pd.read_csv(dat_file,
+                                   sep='\t',
+                                   dtype=RATEDATA_DTYPE,
+                                   na_values=NA_VALUES)
+
+            F_RATE_DAT_FILE.write(
+                "\t".join([str(met_data.iloc[0]['rate_id']),
+                           directoryname + str(filename_wo_ext)]) + "\n"
+            )
+
+            MYCURSOR.execute(UPDATE_COMMAND_RATE,
+                             (int(met_data.iloc[0]['rate_id']),
+                              met_data.iloc[0]['ref'],
+                              met_data.iloc[0]['wavelength'],
+                              int(met_data.iloc[0]['lhs_v']),
+                              int(met_data.iloc[0]['rhs_v']),
+                              int(met_data.iloc[0]['lhs_j']),
+                              int(met_data.iloc[0]['rhs_j']),
+                              met_data.iloc[0]['background'],
+                              np_str(met_data, 0, 'form'),
+                              np_str(met_data, 0, 'specie'),
+                              np_str(met_data, 0, 'process'),
+                              np_str(met_data, 0, 'lhs_a'),
+                              np_str(met_data, 0, 'lhs_b'),
+                              np_str(met_data, 0, 'rhs_a'),
+                              np_str(met_data, 0, 'rhs_b')))
+            dat_data.insert(1, 'rate_id', met_data.iloc[0]['rate_id'])
+            dat_data_list = list(dat_data.itertuples(index=False,
+                                                     name=None))
+            MYCURSOR.executemany(INSERT_COMMAND_RATEDATA, dat_data_list)
+
+            if os.path.exists(mod_file):
+                mod_data = pd.read_csv(mod_file,
+                                       sep='\t',
+                                       dtype=MOD_DTYPE,
+                                       na_values=NA_VALUES)
+                mod_data.insert(0, 'rate_id', met_data.iloc[0]['rate_id'])
+                mod_data_list = list(mod_data.itertuples(index=False,
+                                                         name=None))
+                MYCURSOR.executemany(INSERT_COMMAND_MODELS2RATE,
+                                     mod_data_list)
+
+            MYDB.commit()
+
+MYDB.commit()
+F_RATE_DAT_FILE.close()
+
+if ARGS.debug:
+    print_timestep("loaded data into rate, ratedata, and models2rate tables")
+    # print_table("rate")
+
 print_timestep("built NEPC database")
 for table in ["species", "processes", "states", "cs", "models",
-              "models2cs", "csdata"]:
+              "models2cs", "csdata", "rate", "models2rate", "ratedata"]:
     print(table + ": " + str(nepc.count_table_rows(MYCURSOR, table)) +
           " rows")
 
