@@ -296,6 +296,23 @@ class Model:
         self.cs = cs_dicts
 
 
+    def filter(self, specie=None, process=None, ref=None):
+        """return a subset of the model"""
+        subset_dicts = []
+        if specie is None and process is None and ref is None:
+            raise Exception("You must specify the specie, process or " +
+                            "ref to narrow the search results.")
+        if specie is not None and process is not None:
+            for i in range(len(self.cs)):
+                if self.cs[i]['specie'] == specie and self.cs[i]['process'] == process:
+                    subset_dicts.append(self.cs[i])
+        elif specie is not None:
+            for i in range(len(self.cs)):
+                if self.cs[i]['specie'] == specie:
+                    subset_dicts.append(self.cs[i])
+        return subset_dicts
+
+
 def table_as_df(cursor, table, columns="*"):
     """Return a MySQL table as a pandas DataFrame
 
@@ -383,10 +400,10 @@ def model_summary_df(nepc_model, lower=None, upper=None):
     """
     summary_list = []
 
-    headers = ["cs_id", "specie", "process", "reaction", "E_lower", "E_upper",
+    headers = ["cs_id", "specie", "lhsA", "rhsA", "process", "reaction", "E_lower", "E_upper",
                "sigma_max", "lpu", "upu"]
 
-    min_e_lower = 10000
+    max_e_lower = 0
     max_e_upper = 0
     max_peak_sigma = 0
     min_peak_sigma = 1
@@ -396,8 +413,8 @@ def model_summary_df(nepc_model, lower=None, upper=None):
         reaction = reaction_latex(cs)
         e_lower = round(min(cs["e"]), 2)
         e_upper = round(max(cs["e"]), 2)
-        if e_lower < min_e_lower:
-            min_e_lower = e_lower
+        if e_lower > max_e_lower:
+            max_e_lower = e_lower
         if e_upper > max_e_upper:
             max_e_upper = e_upper
         cs_peak_sigma = max(cs["sigma"])
@@ -412,15 +429,14 @@ def model_summary_df(nepc_model, lower=None, upper=None):
         if cs_upu is not None and cs_upu > max_upu:
             max_upu = cs_upu
         summary_list.append([cs["cs_id"],
-                             cs["specie"], cs["process"], reaction,
+                             cs["specie"], cs["lhsA"], cs["rhsA"],
+                             cs["process"], reaction,
                              e_lower, e_upper,
                              cs["units_sigma"]*cs_peak_sigma,
                              cs_lpu, cs_upu])
 
-    e_mid = (e_lower + e_lower)/2
-
     cs_df = DataFrame(summary_list, columns=headers)
-    cs_df = (cs_df.sort_values(by=["E_lower", "reaction"])
+    cs_df = (cs_df.sort_values(by=["process", "rhsA", "E_lower"])
              .reset_index(drop=True))
     if upper is None:
         upper = len(cs_df)
@@ -428,15 +444,8 @@ def model_summary_df(nepc_model, lower=None, upper=None):
         lower = 0
     return (cs_df.loc[lower:upper]
             .style
-            .bar(subset=['E_upper'],
-                 align='mid',
-                 color='green',
-                 vmin=e_mid,
-                 vmax=max_e_upper)
-            .background_gradient(subset=['sigma_max'],
-                                 cmap='plasma',
-                                 low=min_peak_sigma,
-                                 high=max_peak_sigma)
+            .background_gradient(subset=['E_lower', 'E_upper', 'sigma_max', 'lpu', 'upu'],
+                                 cmap='plasma')
             .highlight_null('red'))
 
 
