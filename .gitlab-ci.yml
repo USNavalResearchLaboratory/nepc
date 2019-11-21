@@ -43,10 +43,10 @@ job2:
     - docstr-coverage nepc | tee docstr.txt
     - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
     - echo "docstr-coverage score was $score"
-      #- anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
-      #artifacts:
-      #paths:
-      #- public/docstr_coverage.svg
+    #anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
+    #artifacts:
+    #paths:
+    #public/docstr_coverage.svg
 
 job3:
   stage: reqt
@@ -60,11 +60,11 @@ job3:
     - cat doorstop.txt
     - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
     - echo "doorstop had $warnings warnings"
-      #- anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
+    #anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
     - doorstop publish all /srv/shiny-server/nepc/reqt
-      #artifacts:
-      #paths:
-      #- public/doorstop.svg
+    #artifacts:
+    #paths:
+    #public/doorstop.svg
 
 job4:
   stage: lint
@@ -77,8 +77,8 @@ job4:
     - pylint --output-format=text nepc/ | tee pylint.txt || pylint-exit $?
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - echo "Pylint score was $score"
-      #- anybadge --value=$score --file=public/pylint.svg pylint
-      #artifacts:
-      #paths:
-      #- public/pylint.svg
+    #anybadge --value=$score --file=public/pylint.svg pylint
+    #artifacts:
+    #paths:
+    #public/pylint.svg
 
