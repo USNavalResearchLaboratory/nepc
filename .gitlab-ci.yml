@@ -24,6 +24,7 @@ job1:
     - mysql
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
     - conda activate nepc
     - pytest --cov=nepc tests/
 
@@ -33,6 +34,7 @@ job2:
     - linux
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
     - conda activate nepc
     - cd $NEPC_HOME/doc
     - make html
@@ -52,6 +54,7 @@ job3:
     - linux
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
     - conda activate nepc
     - doorstop >& doorstop.txt
     - cat doorstop.txt
@@ -69,6 +72,7 @@ job4:
     - linux
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
     - conda activate nepc
     - pylint --output-format=text nepc/ | tee pylint.txt || pylint-exit $?
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
