@@ -63,4 +63,3 @@ def pcs(p_state, pp_state, vp, vpp, fcf, a, b, c, electron_energy=incident_ee):
             pcs_list.append(sigma)
 
     return np.asarray(electron_energy), np.asarray(pcs_list)
-
