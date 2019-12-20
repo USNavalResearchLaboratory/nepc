@@ -11,7 +11,15 @@ from nepc.util.constants import N2_DIATOMIC_CONSTANTS as N2_DIATOMIC_CONSTANTS
 from nepc.methods.mp import Te as Te
 from nepc.methods.mp import Tv as Tv
 
-N2_VALENCE = {'N2+(X2Sigmag+)': 2, 'N2+(A2Piu)': 4, 'N2+(B2Sigmau+)': 2, 'N2+(C2Sigmau+)': 0}
+N2_VALENCE = {'N2(X1Sigmag+)': {'N2+(X2Sigmag+)': 2, 'N2+(A2Piu)': 4, 'N2+(B2Sigmau+)': 2, 'N2+(C2Sigmau+)': 0},
+             'N2(A3Sigmau+)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(B3Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
+             'N2(W3Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(Bp3Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(ap1Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(a1Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
+             'N2(w1Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(C3Piu)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 1, 'N2+(C2Sigmau+)': 0}}
 
 incident_ee = np.asarray([16.0,16.5,17.0,17.5,18.0,18.5,19.0,19.5,20.0,20.5,21.0,21.5,
                           22.0,22.5,23.0,23.5,24.0,24.5,25.0,30.0,35.0,40.0,45.0,50.0,
@@ -24,11 +32,11 @@ def universal_function(ej, a, b, c):
     """universal function from fit to total cross section data"""
     return np.float64(a * (ej - 1)/((ej + b) * (ej + c)))
 
-def pcs(p_state, pp_state, vp, vpp, fcf, a=47.3, b=2.4, c=9.2, electron_energy=incident_ee):
+def pcs(p_state, pp_state, vp, vpp, fcf, a, b, c, electron_energy=incident_ee):
     """returns an array of the partial cross section (m^2) of the respective incident electron energy (eV)"""
     """default values a, b, c for universal function are from fit to N2 total cross section data"""
 
-    valence = N2_VALENCE[pp_state]
+    valence = N2_VALENCE[p_state][pp_state]
 
     p_To = N2_DIATOMIC_CONSTANTS[p_state]['To']
     p_we = N2_DIATOMIC_CONSTANTS[p_state]['we']
@@ -50,9 +58,9 @@ def pcs(p_state, pp_state, vp, vpp, fcf, a=47.3, b=2.4, c=9.2, electron_energy=i
                            universal_function((i/Tv_vppvp_ev), a=a, b=b, c=c) *
                            np.float64(fcf) / (Tv_vppvp_ev * ELEMENTARY_CHARGE)**2)
         if sigma < 0.0:
-            pcs_list.append([i, 0.0])
+            pcs_list.append(0.0)
         else:
-            pcs_list.append([i, sigma])
+            pcs_list.append(sigma)
 
-    return pcs_list
+    return np.asarray(electron_energy), np.asarray(pcs_list)
 
