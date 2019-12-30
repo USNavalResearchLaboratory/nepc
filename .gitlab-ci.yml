@@ -5,6 +5,10 @@ stages:
 
 job0:
   stage: .pre
+  tags:
+    - python
+    - linux
+    - mysql
   script:
     - export NEPC_HOME=$CI_PROJECT_DIR
     - conda env remove --name nepc
