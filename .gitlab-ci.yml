@@ -1,74 +1,86 @@
-before_script:
-  - export NEPC_HOME=$CI_PROJECT_DIR
-  - conda env remove --name nepc
-  - conda env create -f environment.yml
-  - conda activate nepc
-  - pip install pylint-exit
-  - pip install anybadge
-  - pip install docstr-coverage
-  - conda install pylint
-  - pip install -e .
-
 stages:
-  - reqt
   - test
-  - doc
+  - reqt
   - lint
 
-doorstop:
-  stage: reqt
+job0:
+  stage: .pre
   tags:
-    - linux
     - python
+    - linux
+    - mysql
   script:
-    - doorstop >& doorstop.txt
-    - cat doorstop.txt
-    - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
-    - echo "doorstop had $warnings warnings"
-    - anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
-    - doorstop publish all /srv/shiny-server/nepc/reqt
-  artifacts:
-    paths:
-      - public/doorstop.svg
+    - export NEPC_HOME=$CI_PROJECT_DIR
+    - conda env remove --name nepc
+    - conda env create -f environment.yml
+    - conda activate nepc
+    - pip install pylint-exit
+    - pip install anybadge
+    - pip install docstr-coverage
+    - conda install pylint
+    - pip install -e .
 
-pytest:
+job1:
   stage: test
   tags:
     - linux
     - mysql
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
+    - conda activate nepc
     - pytest --cov=nepc tests/
 
-sphinx:
-  stage: doc
+#job2:
+#  stage: doc
+#  tags:
+#    - linux
+#    - python
+#  script:
+#    - export NEPC_HOME=$CI_PROJECT_DIR
+#    - conda activate nepc
+#    - cd $NEPC_HOME/doc
+#    - make html
+#    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
+#    - cd $NEPC_HOME
+#    - docstr-coverage nepc | tee docstr.txt
+#    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
+#    - echo "docstr-coverage score was $score"
+#    #anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
+#    #artifacts:
+#    #paths:
+#    #public/docstr_coverage.svg
+
+job3:
+  stage: reqt
   tags:
     - linux
     - python
   script:
-    - cd $NEPC_HOME/doc
-    - make html
-    - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
-    - cd $NEPC_HOME
-    - docstr-coverage nepc | tee docstr.txt
-    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
-    - echo "docstr-coverage score was $score"
-    - anybadge --label=doc --value=$score --suffix='%' --file=public/docstr_coverage.svg 50=red 60=orange 80=yellow 100=green
-  artifacts:
-    paths:
-      - public/docstr_coverage.svg
+    - export NEPC_HOME=$CI_PROJECT_DIR
+    - conda activate nepc
+    - doorstop >& doorstop.txt
+    - cat doorstop.txt
+    - warnings=$(cat doorstop.txt | grep WARNING | wc -l)
+    - echo "doorstop had $warnings warnings"
+    #anybadge --label=reqt --value=$warnings --suffix=' warnings' --file=public/doorstop.svg 1=green 100=yellow
+    - doorstop publish all /srv/shiny-server/nepc/reqt
+    #artifacts:
+    #paths:
+    #public/doorstop.svg
 
-pylint:
+job4:
   stage: lint
   tags:
     - linux
     - python
   script:
+    - export NEPC_HOME=$CI_PROJECT_DIR
+    - conda activate nepc
     - pylint --output-format=text nepc/ | tee pylint.txt || pylint-exit $?
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - echo "Pylint score was $score"
-    - anybadge --value=$score --file=public/pylint.svg pylint
-  artifacts:
-    paths:
-      - public/pylint.svg
-
+    #anybadge --value=$score --file=public/pylint.svg pylint
+    #artifacts:
+    #paths:
+    #public/pylint.svg
