@@ -3,8 +3,7 @@
 <!--[![pipeline status](http://predator.nrl.navy.mil/padamson/nepc/badges/master/pipeline.svg)](http://predator.nrl.navy.mil/padamson/nepc/commits/master)
 -->
 [![pytest coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/pytest.svg?job=pytest)](https://predator.nrl.navy.mil/padamson/nepc/commits/master)
-<!--[![sphinx coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/sphinx.svg?job=sphinx)](http://132.250.158.124:3838/nepc/doc/)
--->
+[![sphinx coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/sphinx.svg?job=sphinx)](http://132.250.158.124:3838/nepc/doc/)
 [![requirements coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/doorstop.svg?job=doorstop)](http://132.250.158.124:3838/nepc/reqt/)
 [![pylint report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/pylint.svg?job=pylint)](https://predator.nrl.navy.mil/padamson/nepc/commits/master)
 
