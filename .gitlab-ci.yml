@@ -80,8 +80,9 @@ job4:
     - pylint --output-format=text nepc/ | tee pylint.txt || pylint-exit $?
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - echo "Pylint score was $score"
-    #anybadge --value=$score --file=public/pylint.svg pylint
-    #artifacts:
-    #paths:
-    #public/pylint.svg
+    - anybadge --value=$score --file=pylint.svg pylint
+  artifacts:
+    paths:
+        - pylint.svg
+    when: always
 
