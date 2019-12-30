@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.7.2, pytest-5.3.2, py-1.8.0, pluggy-0.13.1
+rootdir: /home/adamson/projects/nepc
+plugins: cov-2.8.1
+collected 25 items
+
+tests/test_mysql_build.py ...                                            [ 12%]
+tests/test_nepc.py .............                                         [ 64%]
+tests/test_util_config.py ...                                            [ 76%]
+tests/test_util_scraper.py ......                                        [100%]
+
+----------- coverage: platform linux, python 3.7.2-final-0 -----------
+Name                               Stmts   Miss  Cover
+------------------------------------------------------
+nepc/__init__.py                      14      0   100%
+nepc/methods/__init__.py               0      0   100%
+nepc/methods/mp/__init__.py           16     16     0%
+nepc/methods/mp/mp.py                 44     44     0%
+nepc/methods/mp/version.py             1      1     0%
+nepc/methods/thomson/__init__.py      11     11     0%
+nepc/methods/thomson/thomson.py      193    193     0%
+nepc/methods/thomson/version.py        1      1     0%
+nepc/nepc.py                         160     20    88%
+nepc/util/__init__.py                  0      0   100%
+nepc/util/config.py                    7      0   100%
+nepc/util/constants.py                29     29     0%
+nepc/util/plotter.py                  41     41     0%
+nepc/util/scraper.py                 134     85    37%
+nepc/util/util.py                     17     17     0%
+nepc/version.py                        1      0   100%
+------------------------------------------------------
+TOTAL                                669    458    32%
+
+
+============================= 25 passed in 12.43s ==============================
