@@ -34,6 +34,11 @@ pytest:
     - score=$(cat pytest.txt | grep TOTAL | grep -o -P '[0-9]*(\.[0-9]*)?(?=%)')
     - echo "test coverage is ${score}%"
     - anybadge --label=pytest --value=$score --suffix='%' --file=pytest.svg 50=red 60=orange 80=yellow 100=green
+  artifacts:
+    paths:
+        - pytest.svg
+    when: always
+    expire_in: 6 months
     
 
 sphinx:
