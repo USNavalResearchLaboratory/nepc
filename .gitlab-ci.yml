@@ -55,7 +55,7 @@ sphinx:
     - cd $NEPC_HOME
     - docstr-coverage nepc | tee docstr.txt
     - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
-    - echo "docstr-coverage score was $score"
+    - echo "docstr-coverage score was ${score}%"
     - anybadge --label=doc --value=$score --suffix='%' --file=sphinx.svg 50=red 60=orange 80=yellow 100=green
   artifacts:
     paths:
