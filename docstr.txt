@@ -1,0 +1,89 @@
+
+File: "nepc/nepc.py"
+ Needed: 15; Found: 15; Missing: 0; Coverage: 100.0%
+
+File: "nepc/__init__.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/version.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/methods/__init__.py"
+ - File is empty
+ Needed: 0; Found: 0; Missing: 0; Coverage: 0.0%
+
+File: "nepc/methods/mp/__init__.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/methods/mp/mp.py"
+ - No module docstring
+ - No docstring for `r0_3`
+ - No docstring for `alpha_4`
+ - No docstring for `big_A_5`
+ - No docstring for `K1_6`
+ - No docstring for `K2_7`
+ - No docstring for `D1_8`
+ - No docstring for `D2_9`
+ - No docstring for `C1_10`
+ - No docstring for `C2_11`
+ - No docstring for `little_a_20`
+ - No docstring for `De`
+ - No docstring for `log_norm`
+ - No docstring for `log_psi`
+ - No docstring for `r_array`
+ Needed: 15; Found: 0; Missing: 15; Coverage: 0.0%
+
+File: "nepc/methods/mp/version.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/methods/thomson/thomson.py"
+ - No module docstring
+ - No docstring for `fcf`
+ - No docstring for `print_fcf_calc_ref`
+ - No docstring for `fcf_closure`
+ - No docstring for `rmse_calc_ref`
+ - No docstring for `off_diagonal_elements`
+ - No docstring for `rmse_off_diagonal_elements`
+ - No docstring for `incremental_rmse_off_diagonal_elements`
+ - No docstring for `rmse_diagonal_elements`
+ - No docstring for `incremental_rmse_diagonal_elements`
+ Needed: 10; Found: 0; Missing: 10; Coverage: 0.0%
+
+File: "nepc/methods/thomson/__init__.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/methods/thomson/version.py"
+ - No module docstring
+ Needed: 1; Found: 0; Missing: 1; Coverage: 0.0%
+
+File: "nepc/util/util.py"
+ - No module docstring
+ Needed: 2; Found: 1; Missing: 1; Coverage: 50.0%
+
+File: "nepc/util/scraper.py"
+ - No docstring for `get_column_data`
+ - No docstring for `get_column_strings`
+ Needed: 20; Found: 18; Missing: 2; Coverage: 90.0%
+
+File: "nepc/util/__init__.py"
+ - File is empty
+ Needed: 0; Found: 0; Missing: 0; Coverage: 0.0%
+
+File: "nepc/util/config.py"
+ Needed: 4; Found: 4; Missing: 0; Coverage: 100.0%
+
+File: "nepc/util/plotter.py"
+ Needed: 2; Found: 2; Missing: 0; Coverage: 100.0%
+
+File: "nepc/util/constants.py"
+ Needed: 1; Found: 1; Missing: 0; Coverage: 100.0%
+
+
+Overall statistics for 16 files (2 files are empty):
+Docstrings needed: 75; Docstrings found: 41; Docstrings missing: 34
+Total docstring coverage: 54.7%;  Grade: Not bad

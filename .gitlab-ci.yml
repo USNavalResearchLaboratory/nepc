@@ -53,15 +53,15 @@ sphinx:
     - make html
     - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
     - cd $NEPC_HOME
-    - docstr-coverage nepc | tee docstr.txt
-      #   - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
-      #   - echo "docstr-coverage score was ${score}%"
-      #   - anybadge --label=doc --value=$score --suffix='%' --file=sphinx.svg 50=red 60=orange 80=yellow 100=green
-      #artifacts:
-      #  paths:
-      #      - sphinx.svg
-      #  when: always
-      #  expire_in: 6 months
+    - docstr-coverage nepc | tee docstr.txt || true
+    - score=$(cat docstr.txt | tail -n 1 | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
+    - echo "docstr-coverage score was ${score}%"
+    - anybadge --label=doc --value=$score --suffix='%' --file=sphinx.svg 50=red 60=orange 80=yellow 100=green
+  artifacts:
+    paths:
+        - sphinx.svg
+    when: always
+    expire_in: 6 months
 
 doorstop:
   stage: reqt
