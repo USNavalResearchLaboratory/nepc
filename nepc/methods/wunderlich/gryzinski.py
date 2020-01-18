@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from nepc import nepc
 from nepc.util.constants import WAVENUMBER_PER_EV as WAVENUMBER_PER_EV
 from nepc.util.constants import K_E as K_E
@@ -14,7 +15,7 @@ def gryzinski(p_state, pp_state, vp, vpp, fcf, electron_energy, epsilon=15.581):
        E_thr: lower limit of the energy gain or threshold energy
        epsilon: initial kinetic energy of the orbital electron to be excited;
                 can be set to the ionization potential"""
-    sigma_naught = np.float64(6.56e-18)
+    sigma_naught = 6.56e-18
 
     N_e = N2_VALENCE[p_state][pp_state]
 
@@ -30,13 +31,15 @@ def gryzinski(p_state, pp_state, vp, vpp, fcf, electron_energy, epsilon=15.581):
     Tv_vpp = Tv(vpp, pp_To, pp_we, pp_wexe)
 
     Tv_vppvp = Tv_vpp - Tv_vp
-    E_thr = Tv_vppvp / WAVENUMBER_PER_EV
+    E_thr = float(Tv_vppvp / WAVENUMBER_PER_EV)
 
     sigma_list = []
     for i in electron_energy:
         E_e = i
-        sigma = np.float64((N_e * sigma_naught / E_thr**2) * np.sqrt(epsilon**2 * E_e / (epsilon + E_e)**3) * (1 - (E_thr / E_e))**((2*epsilon + E_thr) / (epsilon + E_thr)) * ((E_thr / epsilon) + (2 / 3) * (1 - (E_thr / (2 * E_e))) * np.log(np.exp(1) + np.sqrt((E_e - E_thr) / epsilon))))
-        if sigma < 0.0:
+        sigma = ((N_e * sigma_naught / E_thr**2) * math.sqrt(epsilon**2 * E_e / (epsilon + E_e)**3) * (1 - (E_thr / E_e))**((2*epsilon + E_thr) / (epsilon + E_thr)) * ((E_thr / epsilon) + (2 / 3) * (1 - (E_thr / (2 * E_e))) * math.log(math.exp(1) + math.sqrt(abs(E_e - E_thr) / epsilon))))
+        if type(sigma) == complex:
+            sigma_list.append(0.0)
+        elif sigma < 0.0:
             sigma_list.append(0.0)
         else:
             sigma_list.append(sigma * fcf)
