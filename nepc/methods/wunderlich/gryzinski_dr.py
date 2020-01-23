@@ -40,7 +40,7 @@ def gryzinski_dr(p_state, pp_state, vp, vpp, fcf, electron_energy, epsilon=15.58
     sigma_list = []
     for i in electron_energy:
         E_e = i
-        sigma = N_e * K_E**2 * PI * ELEMENTARY_CHARGE**4 * / (E_thr*ELEMENTARY_CHARGE)**2 * g_dr(i/E_thr)
+        sigma = N_e * (K_E**2 * PI * ELEMENTARY_CHARGE**4 / (E_thr*ELEMENTARY_CHARGE)**2) * g_dr(i/E_thr)
         if type(sigma) == complex:
             sigma_list.append(0.0)
         elif sigma < 0.0:
