@@ -8,31 +8,16 @@ from nepc import nepc
 from nepc.util.constants import WAVENUMBER_PER_EV as WAVENUMBER_PER_EV
 from nepc.util.constants import K_E as K_E
 from nepc.util.constants import N2_DIATOMIC_CONSTANTS as N2_DIATOMIC_CONSTANTS
+from nepc.util.constants import N2_VALENCE as N2_VALENCE
+from nepc.util.std_incident_energy import INCIDENT_ENERGY as INCIDENT_ENERGY
 from nepc.methods.mp import Te as Te
 from nepc.methods.mp import Tv as Tv
-
-N2_VALENCE = {'N2(X1Sigmag+)': {'N2+(X2Sigmag+)': 2, 'N2+(A2Piu)': 4, 'N2+(B2Sigmau+)': 2, 'N2+(C2Sigmau+)': 0},
-             'N2(A3Sigmau+)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
-             'N2(B3Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
-             'N2(W3Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
-             'N2(Bp3Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
-             'N2(ap1Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
-             'N2(a1Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
-             'N2(w1Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
-             'N2(C3Piu)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 1, 'N2+(C2Sigmau+)': 0}}
-
-incident_ee = np.asarray([16.0,16.5,17.0,17.5,18.0,18.5,19.0,19.5,20.0,20.5,21.0,21.5,
-                          22.0,22.5,23.0,23.5,24.0,24.5,25.0,30.0,35.0,40.0,45.0,50.0,
-                          55.0,60.0,65.0,70.0,75.0,80.0,85.0,90.0,95.0,100.0,110.0,120.0,
-                          140.0,160.0,180.0,200.0,225.0,250.0,275.0,300.0,350.0,400.0,
-                          450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,
-                          950.0,1000.0])
 
 def universal_function(ej, a, b, c):
     """universal function from fit to total cross section data"""
     return np.float64(a * (ej - 1)/((ej + b) * (ej + c)))
 
-def pcs(p_state, pp_state, vp, vpp, fcf, a, b, c, electron_energy=incident_ee):
+def pcs(p_state, pp_state, vp, vpp, fcf, a, b, c, electron_energy=INCIDENT_ENERGY):
     """returns an array of the partial cross section (m^2) of the respective incident electron energy (eV)"""
     """default values a, b, c for universal function are from fit to N2 total cross section data"""
 

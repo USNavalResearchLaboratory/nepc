@@ -2,7 +2,6 @@
 import numpy as np
 from scipy.constants import Avogadro as AVOGADRO
 
-
 N2_DIATOMIC_CONSTANTS = {
         'N2(X1Sigmag+)': {'To': np.float64(0.0),
             'we': np.float64(2358.57),
@@ -83,6 +82,17 @@ N2_DIATOMIC_CONSTANTS = {
             're': np.float64(1.262156),
             'De': np.float64(53549.0)}
         }
+
+"""Number of identical electrons possible for excitation"""
+N2_VALENCE = {'N2(X1Sigmag+)': {'N2+(X2Sigmag+)': 2, 'N2+(A2Piu)': 4, 'N2+(B2Sigmau+)': 2, 'N2+(C2Sigmau+)': 0},
+             'N2(A3Sigmau+)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(B3Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
+             'N2(W3Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(Bp3Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(ap1Sigmau-)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(a1Pig)': {'N2+(X2Sigmag+)': 1, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 4},
+             'N2(w1Deltau)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 1, 'N2+(B2Sigmau+)': 0, 'N2+(C2Sigmau+)': 2},
+             'N2(C3Piu)': {'N2+(X2Sigmag+)': 0, 'N2+(A2Piu)': 0, 'N2+(B2Sigmau+)': 1, 'N2+(C2Sigmau+)': 0}}
 
 """reduced mass of nitrogen"""
 MU_NITROGEN_KG = 1.16294E-26 # kg
