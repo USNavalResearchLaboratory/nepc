@@ -1,16 +1,12 @@
 import numpy as np
-from scipy.constants import elementary_charge as ELEMENTARY_CHARGE
-from scipy.constants import Planck as PLANCK
-from scipy.constants import speed_of_light as SPEED_OF_LIGHT
-from scipy.constants import Avogadro as AVOGADRO
 from numpy import pi as PI
+from scipy.constants import elementary_charge as ELEMENTARY_CHARGE
 from nepc import nepc
 from nepc.util.constants import WAVENUMBER_PER_EV as WAVENUMBER_PER_EV
 from nepc.util.constants import K_E as K_E
 from nepc.util.constants import N2_DIATOMIC_CONSTANTS as N2_DIATOMIC_CONSTANTS
 from nepc.util.constants import N2_VALENCE as N2_VALENCE
 from nepc.util.std_incident_energy import INCIDENT_ENERGY as INCIDENT_ENERGY
-from nepc.methods.mp import Te as Te
 from nepc.methods.mp import Tv as Tv
 
 def universal_function(ej, a, b, c):
