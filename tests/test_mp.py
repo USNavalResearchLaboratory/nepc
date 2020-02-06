@@ -48,3 +48,41 @@ def test_little_a_20():
     assert mp.little_a_20(REDUCED_MASS, DE, WE) == approx(np.float64(2E-9) * PI * SPEED_OF_LIGHT
                                                            * WE * sqrt(REDUCED_MASS /(np.int64(2)
                                                            * PLANCK * SPEED_OF_LIGHT * DE)))
+LITTLE_A = mp.little_a_20(REDUCED_MASS, DE, WE)
+
+def test_C1_10():
+    assert mp.C1_10(BIG_A, LITTLE_A, R0, ALPHA) == approx((BIG_A / (LITTLE_A * R0 * power(np.int64(1) + ALPHA, np.int64(2)))) *
+                                                    (np.int64(4) - (np.int64(6) / LITTLE_A * R0)))
+C1 = mp.C1_10(BIG_A, LITTLE_A, R0, ALPHA)
+
+def test_C2_11():
+    assert mp.C2_11(BIG_A, LITTLE_A, R0, ALPHA) == approx((BIG_A / (LITTLE_A * R0 * power(np.int64(1) + ALPHA, np.int64(2)))) *
+                                                    (np.int64(1) - (np.int64(3) / LITTLE_A * R0)))
+C2 = mp.C2_11(BIG_A, LITTLE_A, R0, ALPHA)
+
+def test_D1_8():
+    assert mp.D1_8(DE, LITTLE_A, RE, ALPHA) == approx(DE * exp(-LITTLE_A * RE * ALPHA))
+
+D1 = mp.D1_8(DE, LITTLE_A, RE, ALPHA)
+
+def test_D2_9():
+    assert mp.D2_9(DE, LITTLE_A, RE, ALPHA) == approx(DE * exp(-np.int(2) * LITTLE_A * RE * ALPHA))
+
+D2 = mp.D2_9(DE, LITTLE_A, RE, ALPHA)
+
+def test_K1_6():
+    assert mp.K1_6(D2, C2, WEXE) == approx(np.int(2) * sqrt((D2 - C2) / WEXE))
+
+K1 = mp.K1_6(D2, C2, WEXE)
+
+def test_K2_7():
+    assert mp.K2_7(D1, C1, WEXE, K1) == approx(np.int64(2) * (np.int64(2) * D1 - C1) / (WEXE * K1))
+
+K2 = mp.K2_7(D1, C1, WEXE, K1)
+
+V_term = 0
+
+def test_log_norm():
+    assert mp.log_norm(LITTLE_A, K2, V_term) == approx((log10(LITTLE_A * (K2 - np.int64(2) * V_term - np.int64(1))) -
+                                                        log10(factorial(V_term, exact=True)) -
+                                                        loggamma(K2 - V_term) / log(np.int64(10))) / np.int64(2))
