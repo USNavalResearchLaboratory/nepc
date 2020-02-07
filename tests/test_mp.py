@@ -86,3 +86,31 @@ def test_log_norm():
     assert mp.log_norm(LITTLE_A, K2, V_term) == approx((log10(LITTLE_A * (K2 - np.int64(2) * V_term - np.int64(1))) -
                                                         log10(factorial(V_term, exact=True)) -
                                                         loggamma(K2 - V_term) / log(np.int64(10))) / np.int64(2))
+
+DELTA_R = 0.5 # taken from what we use in pcs-optimize.ipynb
+K_term = 15 # taken from what we use in pcs-optimize.ipynb
+
+def test_r_array_1():
+    assert mp.r_array(RE, RE, DELTA_R, K_term)[0] == approx(2**K_term + 1)
+
+R_LEN =  mp.r_array(RE, RE, DELTA_R, K_term)[0]
+
+def test_r_array_2():
+    assert mp.r_array(RE, RE, DELTA_R, K_term)[1] == approx((RE + RE)/2.0 - DELTA_R * np.sinh(1 - np.arange(R_LEN) * pow(2, (1 - K_term))) / np.sinh(1))
+
+R_ARRAY =  mp.r_array(RE, RE, DELTA_R, K_term)[1]
+
+Z_term = K1 * exp(-LITTLE_A * (R_ARRAY - R0))
+
+def test_log_psi():
+    assert mp.log_psi(Z_term, K2, V_term) == approx((-Z_term / np.int64(2)) * log10(EULER) +
+                                                    ((K2 - np.int64(2) * V_term - np.int64(1)) / np.int64(2)) *
+                                                    log10(Z_term))
+
+def test_Te():
+    assert mp.Te(TO, WE, WEXE) == approx(TO - WE / 2 + WEXE / 4)
+
+TE = mp.Te(TO, WE, WEXE)
+
+def test_Tv():
+    assert mp.Tv(V_term, TO, WE, WEXE) == approx(TE + WE*(V_term + 1/2) - WEXE*(V_term + 1/2)**2)
