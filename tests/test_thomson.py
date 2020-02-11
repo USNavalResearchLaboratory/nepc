@@ -64,3 +64,14 @@ def test_psi_v_5():
                          N2_DIATOMIC_CONSTANTS['N2(X1Sigmag+)'], REDUCED_MASS, K_term,
                          DELTA_R, dbug=False)[4], dict)
 
+def test_rmse_diagonal_elements():
+    assert isinstance(thomson.rmse_diagonal_elements(np.asarray(FCF)), np.float64)
+
+"""Fix this
+def test_incremental_rmse_diagonal_elements():
+    assert isinstance(thomson.incremental_rmse_diagonal_elements(np.asarray(FCF)), None)
+"""
+
+def test_rmse_off_diagonal_elements():
+    assert isinstance(thomson.rmse_off_diagonal_elements(np.asarray(FCF)), np.float64)
+
