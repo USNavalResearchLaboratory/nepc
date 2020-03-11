@@ -1,6 +1,6 @@
 from nepc import nepc
 from nepc.util import config
-from nepc.util import scraper
+from nepc.util import util
 import pandas as pd
 import os
 import pytest
@@ -31,7 +31,7 @@ def test_csdata_lines(nepc_connect):
                 continue
             else:
                 # subtract 1 to account for header
-                cs_lines += scraper.wc_fxn(directoryname + filename) - 1
+                cs_lines += util.wc_fxn(directoryname + filename) - 1
 
     assert cs_lines == nepc.count_table_rows(nepc_connect[1], "csdata")
 

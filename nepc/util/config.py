@@ -11,8 +11,3 @@ def user_home():
 def nepc_home():
     """Returns the path to the NEPC directory"""
     return os.environ.get('NEPC_HOME')
-
-
-def remove_crs(mystring):
-    """Removes new lines"""
-    return mystring.replace('\n', ' ').replace('\r', '')

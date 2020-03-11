@@ -22,7 +22,5 @@ dependencies:
                 - quadpy==0.13.2
                 - pylint
                 - mysql-connector-python==8.0.17
-                - pdfminer.six==20181108
-                - pdfplumber==0.5.11
                 - doorstop==1.5
                 - autopep8

@@ -1,4 +1,10 @@
 import sys
+from subprocess import check_output
+
+
+def wc_fxn(file_to_count):
+    "return the number of lines in a file using wc"
+    return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
 
 def get_size(obj, seen=None):

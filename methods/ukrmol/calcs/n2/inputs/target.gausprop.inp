@@ -1,5 +1,0 @@
-&gausprop
-  name = 'hydrogen.peroxide_plus_scattering - Property integrals',
-  iget = 1,1,1,19, 1,2,1,19,
-  ipflg = 1,
-&end
