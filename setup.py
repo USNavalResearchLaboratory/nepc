@@ -24,7 +24,7 @@ setup(
     author='Paul Adamson',
     author_email='paul.adamson@nrl.navy.mil',
     license='',
-    packages=['nepc', 'nepc.util', 'nepc.methods'],
+    packages=['nepc', 'nepc.util'],
     #   no dependencies in this example
     #   install_requires=[
     #       'dependency==1.2.3',
