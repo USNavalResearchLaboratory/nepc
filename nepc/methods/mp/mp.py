@@ -82,3 +82,15 @@ def r_array(rep, repp, delta_r, k):
     r = ((rep + repp)/2.0 -
          delta_r * np.sinh(1 - np.arange(r_len) * pow(2, 1 - k)) / np.sinh(1))
     return r_len, r
+
+
+def Te(To, we, wexe):
+    '''Compute the energy at the minimum of the Morse potential well
+    '''
+    return To - we/2 + wexe/4
+
+
+def Tv(v, To, we, wexe):
+    '''Compute the energy of vibrational quanta v in the Morse potential well
+    '''
+    return Te(To, we, wexe) + we*(v+1/2) - wexe*(v+1/2)**2

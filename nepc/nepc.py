@@ -265,11 +265,11 @@ class Model:
         model_name :str
             The name of a NEPC model (see [nepc.wiki]/models
 
-        Attributes 
+        Attributes
         ----------
         cs: list of dict
             A list of dictionaries containing cross section data and
-            metadata from the NEPC database.  See cs_dict_constructor 
+            metadata from the NEPC database.  See cs_dict_constructor
             for the structure of each cross section dictionary."""
         cs_dicts = []
         cursor.execute("SELECT cs.cs_id as cs_id " +
@@ -295,7 +295,6 @@ class Model:
 
         self.cs = cs_dicts
 
-
     def filter(self, specie=None, process=None, ref=None):
         """return a subset of the model"""
         subset_dicts = []
@@ -304,7 +303,8 @@ class Model:
                             "ref to narrow the search results.")
         if specie is not None and process is not None:
             for i in range(len(self.cs)):
-                if self.cs[i]['specie'] == specie and self.cs[i]['process'] == process:
+                if (self.cs[i]['specie'] == specie and
+                    self.cs[i]['process'] == process):
                     subset_dicts.append(self.cs[i])
         elif specie is not None:
             for i in range(len(self.cs)):
@@ -400,7 +400,8 @@ def model_summary_df(nepc_model, lower=None, upper=None):
     """
     summary_list = []
 
-    headers = ["cs_id", "specie", "lhsA", "rhsA", "process", "reaction", "E_lower", "E_upper",
+    headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
+               "reaction", "E_lower", "E_upper",
                "sigma_max", "lpu", "upu"]
 
     max_e_lower = 0
@@ -444,7 +445,8 @@ def model_summary_df(nepc_model, lower=None, upper=None):
         lower = 0
     return (cs_df.loc[lower:upper]
             .style
-            .background_gradient(subset=['E_lower', 'E_upper', 'sigma_max', 'lpu', 'upu'],
+            .background_gradient(subset=['E_lower', 'E_upper',
+                                         'sigma_max', 'lpu', 'upu'],
                                  cmap='plasma')
             .highlight_null('red'))
 

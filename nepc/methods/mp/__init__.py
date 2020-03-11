@@ -13,6 +13,8 @@ from .mp import De
 from .mp import log_norm
 from .mp import log_psi
 from .mp import r_array
+from .mp import Te
+from .mp import Tv
 
 
 # if somebody does "from somepackage import *", this is what they will
