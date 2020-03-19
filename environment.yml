@@ -6,8 +6,8 @@ dependencies:
         - ipython=7.3.0
         - ipython_genutils=0.2.0
         - jpeg=9b
-        - jupyter=1.0.0
-        - jupyter_client=5.2.4
+        - jupyter
+        - jupyter_client
         - numpy=1.16.2
         - pandas=0.24.2
         - python=3.7.2
