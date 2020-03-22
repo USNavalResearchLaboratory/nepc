@@ -15,7 +15,7 @@ PARSER.add_argument('--debug', action='store_true',
 ARGS = PARSER.parse_args()
 
 if ARGS.debug:
-    MAX_CS = 10000
+    MAX_CS = 50
     MAX_RATE = 50
 else:
     MAX_CS = 2000000
@@ -591,36 +591,36 @@ MOD_DTYPE = {"model_name": str}
 
 UPDATE_COMMAND_RATE = ("INSERT INTO rate " +
                        "SET "
-                     "  rate_id = %s, "
-                     "  ref = %s, "
-                     "  wavelength = %s, "
-                     "  lhs_v = %s, "
-                     "  rhs_v = %s, "
-                     "  lhs_j = %s, "
-                     "  rhs_j = %s, "
-                     "  background = %s, "
-                     "  form = %s, "
-                     "  specie_id = (SELECT id FROM nepc.species "
-                     "    WHERE NAME=%s), "
-                     "  process_id = (select id from nepc.processes "
-                     "    WHERE NAME=%s), "
-                     "  lhsA_id = (select id from nepc.states "
-                     "    WHERE NAME=%s), "
-                     "  lhsB_id = (select id from nepc.states "
-                     "    WHERE NAME=%s), "
-                     "  rhsA_id = (select id from nepc.states "
-                     "    WHERE NAME=%s), "
-                     "  rhsB_id = (select id from nepc.states "
-                     "    WHERE NAME=%s);")
+                       "  rate_id = %s, "
+                       "  ref = %s, "
+                       "  wavelength = %s, "
+                       "  lhs_v = %s, "
+                       "  rhs_v = %s, "
+                       "  lhs_j = %s, "
+                       "  rhs_j = %s, "
+                       "  background = %s, "
+                       "  form = %s, "
+                       "  specie_id = (SELECT id FROM nepc.species "
+                       "    WHERE NAME=%s), "
+                       "  process_id = (select id from nepc.processes "
+                       "    WHERE NAME=%s), "
+                       "  lhsA_id = (select id from nepc.states "
+                       "    WHERE NAME=%s), "
+                       "  lhsB_id = (select id from nepc.states "
+                       "    WHERE NAME=%s), "
+                       "  rhsA_id = (select id from nepc.states "
+                       "    WHERE NAME=%s), "
+                       "  rhsB_id = (select id from nepc.states "
+                       "    WHERE NAME=%s);")
 
 INSERT_COMMAND_RATEDATA = insert_command("ratedata", RATEDATA_VARIABLE_LIST)
 
 INSERT_COMMAND_MODELS2RATE = ("INSERT INTO models2rate "
-                            "SET "
-                            " rate_id=%s, "
-                            " model_id=(SELECT model_id "
-                            "           FROM nepc.models "
-                            "           WHERE NAME=%s);")
+                              "SET "
+                              " rate_id=%s, "
+                              " model_id=(SELECT model_id "
+                              "           FROM nepc.models "
+                              "           WHERE NAME=%s);")
 
 file_number = 1
 for directoryname in DIR_NAMES:
