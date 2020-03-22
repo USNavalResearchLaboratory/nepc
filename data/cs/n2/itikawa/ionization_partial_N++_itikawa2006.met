@@ -1,2 +1,2 @@
 cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
-416	N2	d_ionization	1.0	1e-20	itikawa2006	N2	\N	N++	\N	-1	-1	-1	-1	-1	From itikawa2006, Table 15-17. Based on TOF mass spectrometer to detect product ions	0.05	0.05
+416	N2	d_ionization_total	1.0	1e-20	itikawa2006	N2	\N	N++	\N	-1	-1	-1	-1	-1	From itikawa2006, Table 15-17. Based on TOF mass spectrometer to detect product ions	0.05	0.05

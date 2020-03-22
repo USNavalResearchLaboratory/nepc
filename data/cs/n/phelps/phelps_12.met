@@ -1,0 +1,2 @@
+cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
+436	N2	excitation	1.0	1.0	\N	N2(X1Sigmag+)	\N	N2(A3Sigmau+)_v0-4	\N	-1	-1	-1	-1	-1	N2 A3SIGMA-CARTWRIGHT 1977  V=0-4.	-1	-1

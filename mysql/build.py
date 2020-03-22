@@ -15,7 +15,7 @@ PARSER.add_argument('--debug', action='store_true',
 ARGS = PARSER.parse_args()
 
 if ARGS.debug:
-    MAX_CS = 50
+    MAX_CS = 10000
     MAX_RATE = 50
 else:
     MAX_CS = 2000000
@@ -279,6 +279,9 @@ if ARGS.debug:
 # Load data #
 #############
 
+if ARGS.debug:
+    print_timestep("starting to load data into processes table")
+
 PROCESSES_VARIABLE_LIST = ["id", "name", "long_name", "lhs", "rhs",
                            "lhs_e", "rhs_e", "lhs_hv", "rhs_hv",
                            "lhs_v", "rhs_v", "lhs_j", "rhs_j"]
@@ -375,9 +378,13 @@ if ARGS.debug:
     print_timestep("loaded data into states table")
     # print_table("states")
 
+if ARGS.debug:
+    print_timestep("starting to load cross section data")
+
 DIR_NAMES = ["/data/cs/n2/itikawa/",
              "/data/cs/n2/zipf/",
-             "/data/cs/n/zatsarinny/"]
+             "/data/cs/n/zatsarinny/",
+             "/data/cs/n/phelps/"]
 
 if platform.node() == 'ppdadamsonlinux':
     CS_DAT_FILENAME = NEPC_DATA + "cs_datfile_prod.tsv"
@@ -457,6 +464,8 @@ INSERT_COMMAND_MODELS2CS = ("INSERT INTO models2cs "
 
 file_number = 1
 for directoryname in DIR_NAMES:
+    if ARGS.debug:
+        print_timestep('entering directory: {}'.format(directoryname))
     directory = os.fsencode(NEPC_HOME + directoryname)
     for file in os.listdir(directory):
         if file_number >= MAX_CS:
