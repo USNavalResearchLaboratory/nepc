@@ -24,6 +24,7 @@ local machine:
 
     cnx, cursor = connect(local=True)
 """
+import numpy as np
 from pandas import DataFrame
 import mysql.connector
 
@@ -311,6 +312,120 @@ class Model:
                 if self.cs[i]['specie'] == specie:
                     subset_dicts.append(self.cs[i])
         return subset_dicts
+
+
+    def subset(self, filter=None):
+        """return a subset of the model using a dictionary of filter criteria"""
+        if filter is None:
+            raise Exception("You must provide a dictionary of filter " +
+                            "criteria via the filter argument.")
+        cs_dicts_subset = []
+        for cs_dict in self.cs:
+            passed_filter = True
+            for key in filter.keys():
+                if cs_dict[key] != filter[key]:
+                    passed_filter = False
+            if passed_filter:
+                cs_dicts_subset.append(cs_dict)
+        return cs_dicts_subset
+
+
+    def summary(self, filter=None, lower=None, upper=None):
+        """Return a summary of a NEPC model
+    
+        Parameters
+        ----------
+        lower : int
+            lower bound of model index to include in summary
+        upper : int
+            upper bound of model index to include in summary
+    
+        Output 
+        ------
+        In addition to returning a DataFrame as described below,
+        prints the following information:
+            - Number of cross sections/rates in the model
+            - Number of data sets in model that match filter criteria (if provided)
+
+        Returns
+        -------
+        cs_df : pandas DataFrame
+            A DataFrame containing the cs_id, process,
+            range of electron energies (E_lower, E_upper),
+            maximum sigma (sigma_max), and
+            lpu/upu's for each cross section in the model
+        """
+        summary_list = []
+    
+        headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
+                   "reaction", "E_lower", "E_peak", "E_upper",
+                   "sigma_max", "lpu", "upu"]
+    
+        max_e_lower = 0
+        max_e_peak = 0
+        min_e_peak = 100000
+        max_e_upper = 0
+        max_peak_sigma = 0
+        min_peak_sigma = 1
+        max_lpu = 0.000000001
+        max_upu = 0.000000001
+
+        print('Number of cross sections in model: {:d}'.format(len(self.cs)))
+        if filter is not None:
+            cs_dicts_subset = self.subset(filter=filter)
+            print('Number of cross sections that '
+                  'match filter criteria: {:d}'.format(len(cs_dicts_subset)))
+        else:
+            cs_dicts_subset = self.cs
+
+
+        for cs in cs_dicts_subset:
+            csdata = np.array(list(zip(cs['e'], cs['sigma'])))
+            e_peak = csdata[np.argmax(csdata[:,1]),0]
+            cs_peak_sigma = np.max(csdata[:,1])
+            e_lower = np.min(csdata[csdata[:,1]!=0.0][:,0])
+            e_upper = np.max(csdata[csdata[:,1]!=0.0][:,0])
+            if e_lower > max_e_lower:
+                max_e_lower = e_lower
+            if e_peak > max_e_peak:
+                max_e_peak = e_peak
+            if e_peak < min_e_peak:
+                min_e_peak = e_peak
+            if e_upper > max_e_upper:
+                max_e_upper = e_upper
+            if cs_peak_sigma > max_peak_sigma:
+                max_peak_sigma = cs_peak_sigma
+            if cs_peak_sigma < min_peak_sigma:
+                min_peak_sigma = cs_peak_sigma
+            reaction = reaction_latex(cs)
+            cs_lpu = cs["lpu"]
+            cs_upu = cs["upu"]
+            if cs_lpu is not None and cs_lpu > max_lpu:
+                max_lpu = cs_lpu
+            if cs_upu is not None and cs_upu > max_upu:
+                max_upu = cs_upu
+            summary_list.append([cs["cs_id"],
+                                 cs["specie"], cs["lhsA"], cs["rhsA"],
+                                 cs["process"], reaction,
+                                 cs["units_e"]*e_lower,
+                                 cs["units_e"]*e_peak,
+                                 cs["units_e"]*e_upper,
+                                 cs["units_sigma"]*cs_peak_sigma,
+                                 cs_lpu, cs_upu])
+    
+        cs_df = DataFrame(summary_list, columns=headers)
+        cs_df = (cs_df.sort_values(by=["process", "rhsA", "E_lower"])
+                 .reset_index(drop=True))
+        if upper is None:
+            upper = len(cs_df)
+        if lower is None:
+            lower = 0
+        return (cs_df.loc[lower:upper]
+                .style
+                .background_gradient(subset=['E_lower', 'E_peak', 'E_upper',
+                                             'sigma_max', 'lpu', 'upu'],
+                                     cmap='plasma')
+                .highlight_null('red'))
 
 
 def table_as_df(cursor, table, columns="*"):
