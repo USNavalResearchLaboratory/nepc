@@ -2,4 +2,5 @@ model_id	name	long_name	ref
 1	n_b	nitrogen baseline	\N
 2	n_eb1	nitrogen extended baseline #1	\N
 3	abc	Advanced Breakdown Conductivity model developed by J. Angus (2016)	angus2016
-4	phelps	Phelps N cross sections	\N
+4	phelps	Phelps N2 cross sections	\N
+5	phelps_min	Phelps N2 cross sections - minimum model (ionization_total and excitation_total)	\N

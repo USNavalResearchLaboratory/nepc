@@ -384,7 +384,7 @@ if ARGS.debug:
 DIR_NAMES = ["/data/cs/n2/itikawa/",
              "/data/cs/n2/zipf/",
              "/data/cs/n/zatsarinny/",
-             "/data/cs/n/phelps/"]
+             "/data/cs/n2/phelps/"]
 
 if platform.node() == 'ppdadamsonlinux':
     CS_DAT_FILENAME = NEPC_DATA + "cs_datfile_prod.tsv"

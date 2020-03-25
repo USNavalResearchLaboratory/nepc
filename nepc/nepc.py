@@ -414,7 +414,7 @@ class Model:
                                  cs_lpu, cs_upu])
     
         cs_df = DataFrame(summary_list, columns=headers)
-        cs_df = (cs_df.sort_values(by=["process", "rhsA", "E_lower"])
+        cs_df = (cs_df.sort_values(by=["process", "cs_id"])
                  .reset_index(drop=True))
         if upper is None:
             upper = len(cs_df)
