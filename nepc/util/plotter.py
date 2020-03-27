@@ -83,22 +83,27 @@ def plot_nepc_model(axes, model, units_sigma,
             label_text = " ".join(item for item in label_items if item)
             e_np = np.array(model[i]['e'])
             sigma_np = np.array(model[i]['sigma'])
-            upu = 0.5 if model[i]['upu'] is None else model[i]['upu']
-            lpu = 0.5 if model[i]['lpu'] is None else model[i]['lpu']
-            sigma_upper_np = sigma_np*(1 + upu)
-            sigma_lower_np = sigma_np*(1 - lpu)
+
+            upu = model[i]['upu']
+            lpu = model[i]['lpu']
+            if upu != -1:
+                sigma_upper_np = sigma_np*(1 + upu)
+                if lpu == -1:
+                    sigma_lower_np = sigma_np
+            if lpu != -1:
+                sigma_lower_np = sigma_np*(1 - lpu)
+                if upu == -1:
+                    sigma_upper_np = sigma_np
+            
             plot = axes.plot(e_np,
                              sigma_np*model[i]['units_sigma']/units_sigma,
                              **plot_param_dict,
                              label='{}'.format(label_text))
-            if model[i]['upu'] is None or model[i]['lpu'] is None:
-                fill_color = 'grey'
-            else:
-                fill_color = plot[0].get_color()
-            axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
-                              color=fill_color, alpha=0.4)
 
-            i += 1
+            if upu != -1 or lpu != -1:
+                fill_color = plot[0].get_color()
+                axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
+                        color=fill_color, alpha=0.4)
 
     if show_legend:
         axes.legend(fontsize=12, ncol=2, frameon=False,
