@@ -359,10 +359,9 @@ class Model:
         summary_list = []
     
         headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
-                   "reaction", "E_lower", "E_peak", "E_upper",
+                   "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
     
-        max_e_lower = 0
         max_e_peak = 0
         min_e_peak = 100000
         max_e_upper = 0
@@ -384,10 +383,7 @@ class Model:
             csdata = np.array(list(zip(cs['e'], cs['sigma'])))
             e_peak = csdata[np.argmax(csdata[:,1]),0]
             cs_peak_sigma = np.max(csdata[:,1])
-            e_lower = np.min(csdata[csdata[:,1]!=0.0][:,0])
             e_upper = np.max(csdata[csdata[:,1]!=0.0][:,0])
-            if e_lower > max_e_lower:
-                max_e_lower = e_lower
             if e_peak > max_e_peak:
                 max_e_peak = e_peak
             if e_peak < min_e_peak:
@@ -408,7 +404,7 @@ class Model:
             summary_list.append([cs["cs_id"],
                                  cs["specie"], cs["lhsA"], cs["rhsA"],
                                  cs["process"], reaction,
-                                 cs["units_e"]*e_lower,
+                                 cs["units_e"]*cs["threshold"],
                                  cs["units_e"]*e_peak,
                                  cs["units_e"]*e_upper,
                                  cs["units_sigma"]*cs_peak_sigma,
@@ -423,7 +419,7 @@ class Model:
             lower = 0
         return (cs_df.loc[lower:upper]
                 .style
-                .background_gradient(subset=['E_lower', 'E_peak', 'E_upper',
+                .background_gradient(subset=['threshold', 'E_peak', 'E_upper',
                                              'sigma_max', 'lpu', 'upu'],
                                      cmap='plasma')
                 .highlight_null('red'))
