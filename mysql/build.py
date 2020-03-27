@@ -154,6 +154,7 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`cs`("
                  "	`lhsB_id` INT UNSIGNED NULL ,"
                  "	`rhsA_id` INT UNSIGNED NULL ,"
                  "	`rhsB_id` INT UNSIGNED NULL ,"
+                 "	`threshold` DOUBLE NULL ,"
                  "	`wavelength` DOUBLE NULL ,"
                  "	`lhs_v` INT NULL ,"
                  "	`rhs_v` INT NULL ,"
@@ -208,6 +209,7 @@ MYCURSOR.execute("CREATE TABLE `nepc`.`rate`("
                  "	`lhsB_id` INT UNSIGNED NULL ,"
                  "	`rhsA_id` INT UNSIGNED NULL ,"
                  "	`rhsB_id` INT UNSIGNED NULL ,"
+                 "	`threshold` DOUBLE NULL ,"
                  "	`wavelength` DOUBLE NULL ,"
                  "	`lhs_v` INT NULL ,"
                  "	`rhs_v` INT NULL ,"
@@ -398,6 +400,7 @@ CS_VARIABLE_LIST = ["cs_id", "specie_id", "process_id",
                     "units_e", "units_sigma",
                     "ref",
                     "lhsA_id", "lhsB_id", "rhsA_id", "rhsB_id",
+                    "threshold",
                     "wavelength",
                     "lhs_v", "rhs_v", "lhs_j", "rhs_j", "background",
                     "lpu", "upu"]
@@ -411,6 +414,7 @@ CS_DTYPE = {"cs_id": int,
             "lhs_b": str,
             "rhs_a": str,
             "rhs_b": str,
+            "threshold": float,
             "wavelength": float,
             "lhs_v": int,
             "rhs_v": int,
@@ -432,6 +436,7 @@ UPDATE_COMMAND_CS = ("INSERT INTO cs " +
                      "  units_e = %s, "
                      "  units_sigma = %s, "
                      "  ref = %s, "
+                     "  threshold = %s, "
                      "  wavelength = %s, "
                      "  lhs_v = %s, "
                      "  rhs_v = %s, "
@@ -510,6 +515,7 @@ for directoryname in DIR_NAMES:
                               met_data.iloc[0]['units_e'],
                               met_data.iloc[0]['units_sigma'],
                               met_data.iloc[0]['ref'],
+                              met_data.iloc[0]['threshold'],
                               met_data.iloc[0]['wavelength'],
                               int(met_data.iloc[0]['lhs_v']),
                               int(met_data.iloc[0]['rhs_v']),
@@ -549,7 +555,8 @@ if ARGS.debug:
     print_timestep("loaded data into cs, csdata, and models2cs tables")
     # print_table("cs")
 
-DIR_NAMES = ["/data/rate/n2/peterson/"]
+# DIR_NAMES = ["/data/rate/n2/peterson/"]
+DIR_NAMES = []
 
 if platform.node() == 'ppdadamsonlinux':
     RATE_DAT_FILENAME = NEPC_DATA + "rate_datfile_prod.tsv"
@@ -562,6 +569,7 @@ F_RATE_DAT_FILE.write("\t".join(["rate_id", "filename"]) + "\n")
 RATE_VARIABLE_LIST = ["rate_id", "specie_id", "process_id",
                       "ref",
                       "lhsA_id", "lhsB_id", "rhsA_id", "rhsB_id",
+                      "threshold",
                       "wavelength",
                       "lhs_v", "rhs_v", "lhs_j", "rhs_j", "background",
                       "form"]
@@ -573,6 +581,7 @@ RATE_DTYPE = {"rate_id": int,
               "lhs_b": str,
               "rhs_a": str,
               "rhs_b": str,
+              "threshold": float,
               "wavelength": float,
               "lhs_v": int,
               "rhs_v": int,
@@ -593,6 +602,7 @@ UPDATE_COMMAND_RATE = ("INSERT INTO rate " +
                        "SET "
                        "  rate_id = %s, "
                        "  ref = %s, "
+                       "  threshold = %s, "
                        "  wavelength = %s, "
                        "  lhs_v = %s, "
                        "  rhs_v = %s, "
@@ -666,6 +676,7 @@ for directoryname in DIR_NAMES:
             MYCURSOR.execute(UPDATE_COMMAND_RATE,
                              (int(met_data.iloc[0]['rate_id']),
                               met_data.iloc[0]['ref'],
+                              met_data.iloc[0]['threshold'],
                               met_data.iloc[0]['wavelength'],
                               int(met_data.iloc[0]['lhs_v']),
                               int(met_data.iloc[0]['rhs_v']),
