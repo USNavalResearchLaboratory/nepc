@@ -17,7 +17,7 @@ NEPC_DATA = NEPC_HOME + "/data/"
 DIR_NAMES = [NEPC_HOME + "/data/cs/n2/itikawa/",
              NEPC_HOME + "/data/cs/n2/zipf/",
              NEPC_HOME + "/data/cs/n/zatsarinny/",
-             NEPC_HOME + "/data/cs/n/phelps/"]
+             NEPC_HOME + "/data/cs/n2/phelps/"]
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -72,9 +72,9 @@ def test_meta_entered(nepc_connect, local, dbug):
             print(cs_id, met_file)
         e, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
 
-        meta_cols = ['specie', 'process', 'units_e',
+        meta_cols = ['cs_id', 'specie', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
-                     'lhsB', 'rhsA', 'rhsB', 'wavelength',
+                     'lhsB', 'rhsA', 'rhsB', 'threshold', 'wavelength',
                      'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j',
                      'background', 'lpu', 'upu']
 
@@ -82,18 +82,22 @@ def test_meta_entered(nepc_connect, local, dbug):
                 reader = csv.reader(f, delimiter='\t')
                 next(reader)
                 meta_disk = list(reader)[0]
-        meta_disk = [meta_disk[i] for i in list(range(1, 18))]
-        for i in [2, 3, 9, 15, 16]:
+        meta_disk = [meta_disk[i] for i in list(range(len(meta_cols)))]
+        for i in [3, 4, 10, 11, 17, 18]:
             meta_disk[i] = (float(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
-        for i in [10, 11, 12, 13]:
+        for i in [0, 12, 13, 14, 15]:
             meta_disk[i] = (int(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
         meta_db = [nepc.cs_metadata(nepc_connect[1], cs_id)[i]
-                   for i in list(range(1, 18))]
+                   for i in list(range(0, len(meta_cols)))]
+        if dbug:
+            print('meta_db: {}\t from {}'.format(meta_db, met_file))
         for i in range(len(meta_cols)):
+            if dbug:
+                print('meta_db[{}]: {}\t from {}'.format(str(i), str(meta_db[i]), met_file))
             if (type(meta_db[i]) is float):
                 assert (pytest.approx(meta_disk[i]) ==
                         pytest.approx(meta_db[i]))

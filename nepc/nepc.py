@@ -125,7 +125,7 @@ def cs_metadata(cursor, cs_id):
                    "A.`units_e`, A.`units_sigma`, A.`ref`, "
                    "D.`name`, E.`name`, "
                    "F.`name`, G.`name`, "
-                   "A.`wavelength`, A.`lhs_v`, A.`rhs_v`, "
+                   "A.`threshold`, A.`wavelength`, A.`lhs_v`, A.`rhs_v`, "
                    "A.`lhs_j`, A.`rhs_j`, "
                    "A.`background`, A.`lpu`, A.`upu`, "
                    "D.`long_name`, E.`long_name`, "
@@ -231,28 +231,29 @@ def cs_dict_constructor(metadata, e_energy, sigma):
             "lhsB": metadata[7],
             "rhsA": metadata[8],
             "rhsB": metadata[9],
-            "wavelength": metadata[10],
-            "lhs_v": metadata[11],
-            "rhs_v": metadata[12],
-            "lhs_j": metadata[13],
-            "rhs_j": metadata[14],
-            "background": metadata[15],
-            "lpu": metadata[16],
-            "upu": metadata[17],
+            "threshold": metadata[10],
+            "wavelength": metadata[11],
+            "lhs_v": metadata[12],
+            "rhs_v": metadata[13],
+            "lhs_j": metadata[14],
+            "rhs_j": metadata[15],
+            "background": metadata[16],
+            "lpu": metadata[17],
+            "upu": metadata[18],
             "e": e_energy,
             "sigma": sigma,
-            "lhsA_long": metadata[18],
-            "lhsB_long": metadata[19],
-            "rhsA_long": metadata[20],
-            "rhsB_long": metadata[21],
-            "e_on_lhs": metadata[22],
-            "e_on_rhs": metadata[23],
-            "hv_on_lhs": metadata[24],
-            "hv_on_rhs": metadata[25],
-            "v_on_lhs": metadata[26],
-            "v_on_rhs": metadata[27],
-            "j_on_lhs": metadata[28],
-            "j_on_rhs": metadata[29]}
+            "lhsA_long": metadata[19],
+            "lhsB_long": metadata[20],
+            "rhsA_long": metadata[21],
+            "rhsB_long": metadata[22],
+            "e_on_lhs": metadata[28],
+            "e_on_rhs": metadata[24],
+            "hv_on_lhs": metadata[25],
+            "hv_on_rhs": metadata[26],
+            "v_on_lhs": metadata[27],
+            "v_on_rhs": metadata[28],
+            "j_on_lhs": metadata[29],
+            "j_on_rhs": metadata[30]}
 
 
 class Model:
@@ -516,7 +517,7 @@ def model_summary_df(nepc_model, lower=None, upper=None):
     summary_list = []
 
     headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
-               "reaction", "E_lower", "E_upper",
+               "reaction", "threshold", "E_lower", "E_upper",
                "sigma_max", "lpu", "upu"]
 
     max_e_lower = 0
@@ -547,6 +548,7 @@ def model_summary_df(nepc_model, lower=None, upper=None):
         summary_list.append([cs["cs_id"],
                              cs["specie"], cs["lhsA"], cs["rhsA"],
                              cs["process"], reaction,
+                             cs["threshold"],
                              e_lower, e_upper,
                              cs["units_sigma"]*cs_peak_sigma,
                              cs_lpu, cs_upu])
