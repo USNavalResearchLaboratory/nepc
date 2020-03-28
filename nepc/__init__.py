@@ -5,11 +5,9 @@ from .nepc import cs_e_sigma
 from .nepc import cs_e
 from .nepc import cs_sigma
 from .nepc import cs_metadata
-from .nepc import cs_dict_constructor
 from .nepc import table_as_df
 from .nepc import reaction_latex
-from .nepc import model_summary_df
-from .nepc import cs_subset
+from .nepc import CS
 from .nepc import Model
 
 
@@ -22,10 +20,8 @@ __all__ = [
         'cs_e',
         'cs_sigma',
         'cs_metadata',
-        'cs_dict_constructor',
         'table_as_df',
         'reaction_latex',
-        'model_summary_df',
-        'cs_subset',
-        'Model',
+        'CS',
+        'Model'
         ]

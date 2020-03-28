@@ -27,6 +27,7 @@ local machine:
 import numpy as np
 from pandas import DataFrame
 import mysql.connector
+import matplotlib.pyplot as plt
 
 
 def connect(local=False, DBUG=False):
@@ -152,108 +153,125 @@ def cs_metadata(cursor, cs_id):
     return list(cursor.fetchall()[0])
 
 
-def cs_dict_constructor(metadata, e_energy, sigma):
-    """Return a cs_dict given metadata, e_energy, and sigma data
+class CS:
+    """A cross section data set, including metadata and cross section data,
+    from the NEPC MySQL database."""
+    def __init__(self, cursor, cs_id):
+        """Initialize a cross section data set
 
-        "cs_id" : int
-            id of the cross section in `cs` and `csdata` tables
-        "specie" : str
-            `name` of specie from `species` table
-        "process" : str
-            `name` of process from `processes` table
-        "units_e" : float
-            units of electron energy list "e" in eV
-        "units_sigma" : float
-            units of cross section list "sigma" in m^2
-        "ref" : str
-            `ref` from `cs` table corresponding to entry in
-            '[nepc]/models/ref.bib'
-        "lhsA" : str
-            `name` of lhsA state from `states` table
-        "lhsB" : str
-            `name` of lhsB state from `states` table
-        "rhsA" : str
-            `name` of rhsA state from `states` table
-        "rhsB" : str
-            `name` of rhsB state from `states` table
-        "wavelength" : float
-            wavelength of photon involved in process in nanometers (nm)
-        "lhs_v" : int
-            vibrational energy level of lhs specie
-        "rhs_v" : int
-            vibrational energy level of rhs specie
-        "lhs_j" : int
-            rotational energy level of lhs specie
-        "rhs_j" : int
-            rotational energy level of rhs specie
-        "background" : str
-            background text describing origin of data and other important info
-        "lpu" : float
-            lower percent uncertainty
-        "upu" : float
-            upper percent uncertainty
-        "e" : list of float
-            electron energy
-        "sigma" : list of float
-            cross section
-        "lhsA_long" : str
-            `long_name` of lhsA state from `states` table
-        "lhsB_long" : str
-            `long_name` of lhsB state from `states` table
-        "rhsA_long" : str
-            `long_name` of rhsA state from `states` table
-        "rhsB_long" : str
-            `long_name` of rhsB state from `states` table
-        "e_on_lhs" : int
-            number of electrons on lhs
-        "e_on_rhs" : int
-            number of electrons on rhs
-        "hv_on_lhs" : int
-            photon on lhs? (0 or 1)
-        "hv_on_rhs" : int
-            photon on rhs? (0 or 1)
-        "v_on_lhs" : int
-            vibrational energy level on lhs? (0 or 1)
-        "v_on_rhs" : int
-            vibrational energy level on rhs? (0 or 1)
-        "j_on_lhs" : int
-            rotational energy level on lhs? (0 or 1)
-        "j_on_rhs" : int
-            rotational energy level on rhs? (0 or 1)
-    """
-    return {"cs_id": metadata[0],
-            "specie": metadata[1],
-            "process": metadata[2],
-            "units_e": metadata[3],
-            "units_sigma": metadata[4],
-            "ref": metadata[5],
-            "lhsA": metadata[6],
-            "lhsB": metadata[7],
-            "rhsA": metadata[8],
-            "rhsB": metadata[9],
-            "threshold": metadata[10],
-            "wavelength": metadata[11],
-            "lhs_v": metadata[12],
-            "rhs_v": metadata[13],
-            "lhs_j": metadata[14],
-            "rhs_j": metadata[15],
-            "background": metadata[16],
-            "lpu": metadata[17],
-            "upu": metadata[18],
-            "e": e_energy,
-            "sigma": sigma,
-            "lhsA_long": metadata[19],
-            "lhsB_long": metadata[20],
-            "rhsA_long": metadata[21],
-            "rhsB_long": metadata[22],
-            "e_on_lhs": metadata[28],
-            "e_on_rhs": metadata[24],
-            "hv_on_lhs": metadata[25],
-            "hv_on_rhs": metadata[26],
-            "v_on_lhs": metadata[27],
-            "v_on_rhs": metadata[28],
-            "j_on_lhs": metadata[29],
-            "j_on_rhs": metadata[30]}
+        Parameters
+        ----------
+        cursor : MySQLCursor
+            A MySQLCursor object (see nepc.connect)
+        cs_id : int
+            i.d. of the cross section in `cs` and `csdata` tables
+
+        Attributes
+        ----------
+        metadata : dictionary of the metadata
+            "cs_id" : int
+                id of the cross section in `cs` and `csdata` tables
+            "specie" : str
+                `name` of specie from `species` table
+            "process" : str
+                `name` of process from `processes` table
+            "units_e" : float
+                units of electron energy list "e" in eV
+            "units_sigma" : float
+                units of cross section list "sigma" in m^2
+            "ref" : str
+                `ref` from `cs` table corresponding to entry in
+                '[nepc]/models/ref.bib'
+            "lhsA" : str
+                `name` of lhsA state from `states` table
+            "lhsB" : str
+                `name` of lhsB state from `states` table
+            "rhsA" : str
+                `name` of rhsA state from `states` table
+            "rhsB" : str
+                `name` of rhsB state from `states` table
+            "wavelength" : float
+                wavelength of photon involved in process in nanometers (nm)
+            "lhs_v" : int
+                vibrational energy level of lhs specie
+            "rhs_v" : int
+                vibrational energy level of rhs specie
+            "lhs_j" : int
+                rotational energy level of lhs specie
+            "rhs_j" : int
+                rotational energy level of rhs specie
+            "background" : str
+                background text describing origin of data and other important info
+            "lpu" : float
+                lower percent uncertainty
+            "upu" : float
+                upper percent uncertainty
+            "lhsA_long" : str
+                `long_name` of lhsA state from `states` table
+            "lhsB_long" : str
+                `long_name` of lhsB state from `states` table
+            "rhsA_long" : str
+                `long_name` of rhsA state from `states` table
+            "rhsB_long" : str
+                `long_name` of rhsB state from `states` table
+            "e_on_lhs" : int
+                number of electrons on lhs
+            "e_on_rhs" : int
+                number of electrons on rhs
+            "hv_on_lhs" : int
+                photon on lhs? (0 or 1)
+            "hv_on_rhs" : int
+                photon on rhs? (0 or 1)
+            "v_on_lhs" : int
+                vibrational energy level on lhs? (0 or 1)
+            "v_on_rhs" : int
+                vibrational energy level on rhs? (0 or 1)
+            "j_on_lhs" : int
+                rotational energy level on lhs? (0 or 1)
+            "j_on_rhs" : int
+                rotational energy level on rhs? (0 or 1)
+        data : dictionary of the cross section data
+            "e" : list of float
+                electron energy
+            "sigma" : list of float
+                cross section
+        """
+        metadata = cs_metadata(cursor, cs_id)
+        self.metadata = {"cs_id": metadata[0],
+                         "specie": metadata[1],
+                         "process": metadata[2],
+                         "units_e": metadata[3],
+                         "units_sigma": metadata[4],
+                         "ref": metadata[5],
+                         "lhsA": metadata[6],
+                         "lhsB": metadata[7],
+                         "rhsA": metadata[8],
+                         "rhsB": metadata[9],
+                         "threshold": metadata[10],
+                         "wavelength": metadata[11],
+                         "lhs_v": metadata[12],
+                         "rhs_v": metadata[13],
+                         "lhs_j": metadata[14],
+                         "rhs_j": metadata[15],
+                         "background": metadata[16],
+                         "lpu": metadata[17],
+                         "upu": metadata[18],
+                         "lhsA_long": metadata[19],
+                         "lhsB_long": metadata[20],
+                         "rhsA_long": metadata[21],
+                         "rhsB_long": metadata[22],
+                         "e_on_lhs": metadata[28],
+                         "e_on_rhs": metadata[24],
+                         "hv_on_lhs": metadata[25],
+                         "hv_on_rhs": metadata[26],
+                         "v_on_lhs": metadata[27],
+                         "v_on_rhs": metadata[28],
+                         "j_on_lhs": metadata[29],
+                         "j_on_rhs": metadata[30]}
+
+        e_energy, sigma = cs_e_sigma(cursor, cs_id)
+        self.data = {"e": e_energy,
+                     "sigma": sigma}
 
 
 class Model:
@@ -273,7 +291,7 @@ class Model:
             A list of dictionaries containing cross section data and
             metadata from the NEPC database.  See cs_dict_constructor
             for the structure of each cross section dictionary."""
-        cs_dicts = []
+        cs_list = []
         cursor.execute("SELECT cs.cs_id as cs_id " +
                        "FROM cs " +
                        "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
@@ -284,18 +302,9 @@ class Model:
 
         for cs_item in cs_array:
             cs_id = cs_item[0]
-            # print(str(cs_id))
+            cs_list.append(CS(cursor, cs_id))
 
-            metadata = cs_metadata(cursor, cs_id)
-            # print(type(metadata))
-
-            e_energy, sigma = cs_e_sigma(cursor, cs_id)
-            # print(e_energy)
-            # print(sigma)
-
-            cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
-
-        self.cs = cs_dicts
+        self.cs = cs_list
 
     def filter(self, specie=None, process=None, ref=None):
         """return a subset of the model"""
@@ -305,12 +314,12 @@ class Model:
                             "ref to narrow the search results.")
         if specie is not None and process is not None:
             for i in range(len(self.cs)):
-                if (self.cs[i]['specie'] == specie and
-                    self.cs[i]['process'] == process):
+                if (self.cs[i].metadata['specie'] == specie and
+                    self.cs[i].metadata['process'] == process):
                     subset_dicts.append(self.cs[i])
         elif specie is not None:
             for i in range(len(self.cs)):
-                if self.cs[i]['specie'] == specie:
+                if self.cs[i].metadata['specie'] == specie:
                     subset_dicts.append(self.cs[i])
         return subset_dicts
 
@@ -320,15 +329,15 @@ class Model:
         if filter is None:
             raise Exception("You must provide a dictionary of filter " +
                             "criteria via the filter argument.")
-        cs_dicts_subset = []
-        for cs_dict in self.cs:
+        cs_subset = []
+        for cs in self.cs:
             passed_filter = True
             for key in filter.keys():
-                if cs_dict[key] != filter[key]:
+                if cs.metadata[key] != filter[key]:
                     passed_filter = False
             if passed_filter:
-                cs_dicts_subset.append(cs_dict)
-        return cs_dicts_subset
+                cs_subset.append(cs)
+        return cs_subset
 
 
     def summary(self, filter=None, lower=None, upper=None):
@@ -372,15 +381,15 @@ class Model:
 
         print('Number of cross sections in model: {:d}'.format(len(self.cs)))
         if filter is not None:
-            cs_dicts_subset = self.subset(filter=filter)
+            cs_subset = self.subset(filter=filter)
             print('Number of cross sections that '
-                  'match filter criteria: {:d}'.format(len(cs_dicts_subset)))
+                  'match filter criteria: {:d}'.format(len(cs_subset)))
         else:
-            cs_dicts_subset = self.cs
+            cs_subset = self.cs
 
 
-        for cs in cs_dicts_subset:
-            csdata = np.array(list(zip(cs['e'], cs['sigma'])))
+        for cs in cs_subset:
+            csdata = np.array(list(zip(cs.data['e'], cs.data['sigma'])))
             e_peak = csdata[np.argmax(csdata[:,1]),0]
             cs_peak_sigma = np.max(csdata[:,1])
             e_upper = np.max(csdata[csdata[:,1]!=0.0][:,0])
@@ -395,19 +404,19 @@ class Model:
             if cs_peak_sigma < min_peak_sigma:
                 min_peak_sigma = cs_peak_sigma
             reaction = reaction_latex(cs)
-            cs_lpu = cs["lpu"]
-            cs_upu = cs["upu"]
+            cs_lpu = cs.metadata["lpu"]
+            cs_upu = cs.metadata["upu"]
             if cs_lpu is not None and cs_lpu > max_lpu:
                 max_lpu = cs_lpu
             if cs_upu is not None and cs_upu > max_upu:
                 max_upu = cs_upu
-            summary_list.append([cs["cs_id"],
-                                 cs["specie"], cs["lhsA"], cs["rhsA"],
-                                 cs["process"], reaction,
-                                 cs["units_e"]*cs["threshold"],
-                                 cs["units_e"]*e_peak,
-                                 cs["units_e"]*e_upper,
-                                 cs["units_sigma"]*cs_peak_sigma,
+            summary_list.append([cs.metadata["cs_id"],
+                                 cs.metadata["specie"], cs.metadata["lhsA"], cs.metadata["rhsA"],
+                                 cs.metadata["process"], reaction,
+                                 cs.metadata["units_e"]*cs.metadata["threshold"],
+                                 cs.metadata["units_e"]*e_peak,
+                                 cs.metadata["units_e"]*e_upper,
+                                 cs.metadata["units_sigma"]*cs_peak_sigma,
                                  cs_lpu, cs_upu])
     
         cs_df = DataFrame(summary_list, columns=headers)
@@ -424,6 +433,112 @@ class Model:
                                      cmap='plasma')
                 .highlight_null('red'))
 
+    def plot(self,
+             units_sigma=1E-20,
+             process='',
+             plot_param_dict={'linewidth': 1},
+             xlim_param_dict={'auto': True},
+             ylim_param_dict={'auto': True},
+             ylog=False, xlog=False, show_legend=True,
+             filename=None,
+             max_plots=10, width=10, height=10):
+        """
+        A helper function to plot cross sections from a NEPC model on one plot.
+
+        Parameters
+        ----------
+        process: str
+            If provided, the process that should be plotted.
+
+        units_sigma : float
+            Desired units of the y-axis in m^2.
+
+        plot_param_dict : dict
+        dictionary of kwargs to pass to ax.plot
+
+        xlim(ylim)_param_dict: dict
+            dictionary of kwargs to pass to ax.set_x(y)lim
+
+        ylog, xlog: bool
+            whether y-, x-axis is log scale
+
+        show_legend: bool
+            whether to display the legend or not
+
+        filename: str
+            filename for output, if provided (default is to not output a file)
+
+        max_cs : int
+            maximum number of CS to put on graph
+
+        Returns
+        -------
+        f: FIXME
+            plot of a collection of cross sections from a Model
+        """
+        fig, axes = plt.subplots()
+
+        if ylog:
+            plt.yscale('log')
+
+        if xlog:
+            plt.xscale('log')
+
+        plt.rcParams["figure.figsize"] = (width, height)
+        units_sigma_tex = "{0:.0e}".format(units_sigma) + " m$^2$"
+        plt.ylabel(r'Cross Section (' + units_sigma_tex + ')')
+        plt.xlabel(r'Electron Energy (eV)')
+
+        axes.set_xlim(**xlim_param_dict)
+        axes.set_ylim(**ylim_param_dict)
+
+        axes.tick_params(direction='in', which='both',
+                         bottom=True, top=True, left=True, right=True)
+
+        plot_num = 0
+        for i in range(len(self.cs)):
+            if plot_num >= max_plots:
+                continue
+            elif process in ('', self.cs[i].metadata['process']):
+                plot_num += 1
+    
+                reaction = reaction_latex(self.cs[i])
+                label_items = [self.cs[i].metadata['process'], ": ", reaction]
+                label_text = " ".join(item for item in label_items if item)
+                e_np = np.array(self.cs[i].data['e'])
+                sigma_np = np.array(self.cs[i].data['sigma'])
+    
+                upu = self.cs[i].metadata['upu']
+                lpu = self.cs[i].metadata['lpu']
+                if upu != -1:
+                    sigma_upper_np = sigma_np*(1 + upu)
+                    if lpu == -1:
+                        sigma_lower_np = sigma_np
+                if lpu != -1:
+                    sigma_lower_np = sigma_np*(1 - lpu)
+                    if upu == -1:
+                        sigma_upper_np = sigma_np
+                
+                plot = axes.plot(e_np,
+                                 sigma_np*self.cs[i].metadata['units_sigma']/units_sigma,
+                                 **plot_param_dict,
+                                 label='{}'.format(label_text))
+    
+                if upu != -1 or lpu != -1:
+                    fill_color = plot[0].get_color()
+                    axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
+                            color=fill_color, alpha=0.4)
+
+        if show_legend:
+            axes.legend(fontsize=12, ncol=2, frameon=False,
+                        bbox_to_anchor=(1.0, 1.0))
+            # ax.legend(box='best',
+            #           bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
+
+        if filename is not None:
+            plt.savefig(filename)
+
+        return axes
 
 def table_as_df(cursor, table, columns="*"):
     """Return a MySQL table as a pandas DataFrame
@@ -447,13 +562,13 @@ def table_as_df(cursor, table, columns="*"):
     return DataFrame(cursor.fetchall())
 
 
-def reaction_latex(cs_dict):
+def reaction_latex(cs):
     """Return the LaTeX for the reaction from a nepc cross section
 
     Arguments
     ---------
-    cs_dict : dict
-        A nepc cross section dictionary
+    cs : nepc.CS
+        A nepc cross section
 
     Returns
     -------
@@ -461,7 +576,7 @@ def reaction_latex(cs_dict):
         The LaTeX for a nepc cross section reaction
     """
     # FIXME: allow for varying electrons, hv, v, j on rhs and lhs
-    e_on_lhs = cs_dict['e_on_lhs']
+    e_on_lhs = cs.metadata['e_on_lhs']
     if e_on_lhs == 0:
         lhs_e_text = None
     elif e_on_lhs == 1:
@@ -469,7 +584,7 @@ def reaction_latex(cs_dict):
     else:
         lhs_e_text = str(e_on_lhs) + "e$^-$"
 
-    e_on_rhs = cs_dict['e_on_rhs']
+    e_on_rhs = cs.metadata['e_on_rhs']
     if e_on_rhs == 0:
         rhs_e_text = None
     elif e_on_rhs == 1:
@@ -478,197 +593,13 @@ def reaction_latex(cs_dict):
         rhs_e_text = str(e_on_rhs) + "e$^-$"
 
     lhs_items = [lhs_e_text,
-                 cs_dict['lhsA_long'],
-                 cs_dict['lhsB_long']]
+                 cs.metadata['lhsA_long'],
+                 cs.metadata['lhsB_long']]
     lhs_text = " + ".join(item for item in lhs_items if item)
     rhs_items = [
-                cs_dict['rhsA_long'],
-                cs_dict['rhsB_long'],
+                cs.metadata['rhsA_long'],
+                cs.metadata['rhsB_long'],
                 rhs_e_text]
     rhs_text = " + ".join(item for item in rhs_items if item)
     reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
     return reaction
-
-
-def model_summary_df(nepc_model, lower=None, upper=None):
-    """Return a summary of a NEPC model as a DataFrame
-
-    Parameters
-    ----------
-    nepc_model : list of dicts
-        See the model method above
-    lower : int
-        lower bound of model index to include in summary
-    upper : int
-        upper bound of model index to include in summary
-
-    Returns
-    -------
-    cs_df : pandas DataFrame
-        A DataFrame containing the cs_id, process,
-        range of electron energies (E_lower, E_upper),
-        maximum sigma (sigma_max), and
-        lpu/upu's for each cross section in the model
-    """
-    summary_list = []
-
-    headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
-               "reaction", "threshold", "E_lower", "E_upper",
-               "sigma_max", "lpu", "upu"]
-
-    max_e_lower = 0
-    max_e_upper = 0
-    max_peak_sigma = 0
-    min_peak_sigma = 1
-    max_lpu = 0.000000001
-    max_upu = 0.000000001
-    for cs in nepc_model:
-        reaction = reaction_latex(cs)
-        e_lower = round(min(cs["e"]), 2)
-        e_upper = round(max(cs["e"]), 2)
-        if e_lower > max_e_lower:
-            max_e_lower = e_lower
-        if e_upper > max_e_upper:
-            max_e_upper = e_upper
-        cs_peak_sigma = max(cs["sigma"])
-        if cs_peak_sigma > max_peak_sigma:
-            max_peak_sigma = cs_peak_sigma
-        if cs_peak_sigma < min_peak_sigma:
-            min_peak_sigma = cs_peak_sigma
-        cs_lpu = cs["lpu"]
-        cs_upu = cs["upu"]
-        if cs_lpu is not None and cs_lpu > max_lpu:
-            max_lpu = cs_lpu
-        if cs_upu is not None and cs_upu > max_upu:
-            max_upu = cs_upu
-        summary_list.append([cs["cs_id"],
-                             cs["specie"], cs["lhsA"], cs["rhsA"],
-                             cs["process"], reaction,
-                             cs["threshold"],
-                             e_lower, e_upper,
-                             cs["units_sigma"]*cs_peak_sigma,
-                             cs_lpu, cs_upu])
-
-    cs_df = DataFrame(summary_list, columns=headers)
-    cs_df = (cs_df.sort_values(by=["process", "rhsA", "E_lower"])
-             .reset_index(drop=True))
-    if upper is None:
-        upper = len(cs_df)
-    if lower is None:
-        lower = 0
-    return (cs_df.loc[lower:upper]
-            .style
-            .background_gradient(subset=['E_lower', 'E_upper',
-                                         'sigma_max', 'lpu', 'upu'],
-                                 cmap='plasma')
-            .highlight_null('red'))
-
-
-def cs_subset(cursor,
-              sigma_cutoff=None,
-              specie=None,
-              process=None,
-              lhsA=None, lhsB=None,
-              rhsA=None, rhsB=None,
-              ref=None,
-              DBUG=False):
-    """Return a subset of cross sections from the NEPC MySQL database
-
-    Parameters
-    ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
-    sigma_cutoff : float
-        If provided, only cross sections with a sigma value above
-        sigma_cutoff will be returned.
-
-    NOTE: one or more of the following parameters must be set
-
-    specie : str
-        `name` of specie from `species` table
-    process : str
-        `name` of process from `processes` table
-    lhsA : str
-        `name` of lhsA state from `states` table
-    lhsB : str
-        `name` of lhsB state from `states` table
-    rhsA : str
-        `name` of rhsA state from `states` table
-    rhsB : str
-        `name` of rhsB state from `states` table
-    ref : str
-        `ref` from `cs` table corresponding to entry in
-        '[nepc]/models/ref.bib'
-
-    Returns
-    -------
-    cs_dicts : list of dict
-        A list of dictionaries containing cross section data and
-        metadata from NEPC database matching the criteria noted above.
-        See cs_dict_constructor for the structure of each cross section
-        dictionary.
-
-
-    """
-    cs_dicts = []
-    if specie is None and process is None and ref is None:
-        raise Exception("You must specify the specie, process or " +
-                        "ref in cs_subset to narrow the search results.")
-
-    execute_text = ("SELECT cs_id FROM cs")
-    join_text = []
-    where_text = []
-
-    if specie is not None:
-        join_text.append("LEFT JOIN species s ON (cs.specie_id = s.id)")
-        where_text.append("s.name LIKE '" + specie + "'")
-    if process is not None:
-        join_text.append("LEFT JOIN processes p ON (cs.process_id = p.id)")
-        where_text.append("p.name LIKE '" + process + "'")
-    if lhsA is not None:
-        join_text.append("LEFT JOIN states lhsAs ON (cs.lhsA_id = lhsAs.id)")
-        where_text.append("lhsAs.name LIKE '" + lhsA + "'")
-    if lhsB is not None:
-        join_text.append("LEFT JOIN states lhsBs ON (cs.lhsB_id = lhsBs.id)")
-        where_text.append("lhsBs.name LIKE '" + lhsB + "'")
-    if rhsA is not None:
-        join_text.append("LEFT JOIN states rhsAs ON (cs.rhsA_id = rhsAs.id)")
-        where_text.append("rhsAs.name LIKE '" + rhsA + "'")
-    if rhsB is not None:
-        join_text.append("LEFT JOIN states rhsBs ON (cs.rhsB_id = rhsBs.id)")
-        where_text.append("rhsBs.name LIKE '" + rhsB + "'")
-    if ref is not None:
-        where_text.append("cs.ref LIKE '" + ref + "'")
-
-    where_text_joined = ""
-    if where_text:
-        where_text_joined = "WHERE " + " AND ".join(where_text)
-
-    execute_text = " ".join([execute_text,
-                             " ".join(join_text),
-                             where_text_joined])
-    if DBUG:  # pragma: no cover
-        print("Executing the following MySQL string: " + execute_text)
-
-    cursor.execute(execute_text)
-
-    cs_array = cursor.fetchall()
-    if DBUG:  # pragma: no cover
-        print("Got the following list of cs_id's: " + str(cs_array))
-
-    for cs_item in cs_array:
-        cs_id = cs_item[0]
-
-        metadata = cs_metadata(cursor, cs_id)
-
-        cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
-                       str(cs_id))
-        cross_section = cursor.fetchall()
-        e_energy = [i[0] for i in cross_section]
-        sigma = [i[1] for i in cross_section]
-        units_sigma = metadata[4]
-
-        if sigma_cutoff is None or max(sigma) * units_sigma > sigma_cutoff:
-            cs_dicts.append(cs_dict_constructor(metadata, e_energy, sigma))
-
-    return cs_dicts

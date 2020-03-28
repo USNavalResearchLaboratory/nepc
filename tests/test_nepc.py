@@ -68,31 +68,33 @@ def test_cs_metadata(nepc_connect):
 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_cs_dict_constructor(nepc_connect):
-    """Verify that nepc.cs_dict_constructor
-    makes a dictionary out of the three terms as
-    parameters, and that each term is represented
-    in its accurate format"""
-    metadata = nepc.cs_metadata(nepc_connect[1], 1)
-    e_energy, sigma = nepc.cs_e_sigma(nepc_connect[1], 1)
-    cs_dict = nepc.cs_dict_constructor(metadata, e_energy, sigma)
-    assert isinstance(cs_dict, dict)
-    assert isinstance(cs_dict["cs_id"], int)
-    assert isinstance(cs_dict["specie"], str)
-    assert isinstance(cs_dict["units_e"], float)
-    assert isinstance(cs_dict["e"], list)
-    assert isinstance(cs_dict["e"][0], float)
+def test_CS_class(nepc_connect):
+    """Verify that the nepc.CS class has metadata and data attributes,
+    and that each attribute is of the correct type"""
+    # FIXME: randomly sample a few cross sections in the database
+    cs = nepc.CS(nepc_connect[1], 1)
+    # FIXME: add assert for each in data and metadata
+    assert isinstance(cs.metadata, dict)
+    assert isinstance(cs.data, dict)
+    assert isinstance(cs.metadata["cs_id"], int)
+    assert isinstance(cs.metadata["specie"], str)
+    assert isinstance(cs.metadata["units_e"], float)
+    assert isinstance(cs.data["e"], list)
+    assert isinstance(cs.data["e"][0], float)
+    assert isinstance(cs.data["sigma"], list)
+    assert isinstance(cs.data["sigma"][0], float)
 
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_model(nepc_connect):
     """Verify that nepc.model returns a list of dictionaries"""
-    # TODO: create a model class and test that we can retrieve it from
-    # the NEPC database
     abc = nepc.Model(nepc_connect[1], "abc")
+    # FIXME: randomly sample the models in the database
+    # FIXME: randomly sample the cross sections in the model
     assert isinstance(abc.cs, list)
-    assert isinstance(abc.cs[0], dict)
-    assert isinstance(abc.cs[0]['specie'], str)
+    assert isinstance(abc.cs[0].metadata, dict)
+    assert isinstance(abc.cs[0].data, dict)
+    assert isinstance(abc.cs[0].metadata['specie'], str)
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -112,50 +114,36 @@ def test_reaction_latex(nepc_connect):
     """Verify when nepc.reaction_latex is called it
     returns a string representing the LaTeX
     for the reaction from a nepc cross section"""
-    # TODO: verify latex is correct
+    # FIXME: verify latex is correct
+    # FIXME: randomly sample cross sections
     for i in range(1, 100):
-        metadata = nepc.cs_metadata(nepc_connect[1], i)
-        e_energy, sigma = nepc.cs_e_sigma(nepc_connect[1], i)
-        cs_dict = nepc.cs_dict_constructor(metadata, e_energy, sigma)
-        assert isinstance(nepc.reaction_latex(cs_dict), str)
+        cs = nepc.CS(nepc_connect[1], i)
+        assert isinstance(nepc.reaction_latex(cs), str)
 
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_model_summary_df(nepc_connect):
     """Verify nepc.model_summary_df returns a dataframe"""
     # TODO: check formatting of summary dataframe
+    # FIXME: randomly sample models
     abc = nepc.Model(nepc_connect[1], "abc")
-    df = nepc.model_summary_df(abc.cs, lower=0, upper=10)
-    assert isinstance(df, pd.io.formats.style.Styler)
-    df = nepc.model_summary_df(abc.cs, upper=10)
-    assert isinstance(df, pd.io.formats.style.Styler)
-    df = nepc.model_summary_df(abc.cs, lower=10)
+    df = abc.summary(lower=0, upper=10)
     assert isinstance(df, pd.io.formats.style.Styler)
 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_cs_subset(nepc_connect):
-    """Verify that nepc.cs_subset returns a proper
-    subset of cross sections from the NEPC MySQL database"""
+def test_model_subset(nepc_connect):
+    """Verify that Model.subset returns a proper
+    subset of cross sections from a model within the NEPC MySQL database"""
     # TODO: test for lhsB and rhsB
     sigma_cutoff = 1E-21
-    cs_subset = nepc.cs_subset(nepc_connect[1], specie="N",
-                               process="excitation",
-                               ref='wang2014', lhsA='N_2s22p3_4So',
-                               sigma_cutoff=sigma_cutoff)
-    assert isinstance(cs_subset, list)
-    assert isinstance(cs_subset[0], dict)
-    sigma_max = 1
-    for cross in cs_subset:
-        if max(cross["sigma"]) < sigma_max:
-            sigma_max = max(cross["sigma"])
-    assert sigma_max > sigma_cutoff
-    cs_subset = nepc.cs_subset(nepc_connect[1], specie="N",
-                               process="excitation",
-                               ref='wang2014', rhsA='N_2s22p3_2Do',
-                               sigma_cutoff=sigma_cutoff)
-    assert isinstance(cs_subset, list)
-    assert isinstance(cs_subset[0], dict)
+    # FIXME: randomly sample models and cross sections within the model
+    abc = nepc.Model(nepc_connect[1], "abc")
+    abc_subset = abc.subset({'process': 'excitation',
+                             'lhsA': 'N_2s22p3_4So'})
+    assert isinstance(abc_subset, list)
+    assert isinstance(abc_subset[0].metadata, dict)
+    assert isinstance(abc_subset[0].data, dict)
 
 
 @pytest.mark.usefixtures("nepc_connect")
