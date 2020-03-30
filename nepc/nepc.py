@@ -320,10 +320,9 @@ class Model:
             for the structure of each cross section dictionary."""
         # print(str(cs_array))
 
-        cs_id_list = model_cs_id(cursor, model_name)
+        cs_id_list = model_cs_id_list(cursor, model_name)
         cs_list = []
         for cs_id in cs_id_list:
-            cs_id = cs_item[0]
             cs_list.append(CS(cursor, cs_id))
 
         self.cs = cs_list
