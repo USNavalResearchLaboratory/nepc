@@ -2,9 +2,9 @@
 
 Utilize the NEPC MySQL database by:
     - establishing a connection to the database
-    - printing tables and the number of rows in tables
-    - accessing a pre-defined plasma chemistry model (PCM, collection
-    of cross sections)
+    - accessing cross sections via CS class
+    - accessing pre-defined plasma chemistry models via Model class
+    - printing statistics about the database (e.g. number of rows in various tables)
 
 Notes
 -----
@@ -17,12 +17,12 @@ Examples
 Establish a connection to the NEPC database running on the
 production server:
 
-    cnx, cursor = connect()
+    cnx, cursor = nepc.connect()
 
 Establish a connection to the NEPC database running on the
 local machine:
 
-    cnx, cursor = connect(local=True)
+    cnx, cursor = nepc.connect(local=True)
 """
 import numpy as np
 from pandas import DataFrame
@@ -39,6 +39,8 @@ def connect(local=False, DBUG=False):
     local : bool
         Use a copy of NEPC on localhost; otherwise use the production
         server (default False).
+    DBUG : bool
+        Print debug info (default False).
 
     Returns
     -------
@@ -87,6 +89,31 @@ def count_table_rows(cursor, table):
     cursor.execute("select count(*) from " + table + ";")
     table_rows = cursor.fetchall()
     return table_rows[0][0]
+
+
+def model_cs_id_list(cursor, model_name):
+    """return a list of cs_id's for a model in the NEPC database
+
+    Parameters
+    ----------
+    cursor : MySQLCursor
+        A MySQLCursor object (see nepc.connect)
+    model_name : str
+        Name of a model in the NEPC MySQL database
+
+    Return
+    ------
+    cs_id_list : list of ints
+        cs_id's corresponding to cross sections in the model
+    """
+    cursor.execute("SELECT cs.cs_id as cs_id " +
+                   "FROM cs " +
+                   "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
+                   "JOIN models m ON (m2cs.model_id = m.model_id) " +
+                   "WHERE m.name LIKE '" + model_name + "'")
+    cs_id_list = cursor.fetchall()
+    cs_id_list = [cs_id[0] for cs_id in cs_id_list]
+    return cs_id_list
 
 
 def cs_e_sigma(cursor, cs_id):
@@ -260,7 +287,7 @@ class CS:
                          "lhsB_long": metadata[20],
                          "rhsA_long": metadata[21],
                          "rhsB_long": metadata[22],
-                         "e_on_lhs": metadata[28],
+                         "e_on_lhs": metadata[23],
                          "e_on_rhs": metadata[24],
                          "hv_on_lhs": metadata[25],
                          "hv_on_rhs": metadata[26],
@@ -291,16 +318,11 @@ class Model:
             A list of dictionaries containing cross section data and
             metadata from the NEPC database.  See cs_dict_constructor
             for the structure of each cross section dictionary."""
-        cs_list = []
-        cursor.execute("SELECT cs.cs_id as cs_id " +
-                       "FROM cs " +
-                       "JOIN models2cs m2cs ON (cs.cs_id = m2cs.cs_id) " +
-                       "JOIN models m ON (m2cs.model_id = m.model_id) " +
-                       "WHERE m.name LIKE '" + model_name + "'")
-        cs_array = cursor.fetchall()
         # print(str(cs_array))
 
-        for cs_item in cs_array:
+        cs_id_list = model_cs_id(cursor, model_name)
+        cs_list = []
+        for cs_id in cs_id_list:
             cs_id = cs_item[0]
             cs_list.append(CS(cursor, cs_id))
 
@@ -540,6 +562,20 @@ class Model:
 
         return axes
 
+
+def CustomModel(Model):
+    """A customized collection of cross sections. The cross sections can be of CS Class
+    (from the NEPC database) or CustomCS Class (user created)."""
+    def __init__(self, cursor=None, model_name=None, cs_ids=None, cs_list=None):
+        if model_name is None and cs_ids is None and cs_list is None:
+            raise ValueError('Must provide at least one of model_name, cs_ids, or cs_list')
+        if cursor is None and (model_name is not None or cs_ids is not None):
+            raise ValueError('Must provide cursor if providing model_name or cs_ids')
+        if cursor is not None:
+            if model_name is None and cs_ids is None:
+                raise ValueError('Must provide model_name or cs_ids if providing cursor.')
+
+
 def table_as_df(cursor, table, columns="*"):
     """Return a MySQL table as a pandas DataFrame
 
@@ -575,7 +611,9 @@ def reaction_latex(cs):
     reaction : str
         The LaTeX for a nepc cross section reaction
     """
-    # FIXME: allow for varying electrons, hv, v, j on rhs and lhs
+    # FIXME: move this method to the CS Class
+    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+    # FIXME: decide how to represent total cross sections and implement
     e_on_lhs = cs.metadata['e_on_lhs']
     if e_on_lhs == 0:
         lhs_e_text = None

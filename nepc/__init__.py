@@ -1,6 +1,7 @@
 from .version import __version__
 from .nepc import connect
 from .nepc import count_table_rows
+from .nepc import model_cs_id_list
 from .nepc import cs_e_sigma
 from .nepc import cs_e
 from .nepc import cs_sigma
@@ -15,6 +16,7 @@ from .nepc import Model
 # be able to access:
 __all__ = [
         'connect',
+        'model_cs_id_list',
         'count_table_rows',
         'cs_e_sigma',
         'cs_e',
