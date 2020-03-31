@@ -86,8 +86,9 @@ def test_CS_class(nepc_connect):
 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_model(nepc_connect):
-    """Verify that nepc.model returns a list of dictionaries"""
+def test_Model_class(nepc_connect):
+    """Verify that the nepc.Model class is a list of CS type and
+    test the methods within the Class."""
     abc = nepc.Model(nepc_connect[1], "abc")
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
@@ -95,6 +96,32 @@ def test_model(nepc_connect):
     assert isinstance(abc.cs[0].metadata, dict)
     assert isinstance(abc.cs[0].data, dict)
     assert isinstance(abc.cs[0].metadata['specie'], str)
+
+
+@pytest.mark.usefixtures("nepc_connect")
+def test_CustomModel_class(nepc_connect):
+    """Verify that the nepc.CustomModel class is a list of CS 
+    and CustomCS type and
+    test the methods within the Class."""
+    phelps = nepc.CustomModel(cursor=nepc_connect[1], 
+            model_name="phelps")
+    # FIXME: randomly sample the models in the database
+    # FIXME: randomly sample the cross sections in the model
+    assert isinstance(phelps.cs, list)
+    assert isinstance(phelps.cs[0].metadata, dict)
+    assert isinstance(phelps.cs[0].data, dict)
+    assert isinstance(phelps.cs[0].metadata['specie'], str)
+    assert len(phelps.cs) == 27
+    phelps_mod = nepc.CustomModel(cursor=nepc_connect[1], 
+            model_name="phelps", 
+            cs_id_list=[1, 2])
+    # FIXME: randomly sample the models in the database
+    # FIXME: randomly sample the cross sections in the model
+    assert isinstance(phelps_mod.cs, list)
+    assert isinstance(phelps_mod.cs[0].metadata, dict)
+    assert isinstance(phelps_mod.cs[0].data, dict)
+    assert isinstance(phelps_mod.cs[0].metadata['specie'], str)
+    assert len(phelps_mod.cs) == 29
 
 
 @pytest.mark.usefixtures("nepc_connect")

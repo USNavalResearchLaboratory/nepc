@@ -302,7 +302,7 @@ class CS:
 
 
 class Model:
-    """A plasma chemistry model from the NEPC MySQL database"""
+    """A pre-defined collection of cross sections from the NEPC MySQL database"""
     def __init__(self, cursor, model_name):
         """
         Parameters
@@ -314,18 +314,16 @@ class Model:
 
         Attributes
         ----------
-        cs: list of dict
-            A list of dictionaries containing cross section data and
-            metadata from the NEPC database.  See cs_dict_constructor
-            for the structure of each cross section dictionary."""
-        # print(str(cs_array))
+        cs: list of CS
+            A list of cross section data and
+            metadata of CS type.
+        """
+        _cs_list = []
+        _cs_id_list = model_cs_id_list(cursor, model_name)
+        for cs_id in _cs_id_list:
+            _cs_list.append(CS(cursor, cs_id))
 
-        cs_id_list = model_cs_id_list(cursor, model_name)
-        cs_list = []
-        for cs_id in cs_id_list:
-            cs_list.append(CS(cursor, cs_id))
-
-        self.cs = cs_list
+        self.cs = _cs_list
 
     def filter(self, specie=None, process=None, ref=None):
         """return a subset of the model"""
@@ -562,17 +560,58 @@ class Model:
         return axes
 
 
-def CustomModel(Model):
+class CustomModel(Model):
     """A customized collection of cross sections. The cross sections can be of CS Class
-    (from the NEPC database) or CustomCS Class (user created)."""
-    def __init__(self, cursor=None, model_name=None, cs_ids=None, cs_list=None):
-        if model_name is None and cs_ids is None and cs_list is None:
-            raise ValueError('Must provide at least one of model_name, cs_ids, or cs_list')
-        if cursor is None and (model_name is not None or cs_ids is not None):
-            raise ValueError('Must provide cursor if providing model_name or cs_ids')
+    (from the NEPC database) or CustomCS Class (user created).
+    Options:
+
+    a. If building upon an existing NEPC model, must provide cursor and model_name.
+
+    b. If building from existing cross sections, must provide cursor and cs_id_list.
+
+    c. If building from a list of custom cross sections, must provide cs_list.
+
+    Must do at least one of a, b, or c, and can do any combination thereof."""
+    def __init__(self, cursor=None, model_name=None, cs_id_list=None, cs_list=None):
+        """
+        Parameters
+        ----------
+        cursor : MySQLCursor
+            A MySQLCursor object (see nepc.connect)
+        model_name :str
+            The name of a NEPC model (see [nepc.wiki]/models
+        cs_id_list : list of int
+            List of cs_id's to pull from NEPC database.
+        cs_list : list of CustomCS
+            List of user-defined cross sections of CustomCS type.
+        Attributes
+        ----------
+        cs: list of CS and CustomCS
+            A list of cross section data and
+            metadata of CS or CustomCS type.
+        """
+        if model_name is None and cs_id_list is None and cs_list is None:
+            raise ValueError('Must provide at least one of model_name, cs_id_list, or cs_list')
+        if cursor is None and (model_name is not None or cs_id_list is not None):
+            raise ValueError('Must provide cursor if providing model_name or cs_id_list')
         if cursor is not None:
-            if model_name is None and cs_ids is None:
-                raise ValueError('Must provide model_name or cs_ids if providing cursor.')
+            if model_name is None and cs_id_list is None:
+                raise ValueError('Must provide model_name or cs_id_list if providing cursor.')
+
+            _cs_id_list = []
+            if model_name is not None:
+                _cs_id_list = _cs_id_list + model_cs_id_list(cursor, model_name)
+            if cs_id_list is not None:
+                _cs_id_list = _cs_id_list + cs_id_list
+
+            _cs_list = []
+            for cs_id in _cs_id_list:
+                _cs_list.append(CS(cursor, cs_id))
+            if cs_list is not None:
+                _cs_list.append(cs_list)
+
+        self.cs = _cs_list.copy()
+
 
 
 def table_as_df(cursor, table, columns="*"):

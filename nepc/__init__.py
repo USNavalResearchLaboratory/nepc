@@ -10,6 +10,7 @@ from .nepc import table_as_df
 from .nepc import reaction_latex
 from .nepc import CS
 from .nepc import Model
+from .nepc import CustomModel
 
 
 # if somebody does "from somepackage import *", this is what they will
@@ -25,5 +26,6 @@ __all__ = [
         'table_as_df',
         'reaction_latex',
         'CS',
-        'Model'
+        'Model',
+        'CustomModel'
         ]
