@@ -301,6 +301,146 @@ class CS:
                      "sigma": sigma}
 
 
+    def plot(self,
+             units_sigma=1E-20,
+             plot_param_dict={'linewidth': 1},
+             xlim_param_dict={'auto': True},
+             ylim_param_dict={'auto': True},
+             ylog=False, xlog=False, show_legend=True,
+             filename=None,
+             width=10, height=10):
+        """
+        A helper function to plot a single cross section data set
+
+        Parameters
+        ----------
+        units_sigma : float
+            Desired units of the y-axis in m^2.
+
+        plot_param_dict : dict
+        dictionary of kwargs to pass to ax.plot
+
+        xlim(ylim)_param_dict: dict
+            dictionary of kwargs to pass to ax.set_x(y)lim
+
+        ylog, xlog: bool
+            whether y-, x-axis is log scale
+
+        show_legend: bool
+            whether to display the legend or not
+
+        filename: str
+            filename for output, if provided (default is to not output a file)
+
+        Returns
+        -------
+        f: FIXME
+            plot of a single cross section data set
+        """
+        fig, axes = plt.subplots()
+
+        if ylog:
+            plt.yscale('log')
+
+        if xlog:
+            plt.xscale('log')
+
+        plt.rcParams["figure.figsize"] = (width, height)
+        units_sigma_tex = "{0:.0e}".format(units_sigma) + " m$^2$"
+        plt.ylabel(r'Cross Section (' + units_sigma_tex + ')')
+        plt.xlabel(r'Electron Energy (eV)')
+
+        axes.set_xlim(**xlim_param_dict)
+        axes.set_ylim(**ylim_param_dict)
+
+        axes.tick_params(direction='in', which='both',
+                         bottom=True, top=True, left=True, right=True)
+
+        reaction = reaction_latex(self)
+        label_items = [self.metadata['process'], ": ", reaction]
+        label_text = " ".join(item for item in label_items if item)
+        e_np = np.array(self.data['e'])
+        sigma_np = np.array(self.data['sigma'])
+    
+        upu = self.metadata['upu']
+        lpu = self.metadata['lpu']
+        if upu != -1:
+            sigma_upper_np = sigma_np*(1 + upu)
+            if lpu == -1:
+                sigma_lower_np = sigma_np
+        if lpu != -1:
+            sigma_lower_np = sigma_np*(1 - lpu)
+            if upu == -1:
+                sigma_upper_np = sigma_np
+
+        plot = axes.plot(e_np,
+                         sigma_np*self.metadata['units_sigma']/units_sigma,
+                         **plot_param_dict,
+                         label='{}'.format(label_text))
+
+        if upu != -1 or lpu != -1:
+            fill_color = plot[0].get_color()
+            axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
+                    color=fill_color, alpha=0.4)
+
+        if show_legend:
+            axes.legend(fontsize=12, ncol=2, frameon=False,
+                        bbox_to_anchor=(1.0, 1.0))
+            # ax.legend(box='best',
+            #           bbox_to_anchor=(0.5, 0.75), ncol=1, loc='center left')
+
+        if filename is not None:
+            plt.savefig(filename)
+
+        return axes
+
+
+class CustomCS(CS):
+    """A custom cross section data set, including metadata and cross section data.
+    Two options:
+    a. If building upon an existing NEPC CS, must provide cursor and cs_id as well
+    as one or both of metadata and data.
+
+    b. If building a CustomCS from scratch, must provide metadata and data."""
+    def __init__(self, cursor=None, cs_id=None, metadata=None, data=None):
+        """Initialize a cross section data set
+
+        Parameters
+        ----------
+        cursor : MySQLCursor
+            A MySQLCursor object (see nepc.connect)
+        cs_id : int
+            i.d. of the cross section in `cs` and `csdata` tables
+        metadata : dictionary of the metadata
+            See Attributes of CS class.
+        data : dictionary of the cross section data
+            See Attributes of CS class.
+
+        Attributes
+        ----------
+        metadata : dictionary of the metadata
+            See Attributes of CS class.
+        data : dictionary of the cross section data
+            See Attributes of CS class.
+        """
+        if ((cursor is None and cs_id is not None) or
+            (cursor is not None and cs_id is None)):
+            raise ValueError('If providing cursor or cs_id, must provide both.')
+        if (cursor is not None and cs_id is not None):
+            super().__init__(cursor, cs_id)
+            self.metadata['cs_id'] = None
+            if metadata is not None:
+                for key in metadata.keys():
+                    self.metadata[key] = metadata[key]
+            if data is not None:
+                self.data = data.copy()
+        elif (data is None or metadata is None):
+            raise ValueError('must provide data/metadata if not providing cursor/cs_id')
+        else:
+            self.metadata = metadata.copy()
+            self.data = data.copy()
+
+
 class Model:
     """A pre-defined collection of cross sections from the NEPC MySQL database"""
     def __init__(self, cursor, model_name):
@@ -452,6 +592,16 @@ class Model:
                                      cmap='plasma')
                 .highlight_null('red'))
 
+
+    def set_unique(self):
+        for cs, i in zip(self.cs, range(len(self.cs))):
+            if i == 0:
+                _unique = np.asarray(cs.data['e'])
+            else:
+                _unique = np.unique(np.concatenate([_unique, np.asarray(cs.data['e'])]))
+        self.unique = list(_unique)
+
+
     def plot(self,
              units_sigma=1E-20,
              process='',
@@ -572,7 +722,7 @@ class CustomModel(Model):
     c. If building from a list of custom cross sections, must provide cs_list.
 
     Must do at least one of a, b, or c, and can do any combination thereof."""
-    def __init__(self, cursor=None, model_name=None, cs_id_list=None, cs_list=None):
+    def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[]):
         """
         Parameters
         ----------
@@ -590,28 +740,30 @@ class CustomModel(Model):
             A list of cross section data and
             metadata of CS or CustomCS type.
         """
-        if model_name is None and cs_id_list is None and cs_list is None:
+        if model_name is None and not cs_id_list and not cs_list:
             raise ValueError('Must provide at least one of model_name, cs_id_list, or cs_list')
-        if cursor is None and (model_name is not None or cs_id_list is not None):
+
+        if cursor is None and (model_name is not None or cs_id_list):
             raise ValueError('Must provide cursor if providing model_name or cs_id_list')
+
+        if cs_list:
+            _cs_list = cs_list.copy()
+        else:
+            _cs_list = []
+
         if cursor is not None:
-            if model_name is None and cs_id_list is None:
+            if model_name is None and not cs_id_list:
                 raise ValueError('Must provide model_name or cs_id_list if providing cursor.')
 
-            _cs_id_list = []
             if model_name is not None:
-                _cs_id_list = _cs_id_list + model_cs_id_list(cursor, model_name)
-            if cs_id_list is not None:
-                _cs_id_list = _cs_id_list + cs_id_list
+                _cs_id_list = cs_id_list.copy() + model_cs_id_list(cursor, model_name)
+            else:
+                _cs_id_list = cs_id_list.copy()
 
-            _cs_list = []
             for cs_id in _cs_id_list:
                 _cs_list.append(CS(cursor, cs_id))
-            if cs_list is not None:
-                _cs_list.append(cs_list)
 
         self.cs = _cs_list.copy()
-
 
 
 def table_as_df(cursor, table, columns="*"):

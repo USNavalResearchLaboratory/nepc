@@ -73,7 +73,7 @@ def test_CS_class(nepc_connect):
     and that each attribute is of the correct type"""
     # FIXME: randomly sample a few cross sections in the database
     cs = nepc.CS(nepc_connect[1], 1)
-    # FIXME: add assert for each in data and metadata
+    # FIXME: add assert for each key in metadata
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert isinstance(cs.metadata["cs_id"], int)
@@ -83,6 +83,76 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.data["e"][0], float)
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
+
+
+@pytest.mark.usefixtures("nepc_connect")
+def test_CustomCS_class(nepc_connect):
+    """Verify that the nepc.CustomCS class has metadata and data attributes,
+    and that each attribute is of the correct type"""
+    cs = nepc.CustomCS(nepc_connect[1], cs_id=1)
+    # FIXME: add assert for each in key in metadata
+    # FIXME: test edge cases of changing NEPC cross sections
+    # FIXME: check that process, specie, state are in NEPC database
+    assert isinstance(cs.metadata, dict)
+    assert isinstance(cs.data, dict)
+    assert cs.metadata["cs_id"] is None
+    assert isinstance(cs.metadata["specie"], str)
+    assert isinstance(cs.metadata["units_e"], float)
+    assert isinstance(cs.data["e"], list)
+    assert isinstance(cs.data["e"][0], float)
+    assert isinstance(cs.data["sigma"], list)
+    assert isinstance(cs.data["sigma"][0], float)
+    cs = nepc.CustomCS(nepc_connect[1], cs_id=1,
+                       metadata={'cs_id': -1,
+                                 'specie': 'O2'},
+                       data={'e': [0.0, 1.0, 2.0],
+                             'sigma': [0.0, 0.1, 0.2]})
+    assert isinstance(cs.metadata, dict)
+    assert isinstance(cs.data, dict)
+    assert cs.metadata["cs_id"] == -1
+    assert cs.metadata["specie"] == 'O2'
+    assert isinstance(cs.metadata["units_e"], float)
+    assert isinstance(cs.data["e"], list)
+    assert isinstance(cs.data["e"][0], float)
+    assert isinstance(cs.data["sigma"], list)
+    assert isinstance(cs.data["sigma"][0], float)
+    assert cs.data['e'] == [0.0, 1.0, 2.0]
+    assert cs.data['sigma'] == [0.0, 0.1, 0.2]
+    """option not implemented
+    cs = nepc.CustomCS(metadata={'cs_id': -1,
+                                 'specie': 'N2',
+                                 'process': 'excitation',
+                                 'lhsA': 'N2(X1Sigmag+)',
+                                 'rhsA': 'N2(W3Deltau)',
+                                 'units_e': 1.0,
+                                 'units_sigma': 1.0,
+                                 'threshold': 7.36,
+                                 'background': 'N2 W3DELTA-CARTWRIGHT 1977.'},
+                       data={'e': [0.0, 1.0, 2.0],
+                             'sigma': [0.0, 0.1, 0.2]})
+    assert isinstance(cs.metadata, dict)
+    assert isinstance(cs.data, dict)
+    assert cs.metadata["cs_id"] == -1
+    assert cs.metadata["specie"] == 'N2'
+    assert cs.metadata["process"] == 'excitation'
+    assert cs.metadata["lhsA"] == 'N2(X1Sigmag+)'
+    assert cs.metadata["lhsB"] == '\\N'
+    assert cs.metadata["rhsA"] == 'N2(X1Sigmag+)'
+    assert cs.metadata["rhsB"] == '\\N'
+    assert cs.metadata["background"] == 'N2 W3DELTA-CARTWRIGHT 1977.'
+    assert cs.metadata["units_e"] == 1.0
+    assert cs.metadata["units_sigma"] == 1.0
+    assert cs.metadata["threshold"] == 7.36
+    assert cs.metadata["lpu"] == -1
+    assert cs.metadata["upu"] == -1
+    assert isinstance(cs.metadata["units_e"], float)
+    assert isinstance(cs.data["e"], list)
+    assert isinstance(cs.data["e"][0], float)
+    assert isinstance(cs.data["sigma"], list)
+    assert isinstance(cs.data["sigma"][0], float)
+    assert cs.data['e'] == [0.0, 1.0, 2.0]
+    assert cs.data['sigma'] == [0.0, 0.1, 0.2]
+    """
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -111,7 +181,7 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(phelps.cs[0].metadata, dict)
     assert isinstance(phelps.cs[0].data, dict)
     assert isinstance(phelps.cs[0].metadata['specie'], str)
-    assert len(phelps.cs) == 27
+    assert len(phelps.cs) == 28
     phelps_mod = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="phelps", 
             cs_id_list=[1, 2])
@@ -121,7 +191,7 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(phelps_mod.cs[0].metadata, dict)
     assert isinstance(phelps_mod.cs[0].data, dict)
     assert isinstance(phelps_mod.cs[0].metadata['specie'], str)
-    assert len(phelps_mod.cs) == 29
+    assert len(phelps_mod.cs) == 30
 
 
 @pytest.mark.usefixtures("nepc_connect")

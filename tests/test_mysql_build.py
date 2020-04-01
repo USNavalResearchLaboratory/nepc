@@ -17,7 +17,8 @@ NEPC_DATA = NEPC_HOME + "/data/"
 DIR_NAMES = [NEPC_HOME + "/data/cs/n2/itikawa/",
              NEPC_HOME + "/data/cs/n2/zipf/",
              NEPC_HOME + "/data/cs/n/zatsarinny/",
-             NEPC_HOME + "/data/cs/n2/phelps/"]
+             NEPC_HOME + "/data/cs/n2/phelps/",
+             NEPC_HOME + "/data/cs/n2/phelps_total/"]
 
 
 @pytest.mark.usefixtures("nepc_connect")

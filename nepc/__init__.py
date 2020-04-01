@@ -9,6 +9,7 @@ from .nepc import cs_metadata
 from .nepc import table_as_df
 from .nepc import reaction_latex
 from .nepc import CS
+from .nepc import CustomCS
 from .nepc import Model
 from .nepc import CustomModel
 
@@ -26,6 +27,7 @@ __all__ = [
         'table_as_df',
         'reaction_latex',
         'CS',
+        'CustomCS',
         'Model',
         'CustomModel'
         ]
