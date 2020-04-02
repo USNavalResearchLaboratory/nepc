@@ -793,7 +793,7 @@ def reaction_latex(cs):
 
     Arguments
     ---------
-    cs : nepc.CS
+    cs : nepc.CS or nepc.CustomCS
         A nepc cross section
 
     Returns
@@ -820,14 +820,22 @@ def reaction_latex(cs):
     else:
         rhs_e_text = str(e_on_rhs) + "e$^-$"
 
+    lhsA_text = cs.metadata['lhsA_long']
+    if cs.metadata['process'] == 'excitation_v':
+        lhsA_text = lhsA_text.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
+    lhsB_text = cs.metadata['lhsB_long']
     lhs_items = [lhs_e_text,
-                 cs.metadata['lhsA_long'],
-                 cs.metadata['lhsB_long']]
+                 lhsA_text,
+                 lhsB_text]
     lhs_text = " + ".join(item for item in lhs_items if item)
-    rhs_items = [
-                cs.metadata['rhsA_long'],
-                cs.metadata['rhsB_long'],
-                rhs_e_text]
+
+    rhsA_text = cs.metadata['rhsA_long']
+    if cs.metadata['process'] == 'excitation_v':
+        rhsA_text = rhsA_text.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
+    rhsB_text = cs.metadata['rhsB_long']
+    rhs_items = [rhsA_text,
+                 rhsB_text,
+                 rhs_e_text]
     rhs_text = " + ".join(item for item in rhs_items if item)
     reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
     return reaction

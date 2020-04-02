@@ -51,9 +51,9 @@ id	name	long_name	specie
 50	N_2s22p2_3P_4p_2Do	N($2s^22p^2$(${}^3P$)4p ${}^2D^\text{o}$)	N
 51	N_2s22p2_3P_4p_4So	N($2s^22p^2$(${}^3P$)4p ${}^4S^\text{o}$)	N
 52	N_2s22p2_3P_4p_2Po	N($2s^22p^2$(${}^3P$)4p ${}^2P^\text{o}$)	N
-53	N2(A3Sigmau+)_v0-4	N${}_2$ (A ${}^3\Sigma_u^+ v_{0-4}$)	N2
-54	N2(A3Sigmau+)_v5-9	N${}_2$ (A ${}^3\Sigma_u^+ v_{5-9}$)	N2
-55	N2(A3Sigmau+)_v10-	N${}_2$ (A ${}^3\Sigma_u^+ v_{10-}$)	N2
-56	N2(X1Sigmag+)_jSLAR	N${}_2$ (X ${}^1\Sigma_g^+ j_{SLAR}$)	N2
-57	N2(X1Sigmag+)_jSCHULZ	N${}_2$ (X ${}^1\Sigma_g^+ j_{SCHULZ}$)	N2
+53	N2(A3Sigmau+)_v0-4	N${}_2$ (A ${}^3\Sigma_u^+ v=(0-4)$)	N2
+54	N2(A3Sigmau+)_v5-9	N${}_2$ (A ${}^3\Sigma_u^+ v=(5-9)$)	N2
+55	N2(A3Sigmau+)_v10-	N${}_2$ (A ${}^3\Sigma_u^+ v=(10-)$)	N2
+56	N2(X1Sigmag+)_jSLAR	N${}_2$ (X ${}^1\Sigma_g^+ j=SLAR$)	N2
+57	N2(X1Sigmag+)_jSCHULZ	N${}_2$ (X ${}^1\Sigma_g^+ j=SCHULZ$)	N2
 58	N2(1SUM)_Z-M	N${}_2$ $(1SUM)_{Z-M}$)	N2
