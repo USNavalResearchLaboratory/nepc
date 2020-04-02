@@ -57,3 +57,4 @@ id	name	long_name	specie
 56	N2(X1Sigmag+)_jSLAR	N${}_2$ (X ${}^1\Sigma_g^+ j=SLAR$)	N2
 57	N2(X1Sigmag+)_jSCHULZ	N${}_2$ (X ${}^1\Sigma_g^+ j=SCHULZ$)	N2
 58	N2(1SUM)_Z-M	N${}_2$ $(1SUM)_{Z-M}$)	N2
+59	N2*	N${}_2^*$	N2
