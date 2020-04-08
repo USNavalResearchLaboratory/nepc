@@ -499,7 +499,7 @@ class Model:
         return cs_subset
 
 
-    def summary(self, filter=None, lower=None, upper=None):
+    def summary(self, filter=None, lower=None, upper=None, sort=[]):
         """Return a summary of a NEPC model
     
         Parameters
@@ -508,7 +508,8 @@ class Model:
             lower bound of model index to include in summary
         upper : int
             upper bound of model index to include in summary
-    
+        sort : list of str
+            metadata keys for sorting summary table
         Output 
         ------
         In addition to returning a DataFrame as described below,
@@ -577,10 +578,11 @@ class Model:
                                  cs.metadata["units_e"]*e_upper,
                                  cs.metadata["units_sigma"]*cs_peak_sigma,
                                  cs_lpu, cs_upu])
-    
+
         cs_df = DataFrame(summary_list, columns=headers)
-        cs_df = (cs_df.sort_values(by=["process", "cs_id"])
-                 .reset_index(drop=True))
+        if sort:
+            cs_df = (cs_df.sort_values(by=sort)
+                    .reset_index(drop=True))
         if upper is None:
             upper = len(cs_df)
         if lower is None:
@@ -715,14 +717,15 @@ class CustomModel(Model):
     (from the NEPC database) or CustomCS Class (user created).
     Options:
 
-    a. If building upon an existing NEPC model, must provide cursor and model_name.
+    a. If building upon an existing NEPC model, must provide cursor and model_name. May
+    also provide a filter to select cross sections that meet criteria.
 
     b. If building from existing cross sections, must provide cursor and cs_id_list.
 
     c. If building from a list of custom cross sections, must provide cs_list.
 
     Must do at least one of a, b, or c, and can do any combination thereof."""
-    def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[]):
+    def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[], filter=None):
         """
         Parameters
         ----------
@@ -734,6 +737,8 @@ class CustomModel(Model):
             List of cs_id's to pull from NEPC database.
         cs_list : list of CustomCS
             List of user-defined cross sections of CustomCS type.
+        filter : dict
+            Dictionary of filter criteria to select specific CS's from a Model.
         Attributes
         ----------
         cs: list of CS and CustomCS
@@ -746,22 +751,33 @@ class CustomModel(Model):
         if cursor is None and (model_name is not None or cs_id_list):
             raise ValueError('Must provide cursor if providing model_name or cs_id_list')
 
+        if cursor is not None and (model_name is None and not cs_id_list):
+            raise ValueError('Must provide model_name or cs_id_list if providing cursor.')
+
+        if filter is not None and (cursor is None or model_name is None):
+            raise ValueError('Must provide model_name and cursor if providing filter.')
+
         if cs_list:
             _cs_list = cs_list.copy()
         else:
             _cs_list = []
 
-        if cursor is not None:
-            if model_name is None and not cs_id_list:
-                raise ValueError('Must provide model_name or cs_id_list if providing cursor.')
-
-            if model_name is not None:
-                _cs_id_list = cs_id_list.copy() + model_cs_id_list(cursor, model_name)
-            else:
-                _cs_id_list = cs_id_list.copy()
-
+        if cs_id_list:
+            _cs_id_list = cs_id_list.copy()
             for cs_id in _cs_id_list:
                 _cs_list.append(CS(cursor, cs_id))
+
+        if model_name is not None:
+            _model_cs_id_list = model_cs_id_list(cursor, model_name)
+            for cs_id in _model_cs_id_list:
+                cs = CS(cursor, cs_id)
+                if filter is not None:
+                    passed_filter = True
+                    for key in filter.keys():
+                        if cs.metadata[key] != filter[key]:
+                            passed_filter = False
+                if filter is None or passed_filter:
+                    _cs_list.append(cs)
 
         self.cs = _cs_list.copy()
 

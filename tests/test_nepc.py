@@ -192,6 +192,16 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(phelps_mod.cs[0].data, dict)
     assert isinstance(phelps_mod.cs[0].metadata['specie'], str)
     assert len(phelps_mod.cs) == 30
+    phelps_filter = nepc.CustomModel(cursor=nepc_connect[1], 
+            model_name="phelps",
+            filter={'process': 'excitation'})
+    # FIXME: randomly sample the models in the database
+    # FIXME: randomly sample the cross sections in the model
+    assert isinstance(phelps_filter.cs, list)
+    assert isinstance(phelps_filter.cs[0].metadata, dict)
+    assert isinstance(phelps_filter.cs[0].data, dict)
+    assert isinstance(phelps_filter.cs[0].metadata['specie'], str)
+    assert len(phelps_filter.cs) == 15
 
 
 @pytest.mark.usefixtures("nepc_connect")
