@@ -181,7 +181,7 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(phelps.cs[0].metadata, dict)
     assert isinstance(phelps.cs[0].data, dict)
     assert isinstance(phelps.cs[0].metadata['specie'], str)
-    assert len(phelps.cs) == 28
+    assert len(phelps.cs) == 30
     phelps_mod = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="phelps", 
             cs_id_list=[1, 2])
@@ -191,7 +191,7 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(phelps_mod.cs[0].metadata, dict)
     assert isinstance(phelps_mod.cs[0].data, dict)
     assert isinstance(phelps_mod.cs[0].metadata['specie'], str)
-    assert len(phelps_mod.cs) == 30
+    assert len(phelps_mod.cs) == 32
     phelps_filter = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="phelps",
             filter={'process': 'excitation'})
