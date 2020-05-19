@@ -159,13 +159,13 @@ def test_CustomCS_class(nepc_connect):
 def test_Model_class(nepc_connect):
     """Verify that the nepc.Model class is a list of CS type and
     test the methods within the Class."""
-    abc = nepc.Model(nepc_connect[1], "abc")
+    fict = nepc.Model(nepc_connect[1], "fict")
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
-    assert isinstance(abc.cs, list)
-    assert isinstance(abc.cs[0].metadata, dict)
-    assert isinstance(abc.cs[0].data, dict)
-    assert isinstance(abc.cs[0].metadata['specie'], str)
+    assert isinstance(fict.cs, list)
+    assert isinstance(fict.cs[0].metadata, dict)
+    assert isinstance(fict.cs[0].data, dict)
+    assert isinstance(fict.cs[0].metadata['specie'], str)
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -173,35 +173,34 @@ def test_CustomModel_class(nepc_connect):
     """Verify that the nepc.CustomModel class is a list of CS 
     and CustomCS type and
     test the methods within the Class."""
-    phelps = nepc.CustomModel(cursor=nepc_connect[1], 
-            model_name="phelps")
+    fict = nepc.CustomModel(cursor=nepc_connect[1], model_name="fict")
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
-    assert isinstance(phelps.cs, list)
-    assert isinstance(phelps.cs[0].metadata, dict)
-    assert isinstance(phelps.cs[0].data, dict)
-    assert isinstance(phelps.cs[0].metadata['specie'], str)
-    assert len(phelps.cs) == 30
-    phelps_mod = nepc.CustomModel(cursor=nepc_connect[1], 
-            model_name="phelps", 
+    assert isinstance(fict.cs, list)
+    assert isinstance(fict.cs[0].metadata, dict)
+    assert isinstance(fict.cs[0].data, dict)
+    assert isinstance(fict.cs[0].metadata['specie'], str)
+    assert len(fict.cs) == 30
+    fict_mod = nepc.CustomModel(cursor=nepc_connect[1], 
+            model_name="fict", 
             cs_id_list=[1, 2])
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
-    assert isinstance(phelps_mod.cs, list)
-    assert isinstance(phelps_mod.cs[0].metadata, dict)
-    assert isinstance(phelps_mod.cs[0].data, dict)
-    assert isinstance(phelps_mod.cs[0].metadata['specie'], str)
-    assert len(phelps_mod.cs) == 32
-    phelps_filter = nepc.CustomModel(cursor=nepc_connect[1], 
-            model_name="phelps",
+    assert isinstance(fict_mod.cs, list)
+    assert isinstance(fict_mod.cs[0].metadata, dict)
+    assert isinstance(fict_mod.cs[0].data, dict)
+    assert isinstance(fict_mod.cs[0].metadata['specie'], str)
+    assert len(fict_mod.cs) == 32
+    fict_filter = nepc.CustomModel(cursor=nepc_connect[1], 
+            model_name="fict",
             filter={'process': 'excitation'})
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
-    assert isinstance(phelps_filter.cs, list)
-    assert isinstance(phelps_filter.cs[0].metadata, dict)
-    assert isinstance(phelps_filter.cs[0].data, dict)
-    assert isinstance(phelps_filter.cs[0].metadata['specie'], str)
-    assert len(phelps_filter.cs) == 15
+    assert isinstance(fict_filter.cs, list)
+    assert isinstance(fict_filter.cs[0].metadata, dict)
+    assert isinstance(fict_filter.cs[0].data, dict)
+    assert isinstance(fict_filter.cs[0].metadata['specie'], str)
+    assert len(fict_filter.cs) == 15
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -223,7 +222,7 @@ def test_reaction_latex(nepc_connect):
     for the reaction from a nepc cross section"""
     # FIXME: verify latex is correct
     # FIXME: randomly sample cross sections
-    for i in range(1, 100):
+    for i in range(1, 30):
         cs = nepc.CS(nepc_connect[1], i)
         assert isinstance(nepc.reaction_latex(cs), str)
 
@@ -233,8 +232,8 @@ def test_model_summary_df(nepc_connect):
     """Verify nepc.model_summary_df returns a dataframe"""
     # TODO: check formatting of summary dataframe
     # FIXME: randomly sample models
-    abc = nepc.Model(nepc_connect[1], "abc")
-    df = abc.summary(lower=0, upper=10)
+    fict = nepc.Model(nepc_connect[1], "fict")
+    df = fict.summary(lower=0, upper=10)
     assert isinstance(df, pd.io.formats.style.Styler)
 
 
@@ -243,14 +242,13 @@ def test_model_subset(nepc_connect):
     """Verify that Model.subset returns a proper
     subset of cross sections from a model within the NEPC MySQL database"""
     # TODO: test for lhsB and rhsB
-    sigma_cutoff = 1E-21
     # FIXME: randomly sample models and cross sections within the model
-    abc = nepc.Model(nepc_connect[1], "abc")
-    abc_subset = abc.subset({'process': 'excitation',
-                             'lhsA': 'N_2s22p3_4So'})
-    assert isinstance(abc_subset, list)
-    assert isinstance(abc_subset[0].metadata, dict)
-    assert isinstance(abc_subset[0].data, dict)
+    fict = nepc.Model(nepc_connect[1], "fict")
+    fict_subset = fict.subset({'process': 'excitation',
+                               'lhsA': 'N2(X1Sigmag+)'})
+    assert isinstance(fict_subset, list)
+    assert isinstance(fict_subset[0].metadata, dict)
+    assert isinstance(fict_subset[0].data, dict)
 
 
 @pytest.mark.usefixtures("nepc_connect")

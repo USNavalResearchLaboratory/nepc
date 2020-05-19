@@ -38,7 +38,32 @@ $ pytest tests/test_nepc.py #verify it works
 ## MySQL config
 
 ```sql
+/* run this block for each user with read/write access to nepc and nepc_test databases
+CREATE USER 'MySQL_username'@'localhost'
+  IDENTIFIED BY 'MySQL_password';
+GRANT ALL
+  ON nepc.*
+  TO 'MySQL_username'@'localhost';
+GRANT ALL
+  ON nepc_test.*
+  TO 'MySQL_username'@'localhost';
+*/
+
+/* run the following block to setup the nepc user for read access to nepc and nepc_test */
+CREATE USER 'nepc'@'localhost'
+  IDENTIFIED BY 'nepc';
 GRANT USAGE ON *.* TO `nepc`@`localhost` 
-GRANT SELECT ON `nepc`.* TO `nepc`@`localhost`    
-GRANT SELECT ON `nepc_test`.* TO `nepc`@`localhost` 
+GRANT SELECT
+  ON nepc.* 
+  TO 'nepc'@'localhost';
+GRANT SELECT
+  ON nepc_test.* 
+  TO 'nepc'@'localhost';
+```
+
+Create a file `~/.mysql/defaults` with the following contents:
+```sql
+[client]
+user=MySQL_username
+password=MySQL_password
 ```

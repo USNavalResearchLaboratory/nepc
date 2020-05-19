@@ -4,7 +4,7 @@ import pytest
 
 @pytest.fixture
 def nepc_connect(local, dbug):
-    """Establishes a connection with the NEPC database
+    """Establishes a connection with the nepc_test database
 
     Parameters
     ----------
@@ -17,12 +17,13 @@ def nepc_connect(local, dbug):
     Returns
     -------
     cnx : MySQLConnection
-    A connection to the official NEPC MySQL database
+        A connection to the official NEPC MySQL database
     cursor : MySQLCursor
-    A MySQLCursor object for executing SQL queries"""
+        A MySQLCursor object for executing SQL queries
+    """
     if dbug:
         print("opening database connection")
-    cnx, cursor = nepc.connect(local, dbug)
+    cnx, cursor = nepc.connect(local, dbug, test=True)
     yield [cnx, cursor]
     if dbug:
         print("closing database connection")
