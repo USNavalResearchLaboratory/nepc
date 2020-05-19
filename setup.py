@@ -18,8 +18,8 @@ with open(os.path.join(_here, 'nepc', 'version.py')) as f:
 setup(
     name='nepc',
     version=version['__version__'],
-    description='Build, access, and explore the NEPC database.',
-    long_description=('Build, access, and explore the NRL Evaluated Plasma ' +
+    description='Build, access, and explore a NEPC database.',
+    long_description=('Build, access, and explore an NRL Evaluated Plasma ' +
                       'Chemistry (NEPC) database.'),
     author='Paul Adamson',
     author_email='paul.adamson@nrl.navy.mil',
