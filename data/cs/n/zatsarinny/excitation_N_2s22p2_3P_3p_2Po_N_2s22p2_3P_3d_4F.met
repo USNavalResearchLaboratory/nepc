@@ -1,2 +1,0 @@
-cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	threshold	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
-269	N	excitation	1.0	1e-20	wang2014	N_2s22p2_3P_3p_2Po	\N	N_2s22p2_3P_3d_4F	\N	-1	-1	-1	-1	-1	-1	From BSR calculations. Raw data provided by Zatsarinny.	-1	-1

@@ -1,4 +1,6 @@
 import sys
+import shutil
+import os
 from subprocess import check_output
 
 
@@ -26,3 +28,32 @@ def get_size(obj, seen=None):
     elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
         size += sum([get_size(i, seen) for i in obj])
     return size
+
+
+def rmdir(outdir):
+    """Try to remove a tree, raise an exception if this isn't possible
+
+    Parameters
+    ----------
+    outdir : tree
+    The tree to be removed
+    """
+    try:
+        shutil.rmtree(outdir)
+    except OSError as exc:
+        print("Error: %s - %s." % (exc.filename, exc.strerror))
+
+
+def mkdir(outdir):
+    """Try to make a directory, raise an exception if the
+    directory already exists
+    Parameters
+    ----------
+    outdir : directory
+    The directory to be made"""
+    try:
+        os.mkdir(outdir)
+    except OSError as excep:
+        print("Error: %s - %s." % (excep.filename, excep.strerror))
+
+

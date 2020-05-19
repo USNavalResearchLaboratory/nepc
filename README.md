@@ -34,3 +34,11 @@ $ pytest tests/test_nepc.py #verify it works
 *  [Jupyter Notebook](https://jupyter.org/)
 *  [LaTeX](https://www.latex-project.org/)
 *  [MySQL](https://www.mysql.com/)
+
+## MySQL config
+
+```sql
+GRANT USAGE ON *.* TO `nepc`@`localhost` 
+GRANT SELECT ON `nepc`.* TO `nepc`@`localhost`    
+GRANT SELECT ON `nepc_test`.* TO `nepc`@`localhost` 
+```

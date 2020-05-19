@@ -11,3 +11,8 @@ def user_home():
 def nepc_home():
     """Returns the path to the NEPC directory"""
     return os.environ.get('NEPC_HOME')
+
+
+def nepc_data_home():
+    """Returns the path to the NEPC data directory"""
+    return os.environ.get('NEPC_DATA_HOME')

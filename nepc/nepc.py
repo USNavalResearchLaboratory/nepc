@@ -30,7 +30,7 @@ import mysql.connector
 import matplotlib.pyplot as plt
 
 
-def connect(local=False, DBUG=False):
+def connect(local=False, DBUG=False, test=False):
     """Establish a connection to NEPC MySQL database
 
 
@@ -41,6 +41,8 @@ def connect(local=False, DBUG=False):
         server (default False).
     DBUG : bool
         Print debug info (default False).
+    test: bool
+        If true, connect to nepc_test database. Otherwise, connect to nepc database.
 
     Returns
     -------
@@ -60,10 +62,15 @@ def connect(local=False, DBUG=False):
     if DBUG:  # pragma: no cover
         print("\nUsing NEPC database on " + hostname)
 
+    if test:
+        database = 'nepc_test'
+    else:
+        database = 'nepc'
+
     config = {'user': 'nepc',
               'password': 'nepc',
               'host': hostname,
-              'database': 'nepc',
+              'database': database,
               'raise_on_warnings': True}
 
     cnx = mysql.connector.connect(**config)

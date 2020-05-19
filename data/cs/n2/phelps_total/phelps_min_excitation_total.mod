@@ -1,3 +1,0 @@
-model_name
-phelps
-phelps_min

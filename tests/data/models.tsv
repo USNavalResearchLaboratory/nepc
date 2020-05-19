@@ -1,0 +1,4 @@
+model_id	name	long_name	ref
+4	fict	Fictitious N2 cross sections	\N
+5	fict_min	Fictitious N2 cross sections - min model (total; ionization_total; and excitation_total)	\N
+6	fict_min2	Fictitious N2 cross sections - min2 model (total; ionization_total; and three excitation_total's for rotational, electronic, and vibrational excitations)	\N

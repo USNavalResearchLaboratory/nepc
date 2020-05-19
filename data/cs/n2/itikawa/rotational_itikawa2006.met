@@ -1,2 +1,0 @@
-cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	threshold	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
-393	N2	excitation_j	1.0	1e-20	itikawa2006	N2(X1Sigmag+)	\N	N2(X1Sigmag+)	\N	-1	-1	-1	-1	0	2	From itikawa2006, Table 5. For J=0->2 transition; based on theoretical calculations of morrison1997.	0.1	0.1
