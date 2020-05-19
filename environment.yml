@@ -20,7 +20,7 @@ dependencies:
         - sphinx
         - pip:
                 - quadpy==0.13.2
-                - pylint
+                - pylint==2.4.4
                 - mysql-connector-python==8.0.17
                 - doorstop==1.5
                 - autopep8
