@@ -1,11 +1,10 @@
-"""
-Adapted from BOLOS (https://github.com/aluque/bolos). Adaptations:
-- replaced 'next()' with '__next__()' for Python 3
-- broke out large comment to add separate dictionary entry for 'process',
-  param, species, etc.
-"""
+"""Adapted from BOLOS (https://github.com/aluque/bolos). Adaptations:
+ - replaced 'next()' with '__next__()' for Python 3
+ - broke out large comment to add separate dictionary entry for 'process', param, species, etc.
 
-""" This module contains the code required to parse BOLSIG+-compatible files.
+Notes
+-----
+This module contains the code required to parse BOLSIG+-compatible files.
 To make the code re-usabe in other projects it is independent from the rest of
 the BOLOS code.
 

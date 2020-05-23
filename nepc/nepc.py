@@ -1,28 +1,38 @@
-"""Access the NRL Evaluated Plasma Chemistry (NEPC) database
+"""This package provides the following functionality for NRL Evaluated Plasma
+Chemistry (NEPC) style databases:
 
-Utilize the NEPC MySQL database by:
-    - establishing a connection to the database
-    - accessing cross sections via CS class
-    - accessing pre-defined plasma chemistry models via Model class
-    - printing statistics about the database (e.g. number of rows in various tables)
-
-Notes
------
-- [nepc] refers to the base directory of the nepc repository.
-- [nepc.wiki] refers to the base directory of the wiki associated with
-the nepc repository.
+ - create data files for building a NEPC database from common sources (e.g. LXCat)
+ - build a database on a MySQL server
+ - establishing a connection to a local or remote database
+ - access cross section data via the CS class
+ - access pre-defined plasma chemistry models via the Model class
+ - curate, visualize, and use cross section data
+ - perform exploratory data analysis (EDA) of cross section data
+ - print statistics about a database (e.g. number of rows in various tables)
 
 Examples
 --------
 Establish a connection to the NEPC database running on the
 production server:
 
-    cnx, cursor = nepc.connect()
+    ``cnx, cursor = nepc.connect()``
 
-Establish a connection to the NEPC database running on the
-local machine:
+Establish a connection to the ``nepc_test`` database (data provided in ``nepc/tests/data``)
+running on the local machine:
 
-    cnx, cursor = nepc.connect(local=True)
+    ``cnx, cursor = nepc.connect(local=True, test=True)``
+
+Access the pre-defined plasma chemistry model, ``fict``:
+
+    ``fict = nepc.Model(cursor, "fict")``
+
+Print a summary of the ``fict`` model, including a stylized Pandas dataframe:
+
+    ``fict.summary()``
+
+Additional examples of EDA using nepc are in ``nepc/tests/data/eda``. Examples of methods for
+building data files for the ``nepc_test`` database, including parsing LXCat formatted data,
+are in ``nepc/tests/data/methods``.
 """
 import numpy as np
 from pandas import DataFrame
@@ -189,86 +199,91 @@ def cs_metadata(cursor, cs_id):
 
 class CS:
     """A cross section data set, including metadata and cross section data,
-    from the NEPC MySQL database."""
+    from a NEPC MySQL database.
+
+    Attributes
+    ----------
+    metadata : dict
+        cs_id : int
+            id of the cross section in `cs` and `csdata` tables
+        specie : str
+            `name` of specie from `species` table
+        process : str
+            `name` of process from `processes` table
+        units_e : float
+            units of electron energy list e in eV
+        units_sigma : float
+            units of cross section list sigma in m^2
+        ref : str
+            `ref` from `cs` table corresponding to entry in
+            '[nepc]/models/ref.bib'
+        lhsA : str
+            `name` of lhsA state from `states` table
+        lhsB : str
+            `name` of lhsB state from `states` table
+        rhsA : str
+            `name` of rhsA state from `states` table
+        rhsB : str
+            `name` of rhsB state from `states` table
+        wavelength : float
+            wavelength of photon involved in process in nanometers (nm)
+        lhs_v : int
+            vibrational energy level of lhs specie
+        rhs_v : int
+            vibrational energy level of rhs specie
+        lhs_j : int
+            rotational energy level of lhs specie
+        rhs_j : int
+            rotational energy level of rhs specie
+        background : str
+            background text describing origin of data and other important info
+        lpu : float
+            lower percent uncertainty
+        upu : float
+            upper percent uncertainty
+        lhsA_long : str
+            `long_name` of lhsA state from `states` table
+        lhsB_long : str
+            `long_name` of lhsB state from `states` table
+        rhsA_long : str
+            `long_name` of rhsA state from `states` table
+        rhsB_long : str
+            `long_name` of rhsB state from `states` table
+        e_on_lhs : int
+            number of electrons on lhs
+        e_on_rhs : int
+            number of electrons on rhs
+        hv_on_lhs : int
+            photon on lhs? (0 or 1)
+        hv_on_rhs : int
+            photon on rhs? (0 or 1)
+        v_on_lhs : int
+            vibrational energy level on lhs? (0 or 1)
+        v_on_rhs : int
+            vibrational energy level on rhs? (0 or 1)
+        j_on_lhs : int
+           rotational energy level on lhs? (0 or 1)
+        j_on_rhs : int
+           rotational energy level on rhs? (0 or 1)
+    data : dict
+        e : list
+            e_data: float
+                electron energy
+        sigma : list
+            cs_data: float
+                cross section
+
+    """
     def __init__(self, cursor, cs_id):
-        """Initialize a cross section data set
+        """Initialize a cross section data set.
 
         Parameters
         ----------
-        cursor : MySQLCursor
-            A MySQLCursor object (see nepc.connect)
+        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
+            a cursor from a connection to a NEPC database (see :func:`.connect`)
         cs_id : int
             i.d. of the cross section in `cs` and `csdata` tables
 
-        Attributes
-        ----------
-        metadata : dictionary of the metadata
-            "cs_id" : int
-                id of the cross section in `cs` and `csdata` tables
-            "specie" : str
-                `name` of specie from `species` table
-            "process" : str
-                `name` of process from `processes` table
-            "units_e" : float
-                units of electron energy list "e" in eV
-            "units_sigma" : float
-                units of cross section list "sigma" in m^2
-            "ref" : str
-                `ref` from `cs` table corresponding to entry in
-                '[nepc]/models/ref.bib'
-            "lhsA" : str
-                `name` of lhsA state from `states` table
-            "lhsB" : str
-                `name` of lhsB state from `states` table
-            "rhsA" : str
-                `name` of rhsA state from `states` table
-            "rhsB" : str
-                `name` of rhsB state from `states` table
-            "wavelength" : float
-                wavelength of photon involved in process in nanometers (nm)
-            "lhs_v" : int
-                vibrational energy level of lhs specie
-            "rhs_v" : int
-                vibrational energy level of rhs specie
-            "lhs_j" : int
-                rotational energy level of lhs specie
-            "rhs_j" : int
-                rotational energy level of rhs specie
-            "background" : str
-                background text describing origin of data and other important info
-            "lpu" : float
-                lower percent uncertainty
-            "upu" : float
-                upper percent uncertainty
-            "lhsA_long" : str
-                `long_name` of lhsA state from `states` table
-            "lhsB_long" : str
-                `long_name` of lhsB state from `states` table
-            "rhsA_long" : str
-                `long_name` of rhsA state from `states` table
-            "rhsB_long" : str
-                `long_name` of rhsB state from `states` table
-            "e_on_lhs" : int
-                number of electrons on lhs
-            "e_on_rhs" : int
-                number of electrons on rhs
-            "hv_on_lhs" : int
-                photon on lhs? (0 or 1)
-            "hv_on_rhs" : int
-                photon on rhs? (0 or 1)
-            "v_on_lhs" : int
-                vibrational energy level on lhs? (0 or 1)
-            "v_on_rhs" : int
-                vibrational energy level on rhs? (0 or 1)
-            "j_on_lhs" : int
-                rotational energy level on lhs? (0 or 1)
-            "j_on_rhs" : int
-                rotational energy level on rhs? (0 or 1)
-        data : dictionary of the cross section data
-            "e" : list of float
-                electron energy
-            "sigma" : list of float
-                cross section
         """
         metadata = cs_metadata(cursor, cs_id)
         self.metadata = {"cs_id": metadata[0],
@@ -317,34 +332,34 @@ class CS:
              filename=None,
              width=10, height=10):
         """
-        A helper function to plot a single cross section data set
+        Plot a single cross section data set
 
         Parameters
         ----------
         units_sigma : float
-            Desired units of the y-axis in m^2.
-
+            desired units of the y-axis in m^2
         plot_param_dict : dict
-        dictionary of kwargs to pass to ax.plot
-
+            kwargs to pass to :func:`axes.plot`
         xlim(ylim)_param_dict: dict
-            dictionary of kwargs to pass to ax.set_x(y)lim
-
-        ylog, xlog: bool
-            whether y-, x-axis is log scale
-
+            kwargs to pass to :func:`axes.set_x(y)lim`
+        y(x)log: bool
+            whether y(x)-axis is log scale
         show_legend: bool
             whether to display the legend or not
-
         filename: str
             filename for output, if provided (default is to not output a file)
+        width: float
+            width of plot
+        height: float
+            height of plot
 
         Returns
         -------
-        f: FIXME
-            plot of a single cross section data set
+        axes: :class:`matplotlib.axes._subplots.AxesSubplot`
+            plot of the cross section data, :obj:`.CS.data`, with formatting
+            using information in the metadata, :obj:`.CS.metadata`
         """
-        fig, axes = plt.subplots()
+        _, axes = plt.subplots()
 
         if ylog:
             plt.yscale('log')
@@ -368,7 +383,7 @@ class CS:
         label_text = " ".join(item for item in label_items if item)
         e_np = np.array(self.data['e'])
         sigma_np = np.array(self.data['sigma'])
-    
+
         upu = self.metadata['upu']
         lpu = self.metadata['lpu']
         if upu != -1:
@@ -388,7 +403,7 @@ class CS:
         if upu != -1 or lpu != -1:
             fill_color = plot[0].get_color()
             axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
-                    color=fill_color, alpha=0.4)
+                              color=fill_color, alpha=0.4)
 
         if show_legend:
             axes.legend(fontsize=12, ncol=2, frameon=False,
@@ -403,35 +418,42 @@ class CS:
 
 
 class CustomCS(CS):
-    """A custom cross section data set, including metadata and cross section data.
-    Two options:
-    a. If building upon an existing NEPC CS, must provide cursor and cs_id as well
+    """
+    A custom cross section data set, including metadata and cross section data.
+
+    If building upon an existing :class:`.CS`, must provide cursor and cs_id as well
     as one or both of metadata and data.
 
-    b. If building a CustomCS from scratch, must provide metadata and data."""
+    If building a :class:`.CustomCS` from scratch, must provide :obj:`.metadata` 
+    and :obj:`.data`.
+
+
+    Attributes
+    ----------
+    metadata : dict
+        see Attributes of :class:`.CS`
+
+    data : dict
+        e : list[float]
+            electron energy
+        sigma : list[float]
+            cross section
+    """
     def __init__(self, cursor=None, cs_id=None, metadata=None, data=None):
-        """Initialize a cross section data set
+        """Initialize a custom cross section data set
 
         Parameters
         ----------
-        cursor : MySQLCursor
-            A MySQLCursor object (see nepc.connect)
+        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
+            a cursor from a connection to a NEPC database (see :func:`.connect`)
         cs_id : int
             i.d. of the cross section in `cs` and `csdata` tables
-        metadata : dictionary of the metadata
-            See Attributes of CS class.
-        data : dictionary of the cross section data
-            See Attributes of CS class.
-
-        Attributes
-        ----------
-        metadata : dictionary of the metadata
-            See Attributes of CS class.
-        data : dictionary of the cross section data
-            See Attributes of CS class.
+        metadata : dict
+            one or more of the attributes of :class:`.CS`
+        data : dict
+            same as attributes of :class:`.CS`
         """
-        if ((cursor is None and cs_id is not None) or
-            (cursor is not None and cs_id is None)):
+        if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
             raise ValueError('If providing cursor or cs_id, must provide both.')
         if (cursor is not None and cs_id is not None):
             super().__init__(cursor, cs_id)
@@ -449,21 +471,24 @@ class CustomCS(CS):
 
 
 class Model:
-    """A pre-defined collection of cross sections from the NEPC MySQL database"""
+    """A pre-defined collection of cross sections from a NEPC database
+
+    Attributes
+    ----------
+    cs: list[:class:`.CS`]
+        cross section data in the NEPC format (:class:`.CS`)
+    unique: list[float]
+        set with :attr:`.Model.set_unique`, all unique electron energies in all :attr:`.CS.data`
+        of the :class:`.Model`
+    """
     def __init__(self, cursor, model_name):
         """
         Parameters
         ----------
-        cursor : MySQLCursor
-            A MySQLCursor object (see nepc.connect)
+        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
+            a cursor from a connection to a NEPC database (see :func:`.connect`)
         model_name :str
-            The name of a NEPC model (see [nepc.wiki]/models
-
-        Attributes
-        ----------
-        cs: list of CS
-            A list of cross section data and
-            metadata of CS type.
+            name of a NEPC model (pre-defined collection of cross sections)
         """
         _cs_list = []
         _cs_id_list = model_cs_id_list(cursor, model_name)
@@ -472,72 +497,71 @@ class Model:
 
         self.cs = _cs_list
 
-    def filter(self, specie=None, process=None, ref=None):
-        """return a subset of the model"""
-        subset_dicts = []
-        if specie is None and process is None and ref is None:
-            raise Exception("You must specify the specie, process or " +
-                            "ref to narrow the search results.")
-        if specie is not None and process is not None:
-            for i in range(len(self.cs)):
-                if (self.cs[i].metadata['specie'] == specie and
-                    self.cs[i].metadata['process'] == process):
-                    subset_dicts.append(self.cs[i])
-        elif specie is not None:
-            for i in range(len(self.cs)):
-                if self.cs[i].metadata['specie'] == specie:
-                    subset_dicts.append(self.cs[i])
-        return subset_dicts
+    def subset(self, metadata=None):
+        """select the cross sections in the model matching the provided metadata
 
+        Parameters
+        ----------
+        metadata: dict
+            see :attr:`.CS.metadata`
 
-    def subset(self, filter=None):
-        """return a subset of the model using a dictionary of filter criteria"""
-        if filter is None:
-            raise Exception("You must provide a dictionary of filter " +
-                            "criteria via the filter argument.")
+        Return
+        ------
+        cs_subset: list[:class:`.CS`]
+            cross section data in the NEPC format (:class:`.CS`)
+        """
+        if metadata is None or not isinstance(metadata, dict):
+            raise Exception("must provide metadata of type dict")
         cs_subset = []
         for cs in self.cs:
             passed_filter = True
-            for key in filter.keys():
-                if cs.metadata[key] != filter[key]:
+            for key in metadata.keys():
+                if cs.metadata[key] != metadata[key]:
                     passed_filter = False
             if passed_filter:
                 cs_subset.append(cs)
         return cs_subset
 
 
-    def summary(self, filter=None, lower=None, upper=None, sort=[]):
-        """Return a summary of a NEPC model
-    
+    def summary(self, metadata=None, lower=None, upper=None, sort=[]):
+        """Summarize the NEPC model.
+
+        Prints the following information:
+            - Number of cross sections in the model
+            - Number of cross sections matching metadata, if provided
+
+        Returns a stylized Pandas dataframe with headers given by:
+
+        headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
+                   "reaction", "threshold", "E_peak", "E_upper",
+                   "sigma_max", "lpu", "upu"]
+
         Parameters
         ----------
+        metadata: dict
+            see :attr:`.CS.metadata`
         lower : int
             lower bound of model index to include in summary
         upper : int
             upper bound of model index to include in summary
-        sort : list of str
-            metadata keys for sorting summary table
-        Output 
-        ------
-        In addition to returning a DataFrame as described below,
-        prints the following information:
-            - Number of cross sections/rates in the model
-            - Number of data sets in model that match filter criteria (if provided)
+        sort : list[str]
+            headers by which the stylized Pandas table is sorted
 
         Returns
         -------
-        cs_df : pandas DataFrame
-            A DataFrame containing the cs_id, process,
+        cs_df : pandas.io.formats.style.Styler
+            A stylized Pandas DataFrame containing the cs_id, process,
             range of electron energies (E_lower, E_upper),
             maximum sigma (sigma_max), and
-            lpu/upu's for each cross section in the model
+            lpu/upu's for each cross section in the model (or subset of the
+            model if :obj:`metadata` is provided)
         """
         summary_list = []
-    
+
         headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
                    "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
-    
+
         max_e_peak = 0
         min_e_peak = 100000
         max_e_upper = 0
@@ -547,19 +571,19 @@ class Model:
         max_upu = 0.000000001
 
         print('Number of cross sections in model: {:d}'.format(len(self.cs)))
-        if filter is not None:
-            cs_subset = self.subset(filter=filter)
-            print('Number of cross sections that '
-                  'match filter criteria: {:d}'.format(len(cs_subset)))
+        if metadata is not None:
+            cs_subset = self.subset(metadata=metadata)
+            print('Number of cross sections with '
+                  'matching metadata: {:d}'.format(len(cs_subset)))
         else:
             cs_subset = self.cs
 
 
         for cs in cs_subset:
             csdata = np.array(list(zip(cs.data['e'], cs.data['sigma'])))
-            e_peak = csdata[np.argmax(csdata[:,1]),0]
-            cs_peak_sigma = np.max(csdata[:,1])
-            e_upper = np.max(csdata[csdata[:,1]!=0.0][:,0])
+            e_peak = csdata[np.argmax(csdata[:, 1]), 0]
+            cs_peak_sigma = np.max(csdata[:, 1])
+            e_upper = np.max(csdata[csdata[:, 1] != 0.0][:, 0])
             if e_peak > max_e_peak:
                 max_e_peak = e_peak
             if e_peak < min_e_peak:
@@ -589,7 +613,7 @@ class Model:
         cs_df = DataFrame(summary_list, columns=headers)
         if sort:
             cs_df = (cs_df.sort_values(by=sort)
-                    .reset_index(drop=True))
+                     .reset_index(drop=True))
         if upper is None:
             upper = len(cs_df)
         if lower is None:
@@ -603,6 +627,8 @@ class Model:
 
 
     def set_unique(self):
+        """sets :attr:`.Model.unique`
+        """
         for cs, i in zip(self.cs, range(len(self.cs))):
             if i == 0:
                 _unique = np.asarray(cs.data['e'])
@@ -621,7 +647,7 @@ class Model:
              filename=None,
              max_plots=10, width=10, height=10):
         """
-        A helper function to plot cross sections from a NEPC model on one plot.
+        plot cross section data in the :class:`.Model`
 
         Parameters
         ----------
@@ -732,7 +758,7 @@ class CustomModel(Model):
     c. If building from a list of custom cross sections, must provide cs_list.
 
     Must do at least one of a, b, or c, and can do any combination thereof."""
-    def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[], filter=None):
+    def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[], metadata=None):
         """
         Parameters
         ----------
@@ -744,7 +770,7 @@ class CustomModel(Model):
             List of cs_id's to pull from NEPC database.
         cs_list : list of CustomCS
             List of user-defined cross sections of CustomCS type.
-        filter : dict
+        metadata: dict
             Dictionary of filter criteria to select specific CS's from a Model.
         Attributes
         ----------
@@ -761,8 +787,8 @@ class CustomModel(Model):
         if cursor is not None and (model_name is None and not cs_id_list):
             raise ValueError('Must provide model_name or cs_id_list if providing cursor.')
 
-        if filter is not None and (cursor is None or model_name is None):
-            raise ValueError('Must provide model_name and cursor if providing filter.')
+        if metadata is not None and (cursor is None or model_name is None):
+            raise ValueError('Must provide model_name and cursor if providing metadata.')
 
         if cs_list:
             _cs_list = cs_list.copy()
@@ -778,12 +804,12 @@ class CustomModel(Model):
             _model_cs_id_list = model_cs_id_list(cursor, model_name)
             for cs_id in _model_cs_id_list:
                 cs = CS(cursor, cs_id)
-                if filter is not None:
+                if metadata is not None:
                     passed_filter = True
-                    for key in filter.keys():
-                        if cs.metadata[key] != filter[key]:
+                    for key in metadata.keys():
+                        if cs.metadata[key] != metadata[key]:
                             passed_filter = False
-                if filter is None or passed_filter:
+                if metadata is None or passed_filter:
                     _cs_list.append(cs)
 
         self.cs = _cs_list.copy()

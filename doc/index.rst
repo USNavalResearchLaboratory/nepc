@@ -1,35 +1,38 @@
-.. NEPC documentation master file, created by
-   sphinx-quickstart on Tue Jul  9 22:52:49 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+NRL Evaluated Plasma Chemistry (NEPC)
+=====================================
 
-Welcome to NEPC's documentation!
-================================
+``nepc.nepc``
+^^^^^^^^^^^^^
 
 .. automodule:: nepc.nepc 
     :members:
 
-.. automodule:: nepc.methods.thomson
+``nepc.util.util``
+^^^^^^^^^^^^^^^^^^
+
+.. automodule:: nepc.util.util
     :members:
+    
+``nepc.util.config``
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: nepc.util.config
     :members:
-    
-.. automodule:: nepc.util.constants
-    :members:
+
+``nepc.util.parser``
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: nepc.util.parser
     :members:
-    
-.. automodule:: nepc.util.plotter
-    :members:
 
-.. automodule:: nepc.util.scraper
-    :members:
+Other Topics
+^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   db_schema
+
 
 Indices and tables
 ==================

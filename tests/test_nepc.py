@@ -191,16 +191,16 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(fict_mod.cs[0].data, dict)
     assert isinstance(fict_mod.cs[0].metadata['specie'], str)
     assert len(fict_mod.cs) == 32
-    fict_filter = nepc.CustomModel(cursor=nepc_connect[1], 
+    fict_subset = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="fict",
-            filter={'process': 'excitation'})
+            metadata={'process': 'excitation'})
     # FIXME: randomly sample the models in the database
     # FIXME: randomly sample the cross sections in the model
-    assert isinstance(fict_filter.cs, list)
-    assert isinstance(fict_filter.cs[0].metadata, dict)
-    assert isinstance(fict_filter.cs[0].data, dict)
-    assert isinstance(fict_filter.cs[0].metadata['specie'], str)
-    assert len(fict_filter.cs) == 15
+    assert isinstance(fict_subset.cs, list)
+    assert isinstance(fict_subset.cs[0].metadata, dict)
+    assert isinstance(fict_subset.cs[0].data, dict)
+    assert isinstance(fict_subset.cs[0].metadata['specie'], str)
+    assert len(fict_subset.cs) == 15
 
 
 @pytest.mark.usefixtures("nepc_connect")
@@ -249,6 +249,8 @@ def test_model_subset(nepc_connect):
     assert isinstance(fict_subset, list)
     assert isinstance(fict_subset[0].metadata, dict)
     assert isinstance(fict_subset[0].data, dict)
+    with pytest.raises(Exception):
+        assert fict.subset()
 
 
 @pytest.mark.usefixtures("nepc_connect")

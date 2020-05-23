@@ -6,17 +6,17 @@
 [![sphinx coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/sphinx.svg?job=sphinx)](http://132.250.158.124:3838/nepc/doc/)
 [![pylint report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/pylint.svg?job=pylint)](https://predator.nrl.navy.mil/padamson/nepc/commits/master)
 
-The NRL Evaluated Plasma Chemistry (NEPC) project involves building of a 
+The NRL Evaluated Plasma Chemistry (NEPC) project provides tools for building a 
 database of evaluated electron-scattering cross-sections from various sources as well as 
-tools to access and visualize the data. Data can be accessed, raw and formatted, through the 
-"data" directory, while other directories of the project are used for builing and accessing 
-the database. For more information on how the project is organized, please see the 
-[Wiki](http://predator.nrl.navy.mil/padamson/nepc/wikis/home). This database is designed 
+tools to curate, access, visualize, and use the data. 
+For more information on the goals of the project and how it is organized, please see the 
+[Wiki](http://predator.nrl.navy.mil/padamson/nepc/wikis/home). The database schema and Python
+module is designed 
 for anyone interested in plasma chemistry with a background in physics at the graduate level.
 
 ## Getting Started
 
-NEPC works best within a conda environment (`environment.yml` file provided). Also, if you are going to build the
+The nepc Python package works best within a conda environment (`environment.yml` file provided). Also, if you are going to build a
 database yourself, you will need MySQL. To get started:
 
 ```console
@@ -24,46 +24,15 @@ $ git clone predator.nrl.navy.mil/padamson/nepc/
 $ cd nepc
 $ conda env create -f environment.yml #create the nepc conda environment 
 $ conda activate nepc
-$ pip install -e . #install the nepc package and sub-packages into the nepc conda environment
-$ pytest tests/test_nepc.py #verify it works
+$ pip install -e . # install the nepc package and sub-packages into the nepc conda environment
+$ export NEPC_HOME=/path/to/cloned/nepc/repo/ # put this in your `~/.bashrc or ~/.bash_profile`
+$ pytest # if on the NRL network (otherwise see [Wiki notes on MySQL database](https://predator.nrl.navy.mil/padamson/nepc/-/wikis/mysql))
 ```
 
 ## Built With
 
 *  [Python](https://www.python.org/) 
-*  [Jupyter Notebook](https://jupyter.org/)
-*  [LaTeX](https://www.latex-project.org/)
 *  [MySQL](https://www.mysql.com/)
+*  [LaTeX](https://www.latex-project.org/)
+*  [Jupyter Notebook](https://jupyter.org/)
 
-## MySQL config
-
-```sql
-/* run this block for each user with read/write access to nepc and nepc_test databases
-CREATE USER 'MySQL_username'@'localhost'
-  IDENTIFIED BY 'MySQL_password';
-GRANT ALL
-  ON nepc.*
-  TO 'MySQL_username'@'localhost';
-GRANT ALL
-  ON nepc_test.*
-  TO 'MySQL_username'@'localhost';
-*/
-
-/* run the following block to setup the nepc user for read access to nepc and nepc_test */
-CREATE USER 'nepc'@'localhost'
-  IDENTIFIED BY 'nepc';
-GRANT USAGE ON *.* TO `nepc`@`localhost` 
-GRANT SELECT
-  ON nepc.* 
-  TO 'nepc'@'localhost';
-GRANT SELECT
-  ON nepc_test.* 
-  TO 'nepc'@'localhost';
-```
-
-Create a file `~/.mysql/defaults` with the following contents:
-```sql
-[client]
-user=MySQL_username
-password=MySQL_password
-```
