@@ -36,3 +36,10 @@ $ pytest # if on the NRL network (otherwise see [Wiki notes on MySQL database](h
 *  [LaTeX](https://www.latex-project.org/)
 *  [Jupyter Notebook](https://jupyter.org/)
 
+## Pronunciation
+
+NEPC rhymes with the loser of the [Cola War](https://en.wikipedia.org/wiki/Cola_wars).
+If NEPC were in the
+[CMU Pronouncing Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict),
+its entry would be `N EH P S IY .`.
+

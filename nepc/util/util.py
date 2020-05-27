@@ -1,3 +1,4 @@
+"""Utility methods for the nepc module."""
 import sys
 import shutil
 import os
@@ -5,12 +6,12 @@ from subprocess import check_output
 
 
 def wc_fxn(file_to_count):
-    "return the number of lines in a file using wc"
+    "Return the number of lines in a file using the commandline utility ``wc``."
     return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
 
 def get_size(obj, seen=None):
-    """Recursively finds size of objects"""
+    """Recursively find the size of an object."""
     size = sys.getsizeof(obj)
     if seen is None:
         seen = set()
@@ -31,12 +32,12 @@ def get_size(obj, seen=None):
 
 
 def rmdir(outdir):
-    """Try to remove a tree, raise an exception if this isn't possible
+    """Try to remove a tree and raise an exception if this isn't possible.
 
     Parameters
     ----------
-    outdir : tree
-    The tree to be removed
+    outdir : str
+        The directory to be removed.
     """
     try:
         shutil.rmtree(outdir)
@@ -45,15 +46,14 @@ def rmdir(outdir):
 
 
 def mkdir(outdir):
-    """Try to make a directory, raise an exception if the
-    directory already exists
+    """Try to make a directory and raise an exception if the directory already exists
+
     Parameters
     ----------
-    outdir : directory
-    The directory to be made"""
+    outdir : str
+        The directory to be made.
+    """
     try:
         os.mkdir(outdir)
     except OSError as excep:
         print("Error: %s - %s." % (excep.filename, excep.strerror))
-
-

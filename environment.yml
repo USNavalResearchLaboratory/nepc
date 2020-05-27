@@ -11,16 +11,18 @@ dependencies:
         - numpy=1.16.2
         - pandas=0.24.2
         - python=3.7.2
-        - scipy=1.3.1
         - matplotlib
         - tabulate=0.8.3
         - pytest
         - pytest-cov
         - pip=19.0.3
         - sphinx
+        - numpydoc
         - pip:
                 - quadpy==0.13.2
                 - pylint==2.4.4
                 - mysql-connector-python==8.0.17
-                - doorstop==1.5
                 - autopep8
+                - livereload
+                - formic2
+                - sphobjinv

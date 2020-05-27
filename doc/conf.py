@@ -31,7 +31,7 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
-              'sphinx.ext.napoleon']
+              'sphinx.ext.napoleon', 'sphinx.ext.intersphinx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -62,3 +62,9 @@ def skip(app, what, name, obj, would_skip, options):
 
 def setup(app):
     app.connect("autodoc-skip-member", skip)
+
+# -- intersphinx mappings ----------------------------------------------------
+
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
+                       'matplotlib': ('https://matplotlib.org', None),
+                       'numpy': ('https://numpy.org/doc/stable/', None)}

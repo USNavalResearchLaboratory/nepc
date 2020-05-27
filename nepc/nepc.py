@@ -2,7 +2,7 @@
 Chemistry (NEPC) style databases:
 
  - create data files for building a NEPC database from common sources (e.g. LXCat)
- - build a database on a MySQL server
+ - build a NEPC style database on a MySQL server
  - establishing a connection to a local or remote database
  - access cross section data via the CS class
  - access pre-defined plasma chemistry models via the Model class
@@ -12,27 +12,28 @@ Chemistry (NEPC) style databases:
 
 Examples
 --------
-Establish a connection to the NEPC database running on the
+Establish a connection to the database named `nepc` running on a
 production server:
 
-    ``cnx, cursor = nepc.connect()``
+    >>> cnx, cursor = nepc.connect()
 
-Establish a connection to the ``nepc_test`` database (data provided in ``nepc/tests/data``)
+Establish a connection to the database named `nepc`
 running on the local machine:
 
-    ``cnx, cursor = nepc.connect(local=True, test=True)``
+    >>> cnx, cursor = nepc.connect(local=True, test=True)
 
-Access the pre-defined plasma chemistry model, ``fict``:
+Access the pre-defined plasma chemistry model, `fict`, in the `nepc_test` database:
 
-    ``fict = nepc.Model(cursor, "fict")``
+    >>> fict = nepc.Model(cursor, "fict")
 
 Print a summary of the ``fict`` model, including a stylized Pandas dataframe:
 
-    ``fict.summary()``
+    >>> fict.summary()
 
-Additional examples of EDA using nepc are in ``nepc/tests/data/eda``. Examples of methods for
-building data files for the ``nepc_test`` database, including parsing LXCat formatted data,
-are in ``nepc/tests/data/methods``.
+Additional examples of EDA using nepc are in ``tests/data/eda``. Examples of methods for
+building data files for the ``nepc_test`` database, including parsing 
+`LXCat <https://nl.lxcat.net/data/set_type.php>`_ formatted data,
+are in ``tests/data/methods``.
 """
 import numpy as np
 from pandas import DataFrame
@@ -41,27 +42,26 @@ import matplotlib.pyplot as plt
 
 
 def connect(local=False, DBUG=False, test=False):
-    """Establish a connection to NEPC MySQL database
-
+    """Establish a connection to a NEPC MySQL database
 
     Parameters
     ----------
-    local : bool
-        Use a copy of NEPC on localhost; otherwise use the production
+    local : bool, optional
+        Access a database on localhost; otherwise use the production
         server (default False).
-    DBUG : bool
+    DBUG : bool, optional
         Print debug info (default False).
-    test: bool
-        If true, connect to nepc_test database. Otherwise, connect to nepc database.
+    test: bool, optional
+        If true, access the `nepc_test` database; otherwise, connect to the `nepc` database.
 
     Returns
     -------
-    cnx : MySQLConnection
-        A connection to the NEPC MySQL database
-    cursor : MySQLCursor
+    cnx : `connection.MySQLConnection <https://dev.mysql.com/doc/connectors/en/connector-python-api-mysqlconnection.html>`_
+        A connection to a NEPC MySQL database.
+    cursor : `cursor.MySQLCursor <https://dev.mysql.com/doc/connectors/en/connector-python-api-mysqlcursor.html>`_
         A MySQLCursor object that can execute operations such as SQL
         statements. `cursor` interacts with the NEPC server using the
-        `cnx` connection
+        `cnx` connection.
     """
 
     if local:
@@ -88,20 +88,20 @@ def connect(local=False, DBUG=False, test=False):
     return cnx, cursor
 
 
-def count_table_rows(cursor, table):
-    """return the number of rows in a MySQL table
+def count_table_rows(cursor, table: str):
+    """Return the number of rows in a MySQL table.
 
     Parameters
     ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
     table : str
-        Name of a table in the MySQL database
+        Name of a table in the NEPC database at ``cursor``.
 
     Return
     ------
-        : int
-    Number of rows in table
+    : int
+        Number of rows in ``table``.
     """
     cursor.execute("select count(*) from " + table + ";")
     table_rows = cursor.fetchall()
@@ -109,18 +109,18 @@ def count_table_rows(cursor, table):
 
 
 def model_cs_id_list(cursor, model_name):
-    """return a list of cs_id's for a model in the NEPC database
+    """Get a list of ``cs_id``'s for a model in a NEPC database.
 
     Parameters
     ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
     model_name : str
         Name of a model in the NEPC MySQL database
 
     Return
     ------
-    cs_id_list : list of ints
+    cs_id_list : list of int
         cs_id's corresponding to cross sections in the model
     """
     cursor.execute("SELECT cs.cs_id as cs_id " +
@@ -134,7 +134,22 @@ def model_cs_id_list(cursor, model_name):
 
 
 def cs_e_sigma(cursor, cs_id):
-    """get e_energy and sigma data for a given cs_id from NEPC database"""
+    """Get electron energy and cross section data for a given ``cs_id`` in a NEPC database.
+
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
+
+    Return
+    ------
+    : list of float
+        Electron energies for the cross section dataset corresponding to ``cs_id``.
+    : list of float
+        Cross sections for the cross section dataset corresponding to ``cs_id``.
+    """
     cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
     cross_section = cursor.fetchall()
@@ -145,7 +160,21 @@ def cs_e_sigma(cursor, cs_id):
 
 
 def cs_e(cursor, cs_id):
-    """get e_energy only for a given cs_id from NEPC database"""
+    """Get the electron energies for a cross section dataset in a NEPC database 
+    corresponding to a given ``cs_id``.
+
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
+
+    Return
+    ------
+    : list of float
+        Electron energies for the cross section dataset corresponding to ``cs_id``.
+    """
     cursor.execute("SELECT e FROM csdata WHERE cs_id = " +
                    str(cs_id))
     cross_section = cursor.fetchall()
@@ -154,7 +183,21 @@ def cs_e(cursor, cs_id):
 
 
 def cs_sigma(cursor, cs_id):
-    """get sigma only for a given cs_id from NEPC database"""
+    """Get the cross sections for a cross section dataset in a NEPC database
+    corresponding to a given ``cs_id``.
+
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
+
+    Return
+    ------
+    : list of float
+        Cross sections for the cross section dataset corresponding to ``cs_id``.
+    """
     cursor.execute("SELECT sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
     sigma = cursor.fetchall()
@@ -163,7 +206,20 @@ def cs_sigma(cursor, cs_id):
 
 
 def cs_metadata(cursor, cs_id):
-    """Get metadata for cross section in the NEPC database"""
+    """Get metadata for a given ``cs_id`` in a NEPC database.
+
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
+
+    Returns
+    -------
+    : list
+        See :attr:`CS.metadata`. List items are in same order.
+    """
     cursor.execute("SELECT A.`cs_id` , "
                    "B.`name` , "
                    "C.`name` , "
@@ -266,12 +322,10 @@ class CS:
         j_on_rhs : int
            rotational energy level on rhs? (0 or 1)
     data : dict
-        e : list
-            e_data: float
-                electron energy
-        sigma : list
-            cs_data: float
-                cross section
+        e : list of float
+            electron energies in units of `metadata['units_e']` eV
+        sigma : list of float
+            cross sections in units of `metadata['units_sigma']` :math:`m^2`
 
     """
     def __init__(self, cursor, cs_id):
@@ -336,12 +390,12 @@ class CS:
 
         Parameters
         ----------
-        units_sigma : float
-            desired units of the y-axis in m^2
-        plot_param_dict : dict
-            kwargs to pass to :func:`axes.plot`
-        xlim(ylim)_param_dict: dict
-            kwargs to pass to :func:`axes.set_x(y)lim`
+        units_sigma : float, optional
+            desired units of the y-axis in :math:`m^2`
+        plot_param_dict : dict, optional
+            kwargs to pass to :meth:`matplotlib.axes.Axes.plot`
+        xlim_param_dict: dict
+            kwargs to pass to :meth:`matplotlib.axes.Axes.set_xlim`
         y(x)log: bool
             whether y(x)-axis is log scale
         show_legend: bool
@@ -355,7 +409,7 @@ class CS:
 
         Returns
         -------
-        axes: :class:`matplotlib.axes._subplots.AxesSubplot`
+        axes: :class:`matplotlib.axes.Axes`
             plot of the cross section data, :obj:`.CS.data`, with formatting
             using information in the metadata, :obj:`.CS.metadata`
         """
@@ -816,21 +870,21 @@ class CustomModel(Model):
 
 
 def table_as_df(cursor, table, columns="*"):
-    """Return a MySQL table as a pandas DataFrame
+    """Return a ``table`` in a MySQL database as a pandas DataFrame.
 
     Parameters
     ----------
-    cursor : MySQLCursor
-        A MySQLCursor object (see nepc.connect)
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
     table : str
-        The name of a table in the MySQL database
-    columns : list of strings
-        Which columns to get. If None, then get all columns.
+        Name of a table in the NEPC database at ``cursor``.
+    columns : list of str, optional
+        Which columns to get. (Default is to get all columns.)
 
     Return
     ------
-        : DataFrame
-    table in the form of a pandas DataFrame
+    : DataFrame
+        Table in the form of a pandas DataFrame
     """
     column_text = ", ".join(columns)
     cursor.execute("SELECT " + column_text + " FROM " + table)
@@ -838,17 +892,17 @@ def table_as_df(cursor, table, columns="*"):
 
 
 def reaction_latex(cs):
-    """Return the LaTeX for the reaction from a nepc cross section
+    """Return the LaTeX for the process involved in a nepc cross section.
 
-    Arguments
-    ---------
-    cs : nepc.CS or nepc.CustomCS
-        A nepc cross section
+    Parameters
+    ----------
+    cs : :class:`.CS` or :class:`.CustomCS`
+        A nepc cross section.
 
     Returns
     -------
-    reaction : str
-        The LaTeX for a nepc cross section reaction
+    : str
+        The LaTeX for the process involved in a NEPC cross section.
     """
     # FIXME: move this method to the CS Class
     # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs

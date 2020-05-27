@@ -1,37 +1,36 @@
 """Adapted from BOLOS (https://github.com/aluque/bolos). Adaptations:
  - replaced 'next()' with '__next__()' for Python 3
- - broke out large comment to add separate dictionary entry for 'process', param, species, etc.
+ - broke out large comment to add separate dictionary entries for ``process``,
+   ``param``, ``species``, etc.
 
-Notes
------
+Note
+----
 This module contains the code required to parse BOLSIG+-compatible files.
 To make the code re-usabe in other projects it is independent from the rest of
 the BOLOS code.
 
-Most user would only use the method :func:`parse` in this module, which is
+Most users would only use the method :func:`parse` in this module, which is
 documented below.
 """
-
-import sys
 import re
 import numpy as np
 from nepc.util import config as nepc_config
 
 RE_NL = re.compile('\n')
 def parse(filename, has_arg=True, debug=False):
-    """ Parses a BOLSIG+ cross-sections file.  
+    """ Parses a BOLSIG+ cross-sections file.
 
     Parameters
     ----------
     filename: str
         Name of a Bolsig+-compatible cross-sections file.
 
-    has_arg: bool
+    has_arg: bool, optional
         Whether threshold values are present in each block
 
     Returns
     -------
-    processes : list of dictionaries
+    processes : list of dict
         A list with all processes, in dictionary form, included in the file.
 
     Note
@@ -90,9 +89,9 @@ def parse(filename, has_arg=True, debug=False):
 
 
 # BOLSIG+'s user guide saye that the separators must consist of at least five dashes
-RE_SEP = re.compile("-----+")
 def _read_until_sep(fp, debug=False):
-    """ Reads lines from fp until a we find a separator line. """
+    """ Reads lines from fp until we find a separator line. """
+    RE_SEP = re.compile("-----+")
     lines = []
     for line in fp:
         if RE_SEP.match(line.strip()):
@@ -103,8 +102,8 @@ def _read_until_sep(fp, debug=False):
 
 
 def _read_block(fp, has_arg=True, debug=False):
-    """ Reads data of a process, contained in a block. 
-    has_arg indicates wether we have to read an argument line"""
+    """ Reads data of a process, contained in a block.
+    ``has_arg`` indicates wether we have to read an argument line."""
     target = fp.__next__().strip()
     if has_arg:
         arg = fp.__next__().strip()
@@ -184,23 +183,23 @@ KEYWORDS = {"MOMENTUM": _read_momentum,
 
 
 def write_data_to_file(data_array, filename, start_csdata_id):
-    """Given an array of data, write this to a file in the correct format
+    """Given an array of electron energies and corresponding cross sections,
+    write the data to a file in the correct format for a NEPC database.
+
     Parameters
     ----------
-    data_array : numpy array
-    A numpy array of values to be entered into the filenumpy array. Each row is of
-    length 2 (e, sigma).
-
-    filename: file
-    Name of the file where values of data_array should be entered
-
-    start_cs_data_id : int
-    The id where the data should be placed
+    data_array : :class:`numpy.ndarray`
+        A numpy array of values to be entered into the filenumpy array. Each row is of
+        length 2 (e, sigma).
+    filename: str
+        Name of the file where values of ``data_array`` should be written.
+    start_csdata_id : int
+        The first ``csdata_id`` for the supplied data.
 
     Return
     ------
-    csdata_id
-    The next csdata_id to use
+    : int
+        The next csdata_id to use.
     """
     csdata_id = start_csdata_id
     write_f = open(filename, "x")
@@ -219,15 +218,57 @@ def write_metadata_to_file(filename, cs_id, specie, process,
                            rhs_a='\\N', rhs_b='\\N', threshold='-1', wavelength='-1',
                            lhs_v=-1, rhs_v=-1, lhs_j=-1, rhs_j=-1,
                            background='\\N', lpu='-1', upu='-1'):
-    """Write out metadata to the file called filename
+    """Given metadata for a cross section data set,
+    write the metadata to a file in the correct format for a NEPC database.
 
     Parameters
     ----------
-    filename : file
-    The file to which information will be written out
+    filename: str
+        Name of the file where values of ``data_array`` should be written.
+    cs_id: int
+        ``cs_id`` corresponding to the cross section in the database.
+    specie: str
+        The short name corresponding to the specie in the database.
+    process: str
+        The short name corresponding to the electron scattering process in the 
+        database.
+    units_e: float
+        The units, in eV, of the electron energies.
+    units_sigma: float
+        The units, in :math:`m^2`, of the cross sections.
+    ref: str
+        The short name for the reference corresponding to the dataset.
+    lhs_a: str
+        The short name for the lhs_a state for the process.
+    lhs_b: str
+        The short name for the lhs_b state.
+    rhs_a: str
+        The short name for the rhs_a state.
+    rhs_b: str
+        The short name for the rhs_b state.
+    threshold: float
+        The threshold electron energy for the process.
+    wavelength: float
+        The wavelength of the photon associated with the process, if applicable.
+    lhs_v: int
+        The vibrational energy associated with the LHS state, if applicable.
+    rhs_v: int
+        The vibrational energy associated with the RHS state, if applicable.
+    lhs_j: int
+        The rotational energy associated with the LHS state, if applicable.
+    rhs_j: int
+        The rotational energy associated with the RHS state, if applicable.
+    background: str
+        Background information for the cross section data.
+    lpu: float
+        Lower percent uncertainty of the cross section data.
+    upu: float
+        Upper percent uncertainty of the cross section data.
 
-    cs_id : int
-    The id to start with when filling out information
+    Return
+    ------
+    : int
+        The next cs_id to use.
     """
     write_met = open(filename, "x")
     write_met.write(
@@ -278,18 +319,17 @@ def write_metadata_to_file(filename, cs_id, specie, process,
 
 def write_next_id_to_file(
         next_cs_id, next_csdata_id, test=False):
-    """Write out the next id's for the database to a file
+    """Write out the next id's for the database to a file.
 
     Parameters
     ----------
     next_cs_id : int
         The next cs_id to use
-
     next_csdata_id: int
         The next csdata_id to use
-
-    test: bool
-        Flag to indicate whether the command is run for a test.
+    test: bool, optional
+        If true, the command is run for the ``nepc_test`` database. Otherwise,
+        it is run for the ``nepc`` database. (Default is the ``nepc`` database.)
     """
     if test:
         nepc_data_home = nepc_config.nepc_home() + '/tests'
@@ -309,14 +349,15 @@ def write_next_id_to_file(
 
 
 def write_models_to_file(filename, models_array):
-    """Write the models to a file
+    """Write model data to a file.
+
     Parameters
     ----------
-    filename : file
-    The name of the file where the model data should be located
-
-    models_array: arr of strs
-    A list of models that should be added to the filename"""
+    filename : str
+        The name of the file where the model data should be stored.
+    models_array: list of str
+        A list of models that should be added to ``filename``.
+    """
     model_f = open(filename, "x")
     model_f.write("model_name\n")
     for i in range(len(models_array)):
@@ -329,15 +370,15 @@ def get_next_ids(test=False):
 
     Parameters
     ----------
-    test: bool
-        Flag to indicate whether the command is run for a test.
+    test: bool, optional
+        If true, the command is run for the ``nepc_test`` database. Otherwise,
+        it is run for the ``nepc`` database. (Default is the ``nepc`` database.)
 
     Return
     ------
-    next_cs_id: int
+    : int
         Next cs_id to use
-
-    next_csdata_id: int
+    : int
         Next csdata_id to use
     """
     if test:

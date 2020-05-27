@@ -1,5 +1,5 @@
-"""Contains shortcuts to path directories that can be
-used throughout nepc"""
+"""Get environment variables that point to various NEPC directories.
+"""
 import os
 
 
