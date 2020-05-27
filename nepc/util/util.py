@@ -1,4 +1,6 @@
-"""Utility methods for the nepc module."""
+"""Utility methods for the nepc module.
+
+"""
 import sys
 import shutil
 import os
@@ -6,12 +8,16 @@ from subprocess import check_output
 
 
 def wc_fxn(file_to_count):
-    "Return the number of lines in a file using the commandline utility ``wc``."
+    """Return the number of lines in a file using the commandline utility ``wc``.
+
+    """
     return int(check_output(["wc", "-l", file_to_count]).split()[0])
 
 
 def get_size(obj, seen=None):
-    """Recursively find the size of an object."""
+    """Recursively find the size of an object.
+
+    """
     size = sys.getsizeof(obj)
     if seen is None:
         seen = set()
@@ -38,6 +44,7 @@ def rmdir(outdir):
     ----------
     outdir : str
         The directory to be removed.
+
     """
     try:
         shutil.rmtree(outdir)
@@ -52,6 +59,7 @@ def mkdir(outdir):
     ----------
     outdir : str
         The directory to be made.
+
     """
     try:
         os.mkdir(outdir)

@@ -31,9 +31,10 @@ Print a summary of the ``fict`` model, including a stylized Pandas dataframe:
     >>> fict.summary()
 
 Additional examples of EDA using nepc are in ``tests/data/eda``. Examples of methods for
-building data files for the ``nepc_test`` database, including parsing 
+building data files for the ``nepc_test`` database, including parsing
 `LXCat <https://nl.lxcat.net/data/set_type.php>`_ formatted data,
 are in ``tests/data/methods``.
+
 """
 import numpy as np
 from pandas import DataFrame
@@ -59,11 +60,10 @@ def connect(local=False, DBUG=False, test=False):
     cnx : `connection.MySQLConnection <https://dev.mysql.com/doc/connectors/en/connector-python-api-mysqlconnection.html>`_
         A connection to a NEPC MySQL database.
     cursor : `cursor.MySQLCursor <https://dev.mysql.com/doc/connectors/en/connector-python-api-mysqlcursor.html>`_
-        A MySQLCursor object that can execute operations such as SQL
-        statements. `cursor` interacts with the NEPC server using the
-        `cnx` connection.
-    """
+        A MySQLCursor object that can execute operations such as SQL statements. `cursor` 
+        interacts with the NEPC server using the `cnx` connection.
 
+    """
     if local:
         hostname = 'localhost'
     else:
@@ -98,10 +98,11 @@ def count_table_rows(cursor, table: str):
     table : str
         Name of a table in the NEPC database at ``cursor``.
 
-    Return
-    ------
+    Returns
+    -------
     : int
         Number of rows in ``table``.
+
     """
     cursor.execute("select count(*) from " + table + ";")
     table_rows = cursor.fetchall()
@@ -118,10 +119,11 @@ def model_cs_id_list(cursor, model_name):
     model_name : str
         Name of a model in the NEPC MySQL database
 
-    Return
-    ------
+    Returns
+    -------
     cs_id_list : list of int
         cs_id's corresponding to cross sections in the model
+
     """
     cursor.execute("SELECT cs.cs_id as cs_id " +
                    "FROM cs " +
@@ -143,12 +145,13 @@ def cs_e_sigma(cursor, cs_id):
     cs_id : int
         The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
 
-    Return
-    ------
+    Returns
+    -------
     : list of float
         Electron energies for the cross section dataset corresponding to ``cs_id``.
     : list of float
         Cross sections for the cross section dataset corresponding to ``cs_id``.
+
     """
     cursor.execute("SELECT e, sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
@@ -170,10 +173,11 @@ def cs_e(cursor, cs_id):
     cs_id : int
         The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
 
-    Return
-    ------
+    Returns
+    -------
     : list of float
         Electron energies for the cross section dataset corresponding to ``cs_id``.
+
     """
     cursor.execute("SELECT e FROM csdata WHERE cs_id = " +
                    str(cs_id))
@@ -193,10 +197,11 @@ def cs_sigma(cursor, cs_id):
     cs_id : int
         The ``cs_id`` for a cross section dataset in the NEPC database at ``cursor``.
 
-    Return
-    ------
+    Returns
+    -------
     : list of float
         Cross sections for the cross section dataset corresponding to ``cs_id``.
+
     """
     cursor.execute("SELECT sigma FROM csdata WHERE cs_id = " +
                    str(cs_id))
@@ -217,8 +222,9 @@ def cs_metadata(cursor, cs_id):
 
     Returns
     -------
-    : list
-        See :attr:`CS.metadata`. List items are in same order.
+    list
+        See :attr:`CS.metadata`. List items are in same order as :attr:`.CS.metadata`.
+
     """
     cursor.execute("SELECT A.`cs_id` , "
                    "B.`name` , "
@@ -254,8 +260,15 @@ def cs_metadata(cursor, cs_id):
 
 
 class CS:
-    """A cross section data set, including metadata and cross section data,
+    r"""A cross section data set, including metadata and cross section data,
     from a NEPC MySQL database.
+
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        i.d. of the cross section in `cs` and `csdata` tables
 
     Attributes
     ----------
@@ -318,27 +331,22 @@ class CS:
         v_on_rhs : int
             vibrational energy level on rhs? (0 or 1)
         j_on_lhs : int
-           rotational energy level on lhs? (0 or 1)
+            rotational energy level on lhs? (0 or 1)
         j_on_rhs : int
-           rotational energy level on rhs? (0 or 1)
+            rotational energy level on rhs? (0 or 1)
     data : dict
         e : list of float
-            electron energies in units of `metadata['units_e']` eV
+            Electron energies in units of ``units_e`` eV (see :attr:`.CS.metadata`).
         sigma : list of float
-            cross sections in units of `metadata['units_sigma']` :math:`m^2`
+            Cross sections in units of ``units_sigma`` :math:`m^2` (see :attr:`.CS.metadata`).
+
+    Methods
+    -------
+    plot
+        Plot the cross section.
 
     """
     def __init__(self, cursor, cs_id):
-        """Initialize a cross section data set.
-
-        Parameters
-        ----------
-        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
-            a cursor from a connection to a NEPC database (see :func:`.connect`)
-        cs_id : int
-            i.d. of the cross section in `cs` and `csdata` tables
-
-        """
         metadata = cs_metadata(cursor, cs_id)
         self.metadata = {"cs_id": metadata[0],
                          "specie": metadata[1],
@@ -377,16 +385,11 @@ class CS:
                      "sigma": sigma}
 
 
-    def plot(self,
-             units_sigma=1E-20,
-             plot_param_dict={'linewidth': 1},
-             xlim_param_dict={'auto': True},
-             ylim_param_dict={'auto': True},
-             ylog=False, xlog=False, show_legend=True,
-             filename=None,
+    def plot(self, units_sigma=1E-20, plot_param_dict={'linewidth': 1},
+             xlim_param_dict={'auto': True}, ylim_param_dict={'auto': True},
+             ylog=False, xlog=False, show_legend=True, filename=None,
              width=10, height=10):
-        """
-        Plot a single cross section data set
+        r"""Plot a single cross section data set.
 
         Parameters
         ----------
@@ -394,24 +397,29 @@ class CS:
             desired units of the y-axis in :math:`m^2`
         plot_param_dict : dict, optional
             kwargs to pass to :meth:`matplotlib.axes.Axes.plot`
-        xlim_param_dict: dict
+        xlim_param_dict: dict, optional
             kwargs to pass to :meth:`matplotlib.axes.Axes.set_xlim`
-        y(x)log: bool
-            whether y(x)-axis is log scale
-        show_legend: bool
-            whether to display the legend or not
-        filename: str
+        ylim_param_dict: dict, optional
+            kwargs to pass to :meth:`matplotlib.axes.Axes.set_ylim`
+        ylog : bool, optional
+            whether y-axis is log scale (default is False)
+        xlog : bool, optional
+            whether x-axis is log scale (default is False)
+        show_legend: bool, optional
+            whether to display the legend or not (default is True)
+        filename: str, optional
             filename for output, if provided (default is to not output a file)
-        width: float
+        width: float, optional
             width of plot
-        height: float
+        height: float, optional
             height of plot
 
         Returns
         -------
-        axes: :class:`matplotlib.axes.Axes`
-            plot of the cross section data, :obj:`.CS.data`, with formatting
-            using information in the metadata, :obj:`.CS.metadata`
+        :class:`matplotlib.axes.Axes`
+            Plot of the cross section data, :attr:`.CS.data`, with formatting
+            using information in the metadata, :attr:`.CS.metadata`.
+
         """
         _, axes = plt.subplots()
 
@@ -492,20 +500,22 @@ class CustomCS(CS):
             electron energy
         sigma : list[float]
             cross section
+
     """
     def __init__(self, cursor=None, cs_id=None, metadata=None, data=None):
         """Initialize a custom cross section data set
 
         Parameters
         ----------
-        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
-            a cursor from a connection to a NEPC database (see :func:`.connect`)
+        cursor : cursor.MySQLCursor
+            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
         cs_id : int
             i.d. of the cross section in `cs` and `csdata` tables
         metadata : dict
             one or more of the attributes of :class:`.CS`
         data : dict
             same as attributes of :class:`.CS`
+
         """
         if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
             raise ValueError('If providing cursor or cs_id, must provide both.')
@@ -534,15 +544,17 @@ class Model:
     unique: list[float]
         set with :attr:`.Model.set_unique`, all unique electron energies in all :attr:`.CS.data`
         of the :class:`.Model`
+
     """
     def __init__(self, cursor, model_name):
         """
         Parameters
         ----------
-        cursor : :obj:`mysql.connector.cursor_cext.CMySQLCursor`
-            a cursor from a connection to a NEPC database (see :func:`.connect`)
+        cursor : cursor.MySQLCursor
+            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
         model_name :str
             name of a NEPC model (pre-defined collection of cross sections)
+
         """
         _cs_list = []
         _cs_id_list = model_cs_id_list(cursor, model_name)
@@ -559,10 +571,11 @@ class Model:
         metadata: dict
             see :attr:`.CS.metadata`
 
-        Return
-        ------
+        Returns
+        -------
         cs_subset: list[:class:`.CS`]
             cross section data in the NEPC format (:class:`.CS`)
+
         """
         if metadata is None or not isinstance(metadata, dict):
             raise Exception("must provide metadata of type dict")
@@ -609,6 +622,12 @@ class Model:
             maximum sigma (sigma_max), and
             lpu/upu's for each cross section in the model (or subset of the
             model if :obj:`metadata` is provided)
+
+        Methods
+        -------
+        plot
+            Plot cross section data in the Model.
+
         """
         summary_list = []
 
@@ -682,6 +701,7 @@ class Model:
 
     def set_unique(self):
         """sets :attr:`.Model.unique`
+
         """
         for cs, i in zip(self.cs, range(len(self.cs))):
             if i == 0:
@@ -700,41 +720,36 @@ class Model:
              ylog=False, xlog=False, show_legend=True,
              filename=None,
              max_plots=10, width=10, height=10):
-        """
-        plot cross section data in the :class:`.Model`
+        """Plot cross section data in the Model.
 
         Parameters
         ----------
         process: str
             If provided, the process that should be plotted.
-
         units_sigma : float
             Desired units of the y-axis in m^2.
-
         plot_param_dict : dict
-        dictionary of kwargs to pass to ax.plot
-
+            kwargs to pass to ax.plot
         xlim(ylim)_param_dict: dict
             dictionary of kwargs to pass to ax.set_x(y)lim
-
         ylog, xlog: bool
             whether y-, x-axis is log scale
-
         show_legend: bool
             whether to display the legend or not
-
         filename: str
             filename for output, if provided (default is to not output a file)
-
         max_cs : int
             maximum number of CS to put on graph
 
         Returns
         -------
-        f: FIXME
-            plot of a collection of cross sections from a Model
+        :class:`matplotlib.axes.Axes`
+            Plot of the cross section data, :attr:`.CS.data`, with formatting
+            using information in the metadata, :attr:`.CS.metadata` within the
+            model.
+
         """
-        fig, axes = plt.subplots()
+        _, axes = plt.subplots()
 
         if ylog:
             plt.yscale('log')
@@ -759,13 +774,13 @@ class Model:
                 continue
             elif process in ('', self.cs[i].metadata['process']):
                 plot_num += 1
-    
+
                 reaction = reaction_latex(self.cs[i])
                 label_items = [self.cs[i].metadata['process'], ": ", reaction]
                 label_text = " ".join(item for item in label_items if item)
                 e_np = np.array(self.cs[i].data['e'])
                 sigma_np = np.array(self.cs[i].data['sigma'])
-    
+
                 upu = self.cs[i].metadata['upu']
                 lpu = self.cs[i].metadata['lpu']
                 if upu != -1:
@@ -776,16 +791,16 @@ class Model:
                     sigma_lower_np = sigma_np*(1 - lpu)
                     if upu == -1:
                         sigma_upper_np = sigma_np
-                
+
                 plot = axes.plot(e_np,
                                  sigma_np*self.cs[i].metadata['units_sigma']/units_sigma,
                                  **plot_param_dict,
                                  label='{}'.format(label_text))
-    
+
                 if upu != -1 or lpu != -1:
                     fill_color = plot[0].get_color()
                     axes.fill_between(e_np, sigma_lower_np, sigma_upper_np,
-                            color=fill_color, alpha=0.4)
+                                      color=fill_color, alpha=0.4)
 
         if show_legend:
             axes.legend(fontsize=12, ncol=2, frameon=False,
@@ -800,8 +815,8 @@ class Model:
 
 
 class CustomModel(Model):
-    """A customized collection of cross sections. The cross sections can be of CS Class
-    (from the NEPC database) or CustomCS Class (user created).
+    """A customized collection of cross sections. The cross sections can be of class :class:`.CS`
+    (from the NEPC database) or :class:`.CustomCS` (user created/modified).
     Options:
 
     a. If building upon an existing NEPC model, must provide cursor and model_name. May
@@ -811,13 +826,15 @@ class CustomModel(Model):
 
     c. If building from a list of custom cross sections, must provide cs_list.
 
-    Must do at least one of a, b, or c, and can do any combination thereof."""
+    Must do at least one of a, b, or c, and can do any combination thereof.
+
+    """
     def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[], metadata=None):
         """
         Parameters
         ----------
-        cursor : MySQLCursor
-            A MySQLCursor object (see nepc.connect)
+        cursor : cursor.MySQLCursor
+            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
         model_name :str
             The name of a NEPC model (see [nepc.wiki]/models
         cs_id_list : list of int
@@ -826,11 +843,12 @@ class CustomModel(Model):
             List of user-defined cross sections of CustomCS type.
         metadata: dict
             Dictionary of filter criteria to select specific CS's from a Model.
+
         Attributes
         ----------
-        cs: list of CS and CustomCS
-            A list of cross section data and
-            metadata of CS or CustomCS type.
+        cs: list of :class:`.CS` or :class:`.CustomCS`
+            A list of cross section data and metadata of CS or CustomCS type.
+
         """
         if model_name is None and not cs_id_list and not cs_list:
             raise ValueError('Must provide at least one of model_name, cs_id_list, or cs_list')
@@ -881,10 +899,11 @@ def table_as_df(cursor, table, columns="*"):
     columns : list of str, optional
         Which columns to get. (Default is to get all columns.)
 
-    Return
-    ------
-    : DataFrame
+    Returns
+    -------
+    DataFrame
         Table in the form of a pandas DataFrame
+
     """
     column_text = ", ".join(columns)
     cursor.execute("SELECT " + column_text + " FROM " + table)
@@ -903,6 +922,7 @@ def reaction_latex(cs):
     -------
     : str
         The LaTeX for the process involved in a NEPC cross section.
+
     """
     # FIXME: move this method to the CS Class
     # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs

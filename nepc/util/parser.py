@@ -3,14 +3,15 @@
  - broke out large comment to add separate dictionary entries for ``process``,
    ``param``, ``species``, etc.
 
-Note
-----
+Notes
+-----
 This module contains the code required to parse BOLSIG+-compatible files.
 To make the code re-usabe in other projects it is independent from the rest of
 the BOLOS code.
 
 Most users would only use the method :func:`parse` in this module, which is
 documented below.
+
 """
 import re
 import numpy as np
@@ -33,8 +34,8 @@ def parse(filename, has_arg=True, debug=False):
     processes : list of dict
         A list with all processes, in dictionary form, included in the file.
 
-    Note
-    ----
+    Notes
+    -----
     This function does not return :class:`process.Process` instances so that
     the parser is independent of the rest of the code and can be re-used in
     other projects.  If you want to convert a process in dictionary form `d` to
@@ -90,7 +91,9 @@ def parse(filename, has_arg=True, debug=False):
 
 # BOLSIG+'s user guide saye that the separators must consist of at least five dashes
 def _read_until_sep(fp, debug=False):
-    """ Reads lines from fp until we find a separator line. """
+    """ Reads lines from fp until we find a separator line. 
+
+    """
     RE_SEP = re.compile("-----+")
     lines = []
     for line in fp:
@@ -103,7 +106,9 @@ def _read_until_sep(fp, debug=False):
 
 def _read_block(fp, has_arg=True, debug=False):
     """ Reads data of a process, contained in a block.
-    ``has_arg`` indicates wether we have to read an argument line."""
+    ``has_arg`` indicates wether we have to read an argument line.
+
+    """
     target = fp.__next__().strip()
     if has_arg:
         arg = fp.__next__().strip()
@@ -123,7 +128,9 @@ def _read_block(fp, has_arg=True, debug=False):
 # relevant attibutes.
 # 
 def _read_momentum(fp, has_arg=True, debug=False):
-    """ Reads a MOMENTUM or EFFECTIVE block. """
+    """ Reads a MOMENTUM or EFFECTIVE block.
+
+    """
     target, arg, header, data = _read_block(fp, has_arg=has_arg, debug=debug)
     mass_ratio = float(arg.split()[0])
     d = dict(target=target,
@@ -135,7 +142,9 @@ def _read_momentum(fp, has_arg=True, debug=False):
 
 RE_ARROW = re.compile('<?->')
 def _read_excitation(fp, has_arg=True, debug=False):
-    """ Reads an EXCITATION or IONIZATION block. """
+    """ Reads an EXCITATION or IONIZATION block. 
+
+    """
     target, arg, header, data = _read_block(fp, has_arg=has_arg, debug=debug)
     lhs, rhs = [s.strip() for s in RE_ARROW.split(target)]
 
@@ -157,7 +166,9 @@ def _read_excitation(fp, has_arg=True, debug=False):
 
 
 def _read_attachment(fp, has_arg=False, debug=False):
-    """ Reads an ATTACHMENT block. """
+    """ Reads an ATTACHMENT block.
+
+    """
     target, arg, header, data = _read_block(fp, has_arg=False, debug=debug)
 
     d = dict(header=header,
@@ -196,10 +207,11 @@ def write_data_to_file(data_array, filename, start_csdata_id):
     start_csdata_id : int
         The first ``csdata_id`` for the supplied data.
 
-    Return
-    ------
+    Returns
+    -------
     : int
         The next csdata_id to use.
+
     """
     csdata_id = start_csdata_id
     write_f = open(filename, "x")
@@ -265,10 +277,11 @@ def write_metadata_to_file(filename, cs_id, specie, process,
     upu: float
         Upper percent uncertainty of the cross section data.
 
-    Return
-    ------
+    Returns
+    -------
     : int
         The next cs_id to use.
+
     """
     write_met = open(filename, "x")
     write_met.write(
@@ -330,6 +343,7 @@ def write_next_id_to_file(
     test: bool, optional
         If true, the command is run for the ``nepc_test`` database. Otherwise,
         it is run for the ``nepc`` database. (Default is the ``nepc`` database.)
+
     """
     if test:
         nepc_data_home = nepc_config.nepc_home() + '/tests'
@@ -357,6 +371,7 @@ def write_models_to_file(filename, models_array):
         The name of the file where the model data should be stored.
     models_array: list of str
         A list of models that should be added to ``filename``.
+
     """
     model_f = open(filename, "x")
     model_f.write("model_name\n")
@@ -374,12 +389,13 @@ def get_next_ids(test=False):
         If true, the command is run for the ``nepc_test`` database. Otherwise,
         it is run for the ``nepc`` database. (Default is the ``nepc`` database.)
 
-    Return
-    ------
+    Returns
+    -------
     : int
         Next cs_id to use
     : int
         Next csdata_id to use
+
     """
     if test:
         nepc_data_home = nepc_config.nepc_home() + '/tests'
