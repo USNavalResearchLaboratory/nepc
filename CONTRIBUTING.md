@@ -46,7 +46,7 @@ Astropy based on its use in the README file for the
 [MetPy project](https://github.com/Unidata/MetPy) and then further adapted for NEPC.
 
 Most contributions to NEPC are done via pull requests from GitHub users'
-forks of the [nepc repository](FIXME). 
+forks of the [nepc repository](https://predator.nrl.navy.mil/padamson/nepc). 
 
 Once you open a pull request (which should be opened against the ``master``
 branch, not against any of the other branches), please make sure to
@@ -133,8 +133,8 @@ package.
     * Are additional dependencies handled appropriately?
     * Do functions that require additional dependencies raise an `ImportError`
       if they are not present?
-  * Run a linter before making pull requests. `nepc` CI uses `pylint`. See note 
-    below on running `pylint` in your conda environment.
+  * Run a linter before making pull requests. `nepc` CI uses `pylint`. See 
+    [note below on running `pylint` in your conda environment](#pylint-in-a-conda-environment).
 
 **Testing**
   * Are the inputs to the functions sufficiently tested?
@@ -153,8 +153,8 @@ package.
     * Any exceptions which are raised?
     * An example of running the code?
   * Is there any information needed to be added to the docs to describe the function?
-  * Does the documentation build with sphinx without errors or warnings? See note below on using
-    `livereload`.
+  * Does the documentation build with sphinx without errors or warnings? See 
+    [note below on using `livereload`](#livereload).
 
 **License**
   * Is the `nepc` license included at the top of the file?
@@ -174,8 +174,8 @@ Development Environment
 The `nepc` conda environment is defined in the `environment.yml` file.
 
 
-Note on `pylint` in a conda environment
----------------------------------------
+`pylint` in a conda environment
+-------------------------------
 
 It's probably best to make sure `pylint` is not in your base conda environment. Otherwise, when you run `pylint`, the linter will give you errors and warnings for your base environment, not your nepc conda environment.  (i.e. run `conda uninstall pylint` in your base conda environment, if necessary.)
 
