@@ -46,24 +46,34 @@ production server:
 >>> cnx, cursor = nepc.connect()
 ```
 
-Establish a connection to the database named `nepc`
-running on the local machine:
+If you've built the `nepc_test` database on your local machine 
+(see instructions [here](MYSQL.md)), establish a connection to it:
 
 ```python
 >>> cnx, cursor = nepc.connect(local=True, test=True)
 ```
 
-Access the pre-defined plasma chemistry model, `fict`, in the `nepc_test` database:
+Access the pre-defined plasma chemistry model, `fict_min2`, in the `nepc_test` database:
 
 ```python
->>> fict = nepc.Model(cursor, "fict")
+>>> fict_min2 = nepc.Model(cursor, "fict_min2")
 ```
 
-Print a summary of the ``fict`` model, including a stylized Pandas dataframe:
+Print a summary of the ``fict_min2`` model, including a stylized Pandas dataframe:
 
 ```python
->>> fict.summary()
+>>> fict_min2.summary()
 ```
+
+![`fict_min2` summary](docs/fig/fict_min2_summary.png)
+
+Plot the cross sections in `fict_min2`.
+
+```python
+>>> fict_min2.plot(ylog=True, xlog=True, width=8, height=4) 
+```
+
+![`fict_min2` plot](docs/fig/fict_min2_plot.png)
 
 Additional examples of EDA using nepc are in `tests/data/eda`. Examples of methods for
 building data files for the `nepc_test` database, including parsing
