@@ -33,18 +33,42 @@ The project is organized in the following directories:
 
 ## Getting Started
 
-The nepc Python package works best within a conda environment (`environment.yml` file provided). 
-Also, if you are going to build a database yourself, you will need MySQL. To get started:
+To install `nepc` with pip, run:
 
-```console
-$ git clone predator.nrl.navy.mil/padamson/nepc/
-$ cd nepc
-$ conda env create -f environment.yml #create the nepc conda environment 
-$ conda activate nepc
-$ pip install -e . # install the nepc package and sub-packages into the nepc conda environment
-$ export NEPC_HOME=/path/to/cloned/nepc/repo/ # put this in your `~/.bashrc or ~/.bash_profile`
-$ pytest # if on the NRL network (otherwise see MYSQL.md for building the `nepc_test` database)
+```shell
+$ pip install nepc
 ```
+
+Establish a connection to the database named `nepc` running on a
+production server:
+
+```python
+>>> cnx, cursor = nepc.connect()
+```
+
+Establish a connection to the database named `nepc`
+running on the local machine:
+
+```python
+>>> cnx, cursor = nepc.connect(local=True, test=True)
+```
+
+Access the pre-defined plasma chemistry model, `fict`, in the `nepc_test` database:
+
+```python
+>>> fict = nepc.Model(cursor, "fict")
+```
+
+Print a summary of the ``fict`` model, including a stylized Pandas dataframe:
+
+```python
+>>> fict.summary()
+```
+
+Additional examples of EDA using nepc are in `tests/data/eda`. Examples of methods for
+building data files for the `nepc_test` database, including parsing
+[LXCat](https://nl.lxcat.net/data/set_type.php) formatted data,
+are in `tests/data/methods`.
 
 ## Built With
 

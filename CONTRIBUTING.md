@@ -171,8 +171,18 @@ Nuts and Bolts
 Development Environment
 -----------------------
 
-The `nepc` conda environment is defined in the `environment.yml` file.
+Developing `nepc` works best within a conda environment (`environment.yml` file provided). 
+Also, if you are going to build a database yourself, you will need MySQL. To get started:
 
+```console
+$ git clone predator.nrl.navy.mil/padamson/nepc/
+$ cd nepc
+$ conda env create -f environment.yml #create the nepc conda environment 
+$ conda activate nepc
+$ pip install -e . # install the nepc package and sub-packages into the nepc conda environment
+$ export NEPC_HOME=/path/to/cloned/nepc/repo/ # put this in your `~/.bashrc or ~/.bash_profile`
+$ pytest # if on the NRL network (otherwise see MYSQL.md for building the `nepc_test` database)
+```
 
 `pylint` in a conda environment
 -------------------------------
