@@ -9,9 +9,10 @@
 The goals of the nepc project are to provide tools to:
 
 1. parse, evaluate, and populate metadata for electron scattering cross sections;
-2. build a [NEPC MySQL database](mysql) of cross sections;
+2. build a [NEPC MySQL database](http://132.250.158.124:3838/nepc/doc/db_schema.html) of cross sections;
 2. curate, access, visualize, and use cross section data from a NEPC database; and
-4. support [verification and validation](vandv) of electron scattering cross section data.
+4. support [verification and validation](http://132.250.158.124:3838/nepc/doc/vandv.html) 
+   of electron scattering cross section data.
 
 The database schema and Python module are designed 
 for anyone interested in plasma chemistry with a background in physics at the graduate level.
