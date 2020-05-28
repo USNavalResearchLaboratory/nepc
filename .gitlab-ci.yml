@@ -47,7 +47,7 @@ sphinx:
   script:
     - export NEPC_HOME=$CI_PROJECT_DIR
     - conda activate nepc
-    - cd $NEPC_HOME/doc
+    - cd $NEPC_HOME/docs
     - make html
     - rsync -rl _build/html/ /srv/shiny-server/nepc/doc/ --delete
     - cd $NEPC_HOME

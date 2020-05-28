@@ -340,11 +340,6 @@ class CS:
         sigma : list of float
             Cross sections in units of ``units_sigma`` :math:`m^2` (see :attr:`.CS.metadata`).
 
-    Methods
-    -------
-    plot
-        Plot the cross section.
-
     """
     def __init__(self, cursor, cs_id):
         metadata = cs_metadata(cursor, cs_id)
@@ -481,7 +476,7 @@ class CS:
 
 class CustomCS(CS):
     """
-    A custom cross section data set, including metadata and cross section data.
+    Extends :class:`.CS` to provide a custom cross section data set.
 
     If building upon an existing :class:`.CS`, must provide cursor and cs_id as well
     as one or both of metadata and data.
@@ -489,6 +484,16 @@ class CustomCS(CS):
     If building a :class:`.CustomCS` from scratch, must provide :obj:`.metadata` 
     and :obj:`.data`.
 
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    cs_id : int
+        i.d. of the cross section in `cs` and `csdata` tables
+    metadata : dict
+        one or more of the attributes of :class:`.CS`
+    data : dict
+        same as attributes of :class:`.CS`
 
     Attributes
     ----------
@@ -503,20 +508,6 @@ class CustomCS(CS):
 
     """
     def __init__(self, cursor=None, cs_id=None, metadata=None, data=None):
-        """Initialize a custom cross section data set
-
-        Parameters
-        ----------
-        cursor : cursor.MySQLCursor
-            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
-        cs_id : int
-            i.d. of the cross section in `cs` and `csdata` tables
-        metadata : dict
-            one or more of the attributes of :class:`.CS`
-        data : dict
-            same as attributes of :class:`.CS`
-
-        """
         if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
             raise ValueError('If providing cursor or cs_id, must provide both.')
         if (cursor is not None and cs_id is not None):
@@ -537,6 +528,13 @@ class CustomCS(CS):
 class Model:
     """A pre-defined collection of cross sections from a NEPC database
 
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    model_name :str
+        Name of a NEPC model (pre-defined collection of cross sections)
+
     Attributes
     ----------
     cs: list[:class:`.CS`]
@@ -547,15 +545,6 @@ class Model:
 
     """
     def __init__(self, cursor, model_name):
-        """
-        Parameters
-        ----------
-        cursor : cursor.MySQLCursor
-            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
-        model_name :str
-            name of a NEPC model (pre-defined collection of cross sections)
-
-        """
         _cs_list = []
         _cs_id_list = model_cs_id_list(cursor, model_name)
         for cs_id in _cs_id_list:
@@ -564,7 +553,7 @@ class Model:
         self.cs = _cs_list
 
     def subset(self, metadata=None):
-        """select the cross sections in the model matching the provided metadata
+        """Select the cross sections in the model matching the provided metadata
 
         Parameters
         ----------
@@ -622,11 +611,6 @@ class Model:
             maximum sigma (sigma_max), and
             lpu/upu's for each cross section in the model (or subset of the
             model if :obj:`metadata` is provided)
-
-        Methods
-        -------
-        plot
-            Plot cross section data in the Model.
 
         """
         summary_list = []
@@ -815,41 +799,39 @@ class Model:
 
 
 class CustomModel(Model):
-    """A customized collection of cross sections. The cross sections can be of class :class:`.CS`
+    """Extends :class:`.Model` to provide a customized collection of cross sections.
+
+    The cross sections can be of class :class:`.CS`
     (from the NEPC database) or :class:`.CustomCS` (user created/modified).
     Options:
 
     a. If building upon an existing NEPC model, must provide cursor and model_name. May
-    also provide a filter to select cross sections that meet criteria.
-
+       also provide a filter to select cross sections that meet criteria.
     b. If building from existing cross sections, must provide cursor and cs_id_list.
-
     c. If building from a list of custom cross sections, must provide cs_list.
 
     Must do at least one of a, b, or c, and can do any combination thereof.
 
+    Parameters
+    ----------
+    cursor : cursor.MySQLCursor
+        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
+    model_name :str
+        The name of a NEPC model (see [nepc.wiki]/models
+    cs_id_list : list of int
+        List of cs_id's to pull from NEPC database.
+    cs_list : list of CustomCS
+        List of user-defined cross sections of CustomCS type.
+    metadata: dict
+        Dictionary of filter criteria to select specific CS's from a Model.
+
+    Attributes
+    ----------
+    cs: list of :class:`.CS` or :class:`.CustomCS`
+        A list of cross section data and metadata of CS or CustomCS type.
+
     """
     def __init__(self, cursor=None, model_name=None, cs_id_list=[], cs_list=[], metadata=None):
-        """
-        Parameters
-        ----------
-        cursor : cursor.MySQLCursor
-            A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
-        model_name :str
-            The name of a NEPC model (see [nepc.wiki]/models
-        cs_id_list : list of int
-            List of cs_id's to pull from NEPC database.
-        cs_list : list of CustomCS
-            List of user-defined cross sections of CustomCS type.
-        metadata: dict
-            Dictionary of filter criteria to select specific CS's from a Model.
-
-        Attributes
-        ----------
-        cs: list of :class:`.CS` or :class:`.CustomCS`
-            A list of cross section data and metadata of CS or CustomCS type.
-
-        """
         if model_name is None and not cs_id_list and not cs_list:
             raise ValueError('Must provide at least one of model_name, cs_id_list, or cs_list')
 

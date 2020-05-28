@@ -30,10 +30,10 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-        #'sphinx.ext.autodoc',
-extensions = ['sphinx.ext.coverage',
-              'sphinx.ext.napoleon', 'sphinx.ext.intersphinx',
-              'numpydoc']
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.coverage',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.intersphinx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -57,13 +57,13 @@ html_theme = 'classic'
 html_static_path = ['_static']
 
 # -- Document __init__ methods -----------------------------------------------
-def skip(app, what, name, obj, would_skip, options):
-    if name == "__init__":
-        return False
-    return would_skip
-
-def setup(app):
-    app.connect("autodoc-skip-member", skip)
+#def skip(app, what, name, obj, would_skip, options):
+    #if name == "__init__":
+        #return False
+    #return would_skip
+#
+#def setup(app):
+    #app.connect("autodoc-skip-member", skip)
 
 # -- intersphinx mappings ----------------------------------------------------
 
@@ -71,6 +71,16 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
                        'matplotlib': ('https://matplotlib.org', None),
                        'numpy': ('https://numpy.org/doc/stable/', None)}
 
-# -- numpydoc settings -------------------------------------------------------
+# -- Napoleon settings--------------------------------------------------------
 
-numpydoc_attributes_as_param_list = True
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_include_init_with_doc = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
