@@ -29,7 +29,6 @@ to the NEPC database. Put the following commands in a script named `nepc_user_sc
 (replacing `MySQL_username` and `MySQL_password` with your username and your password):
 
 ```sql
-/* run this block for each user with read/write access to nepc and nepc_test databases
 CREATE USER 'MySQL_username'@'localhost'
   IDENTIFIED BY 'MySQL_password';
 GRANT ALL 
@@ -38,9 +37,7 @@ GRANT ALL
 GRANT ALL 
   ON nepc_test.*
   TO 'MySQL_username'@'localhost';
-*/
 
-/* run the following block to setup the nepc user for read access to nepc and nepc_test */
 CREATE USER 'nepc'@'localhost'
   IDENTIFIED BY 'nepc';
 GRANT USAGE ON *.* TO `nepc`@`localhost` 
@@ -52,10 +49,13 @@ GRANT SELECT
   TO 'nepc'@'localhost';
 ```
 
-You can then run the script with `mysql -u root -p < nepc_user_script.sql`
+The first block creates the user `MySQL_username` and gives them read/write access to 
+`nepc` and `nepc_test` databases.
+The second block will setup the `nepc` user for read access to `nepc` and `nepc_test`.
+You can run the script with `mysql -u root -p < nepc_user_script.sql`.
 
 NEPC will need access to your personal MySQL credentials, so you will need to put them in a file at
-`~/.mysql/defaults`:
+`$HOME/.mysql/defaults`:
 
 ```shell
 [client]

@@ -43,7 +43,7 @@ $ conda env create -f environment.yml #create the nepc conda environment
 $ conda activate nepc
 $ pip install -e . # install the nepc package and sub-packages into the nepc conda environment
 $ export NEPC_HOME=/path/to/cloned/nepc/repo/ # put this in your `~/.bashrc or ~/.bash_profile`
-$ pytest # if on the NRL network (otherwise see the [notes on MySQL](MYSQL.md))
+$ pytest # if on the NRL network (otherwise see MYSQL.md for building the `nepc_test` database)
 ```
 
 ## Built With
