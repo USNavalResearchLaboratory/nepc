@@ -17,13 +17,13 @@ from the perspective of the intended uses of the model.
   :height: 250
   :alt: Modeling V&V Phases
 
-**Figure 1.** Phases of modeling and simulation and the role of V&V from
+**Figure 2.** Phases of modeling and simulation and the role of V&V from
 [oberkampf2004]_.
 
-Figure 1, a graphical representation from [schlesinger1979]_
+Figure 2, a graphical representation from [schlesinger1979]_
 and reproduced in [oberkampf2004]_, depicts the phases
 of modeling and simulation and the role of V&V.
-Two types of models are depicted in Figure 1: a conceptual
+Two types of models are depicted in Figure 2: a conceptual
 model and a computerized model. In the context of NEPC, there
 are many conceptual models
 composed of mathematical equations and associated parameters
@@ -45,7 +45,7 @@ Verification
 
 The fundamental strategy of verification is to identify,
 quantify, and reduce errors in the computational model and
-its numerical solution. Figure 2 depicts the verification process
+its numerical solution. Figure 3 depicts the verification process
 of comparing the numerical solution from the code in
 question with various types of highly accurate solutions.
 The following detailed description of verification from
@@ -68,7 +68,7 @@ accuracy.*
   :height: 250
   :alt: Verfication process
 
-**Figure 2.** Verification process from [oberkampf2004]_.
+**Figure 3.** Verification process from [oberkampf2004]_.
 
 Validation
 ----------
@@ -93,17 +93,14 @@ This is especially true for validation of codes to estimate electron
 scattering cross sections. Often there are large errors in
 experimental measurements and the final state(s) of the atomic or
 molecular target gas may not be well known!
-Figure 3 depicts a typical validation process of
+Figure 4 depicts a typical validation process of
 comparing computational results with experimental data.
 
 .. image:: fig/validation_process.png
   :height: 250
   :alt: Validation process
 
-**Figure 3.** Validation process from [oberkampf2004]_.
-
-References
-----------
+**Figure 4.** Validation process from [oberkampf2004]_.
 
 .. [schlesinger1979] Schlesinger, S. "Terminology for model credibility." Simulation. 32(3), 103–104.
 

@@ -94,3 +94,5 @@ If NEPC were in the
 [CMU Pronouncing Dictionary](http://www.speech.cs.cmu.edu/cgi-bin/cmudict),
 its entry would be `N EH P S IY .`.
 
+
+***Approved for public release, distribution is unlimited.***

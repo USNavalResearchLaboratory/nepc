@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'NEPC'
+project = 'nepc'
 copyright = '2019, NRL'
 author = 'Paul Adamson'
 
@@ -50,6 +50,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'classic'
+html_logo = 'fig/nepc_logo.png'
+
+# -- Options for pdf output -------------------------------------------------
+
+# The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
+latex_logo = 'fig/nepc_logo.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
