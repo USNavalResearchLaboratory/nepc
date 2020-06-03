@@ -1,4 +1,4 @@
-"""Get environment variables that point to various NEPC directories.
+"""Get environment variables used by nepc scripts.
 """
 import os
 
@@ -11,14 +11,14 @@ def user_home():
 
 
 def nepc_home():
-    """Returns the path to the NEPC directory.
+    """Returns the path to the nepc directory.
 
     """
     return os.environ.get('NEPC_HOME')
 
 
-def nepc_data_home():
-    """Returns the path to the NEPC data directory.
+def nepc_cs_home():
+    """Returns the path to the nepc_cs directory.
 
     """
-    return os.environ.get('NEPC_DATA_HOME')
+    return os.environ.get('NEPC_CS_HOME')

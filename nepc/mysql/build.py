@@ -30,12 +30,13 @@ if ARGS.test:
                  "/cs/n2/fict_total/"]
 else:
     database = 'nepc'
-    NEPC_DATA = config.nepc_data_home() + "/data/"
+    NEPC_DATA = config.nepc_cs_home() + "/data/"
     DIR_NAMES = ["/cs/n2/itikawa/",
                  "/cs/n2/zipf/",
                  "/cs/n/zatsarinny/",
                  "/cs/n2/phelps/",
-                 "/cs/n2/phelps_total/"]
+                 "/cs/n2/phelps_total/",
+                 "/cs/n2/little/"]
 
 T0 = time.time()
 

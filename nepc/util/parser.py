@@ -224,6 +224,35 @@ def write_data_to_file(data_array, filename, start_csdata_id):
     return csdata_id
 
 
+def write_pd_data_to_file(data_frame, filename, start_csdata_id):
+    """Given a dataframe of csdata, write this to a file in the correct format
+    Parameters
+    ----------
+    data_frame: pandas DataFrame
+    A DataFrame containing cross section data to be entered into the file
+
+    filename: file
+    Name of the file where values of data_frame should be entered
+
+    start_cs_data_id : int
+    The id where the data should be placed
+
+    Return
+    ------
+    csdata_id
+    The next csdata_id to use
+    """
+    csdata_id = start_csdata_id
+    write_f = open(filename, "x")
+    write_f.write("\t".join(['csdata_id', 'e_energy', 'sigma']) + "\n")
+    for i in range(len(data_frame)):
+        write_f.write(str(csdata_id) + "\t" + str(data_frame.iloc[i]['e_energy'])
+                      + "\t" + str(data_frame.iloc[i]['sigma']) + "\n")
+        csdata_id = csdata_id + 1
+    write_f.close()
+    return csdata_id
+
+
 def write_metadata_to_file(filename, cs_id, specie, process,
                            units_e, units_sigma, ref='\\N',
                            lhs_a='\\N', lhs_b='\\N',
@@ -330,6 +359,30 @@ def write_metadata_to_file(filename, cs_id, specie, process,
     return cs_id + 1
 
 
+def write_cs_to_file(filename, data_array, cs_id, start_csdata_id, specie,
+                     process, units_e, units_sigma, ref='\\N',
+                     lhs_a='\\N', lhs_b='\\N', rhs_a='\\N', rhs_b='\\N',
+                     threshold='-1',
+                     wavelength='-1',
+                     lhs_v=-1, rhs_v=-1, lhs_j=-1, rhs_j=-1,
+                     background='\\N', lpu='-1', upu='-1'):
+    """Write both the cross-section data and metadata to a file
+    Parameters
+    ----------
+    Contains a combination of parameters from write_data_to_file and
+    write_metadata_to_file"""
+    next_csdata_id = write_data_to_file(data_array, filename+".dat",
+                                        start_csdata_id)
+    next_cs_id = write_metadata_to_file(filename+".met", cs_id, specie,
+                                        process, units_e, units_sigma,
+                                        ref, lhs_a, lhs_b, rhs_a, rhs_b,
+                                        threshold, wavelength, lhs_v, rhs_v,
+                                        lhs_j, rhs_j, background, lpu, upu)
+    return (next_cs_id, next_csdata_id)
+
+
+
+
 def write_next_id_to_file(
         next_cs_id, next_csdata_id, test=False):
     """Write out the next id's for the database to a file.
@@ -346,10 +399,10 @@ def write_next_id_to_file(
 
     """
     if test:
-        nepc_data_home = nepc_config.nepc_home() + '/tests'
+        nepc_data_home = nepc_config.nepc_home() + '/tests/data/'
     else:
-        nepc_data_home = nepc_config.nepc_data_home()
-    filename = nepc_data_home + "/data/next_id.tsv"
+        nepc_data_home = nepc_config.nepc_cs_home() + '/data/'
+    filename = nepc_data_home + "/next_id.tsv"
     id_file = open(filename, "w+")
     id_file.write(
         "\t".join(
@@ -398,11 +451,56 @@ def get_next_ids(test=False):
 
     """
     if test:
-        nepc_data_home = nepc_config.nepc_home() + '/tests'
+        nepc_data_home = nepc_config.nepc_home() + '/tests/data/'
     else:
-        nepc_data_home = nepc_config.nepc_data_home()
-    filename = nepc_data_home + "/data/next_id.tsv"
+        nepc_data_home = nepc_config.nepc_cs_home() + '/data/'
+    filename = nepc_data_home + "/next_id.tsv"
     with open(filename) as id_file:
         id_line = id_file.readlines()
     next_cs_id, next_csdata_id = id_line[1].split('\t')
     return int(next_cs_id), int(next_csdata_id)
+
+
+def get_states(test=False):
+    """Get lists of name's and long_name's from states.tsv file."""
+    if test:
+        nepc_data_home = nepc_config.nepc_home() + '/tests/data/'
+    else:
+        nepc_data_home = nepc_config.nepc_cs_home() + '/data/'
+    filename = nepc_data_home + 'states.tsv'
+    with open(filename) as states_f:
+        states_lines = states_f.readlines()[1:]
+
+    states = []
+    for line in states_lines:
+        states.append(line.split('\t'))
+    return ([states[i][1] for i in range(len(states))],
+            [states[i][2] for i in range(len(states))])
+
+
+def remove_crs(mystring):
+    """Removes new lines"""
+    return mystring.replace('\n', ' ').replace('\r', '')
+
+
+def text_array_to_float_array(text_array, omit_regexp=''):
+    """Convert an array of strings to an array of floats
+
+    Parameters
+    ----------
+    text_array : str array
+    An array of strings to be converted
+
+    Returns
+    -------
+    data : float array
+    An array of floats containing float-converted data
+    from text_array"""
+    data = np.empty(shape=(0, 1))
+    for inde in range(0, len(text_array)):
+        if (omit_regexp == '' or not(
+                bool(re.search(omit_regexp, text_array[inde])))):
+            data = np.append(data, [[float(text_array[inde])]], axis=0)
+    return data
+
+
