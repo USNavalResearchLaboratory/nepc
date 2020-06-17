@@ -6,6 +6,7 @@
 [![pylint report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/pylint.svg?job=pylint)](https://predator.nrl.navy.mil/padamson/nepc/commits/master)
 -->
 ![Travis (.org)](https://img.shields.io/travis/USNavalResearchLaboratory/nepc?style=plastic)
+[![Documentation Status](https://readthedocs.org/projects/nepc/badge/?version=latest)](https://nepc.readthedocs.io/en/latest/?badge=latest)
 ![GitHub](https://img.shields.io/github/license/USNavalResearchLaboratory/nepc?style=plastic)
 
 The goals of the nepc project are to provide tools to:

@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'nepc'
-copyright = '2019, NRL'
+copyright = '2020, NRL'
 author = 'Paul Adamson'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+#release = '0.1'
 
 
 # -- General configuration ---------------------------------------------------

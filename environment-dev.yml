@@ -1,0 +1,30 @@
+name: nepc-dev
+channels:
+        - defaults
+        - conda-forge
+dependencies:
+        - ipython=7.3.0
+        - ipython_genutils=0.2.0
+        - jpeg=9b
+        - jupyter
+        - jupyter_client
+        - numpy=1.16.2
+        - pandas=0.24.2
+        - python=3.7.2
+        - matplotlib
+        - tabulate=0.8.3
+        - pytest
+        - pytest-cov
+        - pip=19.0.3
+        - sphinx
+        - numpydoc
+        - pip:
+                - quadpy==0.13.2
+                - pylint==2.4.4
+                - pdfminer.six==20181108
+                - pdfplumber==0.5.11
+                - mysql-connector-python==8.0.17
+                - autopep8
+                - livereload
+                - formic2
+                - sphobjinv
