@@ -24,7 +24,7 @@ VERSION = None
 REQUIRED = [
     'numpy', 'scipy', 'ipython', 'ipython_genutils', 'jupyter',
     'jupyter_client', 'pandas', 'matplotlib', 'tabulate', 'quadpy', 'numpydoc',
-    'quadpy', 'pdfminer.six', 'pdfplumber', 'mysql-connector-python'
+    'quadpy', 'mysql-connector-python'
 ]
 
 # What packages are optional?
