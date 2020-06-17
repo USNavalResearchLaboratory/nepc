@@ -22,7 +22,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'numpy', 'scipy', 'ipython', 'ipython_genutils', 'jpeg=9b', 'jupyter',
+    'numpy', 'scipy', 'ipython', 'ipython_genutils', 'jupyter',
     'jupyter_client', 'pandas', 'matplotlib', 'tabulate', 'quadpy', 'numpydoc',
     'quadpy', 'pdfminer.six', 'pdfplumber', 'mysql-connector-python'
 ]
