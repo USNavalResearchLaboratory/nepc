@@ -5,9 +5,9 @@
 [![sphinx coverage report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/sphinx.svg?job=sphinx)](http://132.250.158.124:3838/nepc/doc/)
 [![pylint report](https://predator.nrl.navy.mil/padamson/nepc/-/jobs/artifacts/master/raw/pylint.svg?job=pylint)](https://predator.nrl.navy.mil/padamson/nepc/commits/master)
 -->
-![Travis (.org)](https://img.shields.io/travis/USNavalResearchLaboratory/nepc?style=plastic)
+[![Build Status](https://travis-ci.org/USNavalResearchLaboratory/nepc.svg?branch=master)](https://travis-ci.org/USNavalResearchLaboratory/nepc)
 [![Documentation Status](https://readthedocs.org/projects/nepc/badge/?version=latest)](https://nepc.readthedocs.io/en/latest/?badge=latest)
-![GitHub](https://img.shields.io/github/license/USNavalResearchLaboratory/nepc?style=plastic)
+![GitHub](https://img.shields.io/github/license/USNavalResearchLaboratory/nepc)
 
 The goals of the nepc project are to provide tools to:
 
