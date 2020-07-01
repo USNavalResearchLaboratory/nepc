@@ -79,6 +79,8 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.metadata["cs_id"], int)
     assert isinstance(cs.metadata["specie"], str)
     assert isinstance(cs.metadata["units_e"], float)
+    assert isinstance(cs.metadata["lhsA"], str)
+    assert isinstance(cs.metadata["rhsA"], str)
     assert isinstance(cs.data["e"], list)
     assert isinstance(cs.data["e"][0], float)
     assert isinstance(cs.data["sigma"], list)
