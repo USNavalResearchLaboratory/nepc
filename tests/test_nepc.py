@@ -83,6 +83,9 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.data["e"][0], float)
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
+    # test len()
+    # FIXME: use length of data file to get length of sampled cross section
+    assert len(cs) == 21
 
 
 @pytest.mark.usefixtures("nepc_connect")

@@ -380,6 +380,11 @@ class CS:
                      "sigma": sigma}
 
 
+    def __len__(self):
+        r"""The number of data points in the cross section data set"""
+        return len(self.data['e'])
+
+
     def plot(self, units_sigma=1E-20, plot_param_dict={'linewidth': 1},
              xlim_param_dict={'auto': True}, ylim_param_dict={'auto': True},
              ylog=False, xlog=False, show_legend=True, filename=None,
