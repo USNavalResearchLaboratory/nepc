@@ -557,6 +557,10 @@ class Model:
 
         self.cs = _cs_list
 
+    def __len__(self):
+        """number of cross sections in the model"""
+        return len(self.cs)
+
     def subset(self, metadata=None):
         """Select the cross sections in the model matching the provided metadata
 
