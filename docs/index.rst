@@ -32,6 +32,7 @@ Other Topics
    :maxdepth: 2
 
    db_schema
+   mysql
    vandv
 
 Indices and tables

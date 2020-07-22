@@ -49,7 +49,7 @@ production server:
 ```
 
 If you've built the `nepc_test` database on your local machine 
-(see instructions [here](MYSQL.md)), establish a connection to it:
+(see instructions [here](https://nepc.readthedocs.io/en/latest/mysql.html)), establish a connection to it:
 
 ```python
 >>> cnx, cursor = nepc.connect(local=True, test=True)
