@@ -9,7 +9,7 @@ import os
 import sys
 from shutil import rmtree
 
-from setuptools import find_packages, setup, Command
+from setuptools import find_namespace_packages, setup, Command
 
 # Package meta-data.
 NAME = 'nepc'
@@ -21,11 +21,9 @@ REQUIRES_PYTHON = '>=3.7.0'
 VERSION = None
 
 # What packages are required for this module to be executed?
-REQUIRED = [
-    'pygments>=2.4.1', 'numpy', 'scipy', 'ipython', 'ipython_genutils', 'jupyter',
-    'jupyter_client', 'pandas', 'matplotlib', 'tabulate', 'quadpy', 'numpydoc',
-    'quadpy', 'mysql-connector-python'
-]
+REQUIRED = ['ipython>=7.3.0', 'ipython_genutils>=0.2.0', 'jupyter',
+            'jupyter_client', 'numpy>=1.16.2', 'pandas>=0.24.2',
+            'matplotlib', 'mysql-connector-python>=8.0.17']
 
 # What packages are optional?
 EXTRAS = {
@@ -85,7 +83,8 @@ class UploadCommand(Command):
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         self.status('Uploading the package to PyPI via Twine…')
-        os.system('twine upload dist/*')
+        # os.system('twine upload dist/*')
+        os.system('twine upload --repository testpypi dist/*')
 
         self.status('Pushing git tags…')
         os.system('git tag v{0}'.format(about['__version__']))
@@ -105,9 +104,10 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    packages=find_namespace_packages(),
     # packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
-    py_modules=['turbopy'],
+    # py_modules=['nepc'],
 
     # entry_points={
     #     'console_scripts': ['mycli=mymodule:cli'],
