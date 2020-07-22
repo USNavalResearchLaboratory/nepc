@@ -1,4 +1,3 @@
-from .version import __version__
 from .nepc import connect
 from .nepc import count_table_rows
 from .nepc import model_cs_id_list

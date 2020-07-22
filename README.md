@@ -67,15 +67,11 @@ Print a summary of the ``fict_min2`` model, including a stylized Pandas datafram
 >>> fict_min2.summary()
 ```
 
-![`fict_min2` summary](docs/fig/fict_min2_summary.png)
-
 Plot the cross sections in `fict_min2`.
 
 ```python
 >>> fict_min2.plot(ylog=True, xlog=True, width=8, height=4) 
 ```
-
-![`fict_min2` plot](docs/fig/fict_min2_plot.png)
 
 Additional examples of EDA using nepc are in `tests/data/eda`. Examples of methods for
 building data files for the `nepc_test` database, including parsing
