@@ -83,13 +83,13 @@ class UploadCommand(Command):
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         self.status('Uploading the package to PyPI via Twine…')
-        # os.system('twine upload dist/*')
-        os.system('twine upload --repository testpypi dist/*')
+        os.system('twine upload dist/*')
+        # os.system('twine upload --repository testpypi dist/*')
 
         self.status('Pushing git tags…')
         os.system('git tag v{0}'.format(about['__version__']))
         os.system('git push --tags')
-        
+
         sys.exit()
 
 
@@ -105,13 +105,6 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_namespace_packages(),
-    # packages=find_packages(exclude=('tests',)),
-    # If your package is a single module, use this instead of 'packages':
-    # py_modules=['nepc'],
-
-    # entry_points={
-    #     'console_scripts': ['mycli=mymodule:cli'],
-    # },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
