@@ -8,6 +8,7 @@
 [![Build Status](https://travis-ci.org/USNavalResearchLaboratory/nepc.svg?branch=master)](https://travis-ci.org/USNavalResearchLaboratory/nepc)
 [![Documentation Status](https://readthedocs.org/projects/nepc/badge/?version=latest)](https://nepc.readthedocs.io/en/latest/?badge=latest)
 ![GitHub](https://img.shields.io/github/license/USNavalResearchLaboratory/nepc)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3974315.svg)](https://doi.org/10.5281/zenodo.3974315)
 
 The goals of the nepc project are to provide tools to:
 
