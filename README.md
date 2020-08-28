@@ -43,7 +43,8 @@ $ pip install nepc
 ```
 
 Establish a connection to the database named `nepc` running on a
-production server:
+production server (you must set an environment variable `$NEPC_PRODUCTION` that
+points to the production server):
 
 ```python
 >>> cnx, cursor = nepc.connect()
