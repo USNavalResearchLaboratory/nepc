@@ -40,6 +40,10 @@ import numpy as np
 from pandas import DataFrame
 import mysql.connector
 import matplotlib.pyplot as plt
+from nepc.util import config
+
+
+PRODUCTION = config.production()
 
 
 def connect(local=False, DBUG=False, test=False):
@@ -67,7 +71,7 @@ def connect(local=False, DBUG=False, test=False):
     if local:
         hostname = 'localhost'
     else:
-        hostname = '132.250.158.124'
+        hostname = PRODUCTION
 
     if DBUG:  # pragma: no cover
         print("\nUsing NEPC database on " + hostname)

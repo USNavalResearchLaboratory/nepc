@@ -42,6 +42,7 @@ T0 = time.time()
 
 HOME = config.user_home()
 
+
 def np_str(df, row, name):
     if df.iloc[row][name] == "\\N":
         return "Null"

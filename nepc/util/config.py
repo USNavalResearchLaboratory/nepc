@@ -10,6 +10,13 @@ def user_home():
     return os.environ.get('HOME')
 
 
+def production():
+    """Returns the address of the production server.
+
+    """
+    return os.environ.get('NEPC_PRODUCTION')
+
+
 def nepc_home():
     """Returns the path to the nepc directory.
 
