@@ -7,44 +7,68 @@ Provides templates for curating raw and external (e.g. LxCAT) cross section data
 - verify data
 - write data to nepc formatted input files (i.e. .dat, .met, .mod)
 """
-from abc import ABC, abstractclassmethod, abstractmethod
+from abc import ABC, abstractmethod
 from typing import List, Tuple
 from nepc.util import util
 from nepc.util import parser
 import numpy as np
 import re
+import os
+
 
 class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
 
 
-    def curate(self, datadir: str, outdir: str, states: dict, title: str, debug=False, **next_ids) -> None:
+    def curate(self, datadir: str, outdir: str, states: dict, title: str, units_e: str, units_sigma: str, debug=False, **next_ids) -> None:
         """Skeleton of curation process.
         """
-        datafiles, next_cs_id, next_csdata_id = self.initialize(datadir, outdir, debug, **next_ids)
-        csdata = self.get_csdata(datafiles, debug=debug)
+        filelist, next_cs_id, next_csdata_id = self.initialize(datadir, outdir, debug, **next_ids)
+        csdata = self.get_csdata(filelist, debug=debug)
         csdata = self.clean_csdata(csdata, debug=debug)
-        csdata = self.augment_csdata(csdata, outdir, states, title)
+        csdata = self.augment_csdata(csdata, outdir, states, title, units_e, units_sigma)
         self.verify_csdata()
         next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
         self.finalize(next_cs_id, next_csdata_id)
 
 
     def initialize(self, datadir: str, outdir: str, debug=False, **next_ids) -> Tuple[List[str], str, str]:
-        datafiles = [datadir + '/Phelps.txt']
+
+        def askYesNoQuestion(question):
+            YesNoAnswer = input(question).upper()
+            if YesNoAnswer == "Y" or YesNoAnswer == "N":
+                return YesNoAnswer  
+            else:
+                return askYesNoQuestion(question)
+         
+        filelist = os.listdir(datadir)
+        if len(filelist) > 0:
+            for filenames in enumerate(filelist):
+                answer = askYesNoQuestion(f'Process {filenames[1]}? (Y/N): ')
+                if answer == "Y":
+                    filelist[filenames[0]] = f'{datadir}/{filenames[1]}'
+                    print(f'Added {filenames[1]} to queue.')
+                elif answer == "N":
+                    filelist.pop(filenames[0])
+                    print(f'Skipping {filenames[1]}.')
+
+        if len(filelist) == 0:
+            print('No files to process. Exiting')
+            exit
+        else:
+            print(f'Files in queue: {filelist}')
 
         util.rmdir(outdir)
         util.mkdir(outdir)
 
         if debug:
             next_cs_id, next_csdata_id = (next_ids["next_cs_id"], next_ids["next_csdata_id"])
+            print(f"next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}")
         else:
             next_cs_id, next_csdata_id = parser.get_next_ids()
 
-        print(f"next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}")
-
-        return datafiles, next_cs_id, next_csdata_id
+        return filelist, next_cs_id, next_csdata_id
 
 
     @abstractmethod
@@ -107,9 +131,11 @@ class CurateLxCAT(CurateCS):
         for cs, i in zip(csdata, range(len(csdata))):
             print('\t'.join([self.value(cs, key) for key in keys]))
 
-    def get_csdata(self, datafiles, debug=False):
-        csdata = parser.parse(datafiles[0], debug=debug)
-        print(f"Length of csdata: {len(csdata)}")
+    def get_csdata(self, filelist, debug=False):
+        csdata = []
+        for datafile in filelist:
+            csdata += parser.parse(datafile, debug=debug)
+        if debug: print(f"Length of csdata: {len(csdata)}")
         return csdata
 
     def clean_csdata(self, csdata, debug=False):
@@ -137,16 +163,17 @@ class CurateLxCAT(CurateCS):
                 'threshold',
                 'nepc_filename']
         
-        self.print_csdata_table(keys, csdata)
-        self.print_csdata_table(['background'], csdata)
+        if debug:
+            self.print_csdata_table(keys, csdata)
+            self.print_csdata_table(['background'], csdata)
         return csdata
 
 
-    def augment_csdata(self, csdata, outdir, states, title):
+    def augment_csdata(self, csdata, outdir, states, title, units_e, units_sigma):
         for cs, i in zip(csdata, range(len(csdata))):
             cs['specie'] = self.value(cs, 'target')
-            cs['units_e'] = '1.0'
-            cs['units_sigma'] = '1.0'
+            cs['units_e'] = units_e
+            cs['units_sigma'] = units_sigma
             cs['background'] = self.value(cs, 'comment')
             cs['nepc_filename'] = outdir + '/' + title + '_' + str(i)
             cs['data'] = np.asarray(cs['data'])
@@ -239,10 +266,10 @@ class CurateLxCAT(CurateCS):
     def __str__(self) -> str:
         return "LxCAT curation process"
 
-def curate_client(curate_cs: CurateCS, datadir: str, outdir: str, states: dict, title: str, debug=False, **next_ids) -> None:
+def curate_client(curate_cs: CurateCS, datadir: str, outdir: str, states: dict, title: str, units_e: str, units_sigma: str, debug=False, **next_ids) -> None:
     """Client code that calls the CurateCS template to execute the curation process.
     """
 
     print(f"Executing {curate_cs}.")
     
-    curate_cs.curate(datadir, outdir, states, title, debug, **next_ids)
+    curate_cs.curate(datadir, outdir, states, title, units_e, units_sigma, debug, **next_ids)
