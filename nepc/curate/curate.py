@@ -19,15 +19,13 @@ import os
 class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
-
-
-    def curate(self, datadir: str, outdir: str, states: dict, title: str, units_e: str, units_sigma: str, debug=False, **next_ids) -> None:
+    def curate(self, datadir: str, outdir: str, states: dict, title: str, units_e: str, units_sigma: str, augment_dicts=None, debug=False, **next_ids) -> None:
         """Skeleton of curation process.
         """
         filelist, next_cs_id, next_csdata_id = self.initialize(datadir, outdir, debug, **next_ids)
         csdata = self.get_csdata(filelist, debug=debug)
         csdata = self.clean_csdata(csdata, debug=debug)
-        csdata = self.augment_csdata(csdata, outdir, states, title, units_e, units_sigma)
+        csdata = self.augment_csdata(csdata, outdir, states, title, units_e, units_sigma, augment_dicts)
         self.verify_csdata()
         next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
         self.finalize(next_cs_id, next_csdata_id)
@@ -143,13 +141,15 @@ class CurateLxCAT(CurateCS):
             for cs in csdata:
                 i = len(cs['data']) - 1
                 while cs['data'][i][1] == 0.0:
-                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'].pop(i), i))
+                    if debug: print('removing {} from csdata[{}][\'data\']'.format(cs['data'][i], i))
+                    cs['data'].pop(i)
                     i -= 1
 
         def remove_zeros_at_beginning(csdata):
             for cs in csdata:
                 while cs['data'][0][1] == 0.0 and cs['data'][1][1] == 0.0:
-                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'].pop(0), 0))
+                    if debug: print('removing {} from csdata[{}][\'data\']'.format(cs['data'], 0))
+                    cs['data'].pop(0)
         remove_zeros_at_beginning(csdata)
         remove_zeros_at_end(csdata)
         keys = ['specie',
@@ -163,14 +163,13 @@ class CurateLxCAT(CurateCS):
                 'threshold',
                 'nepc_filename']
         
-        if debug:
-            self.print_csdata_table(keys, csdata)
-            self.print_csdata_table(['background'], csdata)
         return csdata
 
 
-    def augment_csdata(self, csdata, outdir, states, title, units_e, units_sigma):
+    def augment_csdata(self, csdata, outdir, states, title, units_e, units_sigma, augment_dicts=None):
+
         for cs, i in zip(csdata, range(len(csdata))):
+
             cs['specie'] = self.value(cs, 'target')
             cs['units_e'] = units_e
             cs['units_sigma'] = units_sigma
@@ -181,55 +180,17 @@ class CurateLxCAT(CurateCS):
             cs['threshold'] = self.value(cs, 'threshold')
             cs['lhs_v'] = self.value(cs, 'lhs_v')
             cs['rhs_v'] = self.value(cs, 'rhs_v')
-    
-            if (cs['kind'] == 'IONIZATION' and cs['product'] == 'N2^+'):
-                cs['process'] = 'ionization_total'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = 'N2+'
-                cs['models'] = ['phelps', 'phelps_min', 'phelps_min2', 'phelps_min2_dr']
-            elif (cs['kind'] == 'IONIZATION' and cs['product'] == 'N2^+(B2SIGMA)'):
-                cs['process'] = 'ionization'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = states['N2+(B2)']
-                cs['models'] = ['phelps']
-            elif (cs['kind'] == 'EXCITATION' and
-                cs['product'] == 'N2(rot)' and
-                'SLAR' in cs['background']):
-                cs['process'] = 'excitation'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = 'N2(X1Sigmag+)_jSLAR'
-                cs['models'] = ['phelps', 'phelps_min2', 'phelps_min2_dr']
-            elif (cs['kind'] == 'EXCITATION' and
-                  cs['product'] == 'N2(rot)' and
-                  'SCHULZ' in cs['background']):
-                cs['process'] = 'excitation'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = 'N2(X1Sigmag+)_jSCHULZ'
-                cs['models'] = ['phelps']
-            elif (cs['kind'] == 'EFFECTIVE'):
-                cs['process'] = 'total'
-                cs['lhs_a'] = 'N2'
-                cs['rhs_a'] = 'N2'
-                cs['models'] = ['phelps', 'phelps_min', 'phelps_min2', 'phelps_min2_dr']
-            elif (cs['kind'] == 'EXCITATION' and
-                  ('v0-4' in cs['product'] or 'v5-9' in cs['product'] or 'v10-' in cs['product'])):
-                cs['process'] = 'excitation'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = states[cs['product']]
-                cs['models'] = ['phelps']
-            elif (cs['kind'] == 'EXCITATION' and
-                  re.search('v[0-9]', cs['product']) is not None):
-                cs['process'] = 'excitation_v'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = states['N2(X1)']
-                cs['lhs_v'] = '0'
-                cs['rhs_v'] = cs['product'][4]
-                cs['models'] = ['phelps']
-            elif (cs['kind'] == 'EXCITATION'):
-                cs['process'] = 'excitation'
-                cs['lhs_a'] = states['N2(X1)']
-                cs['rhs_a'] = states[cs['product']]
-                cs['models'] = ['phelps']
+
+            if augment_dicts is not None:
+                for cs_dict, augment_dict in augment_dicts:
+                    matched = True
+                    for key in cs_dict:
+                        if matched and key in cs and re.search(cs_dict[key], cs[key]) is None:
+                            matched = False
+                    if matched:
+                        for key in augment_dict.keys():
+                            cs[key] = augment_dict[key]
+                        
         return csdata
 
     def verify_csdata(self) -> None:
@@ -266,10 +227,11 @@ class CurateLxCAT(CurateCS):
     def __str__(self) -> str:
         return "LxCAT curation process"
 
-def curate_client(curate_cs: CurateCS, datadir: str, outdir: str, states: dict, title: str, units_e: str, units_sigma: str, debug=False, **next_ids) -> None:
+def curate_client(curate_cs: CurateCS, datadir: str, outdir: str, states: dict, title: str, 
+                  units_e: str, units_sigma: str, augment_dicts=None, debug=False, **next_ids) -> None:
     """Client code that calls the CurateCS template to execute the curation process.
     """
 
     print(f"Executing {curate_cs}.")
     
-    curate_cs.curate(datadir, outdir, states, title, units_e, units_sigma, debug, **next_ids)
+    curate_cs.curate(datadir, outdir, states, title, units_e, units_sigma, augment_dicts, debug, **next_ids)
