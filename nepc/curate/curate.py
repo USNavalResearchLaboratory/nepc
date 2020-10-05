@@ -10,7 +10,6 @@ Provides templates for curating raw and external (e.g. LxCAT) cross section data
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 import re
-import os
 import numpy as np
 from nepc.util import util
 from nepc.util import parser
@@ -25,11 +24,10 @@ class CurateCS(ABC):
                next_cs_id=None, next_csdata_id=None) -> None:
         """Skeleton of curation process.
         """
-        self.initialize_db(initialize_nepc, test)
-        filelist, outdir, next_cs_id, next_csdata_id = self.initialize(datadir, datatype,
-                                                                       species, title,
-                                                                       test, debug,
-                                                                       next_cs_id, next_csdata_id)
+        next_cs_id, next_csdata_id = self.initialize_db(initialize_nepc, test,
+                                                        debug, next_cs_id, next_csdata_id)
+        filelist = self.initialize_input(datadir, datatype, species, title)
+        outdir = self.initialize_output(datadir, species, title)
         csdata = self.get_csdata(filelist, debug=debug)
         csdata = self.clean_csdata(csdata, debug=debug)
         csdata = self.augment_csdata(csdata, outdir, title, units_e, units_sigma, augment_dicts)
@@ -37,34 +35,37 @@ class CurateCS(ABC):
         next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
         self.finalize(next_cs_id, next_csdata_id, test, debug)
 
-    def initialize_db(self, initialize_nepc=False, test=False) -> None:
+    def initialize_db(self, initialize_nepc=False, test=False, debug=False, 
+                      next_cs_id=None, next_csdata_id=None) -> Tuple[int]:
         """Initialize the nepc database
         """
         if initialize_nepc:
             parser.write_next_id_to_file(1, 1, test)
-
-    def initialize(self, datadir: str, datatype: str, species: str, title: str, test=False,
-                   debug=False, next_cs_id=None, next_csdata_id=None) -> Tuple[List[str], str, str]:
-        """Initialize curation process.
-        """
-        filedir = f'{datadir}/raw/{datatype}/{species}/{title}'
-        outdir = f'{datadir}/cs/{species}/{title}'
-
-        filelist = util.get_filelist(filedir)
-        if len(filelist) == 0:
-            raise Exception('No files to process.')
-        else:
-            print(f'Files in queue: {filelist}')
-
-        util.rmdir(outdir)
-        util.mkdir(outdir)
 
         if not debug:
             next_cs_id, next_csdata_id = parser.get_next_ids(test)
 
         print(f"next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}")
 
-        return filelist, outdir, next_cs_id, next_csdata_id
+        return next_cs_id, next_csdata_id
+
+    def initialize_input(self, datadir: str, datatype: str, species: str,
+                   title: str) -> List[str]:
+        """Initialize curation process.
+        """
+        filedir = f'{datadir}/raw/{datatype}/{species}/{title}'
+        filelist = util.get_filelist(filedir)
+        if len(filelist) == 0:
+            raise Exception('No files to process.')
+        else:
+            print(f'Files in queue: {filelist}')
+        return filelist
+
+    def initialize_output(self, datadir: str, species: str, title: str) -> str:
+        outdir = f'{datadir}/cs/{species}/{title}'
+        util.rmdir(outdir)
+        util.mkdir(outdir)
+        return outdir
 
 
     @abstractmethod
