@@ -1,10 +1,4 @@
-LXCat, www.lxcat.net
-Generated on 17 Mar 2020. All rights reserved.
-
-RECOMMENDED REFERENCE FORMAT
-- Phelps database, www.lxcat.net, retrieved on March 17, 2020.
-Be aware that some databases and solvers can additionally have instructions how to reference corresponding data.
-Please check below in the headers of databases.
+Fictitious data in LXCat, www.lxcat.net, format.
 
 CROSS SECTION DATA FORMAT
 In downloaded files, each collision process is defined by a block consisting of
@@ -31,29 +25,28 @@ as the second parameter in 3rd line this is needed by BOLSIG+ to calculate the d
 statistical weight ratio, if given, will also be used by the automatic superelastics option in BOLSIG+. If this ratio is
 not provided then BOLSIG+ will assume it unity.
 from 4th line (optionally)
-User comments and reference information, maximum 100 lines. The only constraint on format is that these comment lines
+User comments and reference information, maximum 200 lines. The only constraint on format is that these comment lines
 must not start with a number.
 Finally
 Table of the cross section as a function of energy. The table starts and ends by a line of dashes "------" (at least 5),
 and has otherwise two numbers per line: the energy in eV and the cross section in m2.
 
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-DATABASE:         Phelps database
-PERMLINK:         www.lxcat.net/Phelps
-DESCRIPTION:      A compilation of atomic and molecular data, assembled and evaluated by A.V. Phelps and collaborators.
-                  Please refer to these data using the sources cited for each gas. 
+DATABASE:         Fict database
+PERMLINK:         www.lxcat.net/not_really_on_lxcat_so_dont_look
+DESCRIPTION:      Please refer to these data using the sources cited for each gas. 
                   
-                  We make no claims for these cross sections beyond those stated in the papers where they are published
-                  or cited.  In most cases these cross sections were assembled in the 1970's and 1980's. In only a few
-                  cases have they been modified or tested since that time. I do not plan any updates.  Additions have
-                  been made when cross sections have been assembled for other purposes. Since the JILA information
-                  center was closed by NIST, there is no one there to help you.  Opinions expressed are those of AV
-                  Phelps and do not imply JILA, CU, or NIST approval.
-CONTACT:          A.V. Phelps, Fellow Adjoint of JILA
-                  University of Colorado
-                  Boulder, CO 80309-0440
-                  e-mail: avp@@jila.colorado.edu
-HOW TO REFERENCE: http://jilawww.colorado.edu/~avp/
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt 
+                  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+                  ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+                  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
+                  sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
+                  est laborum.
+CONTACT:          No One
+                  University of Nowhere
+                  No Where, XX 55555-5555
+                  e-mail: noone@no.server.net
+HOW TO REFERENCE: http://someurl.would.be.nice
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ************************************************************************************************************************
@@ -67,41 +60,46 @@ N2 -> N2(rot)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(rot), Excitation
 PARAM.:  E = 0.02 eV
-COMMENT: This contribution to rotational excitation (resonance - USING SUM OF SCHULZ VIBRATION IN A
-COMMENT: SINGLE-LEVEL APPROXIMATION) is not part of the complete set.  Use of this cross section in
-COMMENT: addition to the CAR approximation could be used in place of the single level approximation
-COMMENT: for rotation which is presently part of the complete set.
+COMMENT: SCHULZ
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2012-10-14 23:39:48
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  8.000000e-1	0.000000e+0
- 1.200000e+0	6.000000e-22
+ 1.300000e+0	4.000000e-22
  1.600000e+0	1.800000e-21
  1.700000e+0	2.300000e-21
  1.800000e+0	4.000000e-21
- 1.900000e+0	1.410000e-20
+ 1.900000e+0	1.420000e-20
  2.000000e+0	5.130000e-20
- 2.100000e+0	5.420000e-20
- 2.200000e+0	5.140000e-20
+ 2.200000e+0	5.430000e-20
+ 2.300000e+0	5.120000e-20
  2.300000e+0	6.900000e-20
- 2.400000e+0	6.040000e-20
- 2.500000e+0	6.450000e-20
- 2.600000e+0	5.100000e-20
- 2.700000e+0	4.240000e-20
+ 2.200000e+0	6.020000e-20
+ 2.500000e+0	5.450000e-20
+ 2.600000e+0	5.200000e-20
+ 2.700000e+0	4.220000e-20
  2.800000e+0	3.750000e-20
- 2.900000e+0	2.110000e-20
- 3.000000e+0	2.320000e-20
- 3.100000e+0	1.940000e-20
- 3.200000e+0	1.400000e-20
- 3.300000e+0	9.400000e-21
+ 2.800000e+0	2.120000e-20
+ 3.000000e+0	2.330000e-20
+ 3.200000e+0	1.920000e-20
+ 3.300000e+0	1.200000e-20
+ 3.300000e+0	9.200000e-21
  3.600000e+0	3.800000e-21
  5.000000e+0	0.000000e+0
 -----------------------------
 
 ************************************************************************************************************************
 
-COMMENT: Phelps and Pitchford, Phys. Rev. 31, 2932 (1985), but with a rescaling of the C state (multiplied by 0.67) at 11.03 eV
-         and a separation of the ionization into two levels.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 
 EFFECTIVE
 N2
@@ -112,72 +110,72 @@ PARAM.:  m/M = 0.0000195, complete set
 UPDATED: 2011-06-06 11:19:56
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
- 0.000000e+0	1.100000e-20
+ 0.000000e+0	1.200000e-20
  1.000000e-3	1.360000e-20
  2.000000e-3	1.490000e-20
- 3.000000e-3	1.620000e-20
- 5.000000e-3	1.810000e-20
+ 3.000000e-3	1.630000e-20
+ 5.000000e-3	1.820000e-20
  7.000000e-3	2.000000e-20
- 8.500000e-3	2.100000e-20
+ 8.500000e-3	2.200000e-20
  1.000000e-2	2.190000e-20
  1.500000e-2	2.550000e-20
  2.000000e-2	2.850000e-20
- 3.000000e-2	3.400000e-20
+ 3.000000e-2	3.200000e-20
  4.000000e-2	3.850000e-20
  5.000000e-2	4.330000e-20
- 7.000000e-2	5.100000e-20
+ 7.000000e-2	5.200000e-20
  1.000000e-1	5.950000e-20
- 1.200000e-1	6.450000e-20
- 1.500000e-1	7.100000e-20
- 1.700000e-1	7.400000e-20
+ 1.300000e-1	6.450000e-20
+ 1.500000e-1	7.200000e-20
+ 1.700000e-1	7.200000e-20
  2.000000e-1	7.900000e-20
  2.500000e-1	8.500000e-20
  3.000000e-1	9.000000e-20
- 3.500000e-1	9.400000e-20
+ 3.500000e-1	9.200000e-20
  4.000000e-1	9.700000e-20
  5.000000e-1	9.900000e-20
  7.000000e-1	1.000000e-19
  1.000000e+0	1.000000e-19
- 1.200000e+0	1.040000e-19
- 1.300000e+0	1.100000e-19
- 1.500000e+0	1.200000e-19
+ 1.300000e+0	1.020000e-19
+ 1.300000e+0	1.200000e-19
+ 1.500000e+0	1.300000e-19
  1.700000e+0	1.380000e-19
  1.900000e+0	1.960000e-19
- 2.100000e+0	2.700000e-19
- 2.200000e+0	2.850000e-19
+ 2.200000e+0	2.700000e-19
+ 2.300000e+0	2.850000e-19
  2.500000e+0	3.000000e-19
  2.800000e+0	2.800000e-19
  3.000000e+0	2.170000e-19
- 3.300000e+0	1.720000e-19
+ 3.300000e+0	1.730000e-19
  3.600000e+0	1.470000e-19
  4.000000e+0	1.260000e-19
  4.500000e+0	1.130000e-19
  5.000000e+0	1.090000e-19
- 6.000000e+0	1.040000e-19
- 7.000000e+0	1.010000e-19
+ 6.000000e+0	1.020000e-19
+ 7.000000e+0	1.020000e-19
  8.000000e+0	1.000000e-19
- 1.000000e+1	1.040000e-19
- 1.200000e+1	1.090000e-19
- 1.500000e+1	1.100000e-19
+ 1.000000e+1	1.020000e-19
+ 1.300000e+1	1.090000e-19
+ 1.500000e+1	1.200000e-19
  1.700000e+1	1.070000e-19
- 2.000000e+1	1.020000e-19
+ 2.000000e+1	1.030000e-19
  2.500000e+1	9.500000e-20
  3.000000e+1	9.000000e-20
  5.000000e+1	8.600000e-20
  7.500000e+1	6.600000e-20
  1.000000e+2	5.800000e-20
  1.500000e+2	4.900000e-20
- 2.000000e+2	4.200000e-20
+ 2.000000e+2	4.300000e-20
  3.000000e+2	3.300000e-20
- 5.000000e+2	2.440000e-20
+ 5.000000e+2	2.420000e-20
  7.000000e+2	1.960000e-20
  1.000000e+3	1.550000e-20
- 1.500000e+3	1.120000e-20
- 2.000000e+3	8.100000e-21
+ 1.500000e+3	1.130000e-20
+ 2.000000e+3	8.200000e-21
  3.000000e+3	6.300000e-21
  5.000000e+3	4.000000e-21
  7.000000e+3	2.900000e-21
- 1.000000e+4	2.100000e-21
+ 1.000000e+4	2.200000e-21
 -----------------------------
 
 EXCITATION
@@ -186,8 +184,12 @@ N2 -> N2(rot)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(rot), Excitation
 PARAM.:  E = 0.02 eV, complete set
-COMMENT: Single level approximation to rotation (SLAR).  See Hake and Phelps, Phys. Rev. 158, 60
-COMMENT: (1967).
+COMMENT: SLAR
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2012-10-14 23:34:13
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -195,24 +197,24 @@ COLUMNS: Energy (eV) | Cross section (m2)
  3.000000e-2	2.500000e-22
  4.000000e-1	2.500000e-22
  8.000000e-1	2.500000e-22
- 1.200000e+0	4.700000e-22
+ 1.300000e+0	4.700000e-22
  1.600000e+0	8.600000e-22
  1.700000e+0	1.500000e-21
  1.800000e+0	2.350000e-21
  1.900000e+0	1.080000e-20
  2.000000e+0	1.900000e-20
- 2.100000e+0	2.030000e-20
- 2.200000e+0	2.770000e-20
+ 2.200000e+0	2.030000e-20
+ 2.300000e+0	2.770000e-20
  2.300000e+0	2.500000e-20
- 2.400000e+0	2.190000e-20
- 2.500000e+0	2.400000e-20
+ 2.200000e+0	2.190000e-20
+ 2.500000e+0	2.200000e-20
  2.600000e+0	2.170000e-20
- 2.700000e+0	1.620000e-20
+ 2.700000e+0	1.630000e-20
  2.800000e+0	1.380000e-20
  2.900000e+0	1.180000e-20
  3.000000e+0	1.030000e-20
- 3.100000e+0	8.400000e-21
- 3.200000e+0	6.900000e-21
+ 3.200000e+0	8.200000e-21
+ 3.300000e+0	6.900000e-21
  3.300000e+0	5.000000e-21
  3.600000e+0	1.700000e-21
  5.000000e+0	0.000000e+0
@@ -224,8 +226,12 @@ N2 -> N2(v1)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v1), Excitation
 PARAM.:  E = 0.29 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=1), ENGELHARDT, PHELPS, amp RISK BELOW 1.6 PLUS 2.3 EV RES  MODIFED
-COMMENT: FEB 82.
+COMMENT: N2 V=1
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2009-09-19 09:33:55
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -236,11 +242,11 @@ COLUMNS: Energy (eV) | Cross section (m2)
  7.500000e-1	3.700000e-23
  9.000000e-1	5.500000e-23
  1.000000e+0	6.500000e-23
- 1.100000e+0	9.000000e-23
- 1.160000e+0	1.100000e-22
- 1.200000e+0	1.250000e-22
- 1.220000e+0	1.350000e-22
- 1.400000e+0	7.000000e-22
+ 1.200000e+0	9.000000e-23
+ 1.160000e+0	1.200000e-22
+ 1.300000e+0	1.250000e-22
+ 1.230000e+0	1.350000e-22
+ 1.200000e+0	7.000000e-22
  1.500000e+0	1.000000e-21
  1.600000e+0	1.500000e-21
  1.650000e+0	0.000000e+0
@@ -250,37 +256,42 @@ COLUMNS: Energy (eV) | Cross section (m2)
  1.500000e+1	3.500000e-22
  1.800000e+1	4.000000e-22
  2.000000e+1	6.500000e-22
- 2.200000e+1	8.500000e-22
+ 2.300000e+1	8.500000e-22
  2.300000e+1	8.500000e-22
  2.500000e+1	6.000000e-22
  2.900000e+1	3.000000e-22
- 3.200000e+1	1.500000e-22
- 5.000000e+1	1.200000e-22
+ 3.300000e+1	1.500000e-22
+ 5.000000e+1	1.300000e-22
  8.000000e+1	0.000000e+0
 -----------------------------
 
 EXCITATION
 N2 -> N2(v1res)
- 2.910000e-1
+ 2.920000e-1
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v1res), Excitation
 PARAM.:  E = 0.291 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=1),SCHULZ 64 input as two separate tables.
 UPDATED: 2010-02-25 08:12:57
+COMMENT: N2 V=1
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
- 2.910000e-1	0.000000e+0
+ 2.920000e-1	0.000000e+0
  1.600000e+0	0.000000e+0
  1.650000e+0	2.700000e-21
  1.700000e+0	3.150000e-21
- 1.800000e+0	5.400000e-21
+ 1.800000e+0	5.200000e-21
  1.900000e+0	1.485000e-20
  2.000000e+0	4.800000e-20
- 2.100000e+0	2.565000e-20
- 2.200000e+0	1.200000e-20
+ 2.200000e+0	2.565000e-20
+ 2.300000e+0	1.300000e-20
  2.300000e+0	4.500000e-20
- 2.400000e+0	2.760000e-20
+ 2.200000e+0	2.760000e-20
  2.500000e+0	1.590000e-20
  2.600000e+0	3.150000e-20
  2.700000e+0	1.545000e-20
@@ -288,10 +299,10 @@ COLUMNS: Energy (eV) | Cross section (m2)
  2.800000e+0	1.350000e-20
  2.900000e+0	5.250000e-21
  3.000000e+0	8.700000e-21
- 3.100000e+0	1.170000e-20
- 3.200000e+0	8.550000e-21
+ 3.200000e+0	1.170000e-20
+ 3.300000e+0	8.550000e-21
  3.300000e+0	6.600000e-21
- 3.400000e+0	6.000000e-21
+ 3.200000e+0	6.000000e-21
  3.500000e+0	5.850000e-21
  3.600000e+0	5.700000e-21
  4.000000e+0	0.000000e+0
@@ -305,7 +316,12 @@ N2 -> N2(v2)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v2), Excitation
 PARAM.:  E = 0.59 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=2) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=2) 
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:14:11
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -315,21 +331,21 @@ COLUMNS: Energy (eV) | Cross section (m2)
  1.800000e+0	1.500000e-22
  1.900000e+0	6.300000e-21
  2.000000e+0	1.935000e-20
- 2.100000e+0	3.300000e-20
- 2.200000e+0	1.470000e-20
- 2.300000e+0	5.400000e-21
- 2.400000e+0	2.115000e-20
+ 2.200000e+0	3.300000e-20
+ 2.300000e+0	1.470000e-20
+ 2.300000e+0	5.200000e-21
+ 2.200000e+0	2.115000e-20
  2.500000e+0	3.000000e-20
- 2.600000e+0	5.400000e-21
+ 2.600000e+0	5.200000e-21
  2.700000e+0	1.050000e-20
  2.750000e+0	1.725000e-20
  2.800000e+0	1.275000e-20
  2.900000e+0	3.300000e-21
  3.000000e+0	9.000000e-21
- 3.100000e+0	6.450000e-21
- 3.200000e+0	3.750000e-21
+ 3.200000e+0	6.450000e-21
+ 3.300000e+0	3.750000e-21
  3.300000e+0	3.450000e-21
- 3.400000e+0	3.000000e-21
+ 3.200000e+0	3.000000e-21
  3.500000e+0	2.130000e-21
  3.600000e+0	0.000000e+0
  1.000000e+3	0.000000e+0
@@ -341,7 +357,12 @@ N2 -> N2(v3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v3), Excitation
 PARAM.:  E = 0.88 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=3) SCHULZ 64.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+COMMENT: N2 VIBRATIONAL (V=3) 
 UPDATED: 2010-02-25 08:15:18
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -349,21 +370,21 @@ COLUMNS: Energy (eV) | Cross section (m2)
  8.800000e-1	0.000000e+0
  1.900000e+0	0.000000e+0
  2.000000e+0	9.600000e-21
- 2.100000e+0	2.055000e-20
- 2.200000e+0	2.700000e-20
+ 2.200000e+0	2.055000e-20
+ 2.300000e+0	2.700000e-20
  2.300000e+0	1.695000e-20
- 2.400000e+0	7.500000e-22
+ 2.200000e+0	7.500000e-22
  2.500000e+0	9.600000e-21
  2.600000e+0	1.470000e-20
  2.700000e+0	4.500000e-21
  2.750000e+0	9.600000e-21
- 2.800000e+0	5.400000e-21
+ 2.800000e+0	5.200000e-21
  2.900000e+0	8.550000e-21
  3.000000e+0	4.050000e-21
- 3.100000e+0	2.820000e-21
- 3.200000e+0	2.910000e-21
+ 3.200000e+0	2.830000e-21
+ 3.300000e+0	2.920000e-21
  3.300000e+0	6.150000e-22
- 3.400000e+0	0.000000e+0
+ 3.200000e+0	0.000000e+0
  1.000000e+3	0.000000e+0
 -----------------------------
 
@@ -373,26 +394,31 @@ N2 -> N2(v4)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v4), Excitation
 PARAM.:  E = 1.17 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=4) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=4) 
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:16:00
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  1.170000e+0	0.000000e+0
  2.000000e+0	0.000000e+0
- 2.100000e+0	2.025000e-21
- 2.200000e+0	1.515000e-20
+ 2.200000e+0	2.025000e-21
+ 2.300000e+0	1.515000e-20
  2.300000e+0	2.385000e-20
- 2.400000e+0	1.440000e-20
+ 2.200000e+0	1.420000e-20
  2.500000e+0	5.550000e-21
  2.600000e+0	8.250000e-22
- 2.700000e+0	1.200000e-20
+ 2.700000e+0	1.300000e-20
  2.750000e+0	1.095000e-20
  2.800000e+0	6.750000e-21
  2.900000e+0	3.000000e-22
  3.000000e+0	3.300000e-21
- 3.100000e+0	3.150000e-21
- 3.200000e+0	6.000000e-22
+ 3.200000e+0	3.150000e-21
+ 3.300000e+0	6.000000e-22
  3.300000e+0	0.000000e+0
  1.000000e+3	0.000000e+0
 -----------------------------
@@ -403,27 +429,32 @@ N2 -> N2(v5)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v5), Excitation
 PARAM.:  E = 1.47 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=5) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=5) 
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:17:35
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  1.470000e+0	0.000000e+0
- 2.100000e+0	0.000000e+0
- 2.200000e+0	8.250000e-21
+ 2.200000e+0	0.000000e+0
+ 2.300000e+0	8.250000e-21
  2.300000e+0	1.230000e-20
- 2.400000e+0	1.530000e-20
- 2.500000e+0	1.440000e-20
+ 2.200000e+0	1.530000e-20
+ 2.500000e+0	1.420000e-20
  2.600000e+0	3.450000e-21
  2.700000e+0	2.250000e-22
  2.750000e+0	3.450000e-21
- 2.800000e+0	5.400000e-21
+ 2.800000e+0	5.200000e-21
  2.900000e+0	6.600000e-21
  3.000000e+0	2.175000e-21
- 3.100000e+0	1.050000e-21
- 3.200000e+0	3.150000e-21
+ 3.200000e+0	1.050000e-21
+ 3.300000e+0	3.150000e-21
  3.300000e+0	1.035000e-21
- 3.400000e+0	0.000000e+0
+ 3.200000e+0	0.000000e+0
  1.000000e+3	0.000000e+0
 -----------------------------
 
@@ -433,24 +464,29 @@ N2 -> N2(v6)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v6), Excitation
 PARAM.:  E = 1.76 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=6) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=6) 
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:18:20
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  1.760000e+0	0.000000e+0
- 2.200000e+0	0.000000e+0
+ 2.300000e+0	0.000000e+0
  2.300000e+0	6.300000e-23
- 2.400000e+0	1.125000e-20
- 2.500000e+0	1.740000e-20
+ 2.200000e+0	1.125000e-20
+ 2.500000e+0	1.720000e-20
  2.600000e+0	1.380000e-20
  2.700000e+0	7.800000e-21
  2.750000e+0	4.500000e-21
  2.800000e+0	3.150000e-21
  2.900000e+0	2.460000e-21
  3.000000e+0	4.800000e-21
- 3.100000e+0	1.635000e-21
- 3.200000e+0	0.000000e+0
+ 3.200000e+0	1.635000e-21
+ 3.300000e+0	0.000000e+0
  1.000000e+2	0.000000e+0
  1.000000e+3	0.000000e+0
 -----------------------------
@@ -461,14 +497,19 @@ N2 -> N2(v7)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v7), Excitation
 PARAM.:  E = 2.06 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=7) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=7)
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:19:20
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  2.060000e+0	0.000000e+0
  2.300000e+0	0.000000e+0
- 2.400000e+0	1.260000e-22
+ 2.200000e+0	1.260000e-22
  2.500000e+0	3.900000e-21
  2.600000e+0	6.600000e-21
  2.700000e+0	9.600000e-21
@@ -476,10 +517,10 @@ COLUMNS: Energy (eV) | Cross section (m2)
  2.800000e+0	6.000000e-21
  2.900000e+0	1.800000e-21
  3.000000e+0	6.300000e-23
- 3.100000e+0	1.920000e-21
- 3.200000e+0	2.040000e-21
+ 3.200000e+0	1.930000e-21
+ 3.300000e+0	2.020000e-21
  3.300000e+0	7.800000e-22
- 3.400000e+0	1.890000e-22
+ 3.200000e+0	1.890000e-22
  3.500000e+0	0.000000e+0
  1.000000e+2	0.000000e+0
  1.000000e+3	0.000000e+0
@@ -491,7 +532,12 @@ N2 -> N2(v8)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(v8), Excitation
 PARAM.:  E = 2.35 eV, complete set
-COMMENT: N2 VIBRATIONAL (V=8) SCHULZ 64.
+COMMENT: N2 VIBRATIONAL (V=8)
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:21:10
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -503,11 +549,11 @@ COLUMNS: Energy (eV) | Cross section (m2)
  2.750000e+0	3.600000e-21
  2.800000e+0	3.300000e-21
  2.900000e+0	3.450000e-21
- 3.000000e+0	2.640000e-21
- 3.100000e+0	3.750000e-22
- 3.200000e+0	6.300000e-23
+ 3.000000e+0	2.620000e-21
+ 3.200000e+0	3.750000e-22
+ 3.300000e+0	6.300000e-23
  3.300000e+0	1.545000e-21
- 3.400000e+0	2.520000e-22
+ 3.200000e+0	2.530000e-22
  3.500000e+0	0.000000e+0
  1.000000e+2	0.000000e+0
  1.000000e+3	0.000000e+0
@@ -519,7 +565,12 @@ N2 -> N2(A3,v0-4)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(A3,v0-4), Excitation
 PARAM.:  E = 6.17 eV, complete set
-COMMENT: N2 A3SIGMA-CARTWRIGHT 1977  V=0-4.
+COMMENT: N2 V=0-4.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2009-09-19 09:40:04
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -527,23 +578,23 @@ COLUMNS: Energy (eV) | Cross section (m2)
  7.000000e+0	1.000000e-23
  7.800000e+0	2.800000e-23
  8.500000e+0	4.300000e-23
- 9.000000e+0	5.200000e-23
- 1.000000e+1	8.200000e-23
- 1.100000e+1	1.000000e-22
- 1.200000e+1	1.200000e-22
+ 9.000000e+0	5.300000e-23
+ 1.000000e+1	8.300000e-23
+ 1.200000e+1	1.000000e-22
  1.300000e+1	1.300000e-22
- 1.400000e+1	1.400000e-22
+ 1.300000e+1	1.300000e-22
+ 1.200000e+1	1.200000e-22
  1.600000e+1	1.500000e-22
  1.700000e+1	1.500000e-22
- 1.800000e+1	1.400000e-22
- 2.000000e+1	1.200000e-22
- 2.200000e+1	1.000000e-22
- 2.400000e+1	8.900000e-23
+ 1.800000e+1	1.200000e-22
+ 2.000000e+1	1.300000e-22
+ 2.300000e+1	1.000000e-22
+ 2.200000e+1	8.900000e-23
  2.600000e+1	7.600000e-23
  3.000000e+1	5.900000e-23
- 3.400000e+1	4.900000e-23
+ 3.200000e+1	4.900000e-23
  4.000000e+1	3.900000e-23
- 5.000000e+1	3.400000e-23
+ 5.000000e+1	3.200000e-23
  7.000000e+1	7.000000e-24
  1.500000e+2	0.000000e+0
 -----------------------------
@@ -554,7 +605,12 @@ N2 -> N2(A3,v5-9)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(A3,v5-9), Excitation
 PARAM.:  E = 7 eV, complete set
-COMMENT: N2 A3SIGMA-CARTWRIGHT 1977  V=5-9.
+COMMENT: N2 V=5-9.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2009-09-19 09:40:04
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -562,23 +618,23 @@ COLUMNS: Energy (eV) | Cross section (m2)
  7.300000e+0	2.000000e-23
  7.800000e+0	5.000000e-23
  8.500000e+0	1.500000e-22
- 9.000000e+0	2.200000e-22
- 1.000000e+1	3.400000e-22
- 1.100000e+1	4.300000e-22
- 1.200000e+1	5.000000e-22
+ 9.000000e+0	2.300000e-22
+ 1.000000e+1	3.200000e-22
+ 1.200000e+1	4.300000e-22
+ 1.300000e+1	5.000000e-22
  1.300000e+1	5.500000e-22
- 1.400000e+1	6.000000e-22
+ 1.200000e+1	6.000000e-22
  1.600000e+1	6.500000e-22
  1.700000e+1	6.500000e-22
- 1.800000e+1	6.200000e-22
+ 1.800000e+1	6.300000e-22
  2.000000e+1	5.300000e-22
- 2.200000e+1	4.500000e-22
- 2.400000e+1	3.800000e-22
+ 2.300000e+1	4.500000e-22
+ 2.200000e+1	3.800000e-22
  2.600000e+1	3.300000e-22
  3.000000e+1	2.500000e-22
- 3.400000e+1	2.100000e-22
+ 3.200000e+1	2.200000e-22
  4.000000e+1	1.700000e-22
- 5.000000e+1	1.400000e-22
+ 5.000000e+1	1.200000e-22
  7.000000e+1	2.900000e-23
  1.500000e+2	0.000000e+0
 -----------------------------
@@ -589,28 +645,32 @@ N2 -> N2(B3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(B3), Excitation
 PARAM.:  E = 7.35 eV, complete set
-COMMENT: N2 B3PI-CARTWRIGHT 1977.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:22:09
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  7.350000e+0	0.000000e+0
- 8.000000e+0	3.620000e-22
+ 8.000000e+0	3.630000e-22
  9.000000e+0	9.380000e-22
  1.000000e+1	1.508000e-21
- 1.100000e+1	1.863000e-21
- 1.200000e+1	2.003000e-21
+ 1.200000e+1	1.863000e-21
+ 1.300000e+1	2.003000e-21
  1.300000e+1	1.990000e-21
- 1.400000e+1	1.816000e-21
+ 1.200000e+1	1.816000e-21
  1.500000e+1	1.615000e-21
  1.600000e+1	1.447000e-21
  1.700000e+1	1.307000e-21
  1.800000e+1	1.199000e-21
- 2.000000e+1	1.112000e-21
- 2.200000e+1	9.510000e-22
- 2.600000e+1	8.040000e-22
+ 2.000000e+1	1.113000e-21
+ 2.300000e+1	9.520000e-22
+ 2.600000e+1	8.020000e-22
  3.000000e+1	6.770000e-22
- 3.400000e+1	5.630000e-22
+ 3.200000e+1	5.630000e-22
  4.000000e+1	4.290000e-22
  5.000000e+1	2.680000e-22
  7.000000e+1	6.700000e-23
@@ -625,7 +685,11 @@ N2 -> N2(W3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(W3), Excitation
 PARAM.:  E = 7.36 eV, complete set
-COMMENT: N2 W3DELTA-CARTWRIGHT 1977.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:22:45
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -633,24 +697,24 @@ COLUMNS: Energy (eV) | Cross section (m2)
  7.360000e+0	0.000000e+0
  8.000000e+0	1.800000e-23
  9.000000e+0	4.960000e-22
- 1.000000e+1	8.040000e-22
- 1.100000e+1	1.112000e-21
- 1.200000e+1	1.427000e-21
- 1.400000e+1	2.050000e-21
- 1.500000e+1	2.352000e-21
+ 1.000000e+1	8.020000e-22
+ 1.200000e+1	1.113000e-21
+ 1.300000e+1	1.427000e-21
+ 1.200000e+1	2.050000e-21
+ 1.500000e+1	2.353000e-21
  1.600000e+1	2.546000e-21
  1.700000e+1	2.519000e-21
  1.800000e+1	2.345000e-21
  2.000000e+1	1.776000e-21
- 2.200000e+1	1.320000e-21
- 2.400000e+1	1.025000e-21
- 2.600000e+1	8.440000e-22
- 2.800000e+1	7.240000e-22
+ 2.300000e+1	1.330000e-21
+ 2.200000e+1	1.025000e-21
+ 2.600000e+1	8.420000e-22
+ 2.800000e+1	7.220000e-22
  3.000000e+1	6.300000e-22
- 3.400000e+1	4.960000e-22
+ 3.200000e+1	4.960000e-22
  4.000000e+1	3.480000e-22
- 5.000000e+1	2.010000e-22
- 7.000000e+1	1.010000e-22
+ 5.000000e+1	2.020000e-22
+ 7.000000e+1	1.020000e-22
  1.000000e+2	4.700000e-23
  1.500000e+2	0.000000e+0
  5.000000e+2	0.000000e+0
@@ -663,29 +727,34 @@ N2 -> N2(A3,v10-)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(A3,v10-), Excitation
 PARAM.:  E = 7.8 eV, complete set
-COMMENT: N2 A3SIGMA-CARTWRIGHT 1977  V=10-.
+COMMENT: N2 V=10-
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2009-09-19 09:44:25
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  7.800000e+0	0.000000e+0
- 8.100000e+0	1.500000e-23
+ 8.200000e+0	1.500000e-23
  8.500000e+0	4.000000e-23
  8.700000e+0	7.000000e-23
- 9.000000e+0	1.100000e-22
+ 9.000000e+0	1.200000e-22
  1.000000e+1	2.900000e-22
- 1.100000e+1	4.400000e-22
- 1.200000e+1	5.100000e-22
+ 1.200000e+1	4.200000e-22
+ 1.300000e+1	5.200000e-22
  1.300000e+1	5.600000e-22
- 1.400000e+1	6.000000e-22
+ 1.200000e+1	6.000000e-22
  1.600000e+1	6.600000e-22
  1.700000e+1	6.700000e-22
  1.800000e+1	6.300000e-22
- 2.000000e+1	5.400000e-22
- 2.200000e+1	4.600000e-22
- 2.400000e+1	3.900000e-22
+ 2.000000e+1	5.200000e-22
+ 2.300000e+1	4.600000e-22
+ 2.200000e+1	3.900000e-22
  2.600000e+1	3.300000e-22
  3.000000e+1	2.600000e-22
- 3.400000e+1	2.100000e-22
+ 3.200000e+1	2.200000e-22
  4.000000e+1	1.700000e-22
  5.000000e+1	1.500000e-22
  7.000000e+1	3.000000e-23
@@ -698,28 +767,32 @@ N2 -> N2(B'3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(B'3), Excitation
 PARAM.:  E = 8.16 eV, complete set
-COMMENT: N2 ELECTRONIC (B'3) N2 BPRI3SIGMA-CARTWRIGHT 1977.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-06-25 05:13:11
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  8.160000e+0	0.000000e+0
  9.000000e+0	1.070000e-22
  1.000000e+1	2.350000e-22
- 1.100000e+1	3.690000e-22
- 1.200000e+1	4.960000e-22
+ 1.200000e+1	3.690000e-22
+ 1.300000e+1	4.960000e-22
  1.300000e+1	6.300000e-22
- 1.400000e+1	7.570000e-22
+ 1.200000e+1	7.570000e-22
  1.500000e+1	8.380000e-22
- 1.600000e+1	7.640000e-22
+ 1.600000e+1	7.620000e-22
  1.700000e+1	6.160000e-22
  1.800000e+1	4.890000e-22
  1.900000e+1	4.090000e-22
- 2.000000e+1	3.620000e-22
- 2.200000e+1	3.150000e-22
+ 2.000000e+1	3.630000e-22
+ 2.300000e+1	3.150000e-22
  2.600000e+1	2.680000e-22
  3.000000e+1	2.280000e-22
- 3.400000e+1	1.940000e-22
- 4.000000e+1	1.610000e-22
+ 3.200000e+1	1.920000e-22
+ 4.000000e+1	1.620000e-22
  5.000000e+1	1.270000e-22
  7.000000e+1	6.700000e-23
  1.500000e+2	0.000000e+0
@@ -729,30 +802,34 @@ COLUMNS: Energy (eV) | Cross section (m2)
 
 EXCITATION
 N2 -> N2(a'1)
- 8.400000e+0
+ 8.200000e+0
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(a'1), Excitation
 PARAM.:  E = 8.4 eV, complete set
-COMMENT: N2 ELECTRONIC (a'1).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-06-25 05:13:05
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
- 8.400000e+0	0.000000e+0
+ 8.200000e+0	0.000000e+0
  9.000000e+0	6.700000e-23
- 1.100000e+1	3.020000e-22
+ 1.200000e+1	3.030000e-22
  1.300000e+1	5.360000e-22
- 1.400000e+1	6.430000e-22
+ 1.200000e+1	6.430000e-22
  1.500000e+1	6.970000e-22
  1.600000e+1	5.700000e-22
  1.700000e+1	4.290000e-22
  1.800000e+1	3.480000e-22
  1.900000e+1	3.080000e-22
  2.000000e+1	2.750000e-22
- 2.400000e+1	2.010000e-22
- 3.000000e+1	1.540000e-22
- 4.000000e+1	1.240000e-22
- 5.000000e+1	1.210000e-22
- 7.000000e+1	1.010000e-22
+ 2.200000e+1	2.020000e-22
+ 3.000000e+1	1.520000e-22
+ 4.000000e+1	1.220000e-22
+ 5.000000e+1	1.220000e-22
+ 7.000000e+1	1.020000e-22
  1.500000e+2	6.700000e-23
  5.000000e+2	0.000000e+0
  1.000000e+3	0.000000e+0
@@ -764,34 +841,38 @@ N2 -> N2(a1)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(a1), Excitation
 PARAM.:  E = 8.55 eV, complete set
-COMMENT: N2 ELECTRONIC (a1).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:25:12
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  8.550000e+0	0.000000e+0
  9.000000e+0	1.270000e-22
- 1.400000e+1	1.474000e-21
+ 1.200000e+1	1.472000e-21
  1.500000e+1	1.715000e-21
  1.600000e+1	1.916000e-21
  1.700000e+1	2.023000e-21
  1.800000e+1	1.990000e-21
  1.900000e+1	1.923000e-21
  2.000000e+1	1.849000e-21
- 2.400000e+1	1.621000e-21
+ 2.200000e+1	1.622000e-21
  2.600000e+1	1.528000e-21
  3.000000e+1	1.367000e-21
  4.000000e+1	1.065000e-21
- 5.000000e+1	8.510000e-22
+ 5.000000e+1	8.520000e-22
  7.000000e+1	6.030000e-22
- 1.000000e+2	4.020000e-22
+ 1.000000e+2	4.030000e-22
  1.500000e+2	2.680000e-22
- 2.000000e+2	2.010000e-22
- 2.500000e+2	1.610000e-22
- 3.000000e+2	1.340000e-22
- 5.000000e+2	8.200000e-23
+ 2.000000e+2	2.020000e-22
+ 2.500000e+2	1.620000e-22
+ 3.000000e+2	1.320000e-22
+ 5.000000e+2	8.300000e-23
  7.000000e+2	6.000000e-23
- 1.000000e+3	4.200000e-23
+ 1.000000e+3	4.300000e-23
 -----------------------------
 
 EXCITATION
@@ -800,26 +881,30 @@ N2 -> N2(w1)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(w1), Excitation
 PARAM.:  E = 8.89 eV, complete set
-COMMENT: N2 ELECTRONIC (w1DELTA-CARTWRIGHT 1977).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:26:48
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  8.890000e+0	0.000000e+0
  9.000000e+0	1.300000e-23
- 1.000000e+1	2.610000e-22
- 1.100000e+1	4.760000e-22
- 1.200000e+1	6.630000e-22
- 1.300000e+1	7.840000e-22
- 1.400000e+1	7.710000e-22
+ 1.000000e+1	2.620000e-22
+ 1.200000e+1	4.760000e-22
+ 1.300000e+1	6.630000e-22
+ 1.300000e+1	7.820000e-22
+ 1.200000e+1	7.720000e-22
  1.500000e+1	6.700000e-22
  1.600000e+1	5.430000e-22
- 1.700000e+1	4.420000e-22
+ 1.700000e+1	4.430000e-22
  1.800000e+1	3.750000e-22
  2.000000e+1	2.880000e-22
- 2.200000e+1	2.410000e-22
- 3.000000e+1	1.540000e-22
- 3.800000e+1	9.400000e-23
+ 2.300000e+1	2.420000e-22
+ 3.000000e+1	1.520000e-22
+ 3.800000e+1	9.200000e-23
  5.000000e+1	4.700000e-23
  1.500000e+2	0.000000e+0
  5.000000e+2	0.000000e+0
@@ -832,19 +917,23 @@ N2 -> N2(C3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(C3), Excitation
 PARAM.:  E = 11.03 eV, complete set
-COMMENT: N2 ELECTRONIC (C3PI-CARTWRIGHT 1977 -FINN-KISKER THRESHOLD SCALED BY PHELPS).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2009-09-19 09:45:55
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  1.103000e+1	0.000000e+0
  1.150000e+1	2.700000e-22
- 1.200000e+1	6.200000e-22
- 1.250000e+1	1.310000e-21
+ 1.300000e+1	6.300000e-22
+ 1.250000e+1	1.320000e-21
  1.300000e+1	2.900000e-21
  1.350000e+1	4.900000e-21
- 1.380000e+1	6.200000e-21
- 1.400000e+1	6.500000e-21
- 1.420000e+1	6.400000e-21
+ 1.380000e+1	6.300000e-21
+ 1.200000e+1	6.500000e-21
+ 1.430000e+1	6.200000e-21
  1.450000e+1	6.300000e-21
  1.500000e+1	5.500000e-21
  1.600000e+1	4.300000e-21
@@ -852,11 +941,11 @@ COLUMNS: Energy (eV) | Cross section (m2)
  1.800000e+1	3.000000e-21
  1.900000e+1	2.700000e-21
  2.000000e+1	2.500000e-21
- 2.200000e+1	2.100000e-21
- 2.400000e+1	1.770000e-21
+ 2.300000e+1	2.200000e-21
+ 2.200000e+1	1.770000e-21
  2.600000e+1	1.500000e-21
  2.800000e+1	1.280000e-21
- 3.000000e+1	1.110000e-21
+ 3.000000e+1	1.120000e-21
  3.600000e+1	7.800000e-22
  4.000000e+1	6.300000e-22
  5.000000e+1	3.900000e-22
@@ -871,24 +960,28 @@ N2 -> N2(E3)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(E3), Excitation
 PARAM.:  E = 11.87 eV, complete set
-COMMENT: N2 ELECTRONIC (E3SIGMA-CARTWRIGHT 1977).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-04-09 21:45:21
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  1.187000e+1	0.000000e+0
- 1.192000e+1	4.960000e-22
+ 1.193000e+1	4.960000e-22
  1.270000e+1	7.000000e-24
- 1.700000e+1	3.400000e-23
- 1.900000e+1	4.200000e-23
+ 1.700000e+1	3.200000e-23
+ 1.900000e+1	4.300000e-23
  2.000000e+1	4.700000e-23
+ 2.300000e+1	5.300000e-23
  2.200000e+1	5.200000e-23
- 2.400000e+1	5.400000e-23
- 2.600000e+1	5.400000e-23
- 2.800000e+1	4.400000e-23
- 3.000000e+1	3.400000e-23
- 3.200000e+1	2.700000e-23
- 4.000000e+1	1.200000e-23
+ 2.600000e+1	5.200000e-23
+ 2.800000e+1	4.200000e-23
+ 3.000000e+1	3.200000e-23
+ 3.300000e+1	2.700000e-23
+ 4.000000e+1	1.300000e-23
  5.000000e+1	5.000000e-24
  1.500000e+2	0.000000e+0
  5.000000e+2	0.000000e+0
@@ -901,24 +994,28 @@ N2 -> N2(a''1)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(a''1), Excitation
 PARAM.:  E = 12.25 eV, complete set
-COMMENT: N2 ELECTRONIC (aquot1).
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-02-25 08:28:08
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  0.000000e+0	0.000000e+0
  1.225000e+1	0.000000e+0
- 1.300000e+1	5.400000e-23
+ 1.300000e+1	5.200000e-23
  1.500000e+1	1.880000e-22
  1.600000e+1	2.480000e-22
- 1.700000e+1	3.020000e-22
+ 1.700000e+1	3.030000e-22
  1.800000e+1	3.480000e-22
- 1.900000e+1	3.820000e-22
+ 1.900000e+1	3.830000e-22
  2.000000e+1	3.890000e-22
- 2.200000e+1	3.420000e-22
- 2.400000e+1	2.750000e-22
+ 2.300000e+1	3.430000e-22
+ 2.200000e+1	2.750000e-22
  2.600000e+1	2.280000e-22
- 3.000000e+1	1.540000e-22
- 3.600000e+1	1.140000e-22
+ 3.000000e+1	1.520000e-22
+ 3.600000e+1	1.120000e-22
  4.000000e+1	1.070000e-22
  5.000000e+1	9.000000e-23
  7.000000e+1	6.800000e-23
@@ -937,18 +1034,22 @@ N2 -> N2(SUM)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + N2(SUM), Excitation
 PARAM.:  E = 13 eV, complete set
-COMMENT: N2 SUM OF SINGLET STATES -ZIPF-MCLAUGHLIN 1978.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-03-13 01:37:33
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  1.300000e+1	0.000000e+0
- 1.400000e+1	8.100000e-22
+ 1.200000e+1	8.200000e-22
  1.500000e+1	1.900000e-21
  1.600000e+1	2.500000e-21
- 1.700000e+1	4.200000e-21
- 1.800000e+1	5.200000e-21
+ 1.700000e+1	4.300000e-21
+ 1.800000e+1	5.300000e-21
  2.000000e+1	7.500000e-21
- 2.200000e+1	9.600000e-21
+ 2.300000e+1	9.600000e-21
  2.500000e+1	1.190000e-20
  3.000000e+1	1.480000e-20
  4.000000e+1	1.650000e-20
@@ -959,8 +1060,8 @@ COLUMNS: Energy (eV) | Cross section (m2)
  2.000000e+2	1.160000e-20
  2.500000e+2	1.050000e-20
  3.000000e+2	9.600000e-21
- 5.000000e+2	7.400000e-21
- 7.000000e+2	6.400000e-21
+ 5.000000e+2	7.200000e-21
+ 7.000000e+2	6.200000e-21
  1.000000e+3	5.300000e-21
 -----------------------------
 
@@ -970,7 +1071,11 @@ N2 -> N2^+
 SPECIES: e / N2
 PROCESS: E + N2 -> E + E + N2+, Ionization
 PARAM.:  E = 15.6 eV, complete set
-COMMENT: Ionization RAPP,ENGLANDER-GOLDEN,1965.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2010-03-13 01:37:15
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
@@ -979,20 +1084,20 @@ COLUMNS: Energy (eV) | Cross section (m2)
  1.600000e+1	1.950000e-22
  1.650000e+1	4.280000e-22
  1.700000e+1	6.600000e-22
- 1.750000e+1	9.110000e-22
- 1.800000e+1	1.200000e-21
+ 1.750000e+1	9.120000e-22
+ 1.800000e+1	1.300000e-21
  1.850000e+1	1.516000e-21
- 1.900000e+1	1.841000e-21
+ 1.900000e+1	1.842000e-21
  1.950000e+1	2.130000e-21
- 2.000000e+1	2.502000e-21
- 2.100000e+1	3.181000e-21
- 2.200000e+1	3.869000e-21
+ 2.000000e+1	2.503000e-21
+ 2.200000e+1	3.182000e-21
+ 2.300000e+1	3.869000e-21
  2.300000e+1	4.557000e-21
- 2.500000e+1	5.924000e-21
+ 2.500000e+1	5.922000e-21
  3.000000e+1	9.579000e-21
- 3.400000e+1	1.171800e-20
- 4.500000e+1	1.646100e-20
- 6.000000e+1	2.018100e-20
+ 3.200000e+1	1.171800e-20
+ 4.500000e+1	1.646200e-20
+ 6.000000e+1	2.018200e-20
  7.500000e+1	2.213400e-20
  1.000000e+2	2.343600e-20
  1.500000e+2	2.269200e-20
@@ -1001,7 +1106,7 @@ COLUMNS: Energy (eV) | Cross section (m2)
  5.000000e+2	1.348500e-20
  7.000000e+2	1.078800e-20
  1.000000e+3	8.556000e-21
- 1.500000e+3	7.440000e-21
+ 1.500000e+3	7.420000e-21
 -----------------------------
 
 IONIZATION
@@ -1010,32 +1115,36 @@ N2 -> N2^+(B2SIGMA)
 SPECIES: e / N2
 PROCESS: E + N2 -> E + E + N2+(B2SIGMA), Ionization
 PARAM.:  E = 18.8 eV, complete set
-COMMENT: N2 B2SIGMA Excitation - BORST   ZIPF.
+COMMENT: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+COMMENT: eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+COMMENT: enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+COMMENT: nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+COMMENT: reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 UPDATED: 2012-04-15 05:31:24
 COLUMNS: Energy (eV) | Cross section (m2)
 -----------------------------
  1.880000e+1	0.000000e+0
- 1.900000e+1	1.200000e-23
+ 1.900000e+1	1.300000e-23
  1.960000e+1	4.800000e-23
- 2.000000e+1	7.100000e-23
- 3.000000e+1	7.200000e-22
- 3.500000e+1	1.010000e-21
- 4.000000e+1	1.210000e-21
+ 2.000000e+1	7.200000e-23
+ 3.000000e+1	7.300000e-22
+ 3.500000e+1	1.020000e-21
+ 4.000000e+1	1.220000e-21
  4.500000e+1	1.360000e-21
  5.000000e+1	1.470000e-21
  6.000000e+1	1.600000e-21
- 8.000000e+1	1.710000e-21
+ 8.000000e+1	1.720000e-21
  9.000000e+1	1.730000e-21
- 1.000000e+2	1.740000e-21
+ 1.000000e+2	1.720000e-21
  1.500000e+2	1.700000e-21
- 3.000000e+2	1.320000e-21
+ 3.000000e+2	1.330000e-21
  5.000000e+2	1.030000e-21
  7.000000e+2	8.300000e-22
- 1.000000e+3	6.400000e-22
+ 1.000000e+3	6.200000e-22
  1.500000e+3	4.700000e-22
  2.000000e+3	3.700000e-22
  4.000000e+3	2.150000e-22
  7.000000e+3	1.380000e-22
- 1.000000e+4	1.040000e-22
+ 1.000000e+4	1.020000e-22
 -----------------------------
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -19,44 +19,38 @@ from nepc.util import parser
 class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
-    def curate(self, datadir: str, outdir: str, title: str, units_e: str,
-               units_sigma: str, augment_dicts=None, debug=False, **next_ids) -> None:
+    def curate(self, datadir: str, datatype: str, species: str, title: str, units_e: str,
+               units_sigma: str, augment_dicts=None, initialize_nepc=False,
+               test=False, debug=False,
+               next_cs_id=None, next_csdata_id=None) -> None:
         """Skeleton of curation process.
         """
-        filelist, next_cs_id, next_csdata_id = self.initialize(datadir, outdir, debug, **next_ids)
+        self.initialize_db(initialize_nepc, test)
+        filelist, outdir, next_cs_id, next_csdata_id = self.initialize(datadir, datatype,
+                                                                       species, title,
+                                                                       test, debug,
+                                                                       next_cs_id, next_csdata_id)
         csdata = self.get_csdata(filelist, debug=debug)
         csdata = self.clean_csdata(csdata, debug=debug)
         csdata = self.augment_csdata(csdata, outdir, title, units_e, units_sigma, augment_dicts)
         self.verify_csdata()
         next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
-        self.finalize(next_cs_id, next_csdata_id, debug)
+        self.finalize(next_cs_id, next_csdata_id, test, debug)
 
+    def initialize_db(self, initialize_nepc=False, test=False) -> None:
+        """Initialize the nepc database
+        """
+        if initialize_nepc:
+            parser.write_next_id_to_file(1, 1, test)
 
-    def initialize(self, datadir: str, outdir: str, debug=False,
-                   **next_ids) -> Tuple[List[str], str, str]:
+    def initialize(self, datadir: str, datatype: str, species: str, title: str, test=False,
+                   debug=False, next_cs_id=None, next_csdata_id=None) -> Tuple[List[str], str, str]:
         """Initialize curation process.
         """
-        def yes_or_no(question) -> bool:
-            yes_no_answer = input(question + ' (Y|N) ').upper()
-            if yes_no_answer == "Y" or yes_no_answer == "N":
-                if yes_no_answer == "Y":
-                    return True
-                else:
-                    return False
-            else:
-                return yes_or_no(question)
+        filedir = f'{datadir}/raw/{datatype}/{species}/{title}'
+        outdir = f'{datadir}/cs/{species}/{title}'
 
-        filelist = os.listdir(datadir)
-        if len(filelist) > 0:
-            for filenames in enumerate(filelist):
-                answer = yes_or_no(f'Process {filenames[1]}?')
-                if answer:
-                    filelist[filenames[0]] = f'{datadir}/{filenames[1]}'
-                    print(f'Added {filenames[1]} to queue.')
-                else:
-                    filelist.pop(filenames[0])
-                    print(f'Skipping {filenames[1]}.')
-
+        filelist = util.get_filelist(filedir)
         if len(filelist) == 0:
             raise Exception('No files to process.')
         else:
@@ -65,13 +59,12 @@ class CurateCS(ABC):
         util.rmdir(outdir)
         util.mkdir(outdir)
 
-        if debug:
-            next_cs_id, next_csdata_id = (next_ids["next_cs_id"], next_ids["next_csdata_id"])
-            print(f"next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}")
-        else:
-            next_cs_id, next_csdata_id = parser.get_next_ids()
+        if not debug:
+            next_cs_id, next_csdata_id = parser.get_next_ids(test)
 
-        return filelist, next_cs_id, next_csdata_id
+        print(f"next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}")
+
+        return filelist, outdir, next_cs_id, next_csdata_id
 
 
     @abstractmethod
@@ -104,7 +97,7 @@ class CurateCS(ABC):
         """
 
     @abstractmethod
-    def finalize(self, next_cs_id: int, next_csdata_id: int, debug=False) -> None:
+    def finalize(self, next_cs_id: int, next_csdata_id: int, test=False, debug=False) -> None:
         """Finalize cross section data curation process.
         """
 
@@ -212,7 +205,8 @@ class CurateLxCAT(CurateCS):
     def verify_csdata(self) -> None:
         pass
 
-    def write_csdata(self, csdata, next_cs_id, next_csdata_id):
+    def write_csdata(self, csdata: List[dict],
+                     next_cs_id: int, next_csdata_id: int):
         for cs in csdata:
             next_csdata_id = parser.write_data_to_file(data_array=cs['data'],
                                                        filename=cs['nepc_filename']+'.dat',
@@ -235,20 +229,41 @@ class CurateLxCAT(CurateCS):
         return next_cs_id, next_csdata_id
 
 
-    def finalize(self, next_cs_id, next_csdata_id, debug=False) -> None:
+    def finalize(self, next_cs_id, next_csdata_id, test=False, debug=False) -> None:
         if not debug:
-            parser.write_next_id_to_file(next_cs_id, next_csdata_id)
+            parser.write_next_id_to_file(next_cs_id, next_csdata_id, test)
         print(f'next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}')
 
 
     def __str__(self) -> str:
-        return "LxCAT curation process"
+        return "LXCat cross section curation"
 
-def curate_client(curate_cs: CurateCS, datadir: str, outdir: str, title: str,
+    @property
+    def datatype(self) -> str:
+        """Provide data type for curation process
+        """
+        return "lxcat"
+
+class CurateLumped(CurateCS):
+    """Template for creating lumped cross sections from cross sections already
+    in the database.
+    """
+
+    def __str__(self) -> str:
+        return "Lumped cross section curation"
+
+    @property
+    def datatype(self) -> str:
+        return "lumped"
+
+def curate_client(curate_cs: CurateCS, datadir: str, species: str, title: str,
                   units_e: str, units_sigma: str, augment_dicts=None,
-                  debug=False, **next_ids) -> None:
+                  initialize_nepc=False, test=False,
+                  debug=False, next_cs_id=None, next_csdata_id=None) -> None:
     """Client code that calls the CurateCS template to execute the curation process.
     """
     print(f"Executing {curate_cs}.")
 
-    curate_cs.curate(datadir, outdir, title, units_e, units_sigma, augment_dicts, debug, **next_ids)
+    curate_cs.curate(datadir, curate_cs.datatype, species, title,
+                     units_e, units_sigma, augment_dicts,
+                     initialize_nepc, test, debug, next_cs_id, next_csdata_id)
