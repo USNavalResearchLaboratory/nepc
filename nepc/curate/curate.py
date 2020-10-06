@@ -384,30 +384,13 @@ class CurateLumped(CurateCS):
                                                           'sigma': list(sigma)})
         
         
-        phelps_min_excitation_total.plot(units_sigma=1E-20,
-                      plot_param_dict = {'linewidth':.8}, 
-                      xlim_param_dict = {'left': .01, 'right': 1000.0}, 
-                      ylog=True, xlog=True, width=4, height=4)
-        
-        
         n_phelps_excitation_e_v_j_total = nepc.CustomModel(
             cs_list=([n_phelps_excitation_j] + n_phelps_excitation_e + 
                      n_phelps_excitation_v.cs + [phelps_min_excitation_total]))
         
-        
-        # %%
-        n_phelps_excitation_e_v_j_total.plot(units_sigma=1E-20,
-                                             plot_param_dict = {'linewidth':.8}, 
-                                             xlim_param_dict = {'left': .01, 'right': 1000.0}, 
-                                             ylog=True, xlog=True, max_plots=40, width=8, height=8)
-        
-        
-        # %%
         data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min_excitation_total.data['e'],
                                                                         phelps_min_excitation_total.data['sigma'])])
         
-        
-        # %%
         cs_name = outdir + '/phelps_min_excitation_total'
         next_csdata_id = parser.write_data_to_file(data_array=data_array,
                                                     filename=cs_name+'.dat',
@@ -428,12 +411,8 @@ class CurateLumped(CurateCS):
         parser.write_models_to_file(filename=cs_name+'.mod',
                                      models_array=['phelps', 'phelps_min'])
         
-        
-        # %%
         e_range = np.logspace(0, 3, 301)
         
-        
-        # %%
         sigma = [0.0 for _ in range(len(e_range))]
         for e, i in zip(e_range, range(len(e_range))):    
             for cs in n_phelps_excitation_e:
@@ -482,32 +461,14 @@ class CurateLumped(CurateCS):
                                                     data={'e': list(e_range),
                                                           'sigma': list(sigma)})
         
-        
-        # %%
-        phelps_min2_excitation_total_e.plot(units_sigma=1E-20,
-                      plot_param_dict = {'linewidth':.8}, 
-                      xlim_param_dict = {'left': 6, 'right': 1000.0}, 
-                      ylog=True, xlog=True, width=4, height=4)
-        
-        
-        # %%
         n_phelps_min2_excitation_total_e_model = nepc.CustomModel(
             cs_list=(n_phelps_excitation_e + [phelps_min2_excitation_total_e]))
         
         
-        # %%
-        n_phelps_min2_excitation_total_e_model.plot(units_sigma=1E-20,
-                                             plot_param_dict = {'linewidth':.8}, 
-                                             xlim_param_dict = {'left': 6, 'right': 1000.0}, 
-                                             ylog=True, xlog=True, max_plots=40, width=12, height=12)
-        
-        
-        # %%
         data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min2_excitation_total_e.data['e'],
                                                                         phelps_min2_excitation_total_e.data['sigma'])])
         
         
-        # %%
         cs_name = outdir + '/phelps_min2_excitation_total_e'
         next_csdata_id = parser.write_data_to_file(data_array=data_array,
                                                     filename=cs_name+'.dat',
@@ -582,27 +543,10 @@ class CurateLumped(CurateCS):
                                                     data={'e': list(e_range),
                                                           'sigma': list(sigma)})
         
-        
-        # %%
-        phelps_min2_excitation_total_v.plot(units_sigma=1E-20,
-                      plot_param_dict = {'linewidth':.8}, 
-                      xlim_param_dict = {'left': 0.25, 'right': 1000.0}, 
-                      ylog=True, xlog=True, width=4, height=4)
-        
-        
-        # %%
         n_phelps_min2_excitation_total_v_model = nepc.CustomModel(
                     cs_list=(n_phelps_excitation_v.cs + [phelps_min2_excitation_total_v]))
         
         
-        # %%
-        n_phelps_min2_excitation_total_v_model.plot(units_sigma=1E-20,
-                                             plot_param_dict = {'linewidth':.8}, 
-                                             xlim_param_dict = {'left': .25, 'right': 100.0}, 
-                                             ylog=True, xlog=True, max_plots=40, width=12, height=12)
-        
-        
-        # %%
         data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min2_excitation_total_v.data['e'],
                                                                 phelps_min2_excitation_total_v.data['sigma'])])
 
