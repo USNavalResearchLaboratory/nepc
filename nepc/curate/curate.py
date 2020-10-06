@@ -213,7 +213,6 @@ class CurateLxCAT(CurateCS):
                     cs['data'].pop(0)
 
         remove_zeros(csdata)
-
         return csdata
 
 
@@ -278,10 +277,7 @@ class CurateLumped(CurateCS):
         print(f'max_e: {max_e}')
 
         e_range_low = math.floor(math.log10(min_e))
-        eps = 1E-24
-        e_range_high = math.floor(math.log10(max_e))
-        if math.fmod(max_e, 10) > eps:
-            e_range_high += 1
+        e_range_high = math.ceil(math.log10(max_e))
         print(f'e_range_low: {e_range_low}')
         print(f'e_range_high: {e_range_high}')
 
@@ -297,9 +293,30 @@ class CurateLumped(CurateCS):
         sigma = np.array(sigma)
         e_range = e_range[~sigma_nan]
         sigma = sigma[~sigma_nan]
+        eps = 1.0E-24
         sigma[np.abs(sigma) < eps] = 0.0
-        return e_range, sigma
-            
+        #csdata_lumped = {'e': e_range,
+        #                 'sigma': sigma}
+        csdata_lumped = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(e_range, sigma)])
+        return csdata_lumped
+
+
+    def unique_metadata(self, csdata, key):
+        return list(set([cs.metadata[key] for cs in csdata]))
+
+
+    def metadata_match(self, csdata, key):
+        return [True] * (len(csdata) - 1) == [csdata[i-1].metadata[key] == csdata[i].metadata[key] for i in range(1, len(csdata))]
+
+    def check_for_unmatched_metadata(self, csdata, keys):
+        unmatched_metadata = []
+        for key in keys:
+            if not self.metadata_match(csdata, key):
+                unmatched_metadata.append(str(key))
+        if len(unmatched_metadata) > 0:
+            raise Exception(f"Trying to lump cross sections with unmatched "
+                            f"{' and '.join(unmatched_metadata)}.")
+
 
     def curate(self, datadir: str, datatype: str, species: str, title: str, units_e: str,
                units_sigma: str, augment_dicts=None, initialize_nepc=False,
@@ -311,123 +328,77 @@ class CurateLumped(CurateCS):
                                                         debug, next_cs_id, next_csdata_id)
         outdir = self.initialize_output(datadir, species, title)
         csdata = self.get_csdata(cs_ids)
-        #csdata = self.augment_csdata(csdata, outdir, title, units_e, units_sigma, augment_dicts)
-        #self.verify_csdata()
+        csdata_lumped = self.augment_csdata(csdata, outdir, title,
+                                            units_e, units_sigma, augment_dicts, debug)
+        self.verify_csdata()
         #next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
+
+        phelps_min_excitation_total = nepc.CustomCS(metadata={'specie': 'N2',
+                                                              'process': 'excitation_total',
+                                                              'units_e': 1.0,
+                                                              'units_sigma': 1.0,
+                                                              'ref': '\\N',
+                                                              'lhsA': 'N2(X1Sigmag+)',
+                                                              'lhsB': None,
+                                                              'rhsA': 'N2*',
+                                                              'rhsB': None,
+                                                              'threshold': 0.02,
+                                                              'wavelength': -1.0,
+                                                              'lhs_v': -1,
+                                                              'rhs_v': -1,
+                                                              'lhs_j': -1,
+                                                              'rhs_j': -1,
+                                                              'background': 'Sum of excitations (electronic, vibrational, and rotational) in Phelps complete model.',
+                                                              'lpu': -1.0,
+                                                              'upu': -1.0,
+                                                              'lhsA_long': 'N${}_2$ (X ${}^1\\Sigma_g^+$)',
+                                                              'lhsB_long': None,
+                                                              'rhsA_long': 'N${}_2^*$',
+                                                              'rhsB_long': None,
+                                                              'e_on_lhs': 1,
+                                                              'e_on_rhs': 1,
+                                                              'hv_on_lhs': 0,
+                                                              'hv_on_rhs': 0,
+                                                              'v_on_lhs': 0,
+                                                              'v_on_rhs': 0,
+                                                              'j_on_lhs': 0,
+                                                              'j_on_rhs': 0},
+                                                    data=csdata_lumped)
+
+        
+        cs_name = outdir + '/phelps_min_excitation_total'
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
+                                                   filename=cs_name+'.dat',
+                                                   start_csdata_id=next_csdata_id)
+        next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
+                                                   cs_id=next_cs_id,
+                                                   specie=phelps_min_excitation_total.metadata['specie'],
+                                                   process=phelps_min_excitation_total.metadata['process'],
+                                                   lhs_a=phelps_min_excitation_total.metadata['lhsA'],
+                                                   rhs_a=phelps_min_excitation_total.metadata['rhsA'],
+                                                   lhs_v=phelps_min_excitation_total.metadata['lhs_v'],
+                                                   rhs_v=phelps_min_excitation_total.metadata['rhs_v'],
+                                                   units_e=phelps_min_excitation_total.metadata['units_e'],
+                                                   units_sigma=phelps_min_excitation_total.metadata[
+                                                       'units_sigma'],
+                                                   threshold=phelps_min_excitation_total.metadata['threshold'],
+                                                   ref=phelps_min_excitation_total.metadata['ref'],
+                                                   background=phelps_min_excitation_total.metadata['background'])
+        parser.write_models_to_file(filename=cs_name+'.mod',
+                                    models_array=['phelps', 'phelps_min'])
         #self.finalize(next_cs_id, next_csdata_id, test, debug)
 
         cnx, cursor = nepc.connect(local=True)
         
-        # %%
         n_phelps_excitation_e_j = nepc.CustomModel(cursor, "phelps", metadata={'process': 'excitation'})
         
-        # %%
-        n_phelps_excitation_e_j.summary()
-        
-        # %%
         n_phelps_excitation_e = n_phelps_excitation_e_j.cs[2:]
         
-        # %%
-        for cs in n_phelps_excitation_e:
-            print('cs_id: {}'.format(cs.metadata['cs_id']))
-        
-        # %%
         n_phelps_excitation_j = n_phelps_excitation_e_j.cs[1]
         
-        
-        # %%
-        n_phelps_excitation_j.metadata['cs_id']
-        
         n_phelps_excitation_v = nepc.CustomModel(cursor, "phelps", metadata={'process': 'excitation_v'})
-        
-        n_phelps_excitation_v.summary()
-        
-        n_phelps_excitation_e_v_j = csdata
-        
-        e_range, sigma = self.lump(n_phelps_excitation_e_v_j)
        
-        print(f'cs_ids in n_phelps_excitation_e_v_j\n============================')
-        for cs in n_phelps_excitation_e_v_j:
-            print('cs_id: {}'.format(cs.metadata['cs_id']))
-        
-        phelps_min_excitation_total = nepc.CustomCS(metadata={'specie': 'N2',
-                                                             'process': 'excitation_total',
-                                                             'units_e': 1.0,
-                                                             'units_sigma': 1.0,
-                                                             'ref': '\\N',
-                                                             'lhsA': 'N2(X1Sigmag+)',
-                                                             'lhsB': None,
-                                                             'rhsA': 'N2*',
-                                                             'rhsB': None,
-                                                             'threshold': 0.02,
-                                                             'wavelength': -1.0,
-                                                             'lhs_v': -1,
-                                                             'rhs_v': -1,
-                                                             'lhs_j': -1,
-                                                             'rhs_j': -1,
-                                                             'background': 'Sum of excitations (electronic, vibrational, and rotational) in Phelps complete model.',
-                                                             'lpu': -1.0,
-                                                             'upu': -1.0,
-                                                             'lhsA_long': 'N${}_2$ (X ${}^1\\Sigma_g^+$)',
-                                                             'lhsB_long': None,
-                                                             'rhsA_long': 'N${}_2^*$',
-                                                             'rhsB_long': None,
-                                                             'e_on_lhs': 1,
-                                                             'e_on_rhs': 1,
-                                                             'hv_on_lhs': 0,
-                                                             'hv_on_rhs': 0,
-                                                             'v_on_lhs': 0,
-                                                             'v_on_rhs': 0,
-                                                             'j_on_lhs': 0,
-                                                             'j_on_rhs': 0},
-                                                    data={'e': list(e_range),
-                                                          'sigma': list(sigma)})
-        
-        
-        n_phelps_excitation_e_v_j_total = nepc.CustomModel(
-            cs_list=([n_phelps_excitation_j] + n_phelps_excitation_e + 
-                     n_phelps_excitation_v.cs + [phelps_min_excitation_total]))
-        
-        data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min_excitation_total.data['e'],
-                                                                        phelps_min_excitation_total.data['sigma'])])
-        
-        cs_name = outdir + '/phelps_min_excitation_total'
-        next_csdata_id = parser.write_data_to_file(data_array=data_array,
-                                                    filename=cs_name+'.dat',
-                                                    start_csdata_id=next_csdata_id)
-        next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
-                                                    cs_id=next_cs_id,
-                                                    specie=phelps_min_excitation_total.metadata['specie'],
-                                                    process=phelps_min_excitation_total.metadata['process'],
-                                                    lhs_a=phelps_min_excitation_total.metadata['lhsA'],
-                                                    rhs_a=phelps_min_excitation_total.metadata['rhsA'],
-                                                    lhs_v=phelps_min_excitation_total.metadata['lhs_v'],
-                                                    rhs_v=phelps_min_excitation_total.metadata['rhs_v'],
-                                                    units_e=phelps_min_excitation_total.metadata['units_e'],
-                                                    units_sigma=phelps_min_excitation_total.metadata['units_sigma'],
-                                                    threshold=phelps_min_excitation_total.metadata['threshold'],
-                                                    ref=phelps_min_excitation_total.metadata['ref'],
-                                                    background=phelps_min_excitation_total.metadata['background'])
-        parser.write_models_to_file(filename=cs_name+'.mod',
-                                     models_array=['phelps', 'phelps_min'])
-        
-        e_range = np.logspace(0, 3, 301)
-        
-        sigma = [0.0 for _ in range(len(e_range))]
-        for e, i in zip(e_range, range(len(e_range))):    
-            for cs in n_phelps_excitation_e:
-                sigma_i = self.log_interp(e, cs.data['e'], cs.data['sigma'])
-                if ~np.isnan(sigma_i):
-                    sigma[i] += sigma_i
-        sigma_nan = np.isnan(sigma)
-        sigma = np.array(sigma)
-        e_range = e_range[~sigma_nan]
-        sigma = sigma[~sigma_nan]
-        eps = 1E-24
-        sigma[np.abs(sigma) < eps] = 0.0
-                
-        
-        # %%
+        csdata_lumped = self.lump(n_phelps_excitation_e)
         phelps_min2_excitation_total_e = nepc.CustomCS(metadata={'specie': 'N2',
                                                              'process': 'excitation_total',
                                                              'units_e': 1.0,
@@ -458,19 +429,12 @@ class CurateLumped(CurateCS):
                                                              'v_on_rhs': 0,
                                                              'j_on_lhs': 0,
                                                              'j_on_rhs': 0},
-                                                    data={'e': list(e_range),
-                                                          'sigma': list(sigma)})
-        
-        n_phelps_min2_excitation_total_e_model = nepc.CustomModel(
-            cs_list=(n_phelps_excitation_e + [phelps_min2_excitation_total_e]))
-        
-        
-        data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min2_excitation_total_e.data['e'],
-                                                                        phelps_min2_excitation_total_e.data['sigma'])])
+                                                    data={'e': list(range(100)),
+                                                          'sigma': list(range(100))})
         
         
         cs_name = outdir + '/phelps_min2_excitation_total_e'
-        next_csdata_id = parser.write_data_to_file(data_array=data_array,
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
                                                     filename=cs_name+'.dat',
                                                     start_csdata_id=next_csdata_id)
         next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
@@ -490,26 +454,8 @@ class CurateLumped(CurateCS):
                                      models_array=['phelps', 'phelps_min2', 'phelps_min2_dr'])
         
         
-        # %%
-        e_range = np.logspace(-1, 2, 301)
+        csdata_lumped = self.lump(n_phelps_excitation_v.cs)
         
-        
-        # %%
-        sigma = [0.0 for _ in range(len(e_range))]
-        for e, i in zip(e_range, range(len(e_range))):    
-            for cs in n_phelps_excitation_v.cs:
-                sigma_i = self.log_interp(e, cs.data['e'], cs.data['sigma'])
-                if ~np.isnan(sigma_i):
-                    sigma[i] += sigma_i
-        sigma_nan = np.isnan(sigma)
-        sigma = np.array(sigma)
-        e_range = e_range[~sigma_nan]
-        sigma = sigma[~sigma_nan]
-        eps = 1E-24
-        sigma[np.abs(sigma) < eps] = 0.0
-        
-        
-        # %%
         phelps_min2_excitation_total_v = nepc.CustomCS(metadata={'specie': 'N2',
                                                              'process': 'excitation_total',
                                                              'units_e': 1.0,
@@ -540,20 +486,11 @@ class CurateLumped(CurateCS):
                                                              'v_on_rhs': 0,
                                                              'j_on_lhs': 0,
                                                              'j_on_rhs': 0},
-                                                    data={'e': list(e_range),
-                                                          'sigma': list(sigma)})
-        
-        n_phelps_min2_excitation_total_v_model = nepc.CustomModel(
-                    cs_list=(n_phelps_excitation_v.cs + [phelps_min2_excitation_total_v]))
-        
-        
-        data_array = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(phelps_min2_excitation_total_v.data['e'],
-                                                                phelps_min2_excitation_total_v.data['sigma'])])
+                                                    data={'e': list(range(100)),
+                                                          'sigma': list(range(100))})
 
-
-        # %%
         cs_name = outdir + '/phelps_min2_excitation_total_v'
-        next_csdata_id = parser.write_data_to_file(data_array=data_array,
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
                                                     filename=cs_name+'.dat',
                                                     start_csdata_id=next_csdata_id)
         next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
@@ -573,12 +510,7 @@ class CurateLumped(CurateCS):
                                      models_array=['phelps', 'phelps_min2', 'phelps_min2_dr'])
         
 
-        # %%
-        parser.write_next_id_to_file(next_cs_id, next_csdata_id)
-
-
-        # %%
-        next_cs_id, next_csdata_id
+        self.finalize(next_cs_id, next_csdata_id, test, debug)
 
 
     def get_csdata(self, cs_ids) -> List[dict]:
@@ -586,8 +518,24 @@ class CurateLumped(CurateCS):
         csdata = nepc.CustomModel(cursor, cs_id_list=cs_ids).cs
         return csdata
 
+
     def augment_csdata(self, csdata, outdir, title, units_e, units_sigma,
-                       augment_dicts=None):
+                       augment_dicts=None, debug=False):
+
+        self.check_for_unmatched_metadata(csdata, ['specie', 'units_e', 'units_sigma'])
+
+        lumped_metadata = dict()
+        for key in ['specie', 'units_e', 'units_sigma', 'ref']:
+            lumped_metadata[key] = self.unique_metadata(csdata, key)
+            if debug:
+                print(f'lumped_metadata[{key}]: {lumped_metadata[key]}')
+        
+        for _, (key, value) in enumerate(augment_dicts.items()):
+            lumped_metadata[key] = value
+            if debug:
+                print(f'lumped_metadata[{key}]: {lumped_metadata[key]}')
+        
+        csdata = self.lump(csdata)
         return csdata
 
     def verify_csdata(self) -> None:
