@@ -36,8 +36,10 @@ building data files for the ``nepc_test`` database, including parsing
 are in ``tests/data/methods``.
 
 """
+from typing import List
 import numpy as np
 from pandas import DataFrame
+import pandas as pd
 import mysql.connector
 import matplotlib.pyplot as plt
 from nepc.util import config
@@ -904,6 +906,22 @@ def table_as_df(cursor, table, columns="*"):
     cursor.execute("SELECT " + column_text + " FROM " + table)
     return DataFrame(cursor.fetchall())
 
+def process_attr(process: str, attr_list: List[str], test=False):
+    if test:
+        NEPC_DATA = config.nepc_home() + "/tests/data"
+    else:
+        NEPC_DATA = config.nepc_cs_home() + "/data"
+
+    proc_df = pd.read_csv(NEPC_DATA + '/processes.tsv',
+                          sep='\t',
+                          header=0)
+    process_attr_dict = {}
+    for attr in attr_list:
+        process_attr_dict[attr] = proc_df.loc[proc_df.name==process, attr].values[0]
+    
+    return process_attr_dict
+
+                                         
 
 def reaction_latex(cs):
     """Return the LaTeX for the process involved in a nepc cross section.

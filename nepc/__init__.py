@@ -6,6 +6,7 @@ from .nepc import cs_e
 from .nepc import cs_sigma
 from .nepc import cs_metadata
 from .nepc import table_as_df
+from .nepc import process_attr
 from .nepc import reaction_latex
 from .nepc import CS
 from .nepc import CustomCS
@@ -24,6 +25,7 @@ __all__ = [
         'cs_sigma',
         'cs_metadata',
         'table_as_df',
+        'process_attr',
         'reaction_latex',
         'CS',
         'CustomCS',

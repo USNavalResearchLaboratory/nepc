@@ -34,9 +34,11 @@ else:
     DIR_NAMES = ["/cs/n2/itikawa/",
                  "/cs/n2/zipf/",
                  "/cs/n/zatsarinny/",
-                 "/cs/n2/phelps/",
-                 "/cs/n2/phelps_total/",
-                 "/cs/n2/little/"]
+                 "/cs/lxcat/n2/phelps/",
+                 "/cs/lumped/n2/phelps_excitation_total/",
+                 "/cs/lumped/n2/phelps_excitation_total_e/",
+                 "/cs/lumped/n2/phelps_excitation_total_v/",
+                 "/cs/lxcat/n2/little_n2p_dr/"]
 
 T0 = time.time()
 

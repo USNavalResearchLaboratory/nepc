@@ -1,2 +1,0 @@
-cs_id	specie	process	units_e	units_sigma	ref	lhs_a	lhs_b	rhs_a	rhs_b	threshold	wavelength	lhs_v	rhs_v	lhs_j	rhs_j	background	lpu	upu
-1	N2	excitation	1.0	1.0	\N	N2(X1Sigmag+)	\N	N2(X1Sigmag+)_jSCHULZ	\N	0.02	-1	-1	-1	-1	-1	This contribution to rotational excitation (resonance - USING SUM OF SCHULZ VIBRATION IN A SINGLE-LEVEL APPROXIMATION) is not part of the complete set.  Use of this cross section in addition to the CAR approximation could be used in place of the single level approximation for rotation which is presently part of the complete set.	-1	-1
