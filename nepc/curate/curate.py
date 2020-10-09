@@ -20,6 +20,27 @@ from nepc.util import parser
 class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
+    def value(self, csdata_i, key):
+        """Provide cross section data as strings. Provide default
+        values for certain cross section data types.
+        """
+        float_keys = ['threshold']
+        int_keys = ['lhs_v', 'rhs_v']
+
+        if key in csdata_i.keys():
+            if csdata_i[key] == '':
+                if key in float_keys or key in int_keys:
+                    return '-1'
+                else:
+                    return '\\N'
+            else:
+                return str(csdata_i[key])
+        else:
+            if key in float_keys or key in int_keys:
+                return '-1'
+            else:
+                return '\\N'
+
     @abstractmethod
     def curate(self, datadir: str, species: str, title: str, units_e: str,
                units_sigma: str, augment_dicts=None, initialize_nepc=False,
@@ -106,7 +127,9 @@ class CurateCS(ABC):
                                                        specie=cs['specie'],
                                                        process=cs['process'],
                                                        lhs_a=cs['lhs_a'],
+                                                       lhs_b=cs['lhs_b'],
                                                        rhs_a=cs['rhs_a'],
+                                                       rhs_b=cs['rhs_b'],
                                                        lhs_v=cs['lhs_v'],
                                                        rhs_v=cs['rhs_v'],
                                                        units_e=cs['units_e'],
@@ -141,26 +164,6 @@ class CurateLxCAT(CurateCS):
         [description]
     """
 
-    def value(self, csdata_i, key):
-        """Provide cross section data as strings. Provide default
-        values for certain cross section data types.
-        """
-        float_keys = ['threshold']
-        int_keys = ['lhs_v', 'rhs_v']
-
-        if key in csdata_i.keys():
-            if csdata_i[key] == '':
-                if key in float_keys or key in int_keys:
-                    return '-1'
-                else:
-                    return '\\N'
-            else:
-                return str(csdata_i[key])
-        else:
-            if key in float_keys or key in int_keys:
-                return '-1'
-            else:
-                return '\\N'
 
     def print_csdata_table(self, keys, csdata):
         """Print cross section data for debugging.
@@ -233,8 +236,16 @@ class CurateLxCAT(CurateCS):
             cs['data'] = np.asarray(cs['data'])
             cs['ref'] = self.value(cs, 'ref')
             cs['threshold'] = self.value(cs, 'threshold')
+            cs['lhs_a'] = self.value(cs, 'lhs_a')
+            cs['lhs_b'] = self.value(cs, 'lhs_b')
+            cs['rhs_a'] = self.value(cs, 'rhs_a')
+            cs['rhs_b'] = self.value(cs, 'rhs_b')
             cs['lhs_v'] = self.value(cs, 'lhs_v')
             cs['rhs_v'] = self.value(cs, 'rhs_v')
+            cs['lhs_j'] = self.value(cs, 'lhs_j')
+            cs['rhs_j'] = self.value(cs, 'rhs_j')
+            cs['lhs_hv'] = self.value(cs, 'lhs_hv')
+            cs['rhs_hv'] = self.value(cs, 'rhs_hv')
 
             if augment_dicts is not None:
                 for cs_dict, augment_dict in augment_dicts:
@@ -358,7 +369,6 @@ class CurateLumped(CurateCS):
         csdata_lumped = self.lump(csdata)
         csdata_lumped['nepc_filename'] = outdir + '/' + title
 
-        #TODO: check that all required keys are provided in augment_dicts
         check_process_attr = ['lhs', 'rhs', 'lhs_hv', 'rhs_hv',
                               'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j']
 
@@ -374,21 +384,21 @@ class CurateLumped(CurateCS):
                              'rhs_j': ['rhs_j']}
 
         for _, (key, value) in enumerate(process_attr_keys.items()):
+            for v in value:
+                csdata_lumped[v] = self.value(csdata_lumped, v)
             if sum(k in augment_dicts.keys() for k in value) != process_attr_values[key]:
                 raise Exception(f'Mismatch in augment_dicts for {key}')
-            if process_attr_values[key] == 0:
-                csdata_lumped[key] = -1
 
         for key in matched_metadata + consolidated_metadata:
             csdata_lumped[key] = ','.join(self.unique_metadata(csdata, key))
             if debug:
                 print(f'csdata_lumped[{key}]: {csdata_lumped[key]}')
-        
+
         for _, (key, value) in enumerate(augment_dicts.items()):
             csdata_lumped[key] = value
             if debug:
                 print(f'csdata_lumped[{key}]: {csdata_lumped[key]}')
-        
+
         return csdata_lumped
 
     def verify_csdata(self) -> None:
