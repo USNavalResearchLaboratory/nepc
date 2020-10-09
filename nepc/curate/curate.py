@@ -7,7 +7,9 @@ Provides templates for curating raw and external (e.g. LxCAT) cross section data
 - verify data
 - write data to nepc formatted input files (i.e. .dat, .met, .mod)
 """
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
+from nepc.nepc import process_attr
+from nepc.util.parser import write_next_id_to_file
 from typing import List, Tuple
 import re
 import math
@@ -22,7 +24,7 @@ class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
     @abstractmethod
-    def curate(self, datadir: str, datatype: str, species: str, title: str, units_e: str,
+    def curate(self, datadir: str, species: str, title: str, units_e: str,
                units_sigma: str, augment_dicts=None, initialize_nepc=False,
                test=False, debug=False,
                next_cs_id=None, next_csdata_id=None, cs_ids=None) -> None:
@@ -54,11 +56,11 @@ class CurateCS(ABC):
         return next_cs_id, next_csdata_id
 
 
-    def initialize_input(self, datadir: str, datatype: str, species: str,
+    def initialize_input(self, datadir: str, species: str,
                          title: str) -> List[str]:
         """Initialize input filelist for curation processes that read data from files.
         """
-        filedir = f'{datadir}/raw/{datatype}/{species}/{title}'
+        filedir = f'{datadir}/raw/{self.datatype}/{species}/{title}'
         filelist = util.get_filelist(filedir)
         if len(filelist) == 0:
             raise Exception('No files to process.')
@@ -69,7 +71,7 @@ class CurateCS(ABC):
     def initialize_output(self, datadir: str, species: str, title: str) -> str:
         """Initialize output directory for curation process
         """
-        outdir = f'{datadir}/cs/{species}/{title}'
+        outdir = f'{datadir}/cs/{self.datatype}/{species}/{title}'
         util.rmdir(outdir)
         util.mkdir(outdir)
         return outdir
@@ -127,6 +129,11 @@ class CurateCS(ABC):
             parser.write_next_id_to_file(next_cs_id, next_csdata_id, test)
         print(f'next_cs_id: {next_cs_id}\nnext_csdata_id: {next_csdata_id}')
 
+    @abstractproperty
+    def datatype(self) -> str:
+        """Provide data type for curation process
+        """
+
 
 class CurateLxCAT(CurateCS):
     """Template for curating LXCat cross section data
@@ -166,7 +173,7 @@ class CurateLxCAT(CurateCS):
         for cs in csdata:
             print('\t'.join([self.value(cs, key) for key in keys]))
 
-    def curate(self, datadir: str, datatype: str, species: str, title: str, units_e: str,
+    def curate(self, datadir: str, species: str, title: str, units_e: str,
                units_sigma: str, augment_dicts=None, initialize_nepc=False,
                test=False, debug=False,
                next_cs_id=None, next_csdata_id=None, cs_ids=None) -> None:
@@ -174,7 +181,7 @@ class CurateLxCAT(CurateCS):
         """
         next_cs_id, next_csdata_id = self.initialize_db(initialize_nepc, test,
                                                         debug, next_cs_id, next_csdata_id)
-        filelist = self.initialize_input(datadir, datatype, species, title)
+        filelist = self.initialize_input(datadir, species, title)
         outdir = self.initialize_output(datadir, species, title)
         csdata = self.get_csdata(filelist, debug=debug)
         csdata = self.clean_csdata(csdata, debug=debug)
@@ -270,9 +277,11 @@ class CurateLumped(CurateCS):
     def lump(self, csdata):
         min_e = np.Inf
         max_e = -np.Inf
+        threshold = np.Inf
         for cs in csdata:
             min_e = min(min_e, np.min(cs.data['e']))
             max_e = max(max_e, np.max(cs.data['e']))
+            threshold = min(threshold, cs.metadata['threshold'])
         print(f'min_e: {min_e}')
         print(f'max_e: {max_e}')
 
@@ -295,9 +304,9 @@ class CurateLumped(CurateCS):
         sigma = sigma[~sigma_nan]
         eps = 1.0E-24
         sigma[np.abs(sigma) < eps] = 0.0
-        #csdata_lumped = {'e': e_range,
-        #                 'sigma': sigma}
-        csdata_lumped = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(e_range, sigma)])
+        csdata_lumped = {}
+        csdata_lumped['threshold'] = threshold
+        csdata_lumped['data'] = np.asarray([[e_i, sigma_i] for e_i, sigma_i in zip(e_range, sigma)])
         return csdata_lumped
 
 
@@ -314,11 +323,11 @@ class CurateLumped(CurateCS):
             if not self.metadata_match(csdata, key):
                 unmatched_metadata.append(str(key))
         if len(unmatched_metadata) > 0:
-            raise Exception(f"Trying to lump cross sections with unmatched "
+            raise Exception(f"Trying {self} with unmatched "
                             f"{' and '.join(unmatched_metadata)}.")
 
 
-    def curate(self, datadir: str, datatype: str, species: str, title: str, units_e: str,
+    def curate(self, datadir: str, species: str, title: str, units_e: str,
                units_sigma: str, augment_dicts=None, initialize_nepc=False,
                test=False, debug=False,
                next_cs_id=None, next_csdata_id=None, cs_ids=None) -> None:
@@ -342,7 +351,8 @@ class CurateLumped(CurateCS):
                                                               'lhsB': None,
                                                               'rhsA': 'N2*',
                                                               'rhsB': None,
-                                                              'threshold': 0.02,
+                                                              #'threshold': 0.02,
+                                                              'threshold': csdata_lumped['threshold'],
                                                               'wavelength': -1.0,
                                                               'lhs_v': -1,
                                                               'rhs_v': -1,
@@ -363,11 +373,11 @@ class CurateLumped(CurateCS):
                                                               'v_on_rhs': 0,
                                                               'j_on_lhs': 0,
                                                               'j_on_rhs': 0},
-                                                    data=csdata_lumped)
+                                                    data=csdata_lumped['data'])
 
         
         cs_name = outdir + '/phelps_min_excitation_total'
-        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped['data'],
                                                    filename=cs_name+'.dat',
                                                    start_csdata_id=next_csdata_id)
         next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
@@ -408,7 +418,8 @@ class CurateLumped(CurateCS):
                                                              'lhsB': None,
                                                              'rhsA': 'N2*',
                                                              'rhsB': None,
-                                                             'threshold': 6.17,
+                                                             #'threshold': 6.17,
+                                                             'threshold': csdata_lumped['threshold'],
                                                              'wavelength': -1.0,
                                                              'lhs_v': -1,
                                                              'rhs_v': -1,
@@ -434,7 +445,7 @@ class CurateLumped(CurateCS):
         
         
         cs_name = outdir + '/phelps_min2_excitation_total_e'
-        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped['data'],
                                                     filename=cs_name+'.dat',
                                                     start_csdata_id=next_csdata_id)
         next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
@@ -465,7 +476,8 @@ class CurateLumped(CurateCS):
                                                              'lhsB': None,
                                                              'rhsA': 'N2(X1Sigmag+)_v1-8)',
                                                              'rhsB': None,
-                                                             'threshold': 0.29,
+                                                             #'threshold': 0.29,
+                                                             'threshold': csdata_lumped['threshold'],
                                                              'wavelength': -1.0,
                                                              'lhs_v': -1,
                                                              'rhs_v': -1,
@@ -490,7 +502,7 @@ class CurateLumped(CurateCS):
                                                           'sigma': list(range(100))})
 
         cs_name = outdir + '/phelps_min2_excitation_total_v'
-        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped,
+        next_csdata_id = parser.write_data_to_file(data_array=csdata_lumped['data'],
                                                     filename=cs_name+'.dat',
                                                     start_csdata_id=next_csdata_id)
         next_cs_id = parser.write_metadata_to_file(filename=cs_name+'.met',
@@ -520,12 +532,25 @@ class CurateLumped(CurateCS):
 
 
     def augment_csdata(self, csdata, outdir, title, units_e, units_sigma,
-                       augment_dicts=None, debug=False):
+                       augment_dicts=None, debug=False, test=False):
 
-        self.check_for_unmatched_metadata(csdata, ['specie', 'units_e', 'units_sigma'])
+        matched_metadata = ['specie', 'units_e', 'units_sigma']
+        self.check_for_unmatched_metadata(csdata, matched_metadata)
+
+        consolidated_metadata = ['ref']
+        augment_metadata = ['process', 'lhsA', 'rhsA',
+                            'background', 'lhsA_long', 'rhsA_long']
+        check_process_attr = ['lhs', 'rhs', 'lhs_hv', 'rhs_hv',
+                              'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j']
+        process_attr_values = nepc.process_attr('excitation_total', check_process_attr, test)
+
+        #for _, (key, value) in enumerate(process_attr_values):
+        #    if attr in ['lhs', 'rhs']:
+        #        if value
+
 
         lumped_metadata = dict()
-        for key in ['specie', 'units_e', 'units_sigma', 'ref']:
+        for key in matched_metadata + consolidated_metadata:
             lumped_metadata[key] = self.unique_metadata(csdata, key)
             if debug:
                 print(f'lumped_metadata[{key}]: {lumped_metadata[key]}')
@@ -542,7 +567,7 @@ class CurateLumped(CurateCS):
         pass
 
     def __str__(self) -> str:
-        return "Lumped cross section curation"
+        return "lumped cross section curation"
 
     @property
     def datatype(self) -> str:
@@ -559,7 +584,7 @@ def curate_client(curate_cs: CurateCS, datadir: str, species: str, title: str,
     """
     print(f"Executing {curate_cs}.")
 
-    curate_cs.curate(datadir, curate_cs.datatype, species, title,
+    curate_cs.curate(datadir, species, title,
                      units_e, units_sigma, augment_dicts,
                      initialize_nepc, test, debug, next_cs_id, next_csdata_id,
                      cs_ids)
