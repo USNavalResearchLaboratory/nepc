@@ -11,6 +11,6 @@ dependencies:
         - pandas=0.24.2
         - python=3.7.2
         - matplotlib
-        - pip=19.0.3
+        - pip=20.2
         - pip:
                 - mysql-connector-python==8.0.17
