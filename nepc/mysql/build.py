@@ -30,19 +30,16 @@ else:
 
 if ARGS.test or ARGS.travis:
     database = 'nepc_test'
+    DIR_NAMES = ["/cs/lxcat/n2/fict/",
+                 "/cs/lumped/n2/fict_total/"]
 
 if ARGS.test:
     NEPC_DATA = config.nepc_home() + "/tests/data/"
-    DIR_NAMES = ["/cs/n2/fict/",
-                 "/cs/n2/fict_total/"]
     HOME = config.user_home()
     option_files = HOME + '/.mysql/defaults'
 elif ARGS.travis:
     cwd = os.getcwd()
-    print(f'cwd: {cwd}')
     NEPC_DATA = cwd + "/tests/data/"
-    DIR_NAMES = ["/cs/n2/fict/",
-                 "/cs/n2/fict_total/"]
     option_files = cwd + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
