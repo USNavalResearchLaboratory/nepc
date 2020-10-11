@@ -26,8 +26,8 @@ else:
 if ARGS.test:
     database = 'nepc_test'
     NEPC_DATA = config.nepc_home() + "/tests/data/"
-    DIR_NAMES = ["/cs/n2/fict/",
-                 "/cs/n2/fict_total/"]
+    DIR_NAMES = ["/cs/lxcat/n2/fict/",
+                 "/cs/lumped/n2/fict_total/"]
 else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"

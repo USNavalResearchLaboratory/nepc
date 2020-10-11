@@ -13,8 +13,8 @@ import csv
 
 NEPC_HOME = config.nepc_home()
 NEPC_DATA = NEPC_HOME + "/tests/data/"
-DIR_NAMES = [NEPC_HOME + "/tests/data/cs/n2/fict/",
-             NEPC_HOME + "/tests/data/cs/n2/fict_total/"]
+DIR_NAMES = [NEPC_HOME + "/tests/data/cs/lxcat/n2/fict/",
+             NEPC_HOME + "/tests/data/cs/lumped/n2/fict_total/"]
 
 
 @pytest.mark.usefixtures("nepc_connect")
