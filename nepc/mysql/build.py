@@ -43,7 +43,7 @@ elif ARGS.travis:
     NEPC_DATA = cwd + "/tests/data/"
     DIR_NAMES = ["/cs/n2/fict/",
                  "/cs/n2/fict_total/"]
-    option_files = cwd + 'nepc/mysql/defaults'
+    option_files = cwd + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"
