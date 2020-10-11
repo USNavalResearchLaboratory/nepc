@@ -24,7 +24,7 @@ nepc.egg-info/
 
 pytestdebug.log
 
-data/cs_datfile_local.tsv
+tests/data/cs_datfile_local.tsv
 
 _build/
 
