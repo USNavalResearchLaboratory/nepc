@@ -48,7 +48,7 @@ from nepc.util import config
 PRODUCTION = config.production()
 
 
-def connect(local=False, DBUG=False, test=False):
+def connect(local=False, DBUG=False, test=False, travis=False):
     """Establish a connection to a NEPC MySQL database
 
     Parameters
@@ -58,8 +58,10 @@ def connect(local=False, DBUG=False, test=False):
         server (default False).
     DBUG : bool, optional
         Print debug info (default False).
-    test: bool, optional
+    test : bool, optional
         If true, access the `nepc_test` database; otherwise, connect to the `nepc` database.
+    travis : bool, optional
+        If true, connect to database on TravisCI
 
     Returns
     -------
@@ -83,11 +85,17 @@ def connect(local=False, DBUG=False, test=False):
     else:
         database = 'nepc'
 
-    config = {'user': 'nepc',
-              'password': 'nepc',
-              'host': hostname,
-              'database': database,
-              'raise_on_warnings': True}
+    if travis:
+        config = {'user': 'root',
+                  'host': hostname,
+                  'database': database,
+                  'raise_on_warnings': True}
+    else:
+        config = {'user': 'nepc',
+                  'password': 'nepc',
+                  'host': hostname,
+                  'database': database,
+                  'raise_on_warnings': True}
 
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

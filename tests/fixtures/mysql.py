@@ -18,7 +18,7 @@ def data_config(travis):
 
 
 @pytest.fixture
-def nepc_connect(local, dbug):
+def nepc_connect(local, dbug, travis):
     """Establishes a connection with the nepc_test database
 
     Parameters
@@ -38,7 +38,7 @@ def nepc_connect(local, dbug):
     """
     if dbug:
         print("opening database connection")
-    cnx, cursor = nepc.connect(local, dbug, test=True)
+    cnx, cursor = nepc.connect(local, dbug, test=True, travis=travis)
     yield [cnx, cursor]
     if dbug:
         print("closing database connection")
