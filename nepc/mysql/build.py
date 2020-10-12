@@ -14,6 +14,8 @@ PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
 PARSER.add_argument('--test', action='store_true',
                     help='build test database on localhost')
+PARSER.add_argument('--travis', action='store_true',
+                    help='build test database on TravisCI')
 ARGS = PARSER.parse_args()
 
 if ARGS.debug:
@@ -23,15 +25,22 @@ else:
     MAX_CS = 2000000
     MAX_RATE = 2000000
 
-HOME = config.user_home()
-option_files = HOME + '/.mysql/defaults'
+if ARGS.test and ARGS.travis:
+    raise Exception('can pass only --test or --travis, not both')
 
 if ARGS.test:
     database = 'nepc_test'
-    DIR_NAMES = ["/cs/lxcat/n2/fict/",
-                 "/cs/lumped/n2/fict_total/"]
     NEPC_HOME = config.nepc_home()
     NEPC_DATA = NEPC_HOME + "/tests/data/"
+    DIR_NAMES = ["/cs/lxcat/n2/fict/",
+                 "/cs/lumped/n2/fict_total/"]
+    HOME = config.user_home()
+    option_files = HOME + '/.mysql/defaults'
+elif ARGS.travis:
+    database = 'nepc_test'
+    NEPC_HOME = os.getcwd()
+    NEPC_DATA = NEPC_HOME + "/tests/data/"
+    option_files = NEPC_HOME + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"
