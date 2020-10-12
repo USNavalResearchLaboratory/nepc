@@ -40,8 +40,10 @@ if ARGS.test:
 elif ARGS.travis:
     #cwd = os.getcwd()
     #NEPC_DATA = cwd + "/tests/data/"
-    NEPC_DATA = config.nepc_home() + "/tests/data/"
-    option_files = cwd + '/nepc/mysql/defaults'
+    #option_files = cwd + '/nepc/mysql/defaults'
+    NEPC_HOME = config.nepc_home()
+    NEPC_DATA = NEPC_HOME + "/tests/data/"
+    option_files = NEPC_HOME + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"
