@@ -19,6 +19,7 @@ install:
     #- pip install pylint-exit
     - pip install anybadge
     #- pip install docstr-coverage
+    - export NEPC_HOME='${HOME}/nepc'
     - python nepc/mysql/build.py --travis
 
 script:
