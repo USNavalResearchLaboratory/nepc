@@ -3,6 +3,20 @@ import pytest
 
 
 @pytest.fixture
+def data_config(pytestconfig):
+    travis = pytestconfig.getoption("travis")
+    if travis:
+        NEPC_HOME = os.getcwd()
+    else:
+        NEPC_HOME = config.nepc_home()
+
+    NEPC_DATA = NEPC_HOME + "/tests/data/"
+    DIR_NAMES = [NEPC_HOME + "/tests/data/cs/lxcat/n2/fict/",
+                 NEPC_HOME + "/tests/data/cs/lumped/n2/fict_total/"]
+    yield [NEPC_DATA, DIR_NAMES]
+
+
+@pytest.fixture
 def nepc_connect(local, dbug):
     """Establishes a connection with the nepc_test database
 

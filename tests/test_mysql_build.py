@@ -2,7 +2,6 @@ from nepc import nepc
 from nepc.util import config
 from nepc.util import util
 import pandas as pd
-import argparse
 import os
 import pytest
 import platform
@@ -12,23 +11,10 @@ import csv
 
 # TODO: test that all values in [nepc]/tests/data are in the nepc database
 
-PARSER = argparse.ArgumentParser(description='Build the NEPC database.')
-PARSER.add_argument('--travis', action='store_true',
-                    help='build test database on TravisCI')
-ARGS = PARSER.parse_args()
 
-if ARGS.travis:
-    NEPC_HOME = os.getcwd()
-else:
-    NEPC_HOME = config.nepc_home()
-
-NEPC_DATA = NEPC_HOME + "/tests/data/"
-DIR_NAMES = [NEPC_HOME + "/tests/data/cs/lxcat/n2/fict/",
-             NEPC_HOME + "/tests/data/cs/lumped/n2/fict_total/"]
-
-
-@pytest.mark.usefixtures("nepc_connect")
-def test_csdata_lines(nepc_connect):
+@pytest.mark.usefixtures("data_config", "nepc_connect")
+def test_csdata_lines(data_config, nepc_connect):
+    DIR_NAMES = data_config[1]
     cs_lines = 0
     for directoryname in DIR_NAMES:
         directory = os.fsencode(directoryname)
