@@ -53,7 +53,9 @@ else:
                  "/cs/lumped/n2/phelps_excitation_total/",
                  "/cs/lumped/n2/phelps_excitation_total_e/",
                  "/cs/lumped/n2/phelps_excitation_total_v/",
-                 "/cs/lxcat/n2p/little_n2p_dr/"]
+                 "/cs/lxcat/n2/little_n2p_dr/"]
+    HOME = config.user_home()
+    option_files = HOME + '/.mysql/defaults'
 
 T0 = time.time()
 
