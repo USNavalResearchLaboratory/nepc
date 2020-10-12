@@ -1,10 +1,11 @@
 from nepc import nepc
+from nepc.util import config
 import pytest
+import os
 
 
 @pytest.fixture
-def data_config(pytestconfig):
-    travis = pytestconfig.getoption("travis")
+def data_config(travis):
     if travis:
         NEPC_HOME = os.getcwd()
     else:

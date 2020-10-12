@@ -1,5 +1,4 @@
 from nepc import nepc
-from nepc.util import config
 from nepc.util import util
 import pandas as pd
 import os
@@ -30,8 +29,9 @@ def test_csdata_lines(data_config, nepc_connect):
     assert cs_lines == nepc.count_table_rows(nepc_connect[1], "csdata")
 
 
-@pytest.mark.usefixtures("nepc_connect")
-def test_data_entered(nepc_connect, local):
+@pytest.mark.usefixtures("data_config", "nepc_connect")
+def test_data_entered(data_config, nepc_connect, local):
+    NEPC_DATA = data_config[0]
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
@@ -49,8 +49,9 @@ def test_data_entered(nepc_connect, local):
         assert sigma == pytest.approx(df['sigma'].tolist())
 
 
-@pytest.mark.usefixtures("nepc_connect")
-def test_meta_entered(nepc_connect, local, dbug):
+@pytest.mark.usefixtures("data_config", "nepc_connect")
+def test_meta_entered(data_config, nepc_connect, local, dbug):
+    NEPC_DATA = data_config[0]
     if local is False or platform.node() == 'ppdadamsonlinux':
         cs_dat_files = pd.read_csv(NEPC_DATA + 'cs_datfile_prod.tsv',
                                    delimiter='\t')
