@@ -1,3 +1,5 @@
+services:
+    - mysql
 language: python
 python:
     - "3.7"
@@ -17,13 +19,17 @@ install:
     #- pip install pylint-exit
     - pip install anybadge
     #- pip install docstr-coverage
+    - mkdir ${HOME}/.mysql
+    - echo "[client]\nuser=root" > ${HOME}/.mysql/defaults
+    - python nepc/mysql/build.py --travis
 
 script:
       # test
-    - pytest --cov=nepc tests/ | tee pytest.txt
-    - score=$(cat pytest.txt | grep TOTAL | grep -o -P '[0-9]*(\.[0-9]*)?(?=%)')
-    - echo "test coverage is ${score}%"
-    - anybadge --label=pytest --value=$score --suffix='%' --file=pytest.svg 50=red 60=orange 80=yellow 100=green
+    - pytest --local --travis
+    #- pytest --cov=nepc tests/ | tee pytest.txt
+    #- score=$(cat pytest.txt | grep TOTAL | grep -o -P '[0-9]*(\.[0-9]*)?(?=%)')
+    #- echo "test coverage is ${score}%"
+    #- anybadge --label=pytest --value=$score --suffix='%' --file=pytest.svg 50=red 60=orange 80=yellow 100=green
       # docs
       #- cd docs
       #- make html

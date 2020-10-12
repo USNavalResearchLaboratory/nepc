@@ -1,5 +1,6 @@
 """Tests for nepc.util.config.py"""
 import os
+import pytest
 from nepc.util import config
 
 
@@ -10,8 +11,10 @@ def test_user_home():
     assert config.user_home() == os.environ.get('HOME')
 
 
-def test_nepc_home():
+@pytest.mark.usefixtures("data_config")
+def test_nepc_home(data_config, travis):
     """Verify whether nepc_home() returns a string
     that represents the correct path to the NEPC folder"""
-    assert isinstance(config.nepc_home(), str)
-    assert config.nepc_home() == os.environ.get('NEPC_HOME')
+    if not travis:
+        assert isinstance(config.nepc_home(), str)
+        assert config.nepc_home() == os.environ.get('NEPC_HOME')
