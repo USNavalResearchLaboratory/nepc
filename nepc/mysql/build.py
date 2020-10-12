@@ -40,6 +40,8 @@ elif ARGS.travis:
     database = 'nepc_test'
     NEPC_HOME = os.getcwd()
     NEPC_DATA = NEPC_HOME + "/tests/data/"
+    DIR_NAMES = ["/cs/lxcat/n2/fict/",
+                 "/cs/lumped/n2/fict_total/"]
     option_files = NEPC_HOME + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
