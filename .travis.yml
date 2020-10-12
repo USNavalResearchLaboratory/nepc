@@ -19,8 +19,10 @@ install:
     #- pip install pylint-exit
     - pip install anybadge
     #- pip install docstr-coverage
-    - export NEPC_HOME='${HOME}/nepc'
-    - python nepc/mysql/build.py --travis
+    - export NEPC_HOME=${HOME}/nepc
+    - mkdir ${HOME}/.mysql
+    - echo "[client]\nuser=root" > ${HOME}/.mysql/defaults
+    - python nepc/mysql/build.py --test
 
 script:
       # test

@@ -14,12 +14,7 @@ PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
 PARSER.add_argument('--test', action='store_true',
                     help='build test database on localhost')
-PARSER.add_argument('--travis', action='store_true',
-                    help='build test database on TravisCI')
 ARGS = PARSER.parse_args()
-
-if ARGS.test and ARGS.travis:
-    raise Exception('can pass only --test or --travis, not both')
 
 if ARGS.debug:
     MAX_CS = 50
@@ -28,22 +23,15 @@ else:
     MAX_CS = 2000000
     MAX_RATE = 2000000
 
-if ARGS.test or ARGS.travis:
+HOME = config.user_home()
+option_files = HOME + '/.mysql/defaults'
+
+if ARGS.test:
     database = 'nepc_test'
     DIR_NAMES = ["/cs/lxcat/n2/fict/",
                  "/cs/lumped/n2/fict_total/"]
-
-if ARGS.test:
-    NEPC_DATA = config.nepc_home() + "/tests/data/"
-    HOME = config.user_home()
-    option_files = HOME + '/.mysql/defaults'
-elif ARGS.travis:
-    #cwd = os.getcwd()
-    #NEPC_DATA = cwd + "/tests/data/"
-    #option_files = cwd + '/nepc/mysql/defaults'
     NEPC_HOME = config.nepc_home()
     NEPC_DATA = NEPC_HOME + "/tests/data/"
-    option_files = NEPC_HOME + '/nepc/mysql/defaults'
 else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"
@@ -55,8 +43,6 @@ else:
                  "/cs/lumped/n2/phelps_excitation_total_e/",
                  "/cs/lumped/n2/phelps_excitation_total_v/",
                  "/cs/lxcat/n2p/little_n2p_dr/"]
-    HOME = config.user_home()
-    option_files = HOME + '/.mysql/defaults'
 
 T0 = time.time()
 
