@@ -18,17 +18,24 @@ def yes_or_no(question) -> bool:
         return yes_or_no(question)
 
 
-def get_filelist(filedir):
+def get_filelist(filedir, datatype: str):
+    extension_dict = {'lxcat': '.txt',
+                      'qdb': '.qml'}
+    if datatype not in extension_dict.keys():
+        raise Exception("datatype not supported")
+    ext = extension_dict[datatype]
+
     filelist = []
     filelisting = os.listdir(f'{filedir}')
     if len(filelisting) > 0:
         for filenames in enumerate(filelisting):
-            answer = yes_or_no(f'Process {filenames[1]}?')
-            if answer:
-                filelist += [f'{filedir}/{filenames[1]}']
-                print(f'Added {filelist[-1]} to queue.')
-            else:
-                print(f'Skipping {filenames[1]}.')
+            if ext in filenames[1]:
+                answer = yes_or_no(f'Process {filenames[1]}?')
+                if answer:
+                    filelist += [f'{filedir}/{filenames[1]}']
+                    print(f'Added {filelist[-1]} to queue.')
+                else:
+                    print(f'Skipping {filenames[1]}.')
     return filelist
 
 def wc_fxn(file_to_count):
