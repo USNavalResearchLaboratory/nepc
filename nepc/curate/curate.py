@@ -20,6 +20,23 @@ from nepc.util import parser
 class CurateCS(ABC):
     """Template method that contains the skeleton for curating cross section data.
     """
+    def remove_zeros(self, csdata, debug=False):
+        """Remove data points from cross section data with zero cross section.
+        """
+        for cs in csdata:
+            i = len(cs['data']) - 1
+            while cs['data'][i][1] == 0.0:
+                if debug:
+                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'][i], i))
+                cs['data'].pop(i)
+                i -= 1
+
+            while cs['data'][0][1] == 0.0 and cs['data'][1][1] == 0.0:
+                if debug:
+                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'], 0))
+                cs['data'].pop(0)
+
+
     def value(self, csdata_i, key):
         """Provide cross section data as strings. Provide default
         values for certain cross section data types.
@@ -79,7 +96,7 @@ class CurateCS(ABC):
         """Initialize input filelist for curation processes that read data from files.
         """
         filedir = f'{datadir}/raw/{self.datatype}/{species}/{title}'
-        filelist = util.get_filelist(filedir)
+        filelist = util.get_filelist(filedir, self.datatype)
         if len(filelist) == 0:
             raise Exception('No files to process.')
         else:
@@ -154,14 +171,141 @@ class CurateCS(ABC):
         """Provide data type for curation process
         """
 
+class CurateQDB(CurateCS):
+    """Template for curating QuantemolDB (QDB) cross section data
+    """
+
+    def curate(self, datadir: str, species: str, title: str, units_e=None,
+               units_sigma=None, augment_dicts=None, initialize_nepc=False,
+               test=False, debug=False,
+               next_cs_id=None, next_csdata_id=None, cs_ids=None) -> None:
+        """Curation driver function for QDB text files.
+        """
+        next_cs_id, next_csdata_id = self.initialize_db(initialize_nepc, test,
+                                                        debug, next_cs_id, next_csdata_id)
+        filelist = self.initialize_input(datadir, species, title)
+        outdir = self.initialize_output(datadir, species, title)
+        csdata = self.get_csdata(filelist, debug=debug)
+        csdata = self.clean_csdata(csdata, debug=debug)
+        csdata = [self.augment_csdata(csdata, outdir, title, units_e, units_sigma, augment_dicts)]
+        self.verify_csdata()
+        next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
+        self.finalize(next_cs_id, next_csdata_id, test, debug)
+
+
+    def get_csdata(self, filelist, debug=False):
+        """Get cross section data for curation process.
+        """
+        import xml.etree.ElementTree as ET
+        import os
+        import csv
+
+        csdata = dict()
+
+        ns = {'uri': 'https://quantemoldb.com/qml'}
+        tree = ET.parse(filelist[0])
+        root = tree.getroot()
+
+        def print_dict_val(dictionary, k):
+            print(f'{k}: {dictionary[k]}')
+
+        for child in root.findall('uri:dataset/uri:data_table/uri:column', ns):
+            if child.attrib['name'] == 'eE' and child.attrib['units'] == 'eV':
+                csdata['units_e'] = '1.0'
+                if debug:
+                    print_dict_val(csdata, 'units_e')
+            elif child.attrib['name'] == 'sigma' and child.attrib['units'] == 'cm2':
+                csdata['units_sigma'] = '1.0E-4'
+                if debug:
+                    print_dict_val(csdata, 'units_sigma')
+            else:
+                raise Exception('units not implemented')
+
+        csdata['nrows'] = int(root.find('uri:dataset/uri:data_table/uri:nrows',
+                                        ns).text)
+
+        datafile_path = filelist[0].replace(
+            os.path.basename(filelist[0]),
+            root.find('uri:dataset/uri:data_table/uri:filename',
+                      ns).text)
+        if debug:
+            print(f'Getting data from {datafile_path}.')
+
+        csdata['data'] = []
+        csdata['threshold'] = np.Inf
+        with open(datafile_path, 'r') as f:
+            reader = csv.reader(f, delimiter=' ')
+            for row in reader:
+                csdata['data'].append(row)
+                csdata['threshold'] = min(csdata['threshold'], float(csdata['data'][-1][0]))
+
+        csdata['data'] = np.asarray(csdata['data'])
+
+        if len(csdata['data']) != csdata['nrows']:
+            raise Exception(f'Failed to read in {csdata["nrows"]} as expected.')
+        else:
+            print(f'Read in {csdata["nrows"]} data points as expected.')
+        return csdata
+
+
+    def clean_csdata(self, csdata, debug=False):
+        """Clean QDB cross section data during curation process.
+        """
+        self.remove_zeros([csdata], debug)
+        return csdata 
+
+    def augment_csdata(self, csdata, outdir, title, units_e, units_sigma,
+                       augment_dicts=None, debug=False, test=False):
+
+        csdata_augmented = csdata
+        
+        csdata_augmented['nepc_filename'] = outdir + '/' + title
+
+        check_process_attr = ['lhs', 'rhs', 'lhs_hv', 'rhs_hv',
+                              'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j']
+
+        process_attr_values = nepc.process_attr(augment_dicts['process'],
+                                                check_process_attr, test)
+
+        process_attr_keys = {'lhs': ['lhs_a', 'lhs_b'],
+                             'rhs': ['rhs_a', 'rhs_b'],
+                             'lhs_v': ['lhs_v'],
+                             'rhs_v': ['rhs_v'],
+                             'lhs_hv': ['lhs_hv'],
+                             'rhs_hv': ['rhs_hv'],
+                             'lhs_j': ['lhs_j'],
+                             'rhs_j': ['rhs_j']}
+
+        for _, (key, value) in enumerate(process_attr_keys.items()):
+            for v in value:
+                csdata_augmented[v] = self.value(csdata_augmented, v)
+            if sum(k in augment_dicts.keys() for k in value) != process_attr_values[key]:
+                raise Exception(f'Mismatch in augment_dicts for {key}')
+
+        for _, (key, value) in enumerate(augment_dicts.items()):
+            csdata_augmented[key] = value
+            if debug:
+                print(f'csdata_augmented[{key}]: {csdata_augmented[key]}')
+
+        return csdata_augmented
+
+    def verify_csdata(self) -> None:
+        """Verify cross setion data in curation process.
+        """
+
+
+    def __str__(self) -> str:
+        return "QuantemolDB cross section curation"
+
+
+    @property
+    def datatype(self) -> str:
+        """Provide data type for curation process
+        """
+        return "qdb"
 
 class CurateLxCAT(CurateCS):
     """Template for curating LXCat cross section data
-
-    Parameters
-    ----------
-    CurateCS : [type]
-        [description]
     """
 
 
@@ -191,7 +335,7 @@ class CurateLxCAT(CurateCS):
         self.finalize(next_cs_id, next_csdata_id, test, debug)
 
     def get_csdata(self, filelist, debug=False):
-        """Get cross section data from LxCAT formatting text file.
+        """Get cross section data from LxCAT formatted text file.
         """
         csdata = []
         for datafile in filelist:
@@ -203,23 +347,7 @@ class CurateLxCAT(CurateCS):
     def clean_csdata(self, csdata, debug=False):
         """Clean LxCAT cross section data during curation process.
         """
-        def remove_zeros(csdata):
-            """Remove data points from cross section data with zero cross section.
-            """
-            for cs in csdata:
-                i = len(cs['data']) - 1
-                while cs['data'][i][1] == 0.0:
-                    if debug:
-                        print('removing {} from csdata[{}][\'data\']'.format(cs['data'][i], i))
-                    cs['data'].pop(i)
-                    i -= 1
-
-                while cs['data'][0][1] == 0.0 and cs['data'][1][1] == 0.0:
-                    if debug:
-                        print('removing {} from csdata[{}][\'data\']'.format(cs['data'], 0))
-                    cs['data'].pop(0)
-
-        remove_zeros(csdata)
+        self.remove_zeros(csdata, debug)
         return csdata
 
 
@@ -372,7 +500,8 @@ class CurateLumped(CurateCS):
         check_process_attr = ['lhs', 'rhs', 'lhs_hv', 'rhs_hv',
                               'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j']
 
-        process_attr_values = nepc.process_attr('excitation_total', check_process_attr, test)
+        process_attr_values = nepc.process_attr(augment_dicts['process'],
+                                                check_process_attr, test)
 
         process_attr_keys = {'lhs': ['lhs_a', 'lhs_b'],
                              'rhs': ['rhs_a', 'rhs_b'],
@@ -413,7 +542,7 @@ class CurateLumped(CurateCS):
 
 
 def curate_client(curate_cs: CurateCS, datadir: str, species: str, title: str,
-                  units_e: str, units_sigma: str, augment_dicts=None,
+                  units_e=None, units_sigma=None, augment_dicts=None,
                   initialize_nepc=False, test=False,
                   debug=False, next_cs_id=None, next_csdata_id=None,
                   cs_ids=None) -> None:
