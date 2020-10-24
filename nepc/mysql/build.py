@@ -53,7 +53,8 @@ else:
                  "/cs/lumped/n2/phelps_excitation_total/",
                  "/cs/lumped/n2/phelps_excitation_total_e/",
                  "/cs/lumped/n2/phelps_excitation_total_v/",
-                 "/cs/qdb/n2p/D19505/"]
+                 "/cs/qdb/n2p/D19505/",
+                 "/cs/generated/n2/angus_dissociation/"]
     HOME = config.user_home()
     option_files = HOME + '/.mysql/defaults'
 

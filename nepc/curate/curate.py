@@ -24,17 +24,26 @@ class CurateCS(ABC):
         """Remove data points from cross section data with zero cross section.
         """
         for cs in csdata:
-            i = len(cs['data']) - 1
-            while cs['data'][i][1] == 0.0:
+            if type(cs['data']) is dict:
+                nonzero_indices = np.where(cs['data']['sigma']>0)
                 if debug:
-                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'][i], i))
-                cs['data'].pop(i)
-                i -= 1
-
-            while cs['data'][0][1] == 0.0 and cs['data'][1][1] == 0.0:
-                if debug:
-                    print('removing {} from csdata[{}][\'data\']'.format(cs['data'], 0))
-                cs['data'].pop(0)
+                    if 'files' in cs.keys():
+                        print(f"from {cs['files']['raw_data_file']}")
+                    print(f"removing zero_indices: {np.setdiff1d(np.arange(len(cs['data']['e'])), nonzero_indices)}")
+                cs['data']['e'] = cs['data']['e'][nonzero_indices]
+                cs['data']['sigma'] = cs['data']['sigma'][nonzero_indices]
+            else:
+                i = len(cs['data']) - 1
+                while cs['data'][i][1] == 0.0:
+                    if debug:
+                        print('removing {} from csdata[{}][\'data\']'.format(cs['data'][i], i))
+                    cs['data'].pop(i)
+                    i -= 1
+    
+                while cs['data'][0][1] == 0.0 and cs['data'][1][1] == 0.0:
+                    if debug:
+                        print('removing {} from csdata[{}][\'data\']'.format(cs['data'], 0))
+                    cs['data'].pop(0)
 
 
     def value(self, csdata_i, key):
@@ -136,26 +145,35 @@ class CurateCS(ABC):
         """Write cross section data to .dat, .met, and .mod files at end of curation process.
         """
         for cs in csdata:
-            next_csdata_id = parser.write_data_to_file(data_array=cs['data'],
-                                                       filename=cs['nepc_filename']+'.dat',
-                                                       start_csdata_id=next_csdata_id)
-            next_cs_id = parser.write_metadata_to_file(filename=cs['nepc_filename']+'.met',
+            if type(cs['data']) is dict:
+                next_csdata_id = parser.write_csdata_to_file(data_dict=cs['data'],
+                                                             filename=cs['metadata']['nepc_filename']+'.dat',
+                                                             start_csdata_id=next_csdata_id)
+            else:
+                next_csdata_id = parser.write_data_to_file(data_array=cs['data'],
+                                                           filename=cs['nepc_filename']+'.dat',
+                                                           start_csdata_id=next_csdata_id)
+            if 'metadata' in cs.keys():
+                metadata = cs['metadata']
+            else:
+                metadata = cs
+            next_cs_id = parser.write_metadata_to_file(filename=metadata['nepc_filename']+'.met',
                                                        cs_id=next_cs_id,
-                                                       specie=cs['specie'],
-                                                       process=cs['process'],
-                                                       lhs_a=cs['lhs_a'],
-                                                       lhs_b=cs['lhs_b'],
-                                                       rhs_a=cs['rhs_a'],
-                                                       rhs_b=cs['rhs_b'],
-                                                       lhs_v=cs['lhs_v'],
-                                                       rhs_v=cs['rhs_v'],
-                                                       units_e=cs['units_e'],
-                                                       units_sigma=cs['units_sigma'],
-                                                       threshold=cs['threshold'],
-                                                       ref=cs['ref'],
-                                                       background=cs['background'])
-            parser.write_models_to_file(filename=cs['nepc_filename']+'.mod',
-                                        models_array=cs['models'])
+                                                       specie=metadata['specie'],
+                                                       process=metadata['process'],
+                                                       lhs_a=metadata['lhs_a'],
+                                                       lhs_b=metadata['lhs_b'],
+                                                       rhs_a=metadata['rhs_a'],
+                                                       rhs_b=metadata['rhs_b'],
+                                                       lhs_v=metadata['lhs_v'],
+                                                       rhs_v=metadata['rhs_v'],
+                                                       units_e=metadata['units_e'],
+                                                       units_sigma=metadata['units_sigma'],
+                                                       threshold=metadata['threshold'],
+                                                       ref=metadata['ref'],
+                                                       background=metadata['background'])
+            parser.write_models_to_file(filename=metadata['nepc_filename']+'.mod',
+                                        models_array=metadata['models'])
         return next_cs_id, next_csdata_id
 
 
@@ -303,6 +321,119 @@ class CurateQDB(CurateCS):
         """Provide data type for curation process
         """
         return "qdb"
+
+class CurateGenerated(CurateCS):
+    """Template for curating generated cross section data
+    """
+    from nepc.util import config
+
+    NEPC_CS_HOME = config.nepc_cs_home()
+    NEPC_DATA = NEPC_CS_HOME + '/data/'
+
+    def curate(self, datadir: str, species: str, title: str, units_e=None,
+               units_sigma=None, augment_dicts=None, initialize_nepc=False,
+               test=False, debug=False,
+               next_cs_id=None, next_csdata_id=None, cs_ids=None) -> None:
+        """Curation driver function for generated cross section files.
+        """
+        next_cs_id, next_csdata_id = self.initialize_db(initialize_nepc, test,
+                                                        debug, next_cs_id, next_csdata_id)
+        filelist = self.initialize_input(datadir, species, title)
+        outdir = self.initialize_output(datadir, species, title)
+        print(f'outdir: {outdir}')
+        csdata = self.get_csdata(filelist, debug=debug)
+        self.clean_csdata(csdata, debug=debug)
+        self.augment_csdata(csdata, outdir, title, units_e, units_sigma, augment_dicts)
+        self.verify_csdata(csdata, debug=debug)
+        next_cs_id, next_csdata_id = self.write_csdata(csdata, next_cs_id, next_csdata_id)
+        self.finalize(next_cs_id, next_csdata_id, test, debug)
+
+
+    def get_csdata(self, filelist, debug=False):
+        """Get generated cross section data for curation process.
+        """
+        import toml
+
+        csdata = []
+        for filename in filelist:
+            with open(filename, 'r') as f:
+                metadata = toml.load(f)
+            csdata_dict = dict()
+            csdata_dict = metadata
+            csdata_dict['data'] = dict()
+            csdata_dict['data']['e'], csdata_dict['data']['sigma'] = np.loadtxt(self.NEPC_DATA + csdata_dict['files']['raw_data_file'], unpack=True)
+            csdata_dict['metadata']['threshold'] = csdata_dict['data']['e'][np.min(np.where(csdata_dict['data']['sigma']>0))]
+            csdata.append(csdata_dict)        
+
+        return csdata
+
+
+    def clean_csdata(self, csdata, debug=False):
+        """Clean generated cross section data during curation process.
+        """
+        self.remove_zeros(csdata, debug)
+
+    def augment_csdata(self, csdata, outdir, title, units_e, units_sigma,
+                       augment_dicts=None, debug=False, test=False):
+
+        check_process_attr = ['lhs', 'rhs', 'lhs_hv', 'rhs_hv',
+                              'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j']
+        for cs in csdata:
+            cs['metadata']['nepc_filename'] = outdir + '/' + title + '_' + cs['metadata']['file_suffix']
+
+            process_attr_values = nepc.process_attr(cs['metadata']['process'],
+                                                    check_process_attr, test)
+
+            process_attr_keys = {'lhs': ['lhs_a', 'lhs_b'],
+                                 'rhs': ['rhs_a', 'rhs_b'],
+                                 'lhs_v': ['lhs_v'],
+                                 'rhs_v': ['rhs_v'],
+                                 'lhs_hv': ['lhs_hv'],
+                                 'rhs_hv': ['rhs_hv'],
+                                 'lhs_j': ['lhs_j'],
+                                 'rhs_j': ['rhs_j']}
+
+            for _, (key, value) in enumerate(process_attr_keys.items()):
+                if sum(k in cs['metadata'].keys() for k in value) != process_attr_values[key]:
+                    raise Exception(f"Mismatch in cs['metadata'] for {key} in {cs['metadata']['file_suffix']}.")
+                for v in value:
+                    cs['metadata'][v] = self.value(cs['metadata'], v)
+
+
+    def verify_csdata(self, csdata, debug=False) -> None:
+        """Verify cross setion data in curation process.
+        """
+        for cs in csdata:
+            print(f"================")
+            if 'verification_data_file' in cs['files'].keys():
+                print(f"verifying {cs['metadata']['file_suffix']}")
+                verdata = dict()
+                verdata['data'] = dict()
+                verdata['data']['e'], verdata['data']['sigma'] = np.loadtxt(self.NEPC_DATA + cs['files']['verification_data_file'], unpack=True)
+                print('removing zeroes from verification data')
+                self.remove_zeros([verdata], debug)
+                print(f"cs: {cs['data']['e']}\tverdata: {verdata['data']['e']}")
+                e_allclose = np.allclose(cs['data']['e'], verdata['data']['e'])
+                print(f"e_allclose: {e_allclose}")
+                sigma_allclose = np.allclose(cs['data']['sigma'], verdata['data']['sigma'])
+                print(f"sigma_allclose: {sigma_allclose}")
+                if e_allclose and sigma_allclose:
+                    print(f"verified")
+                else:
+                    raise Exception(f"Problem with verification of {cs['metadata']['file_suffix']} data.")
+            else:
+                print(f"No verification data for {cs['metadata']['file_suffix']}")
+
+
+    def __str__(self) -> str:
+        return "generated cross section curation"
+
+
+    @property
+    def datatype(self) -> str:
+        """Provide data type for curation process
+        """
+        return "generated"
 
 class CurateLxCAT(CurateCS):
     """Template for curating LXCat cross section data
