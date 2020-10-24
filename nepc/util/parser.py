@@ -192,6 +192,34 @@ KEYWORDS = {"MOMENTUM": _read_momentum,
             "IONIZATION": _read_excitation,
             "ATTACHMENT": _read_attachment}
 
+def write_csdata_to_file(data_dict, filename: str, start_csdata_id):
+    """Given a dictionary of electron energies and corresponding cross sections,
+    write the data to a file in the correct format for a NEPC database.
+
+    Parameters
+    ----------
+    data_dict: dict
+        A dictionary where 'e' is a numpy array of electron energies, and 'sigma' is a numpy array of cross
+        sections. 
+    filename: str
+        The filename for the .dat file.
+    start_csdata_id : int
+        The first ``csdata_id`` for the supplied data.
+
+    Returns
+    -------
+    : int
+        The next csdata_id to use.
+
+    """
+    csdata_id = start_csdata_id
+    write_f = open(filename, "x")
+    write_f.write("\t".join(['csdata_id', 'e_energy', 'sigma']) + "\n")
+    for i in range(len(data_dict['e'])):
+        write_f.write(str(csdata_id) + "\t" + str(data_dict['e'][i]) + '\t' + str(data_dict['sigma'][i]) + '\n')
+        csdata_id = csdata_id + 1
+    write_f.close()
+    return csdata_id
 
 def write_data_to_file(data_array, filename, start_csdata_id):
     """Given an array of electron energies and corresponding cross sections,

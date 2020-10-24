@@ -20,6 +20,7 @@ def yes_or_no(question) -> bool:
 
 def get_filelist(filedir, datatype: str):
     extension_dict = {'lxcat': '.txt',
+                      'generated': '.toml',
                       'qdb': '.qml'}
     if datatype not in extension_dict.keys():
         raise Exception("datatype not supported")
@@ -30,7 +31,8 @@ def get_filelist(filedir, datatype: str):
     if len(filelisting) > 0:
         for filenames in enumerate(filelisting):
             if ext in filenames[1]:
-                answer = yes_or_no(f'Process {filenames[1]}?')
+                answer=True
+                #answer = yes_or_no(f'Process {filenames[1]}?')
                 if answer:
                     filelist += [f'{filedir}/{filenames[1]}']
                     print(f'Added {filelist[-1]} to queue.')
