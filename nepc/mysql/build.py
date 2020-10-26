@@ -47,7 +47,6 @@ else:
     database = 'nepc'
     NEPC_DATA = config.nepc_cs_home() + "/data/"
     DIR_NAMES = ["/cs/n2/itikawa/",
-                 "/cs/n2/zipf/",
                  "/cs/n/zatsarinny/",
                  "/cs/lxcat/n2/phelps/",
                  "/cs/lumped/n2/phelps_excitation_total/",
