@@ -533,7 +533,7 @@ def text_array_to_float_array(text_array, omit_regexp=''):
     return data
 
 
-def format_model(model, format='lxcat'):
+def format_model(model, format='lxcat', filename='lxcat.txt'):
     valid_formats = ['lxcat']
 
     if format not in valid_formats:
@@ -542,4 +542,11 @@ def format_model(model, format='lxcat'):
     if not isinstance(model, nepc.nepc.Model):
         raise Exception(f'model {model} is not supported')
 
+    with open(nepc_config.nepc_home() + '/tests/data/processes_lxcat.tsv') as f:
+        processes_lxcat = f.read()
 
+    print(f'{processes_lxcat}')
+
+    with open(filename, 'w') as f:
+        for cs in model.cs:
+            f.write(f"{cs.metadata['process']}\n")
