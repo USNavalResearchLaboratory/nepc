@@ -15,6 +15,7 @@ documented below.
 """
 import re
 import numpy as np
+import nepc
 from nepc.util import config as nepc_config
 
 RE_NL = re.compile('\n')
@@ -444,7 +445,7 @@ def write_next_id_to_file(
 
 
 def write_models_to_file(filename, models_array):
-    """Write model data to a file.
+    """Write model metadata to a file.
 
     Parameters
     ----------
@@ -530,5 +531,15 @@ def text_array_to_float_array(text_array, omit_regexp=''):
                 bool(re.search(omit_regexp, text_array[inde])))):
             data = np.append(data, [[float(text_array[inde])]], axis=0)
     return data
+
+
+def format_model(model, format='lxcat'):
+    valid_formats = ['lxcat']
+
+    if format not in valid_formats:
+        raise Exception(f'format {format} is not supported')
+
+    if not isinstance(model, nepc.nepc.Model):
+        raise Exception(f'model {model} is not supported')
 
 

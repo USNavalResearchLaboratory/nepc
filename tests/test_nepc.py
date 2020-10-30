@@ -257,10 +257,3 @@ def test_model_subset(nepc_connect):
     with pytest.raises(Exception):
         assert fict.subset()
 
-
-@pytest.mark.usefixtures("nepc_connect")
-def test_cs_subset_exception(nepc_connect):
-    """When prompted with an exception in test_cs_subset
-    verify that nepc.cs_subset does indeed return a value"""
-    with pytest.raises(Exception):
-        assert nepc.cs_subset(nepc_connect[1])
