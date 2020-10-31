@@ -15,6 +15,7 @@ documented below.
 """
 import re
 import numpy as np
+import pandas as pd
 import nepc
 from nepc.util import config as nepc_config
 
@@ -542,11 +543,19 @@ def format_model(model, format='lxcat', filename='lxcat.txt'):
     if not isinstance(model, nepc.nepc.Model):
         raise Exception(f'model {model} is not supported')
 
-    with open(nepc_config.nepc_home() + '/tests/data/processes_lxcat.tsv') as f:
-        processes_lxcat = f.read()
-
-    print(f'{processes_lxcat}')
+    nepc_process_lxcat_crosswalk_file = nepc_config.nepc_home() + '/tests/data/processes_lxcat.tsv'
+    with open(nepc_process_lxcat_crosswalk_file) as f:
+        processes_lxcat = pd.read_csv(f, sep='\t', header=0, names=['name', 'lxcat']).set_index('name').T.to_dict('records')[0]
 
     with open(filename, 'w') as f:
         for cs in model.cs:
-            f.write(f"{cs.metadata['process']}\n")
+            for metadata in ['process', 'reaction_abbrev', 'threshold']:
+                if metadata == 'process':
+                    line = f"{processes_lxcat[cs.metadata[metadata]]}\n" 
+                if metadata == 'reaction_abbrev':
+                    line = f'{nepc.reaction_text(cs)[0]}\n'
+                else:
+                    line = f"{cs.metadata[metadata]}\n" 
+                f.write(line)
+
+        

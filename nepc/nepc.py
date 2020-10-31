@@ -1025,3 +1025,79 @@ def reaction_latex(cs):
     rhs_text = reaction_latex_rhs(cs)
     reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
     return reaction
+
+def reaction_text_side(side, cs):
+    """Return the plain text for the LHS or RHS of the process involved in a nepc cross section.
+
+    Parameters
+    ----------
+    side : str
+        'LHS' or 'RHS' to indicate which side of the reaction to return.
+
+    cs : :class:`.CS` or :class:`.CustomCS`
+        A nepc cross section.
+
+    Returns
+    -------
+    : str
+        The plain text for either the LHS or RHS of the process involved in a NEPC cross section.
+
+    """
+    # FIXME: move this method to the CS Class
+    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+    # FIXME: decide how to represent total cross sections and implement
+    keys = {'LHS': {'e': 'e_on_lhs',
+                    'sideA': 'lhsA',
+                    'sideB': 'lhsB',
+                    'side_v': 'lhs_v'},
+            'RHS': {'e': 'e_on_rhs',
+                    'sideA': 'rhsA',
+                    'sideB': 'rhsB',
+                    'side_v': 'rhs_v'}}
+
+    e_on_side = cs.metadata[keys[side]['e']]
+    if e_on_side == 0:
+        side_e_text = None
+    elif e_on_side == 1:
+        side_e_text = "E"
+    else:
+        side_e_text = str(e_on_side) + "E"
+
+    sideA_text = cs.metadata[keys[side]['sideA']]
+    if cs.metadata['process'] == 'excitation_v':
+        # TODO: modify for all interesting process types (e.g. excitation_j)
+        sideA_text = sideA_text.replace(")", " v=" + str(cs.metadata[keys[side]['side_v']]) + ")")
+    sideB_text = cs.metadata[keys[side]['sideB']]
+    side_items_abbrev = [sideA_text,
+                         sideB_text]
+    side_items_full = [side_e_text,
+                       sideA_text,
+                       sideB_text]
+    side_text_abbrev = " + ".join(item for item in side_items_abbrev if item)
+    side_text_full = " + ".join(item for item in side_items_full if item)
+
+    return side_text_abbrev, side_text_full
+
+
+def reaction_text(cs):
+    """Return the plain text for the process involved in a nepc cross section.
+
+    Parameters
+    ----------
+    cs : :class:`.CS` or :class:`.CustomCS`
+        A nepc cross section.
+
+    Returns
+    -------
+    : (str, str)
+        The plain text (abbrev, full) for the process involved in a NEPC cross section.
+
+    """
+    # FIXME: move this method to the CS Class
+    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+    # FIXME: decide how to represent total cross sections and implement
+    lhs_text_abbrev, lhs_text_full = reaction_text_side('LHS', cs)
+    rhs_text_abbrev, rhs_text_full = reaction_text_side('RHS', cs)
+    reaction_abbrev = " -> ".join([lhs_text_abbrev, rhs_text_abbrev])
+    reaction_full = " -> ".join([lhs_text_full, rhs_text_full])
+    return reaction_abbrev, reaction_full

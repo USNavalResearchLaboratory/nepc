@@ -231,6 +231,20 @@ def test_reaction_latex(nepc_connect):
         cs = nepc.CS(nepc_connect[1], i)
         assert isinstance(nepc.reaction_latex(cs), str)
 
+@pytest.mark.usefixtures("nepc_connect")
+def test_reaction_text_side(nepc_connect):
+    """Verify when nepc.reaction_text_side is called it
+    returns a string representing the LHS or RHS text
+    for the reaction from a nepc cross section"""
+    # TODO: sample all process types and enough permutations
+    cs = nepc.CS(nepc_connect[1], 1)
+    lhsA = 'N2(X1Sigmag+)'
+    rhsA = 'N2(X1Sigmag+)_jSCHULZ'
+    assert nepc.reaction_text_side('LHS', cs) == (lhsA, f'E + {lhsA}')
+    assert nepc.reaction_text_side('RHS', cs) == (rhsA, f'E + {rhsA}')
+    assert nepc.reaction_text(cs) == (f'{lhsA} -> {rhsA}',
+                                      f'E + {lhsA} -> E + {rhsA}')
+
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_model_summary_df(nepc_connect):

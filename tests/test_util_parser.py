@@ -21,10 +21,8 @@ def test_format_model_exception_for_unsupported_model():
     assert str(e.value) == 'model str_not_model is not supported' 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_format_model_write_file(nepc_connect, tmpdir):
+def test_format_model_write_file(nepc_connect, tmpdir, dbug):
     file = tmpdir.join('lxcat.txt')
     fict = nepc.Model(nepc_connect[1], "fict")
     parser.format_model(fict, format='lxcat', filename=str(file))
-    assert file.read() == 'EFFECTIVE\nEXCITATION'
-
-
+    assert file.read() == ''

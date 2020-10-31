@@ -8,6 +8,8 @@ from .nepc import cs_metadata
 from .nepc import table_as_df
 from .nepc import process_attr
 from .nepc import reaction_latex
+from .nepc import reaction_text_side
+from .nepc import reaction_text
 from .nepc import CS
 from .nepc import CustomCS
 from .nepc import Model
@@ -27,6 +29,8 @@ __all__ = [
         'table_as_df',
         'process_attr',
         'reaction_latex',
+        'reaction_text_side',
+        'reaction_text',
         'CS',
         'CustomCS',
         'Model',
