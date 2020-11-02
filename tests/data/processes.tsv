@@ -38,7 +38,8 @@ id	name	long_name	lhs	rhs	lhs_e	rhs_e	lhs_hv	rhs_hv	lhs_v	rhs_v	lhs_j	rhs_j
 37	d_ionization_excitation_vj	Dissociative ionization with excitation (vibrational and rotational)	1	2	1	2	0	0	1	1	1	1
 38	ion_pair	Ion pair formation	1	2	1	1	0	0	0	0	0	0
 39	d_attachment	Dissociative attachment	1	2	1	0	0	0	0	0	0	0
-40	d_recombination	Dissociative recombination	1	2	1	0	0	0	0	0	0	0
-41	momentum_total	Total elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
-42	momentum	Partial elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
-43	total	Total or effective electron scattering cross section for a species or state	1	1	1	1	0	0	0	0	0	0
+40	d_recombination_total	Total dissociative recombination	1	2	1	0	0	0	0	0	0	0
+41	d_recombination	Dissociative recombination	1	2	1	0	0	0	0	0	0	0
+42	momentum_total	Total elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
+43	momentum	Partial elastic momentum transfer	1	1	1	1	0	0	0	0	0	0
+44	total	Total or effective electron scattering cross section for a species or state	1	1	1	1	0	0	0	0	0	0

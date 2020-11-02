@@ -231,6 +231,20 @@ def test_reaction_latex(nepc_connect):
         cs = nepc.CS(nepc_connect[1], i)
         assert isinstance(nepc.reaction_latex(cs), str)
 
+@pytest.mark.usefixtures("nepc_connect")
+def test_reaction_text(nepc_connect):
+    """Verify nepc.reaction_text and nepc.reaction_text_side
+    return strings representing the LHS, RHS, or full plain text
+    for the reaction from a nepc cross section"""
+    # TODO: sample all process types and enough permutations
+    cs = nepc.CS(nepc_connect[1], 1)
+    lhsA = 'N2(X1Sigmag+)'
+    rhsA = 'N2(X1Sigmag+)_jSCHULZ'
+    assert nepc.reaction_text_side('LHS', cs) == (lhsA, f'E + {lhsA}')
+    assert nepc.reaction_text_side('RHS', cs) == (rhsA, f'E + {rhsA}')
+    assert nepc.reaction_text(cs) == (f'{lhsA} -> {rhsA}',
+                                      f'E + {lhsA} -> E + {rhsA}')
+
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_model_summary_df(nepc_connect):
@@ -257,10 +271,3 @@ def test_model_subset(nepc_connect):
     with pytest.raises(Exception):
         assert fict.subset()
 
-
-@pytest.mark.usefixtures("nepc_connect")
-def test_cs_subset_exception(nepc_connect):
-    """When prompted with an exception in test_cs_subset
-    verify that nepc.cs_subset does indeed return a value"""
-    with pytest.raises(Exception):
-        assert nepc.cs_subset(nepc_connect[1])
