@@ -393,11 +393,65 @@ class CS:
         self.data = {"e": e_energy,
                      "sigma": sigma}
 
-
     def __len__(self):
         r"""The number of data points in the cross section data set"""
         return len(self.data['e'])
 
+    def reaction_latex(self):
+        """Return the LaTeX for the LHS of the process involved in a nepc cross section.
+
+        Parameters
+        ----------
+        cs : :class:`.CS` or :class:`.CustomCS`
+            A nepc cross section.
+
+        Returns
+        -------
+        : str
+            The LaTeX form of the process involved in a NEPC cross section.
+
+        """
+        # FIXME: move this method to the CS Class (check)
+        # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+        # FIXME: decide how to represent total cross sections and implement
+        # Text for the LHS
+        e_on_lhs = self.metadata['e_on_lhs']
+        if e_on_lhs == 0:
+            lhs_e_text = None
+        elif e_on_lhs == 1:
+            lhs_e_text = "e$^-$"
+        else:
+            lhs_e_text = str(e_on_lhs) + "e$^-$"
+
+        lhsA_text = self.metadata['lhsA_long']
+        if self.metadata['process'] == 'excitation_v':
+            lhsA_text = lhsA_text.replace(")", " v=" + str(self.metadata['lhs_v']) + ")")
+        lhsB_text = self.metadata['lhsB_long']
+        lhs_items = [lhs_e_text,
+                     lhsA_text,
+                     lhsB_text]
+        lhs_text = " + ".join(item for item in lhs_items if item)
+
+        # Text for the RHS
+        e_on_rhs = self.metadata['e_on_rhs']
+        if e_on_rhs == 0:
+            rhs_e_text = None
+        elif e_on_rhs == 1:
+            rhs_e_text = "e$^-$"
+        else:
+            rhs_e_text = str(e_on_rhs) + "e$^-$"
+
+        rhsA_text = self.metadata['rhsA_long']
+        if self.metadata['process'] == 'excitation_v':
+            rhsA_text = rhsA_text.replace(")", " v=" + str(self.metadata['rhs_v']) + ")")
+        rhsB_text = self.metadata['rhsB_long']
+        rhs_items = [rhsA_text,
+                     rhsB_text,
+                     rhs_e_text]
+        rhs_text = " + ".join(item for item in rhs_items if item)
+
+        reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
+        return reaction
 
     def plot(self, units_sigma=1E-20, plot_param_dict={'linewidth': 1},
              xlim_param_dict={'auto': True}, ylim_param_dict={'auto': True},
@@ -454,7 +508,7 @@ class CS:
         axes.tick_params(direction='in', which='both',
                          bottom=True, top=True, left=True, right=True)
 
-        reaction = reaction_latex(self)
+        reaction = self.reaction_latex
         label_items = [self.metadata['process'], ": ", reaction]
         label_text = " ".join(item for item in label_items if item)
         e_np = np.array(self.data['e'])
@@ -658,7 +712,6 @@ class Model:
         else:
             cs_subset = self.cs
 
-
         for cs in cs_subset:
             csdata = np.array(list(zip(cs.data['e'], cs.data['sigma'])))
             e_peak = csdata[np.argmax(csdata[:, 1]), 0]
@@ -674,7 +727,7 @@ class Model:
                 max_peak_sigma = cs_peak_sigma
             if cs_peak_sigma < min_peak_sigma:
                 min_peak_sigma = cs_peak_sigma
-            reaction = reaction_latex(cs)
+            reaction = cs.reaction_latex
             cs_lpu = cs.metadata["lpu"]
             cs_upu = cs.metadata["upu"]
             if cs_lpu is not None and cs_lpu > max_lpu:
@@ -782,7 +835,7 @@ class Model:
             elif process in ('', self.cs[i].metadata['process']):
                 plot_num += 1
 
-                reaction = reaction_latex(self.cs[i])
+                reaction = self.cs[i].reaction_latex
                 label_items = [self.cs[i].metadata['process'], ": ", reaction]
                 label_text = " ".join(item for item in label_items if item)
                 e_np = np.array(self.cs[i].data['e'])
@@ -928,100 +981,4 @@ def process_attr(process: str, attr_list: List[str], test=False):
         process_attr_dict[attr] = proc_df.loc[proc_df.name==process, attr].values[0]
     
     return process_attr_dict
-                                         
 
-def reaction_latex_lhs(cs):
-    """Return the LaTeX for the LHS of the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the LHS of the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    e_on_lhs = cs.metadata['e_on_lhs']
-    if e_on_lhs == 0:
-        lhs_e_text = None
-    elif e_on_lhs == 1:
-        lhs_e_text = "e$^-$"
-    else:
-        lhs_e_text = str(e_on_lhs) + "e$^-$"
-
-    lhsA_text = cs.metadata['lhsA_long']
-    if cs.metadata['process'] == 'excitation_v':
-        lhsA_text = lhsA_text.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
-    lhsB_text = cs.metadata['lhsB_long']
-    lhs_items = [lhs_e_text,
-                 lhsA_text,
-                 lhsB_text]
-    lhs_text = " + ".join(item for item in lhs_items if item)
-
-    return lhs_text
-
-
-def reaction_latex_rhs(cs):
-    """Return the LaTeX for the RHS of the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the RHS of the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    e_on_rhs = cs.metadata['e_on_rhs']
-    if e_on_rhs == 0:
-        rhs_e_text = None
-    elif e_on_rhs == 1:
-        rhs_e_text = "e$^-$"
-    else:
-        rhs_e_text = str(e_on_rhs) + "e$^-$"
-
-    rhsA_text = cs.metadata['rhsA_long']
-    if cs.metadata['process'] == 'excitation_v':
-        rhsA_text = rhsA_text.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
-    rhsB_text = cs.metadata['rhsB_long']
-    rhs_items = [rhsA_text,
-                 rhsB_text,
-                 rhs_e_text]
-    rhs_text = " + ".join(item for item in rhs_items if item)
-
-    return rhs_text
-
-
-def reaction_latex(cs):
-    """Return the LaTeX for the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    lhs_text = reaction_latex_lhs(cs)
-    rhs_text = reaction_latex_rhs(cs)
-    reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
-    return reaction
