@@ -534,28 +534,59 @@ def text_array_to_float_array(text_array, omit_regexp=''):
     return data
 
 
-def format_model(model, format='lxcat', filename='lxcat.txt'):
-    valid_formats = ['lxcat']
+def format_model(model, type='lxcat', filename='lxcat.txt'):
+    valid_types = ['lxcat']
 
-    if format not in valid_formats:
-        raise Exception(f'format {format} is not supported')
+    if type not in valid_types:
+        raise Exception(f'type {type} is not supported')
 
     if not isinstance(model, nepc.nepc.Model):
         raise Exception(f'model {model} is not supported')
 
-    nepc_process_lxcat_crosswalk_file = nepc_config.nepc_home() + '/tests/data/processes_lxcat.tsv'
-    with open(nepc_process_lxcat_crosswalk_file) as f:
+    file_process_lxcat = nepc_config.nepc_home() + '/tests/data/processes_lxcat.tsv'
+    with open(file_process_lxcat) as f:
         processes_lxcat = pd.read_csv(f, sep='\t', header=0, names=['name', 'lxcat']).set_index('name').T.to_dict('records')[0]
+
+    def threshold(cs):
+        if cs.metadata['process'] in ['total', 'elastic', 'elastic_total']:
+            #TODO: implement m/M fully
+            if cs.metadata['specie'] in ['N2']:
+                return 1.95e-5
+            else:
+                raise Exception(f'm_M not implemented for {cs.metadata["specie"]}')
+        else:
+            return cs.metadata['threshold']
+
 
     with open(filename, 'w') as f:
         for cs in model.cs:
-            for metadata in ['process', 'reaction_abbrev', 'threshold']:
-                if metadata == 'process':
-                    line = f"{processes_lxcat[cs.metadata[metadata]]}\n" 
-                if metadata == 'reaction_abbrev':
+            for metadata in ['process', 'reaction_abbrev', 'threshold',
+                             'specie', 'reaction_full', 'param', 'header']:
+                if metadata is 'process':
+                    line = f"{str(processes_lxcat[cs.metadata[metadata]]).upper()}\n" 
+                elif metadata is 'reaction_abbrev':
                     line = f'{nepc.reaction_text(cs)[0]}\n'
+                elif metadata is 'threshold':
+                    line = f" {threshold(cs):.6e}\n" 
+                elif metadata is 'specie':
+                    line = f"SPECIES: e / {cs.metadata[metadata]}\n"
+                elif metadata is 'reaction_full':
+                    line = (f'PROCESS: {str(nepc.reaction_text(cs)[1])}, '
+                            f'{str(processes_lxcat[cs.metadata["process"]]).capitalize()}\n')
+                elif metadata is 'param':
+                    if cs.metadata['process'] in ['total', 'elastic', 'elastic_total']:
+                        line = f'PARAM.:  m/M = {threshold(cs)}\n'
+                    # TODO: make sure units_e is not needed here
+                    else:
+                        line = f'PARAM.:  E = {threshold(cs)} eV\n'
+                elif metadata is 'header':
+                    line = (f'COLUMNS: Energy (eV) | Cross section (m2)\n'
+                            f'-----------------------------\n')
                 else:
                     line = f"{cs.metadata[metadata]}\n" 
                 f.write(line)
+            for e, sigma in zip(cs.data['e'], cs.data['sigma']):
+                f.write(f'{e:.6e}\t{sigma:.6e}\n')
+            f.write(f'-----------------------------\n\n')
 
         

@@ -232,9 +232,9 @@ def test_reaction_latex(nepc_connect):
         assert isinstance(nepc.reaction_latex(cs), str)
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_reaction_text_side(nepc_connect):
-    """Verify when nepc.reaction_text_side is called it
-    returns a string representing the LHS or RHS text
+def test_reaction_text(nepc_connect):
+    """Verify nepc.reaction_text and nepc.reaction_text_side
+    return strings representing the LHS, RHS, or full plain text
     for the reaction from a nepc cross section"""
     # TODO: sample all process types and enough permutations
     cs = nepc.CS(nepc_connect[1], 1)
