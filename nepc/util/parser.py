@@ -6,7 +6,7 @@
 Notes
 -----
 This module contains the code required to parse BOLSIG+-compatible files.
-To make the code re-usabe in other projects it is independent from the rest of
+To make the code re-usable in other projects it is independent from the rest of
 the BOLOS code.
 
 Most users would only use the method :func:`parse` in this module, which is
