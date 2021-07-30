@@ -143,8 +143,7 @@ package.
   * Are there tests for the expected performance?
   * Are the sources for the tests documented?
   * Have tests that require an optional dependency been marked as such?
-  * Does ``pytest --local`` run without failures? See [notes about MySQL](MYSQL.md) 
-    for setting up the `nepc_test` database.
+  * Does ``pytest --local`` run without failures? See [nepc documentation: Accessing a NEPC MySQL Database](https://nepc.readthedocs.io/en/latest/mysql.html) for help on setting up a local `nepc_test` database.
 
 **Documentation**
   * Is there a docstring in [numpydoc format](https://numpydoc.readthedocs.io/en/latest/format.html) in the function describing:
@@ -182,8 +181,9 @@ $ conda env create -f environment-dev.yml #create the nepc-dev conda environment
 $ conda activate nepc-dev
 $ pip install -e . # install the nepc package and sub-packages into the nepc-dev conda environment
 $ export NEPC_HOME=/path/to/cloned/nepc/repo/ # in your `~/.bashrc` or `~/.bash_profile` or other appropriate shell config
-$ pytest --local # (see MYSQL.md for building the `nepc_test` database)
+$ pytest --local # requires the nepc_test database (see note below)
 ```
+*Note: running pytest --local requires a nepc_test database and MySQL server. See [the nepc docs](https://nepc.readthedocs.io/en/latest/mysql.html) for help on building the `nepc_test` database.*
 
 `pylint` in a conda environment
 -------------------------------
