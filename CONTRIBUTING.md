@@ -1,7 +1,7 @@
 Contributing to NEPC
 ====================
 
-`nepc` is an open source project, and you are welcome to contribute to its development. Contributions can come in any areas: writing code, contributing Jupyter Notebooks, writing documentation, improving tests (including providing interesting yet realistic fictitious electron scattering data), cleaning up code (i.e. improving the pylint score),  etc.
+`nepc` is an open source project, and you are welcome to contribute to its development. Contributions can come in any areas: writing code, contributing example fictitious data and data analysis, writing documentation, adding and improving tests (including providing interesting yet realistic fictitious electron scattering data and new failing tests for desired features), cleaning up code (i.e. improving the pylint score),  etc.
 
 Version control of `nepc` is done with `git`. We use a continuous integration system and monitor code quality. 
 
@@ -10,7 +10,8 @@ Reporting Issues
 
 When opening an issue to report a problem, please try to provide a minimal code
 example that reproduces the issue along with details of the operating
-system and the Python, NumPy, and `nepc` versions you are using.
+system and package versions that you are using (relative to the `nepc-dev` conda
+environment provided in `environment-dev.yml`).
 
 Contributing Code
 -----------------
@@ -46,7 +47,7 @@ Astropy based on its use in the README file for the
 [MetPy project](https://github.com/Unidata/MetPy) and then further adapted for NEPC.
 
 Most contributions to NEPC are done via pull requests from GitHub users'
-forks of the [nepc repository](https://predator.nrl.navy.mil/padamson/nepc). 
+forks of the [nepc repository](https://github.com/USNavalResearchLaboratory/nepc).
 
 Once you open a pull request (which should be opened against the ``master``
 branch, not against any of the other branches), please make sure to
@@ -142,8 +143,7 @@ package.
   * Are there tests for the expected performance?
   * Are the sources for the tests documented?
   * Have tests that require an optional dependency been marked as such?
-  * Does ``pytest --local`` run without failures? See [notes about MySQL](MYSQL.md) 
-    for setting up the `nepc_test` database.
+  * Does ``pytest --local`` run without failures? See [nepc documentation: Accessing a NEPC MySQL Database](https://nepc.readthedocs.io/en/latest/mysql.html) for help on setting up a local `nepc_test` database.
 
 **Documentation**
   * Is there a docstring in [numpydoc format](https://numpydoc.readthedocs.io/en/latest/format.html) in the function describing:
@@ -171,30 +171,31 @@ Nuts and Bolts
 Development Environment
 -----------------------
 
-Developing `nepc` works best within a conda environment (`environment.yml` file provided). 
+Developing `nepc` works best within a conda environment (`environment-dev.yml` file provided). 
 Also, if you are going to build a database yourself, you will need MySQL. To get started:
 
 ```console
-$ git clone predator.nrl.navy.mil/padamson/nepc/
+$ git clone https://github.com/USNavalResearchLaboratory/nepc.git
 $ cd nepc
-$ conda env create -f environment.yml #create the nepc conda environment 
-$ conda activate nepc
-$ pip install -e . # install the nepc package and sub-packages into the nepc conda environment
-$ export NEPC_HOME=/path/to/cloned/nepc/repo/ # put this in your `~/.bashrc or ~/.bash_profile`
-$ pytest # if on the NRL network (otherwise see MYSQL.md for building the `nepc_test` database)
+$ conda env create -f environment-dev.yml #create the nepc-dev conda environment 
+$ conda activate nepc-dev
+$ pip install -e . # install the nepc package and sub-packages into the nepc-dev conda environment
+$ export NEPC_HOME=/path/to/cloned/nepc/repo/ # in your `~/.bashrc` or `~/.bash_profile` or other appropriate shell config
+$ pytest --local # requires the nepc_test database (see note below)
 ```
+*Note: running pytest --local requires a nepc_test database and MySQL server. See [the nepc docs](https://nepc.readthedocs.io/en/latest/mysql.html) for help on building the `nepc_test` database.*
 
 `pylint` in a conda environment
 -------------------------------
 
-It's probably best to make sure `pylint` is not in your base conda environment. Otherwise, when you run `pylint`, the linter will give you errors and warnings for your base environment, not your nepc conda environment.  (i.e. run `conda uninstall pylint` in your base conda environment, if necessary.)
+It's probably best to make sure `pylint` is not in your base conda environment. Otherwise, when you run `pylint`, the linter will give you errors and warnings for your base environment, not your `nepc-dev` conda environment.  (i.e. run `conda uninstall pylint` in your base conda environment, if necessary.)
 
 `livereload`
 ------------
 
 The very useful tool [`livereload`](https://livereload.readthedocs.io/en/latest/) for monitoring
 changes in Sphinx documentation in real-time is included 
-in the `nepc` conda environment (`environment.yml` file). 
+in the `nepc-dev` conda environment (`environment-dev.yml` file). 
 Here’s a simple script that detects changes in any `*.rst` files in `doc` or `*.py` files in `nepc`,
 rebuilds the Sphinx documentation, and starts a `livereload` server:
 
@@ -220,4 +221,4 @@ Sphinx cross-references
 
 If you are having trouble determining the syntax for a Sphinx cross-reference (internal
 or external), try the command-line tool [https://github.com/bskinn/sphobjinv](sphobjinv),
-which is included in the `nepc` conda environment (`environment.yml` file).
+which is included in the `nepc-dev` conda environment (`environment-dev.yml` file).
