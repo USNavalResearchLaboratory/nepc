@@ -283,7 +283,7 @@ def write_pd_data_to_file(data_frame, filename, start_csdata_id):
     return csdata_id
 
 
-def write_metadata_to_file(filename, cs_id, specie, process,
+def write_metadata_to_file(filename, cs_id, species, process,
                            units_e, units_sigma, ref='\\N',
                            lhs_a='\\N', lhs_b='\\N',
                            rhs_a='\\N', rhs_b='\\N', threshold='-1', wavelength='-1',
@@ -298,8 +298,8 @@ def write_metadata_to_file(filename, cs_id, specie, process,
         Name of the file where values of ``data_array`` should be written.
     cs_id: int
         ``cs_id`` corresponding to the cross section in the database.
-    specie: str
-        The short name corresponding to the specie in the database.
+    species: str
+        The short name corresponding to the species in the database.
     process: str
         The short name corresponding to the electron scattering process in the 
         database.
@@ -346,7 +346,7 @@ def write_metadata_to_file(filename, cs_id, specie, process,
     write_met.write(
         "\t".join(
             ('cs_id',
-             'specie',
+             'species',
              'process',
              'units_e',
              'units_sigma',
@@ -367,7 +367,7 @@ def write_metadata_to_file(filename, cs_id, specie, process,
     write_met.write(
         "\t".join(
             (str(cs_id),
-             specie,
+             species,
              process,
              str(units_e),
              str(units_sigma),
@@ -389,7 +389,7 @@ def write_metadata_to_file(filename, cs_id, specie, process,
     return cs_id + 1
 
 
-def write_cs_to_file(filename, data_array, cs_id, start_csdata_id, specie,
+def write_cs_to_file(filename, data_array, cs_id, start_csdata_id, species,
                      process, units_e, units_sigma, ref='\\N',
                      lhs_a='\\N', lhs_b='\\N', rhs_a='\\N', rhs_b='\\N',
                      threshold='-1',
@@ -403,7 +403,7 @@ def write_cs_to_file(filename, data_array, cs_id, start_csdata_id, specie,
     write_metadata_to_file"""
     next_csdata_id = write_data_to_file(data_array, filename+".dat",
                                         start_csdata_id)
-    next_cs_id = write_metadata_to_file(filename+".met", cs_id, specie,
+    next_cs_id = write_metadata_to_file(filename+".met", cs_id, species,
                                         process, units_e, units_sigma,
                                         ref, lhs_a, lhs_b, rhs_a, rhs_b,
                                         threshold, wavelength, lhs_v, rhs_v,
@@ -550,10 +550,10 @@ def format_model(model, type='lxcat', filename='lxcat.txt'):
     def threshold(cs):
         if cs.metadata['process'] in ['total', 'elastic', 'elastic_total']:
             #TODO: implement m/M fully
-            if cs.metadata['specie'] in ['N2']:
+            if cs.metadata['species'] in ['N2']:
                 return 1.95e-5
             else:
-                raise Exception(f'm_M not implemented for {cs.metadata["specie"]}')
+                raise Exception(f'm_M not implemented for {cs.metadata["species"]}')
         else:
             return cs.metadata['threshold']
 
@@ -561,14 +561,14 @@ def format_model(model, type='lxcat', filename='lxcat.txt'):
     with open(filename, 'w') as f:
         for cs in model.cs:
             for metadata in ['process', 'reaction_abbrev', 'threshold',
-                             'specie', 'reaction_full', 'param', 'header']:
+                             'species', 'reaction_full', 'param', 'header']:
                 if metadata is 'process':
                     line = f"{str(processes_lxcat[cs.metadata[metadata]]).upper()}\n" 
                 elif metadata is 'reaction_abbrev':
                     line = f'{nepc.reaction_text(cs)[0]}\n'
                 elif metadata is 'threshold':
                     line = f" {threshold(cs):.6e}\n" 
-                elif metadata is 'specie':
+                elif metadata is 'species':
                     line = f"SPECIES: e / {cs.metadata[metadata]}\n"
                 elif metadata is 'reaction_full':
                     line = (f'PROCESS: {str(nepc.reaction_text(cs)[1])}, '

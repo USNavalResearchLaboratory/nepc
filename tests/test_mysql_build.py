@@ -66,7 +66,7 @@ def test_meta_entered(data_config, nepc_connect, local, dbug):
             print(cs_id, met_file)
         e, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
 
-        meta_cols = ['cs_id', 'specie', 'process', 'units_e',
+        meta_cols = ['cs_id', 'species', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
                      'lhsB', 'rhsA', 'rhsB', 'threshold', 'wavelength',
                      'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j',

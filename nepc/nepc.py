@@ -257,7 +257,7 @@ def cs_metadata(cursor, cs_id):
                    "C.`lhs_j`, C.`rhs_j` "
                    "FROM `cs` AS A "
                    "LEFT JOIN `species` AS B "
-                   "ON B.`id` = A.`specie_id` "
+                   "ON B.`id` = A.`species_id` "
                    "LEFT JOIN `processes` AS C "
                    "ON C.`id` = A.`process_id` "
                    "LEFT JOIN `states` AS D "
@@ -289,8 +289,8 @@ class CS:
     metadata : dict
         cs_id : int
             id of the cross section in `cs` and `csdata` tables
-        specie : str
-            `name` of specie from `species` table
+        species : str
+            `name` of species from `species` table
         process : str
             `name` of process from `processes` table
         units_e : float
@@ -311,13 +311,13 @@ class CS:
         wavelength : float
             wavelength of photon involved in process in nanometers (nm)
         lhs_v : int
-            vibrational energy level of lhs specie
+            vibrational energy level of lhs species
         rhs_v : int
-            vibrational energy level of rhs specie
+            vibrational energy level of rhs species
         lhs_j : int
-            rotational energy level of lhs specie
+            rotational energy level of lhs species
         rhs_j : int
-            rotational energy level of rhs specie
+            rotational energy level of rhs species
         background : str
             background text describing origin of data and other important info
         lpu : float
@@ -358,7 +358,7 @@ class CS:
     def __init__(self, cursor, cs_id):
         metadata = cs_metadata(cursor, cs_id)
         self.metadata = {"cs_id": metadata[0],
-                         "specie": metadata[1],
+                         "species": metadata[1],
                          "process": metadata[2],
                          "units_e": metadata[3],
                          "units_sigma": metadata[4],
@@ -611,7 +611,7 @@ class Model:
 
         Returns a stylized Pandas dataframe with headers given by:
 
-        headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
+        headers = ["cs_id", "species", "lhsA", "rhsA", "process",
                    "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
 
@@ -638,7 +638,7 @@ class Model:
         """
         summary_list = []
 
-        headers = ["cs_id", "specie", "lhsA", "rhsA", "process",
+        headers = ["cs_id", "species", "lhsA", "rhsA", "process",
                    "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
 
@@ -682,7 +682,7 @@ class Model:
             if cs_upu is not None and cs_upu > max_upu:
                 max_upu = cs_upu
             summary_list.append([cs.metadata["cs_id"],
-                                 cs.metadata["specie"], cs.metadata["lhsA"], cs.metadata["rhsA"],
+                                 cs.metadata["species"], cs.metadata["lhsA"], cs.metadata["rhsA"],
                                  cs.metadata["process"], reaction,
                                  cs.metadata["units_e"]*cs.metadata["threshold"],
                                  cs.metadata["units_e"]*e_peak,
