@@ -9,7 +9,7 @@ dependencies:
         - jupyter_client
         - numpy
         - pandas
-        - python
+        - python==3.7
         - matplotlib
         - tabulate
         - pytest
