@@ -241,7 +241,6 @@ def cs_metadata(cursor, cs_id):
 
     """
     cursor.execute("SELECT A.`cs_id` , "
-                   "B.`name` , "
                    "C.`name` , "
                    "A.`units_e`, A.`units_sigma`, A.`ref`, "
                    "D.`name`, E.`name`, "
@@ -256,8 +255,6 @@ def cs_metadata(cursor, cs_id):
                    "C.`lhs_v`, C.`rhs_v`, "
                    "C.`lhs_j`, C.`rhs_j` "
                    "FROM `cs` AS A "
-                   "LEFT JOIN `species` AS B "
-                   "ON B.`id` = A.`species_id` "
                    "LEFT JOIN `processes` AS C "
                    "ON C.`id` = A.`process_id` "
                    "LEFT JOIN `states` AS D "
@@ -289,8 +286,6 @@ class CS:
     metadata : dict
         cs_id : int
             id of the cross section in `cs` and `csdata` tables
-        species : str
-            `name` of species from `species` table
         process : str
             `name` of process from `processes` table
         units_e : float
@@ -311,13 +306,13 @@ class CS:
         wavelength : float
             wavelength of photon involved in process in nanometers (nm)
         lhs_v : int
-            vibrational energy level of lhs species
+            vibrational energy level of lhsA
         rhs_v : int
-            vibrational energy level of rhs species
+            vibrational energy level of rhsA
         lhs_j : int
-            rotational energy level of lhs species
+            rotational energy level of lhsA
         rhs_j : int
-            rotational energy level of rhs species
+            rotational energy level of rhsA
         background : str
             background text describing origin of data and other important info
         lpu : float
@@ -358,36 +353,35 @@ class CS:
     def __init__(self, cursor, cs_id):
         metadata = cs_metadata(cursor, cs_id)
         self.metadata = {"cs_id": metadata[0],
-                         "species": metadata[1],
-                         "process": metadata[2],
-                         "units_e": metadata[3],
-                         "units_sigma": metadata[4],
-                         "ref": metadata[5],
-                         "lhsA": metadata[6],
-                         "lhsB": metadata[7],
-                         "rhsA": metadata[8],
-                         "rhsB": metadata[9],
-                         "threshold": metadata[10],
-                         "wavelength": metadata[11],
-                         "lhs_v": metadata[12],
-                         "rhs_v": metadata[13],
-                         "lhs_j": metadata[14],
-                         "rhs_j": metadata[15],
-                         "background": metadata[16],
-                         "lpu": metadata[17],
-                         "upu": metadata[18],
-                         "lhsA_long": metadata[19],
-                         "lhsB_long": metadata[20],
-                         "rhsA_long": metadata[21],
-                         "rhsB_long": metadata[22],
-                         "e_on_lhs": metadata[23],
-                         "e_on_rhs": metadata[24],
-                         "hv_on_lhs": metadata[25],
-                         "hv_on_rhs": metadata[26],
-                         "v_on_lhs": metadata[27],
-                         "v_on_rhs": metadata[28],
-                         "j_on_lhs": metadata[29],
-                         "j_on_rhs": metadata[30]}
+                         "process": metadata[1],
+                         "units_e": metadata[2],
+                         "units_sigma": metadata[3],
+                         "ref": metadata[4],
+                         "lhsA": metadata[5],
+                         "lhsB": metadata[6],
+                         "rhsA": metadata[7],
+                         "rhsB": metadata[8],
+                         "threshold": metadata[9],
+                         "wavelength": metadata[10],
+                         "lhs_v": metadata[11],
+                         "rhs_v": metadata[12],
+                         "lhs_j": metadata[13],
+                         "rhs_j": metadata[14],
+                         "background": metadata[15],
+                         "lpu": metadata[16],
+                         "upu": metadata[17],
+                         "lhsA_long": metadata[18],
+                         "lhsB_long": metadata[19],
+                         "rhsA_long": metadata[20],
+                         "rhsB_long": metadata[21],
+                         "e_on_lhs": metadata[22],
+                         "e_on_rhs": metadata[23],
+                         "hv_on_lhs": metadata[24],
+                         "hv_on_rhs": metadata[25],
+                         "v_on_lhs": metadata[26],
+                         "v_on_rhs": metadata[27],
+                         "j_on_lhs": metadata[28],
+                         "j_on_rhs": metadata[29]}
 
         e_energy, sigma = cs_e_sigma(cursor, cs_id)
         self.data = {"e": e_energy,
@@ -611,7 +605,7 @@ class Model:
 
         Returns a stylized Pandas dataframe with headers given by:
 
-        headers = ["cs_id", "species", "lhsA", "rhsA", "process",
+        headers = ["cs_id", "lhsA", "rhsA", "process",
                    "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
 
@@ -638,7 +632,7 @@ class Model:
         """
         summary_list = []
 
-        headers = ["cs_id", "species", "lhsA", "rhsA", "process",
+        headers = ["cs_id", "lhsA", "rhsA", "process",
                    "reaction", "threshold", "E_peak", "E_upper",
                    "sigma_max", "lpu", "upu"]
 
@@ -682,7 +676,7 @@ class Model:
             if cs_upu is not None and cs_upu > max_upu:
                 max_upu = cs_upu
             summary_list.append([cs.metadata["cs_id"],
-                                 cs.metadata["species"], cs.metadata["lhsA"], cs.metadata["rhsA"],
+                                 cs.metadata["lhsA"], cs.metadata["rhsA"],
                                  cs.metadata["process"], reaction,
                                  cs.metadata["units_e"]*cs.metadata["threshold"],
                                  cs.metadata["units_e"]*e_peak,

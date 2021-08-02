@@ -27,11 +27,11 @@ def test_format_model_write_file(nepc_connect, tmpdir):
     fict = nepc.Model(nepc_connect[1], "fict")
     parser.format_model(fict, type='lxcat', filename=str(file))
     lines = file.read().splitlines()
-    assert len(lines) == 1981
+    assert len(lines) == 1951
     assert lines[0] == 'EXCITATION'
-    assert lines[99] == '1.500000e+03\t1.130000e-20'
-    assert lines[184] == 'COLUMNS: Energy (eV) | Cross section (m2)'
+    assert lines[99] == '3.000000e+03\t6.300000e-21'
+    assert lines[179] == 'COLUMNS: Energy (eV) | Cross section (m2)'
     with open(str(file), 'rb') as f:
         fb = f.read()
         readable_hash = hashlib.md5(fb).hexdigest()
-    assert readable_hash == '8f8c7935e3d80ea20ca9fffd98391ade'
+    assert readable_hash == 'b0c0d9564c3f9c722a27c6e5a4d27260'

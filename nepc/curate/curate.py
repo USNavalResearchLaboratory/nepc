@@ -159,7 +159,6 @@ class CurateCS(ABC):
                 metadata = cs
             next_cs_id = parser.write_metadata_to_file(filename=metadata['nepc_filename']+'.met',
                                                        cs_id=next_cs_id,
-                                                       species=metadata['species'],
                                                        process=metadata['process'],
                                                        lhs_a=metadata['lhs_a'],
                                                        lhs_b=metadata['lhs_b'],

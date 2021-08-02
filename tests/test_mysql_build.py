@@ -87,13 +87,14 @@ def test_meta_entered(data_config, nepc_connect, local, dbug):
                 reader = csv.reader(f, delimiter='\t')
                 next(reader)
                 meta_disk = list(reader)[0]
-        meta_disk = [meta_disk[i] for i in list(range(len(meta_cols)))]
-        for i in [3, 4, 10, 11, 17, 18]:
-            meta_disk[i] = (float(meta_disk[i]) if meta_disk[i] != '\\N'
-                            else meta_disk[i])
 
-        for i in [0, 12, 13, 14, 15]:
+        meta_disk = [meta_disk[i] for i in list(range(len(meta_cols)))]
+
+        for i in [0, 11, 12, 13, 14]:
             meta_disk[i] = (int(meta_disk[i]) if meta_disk[i] != '\\N'
+                            else meta_disk[i])
+        for i in [2, 3, 9, 10, 16, 17]:
+            meta_disk[i] = (float(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
         meta_db = [nepc.cs_metadata(nepc_connect[1], cs_id)[i]

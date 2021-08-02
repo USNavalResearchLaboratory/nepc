@@ -178,7 +178,6 @@ MYCURSOR.execute("CREATE TABLE `" + database + "`.`models`("
 
 MYCURSOR.execute("CREATE TABLE `" + database + "`.`cs`("
                  "	`cs_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
-                 "	`species_id` INT UNSIGNED NOT NULL, "
                  "	`process_id` INT UNSIGNED NOT NULL, "
                  "	`units_e` DOUBLE NOT NULL,"
                  "	`units_sigma` DOUBLE NOT NULL,"
@@ -197,10 +196,6 @@ MYCURSOR.execute("CREATE TABLE `" + database + "`.`cs`("
                  "	`lpu` DOUBLE NULL ,"
                  "	`upu` DOUBLE NULL ,"
                  "	PRIMARY KEY(`CS_ID`) ,"
-                 "	INDEX `species_id`(`species_id` ASC) ,"
-                 "	CONSTRAINT `species_id_CS` FOREIGN KEY(`species_id`)"
-                 "	REFERENCES `" + database + "`.`species`(`id`)"
-                 "  ON DELETE RESTRICT ON UPDATE CASCADE,"
                  "	INDEX `PROCESS_ID`(`process_id` ASC) ,"
                  "	CONSTRAINT `PROCESS_ID_CS` FOREIGN KEY(`process_id`)"
                  "	REFERENCES `" + database + "`.`processes`(`id`)"
@@ -235,7 +230,6 @@ MYCURSOR.execute("CREATE TABLE `" + database + "`.`csdata`("
 
 MYCURSOR.execute("CREATE TABLE `" + database + "`.`rate`("
                  "	`rate_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, "
-                 "	`species_id` INT UNSIGNED NOT NULL, "
                  "	`process_id` INT UNSIGNED NOT NULL, "
                  "	`ref` VARCHAR(1000),"
                  "	`lhsA_id` INT UNSIGNED NULL ,"
@@ -251,10 +245,6 @@ MYCURSOR.execute("CREATE TABLE `" + database + "`.`rate`("
                  "	`background` VARCHAR(10000), "
                  "      `form` VARCHAR(100) NOT NULL, "
                  "	PRIMARY KEY(`RATE_ID`) ,"
-                 "	INDEX `species_id`(`species_id` ASC) ,"
-                 "	CONSTRAINT `species_id_RATE` FOREIGN KEY(`species_id`)"
-                 "	REFERENCES `" + database + "`.`species`(`id`)"
-                 "  ON DELETE RESTRICT ON UPDATE CASCADE,"
                  "	INDEX `PROCESS_ID`(`process_id` ASC) ,"
                  "	CONSTRAINT `PROCESS_ID_RATE` FOREIGN KEY(`process_id`)"
                  "	REFERENCES `" + database + "`.`processes`(`id`)"
@@ -425,7 +415,7 @@ else:
 F_CS_DAT_FILE = open(CS_DAT_FILENAME, 'w')
 F_CS_DAT_FILE.write("\t".join(["cs_id", "filename"]) + "\n")
 
-CS_VARIABLE_LIST = ["cs_id", "species_id", "process_id",
+CS_VARIABLE_LIST = ["cs_id", "process_id",
                     "units_e", "units_sigma",
                     "ref",
                     "lhsA_id", "lhsB_id", "rhsA_id", "rhsB_id",
@@ -434,7 +424,6 @@ CS_VARIABLE_LIST = ["cs_id", "species_id", "process_id",
                     "lhs_v", "rhs_v", "lhs_j", "rhs_j", "background",
                     "lpu", "upu"]
 CS_DTYPE = {"cs_id": int,
-            "species": str,
             "process": str,
             "units_e": float,
             "units_sigma": float,
@@ -474,8 +463,6 @@ UPDATE_COMMAND_CS = ("INSERT INTO cs " +
                      "  background = %s, "
                      "  lpu = %s, "
                      "  upu = %s, "
-                     "  species_id = (SELECT id FROM " + database + ".species "
-                     "    WHERE NAME=%s), "
                      "  process_id = (select id from " + database + ".processes "
                      "    WHERE NAME=%s), "
                      "  lhsA_id = (select id from " + database + ".states "
@@ -553,7 +540,6 @@ for directoryname in DIR_NAMES:
                               met_data.iloc[0]['background'],
                               float(met_data.iloc[0]['lpu']),
                               float(met_data.iloc[0]['upu']),
-                              np_str(met_data, 0, 'species'),
                               np_str(met_data, 0, 'process'),
                               np_str(met_data, 0, 'lhs_a'),
                               np_str(met_data, 0, 'lhs_b'),
@@ -595,7 +581,7 @@ else:
 F_RATE_DAT_FILE = open(RATE_DAT_FILENAME, 'w')
 F_RATE_DAT_FILE.write("\t".join(["rate_id", "filename"]) + "\n")
 
-RATE_VARIABLE_LIST = ["rate_id", "species_id", "process_id",
+RATE_VARIABLE_LIST = ["rate_id", "process_id",
                       "ref",
                       "lhsA_id", "lhsB_id", "rhsA_id", "rhsB_id",
                       "threshold",
@@ -603,7 +589,6 @@ RATE_VARIABLE_LIST = ["rate_id", "species_id", "process_id",
                       "lhs_v", "rhs_v", "lhs_j", "rhs_j", "background",
                       "form"]
 RATE_DTYPE = {"rate_id": int,
-              "species": str,
               "process": str,
               "ref": str,
               "lhs_a": str,
@@ -639,8 +624,6 @@ UPDATE_COMMAND_RATE = ("INSERT INTO rate " +
                        "  rhs_j = %s, "
                        "  background = %s, "
                        "  form = %s, "
-                       "  species_id = (SELECT id FROM " + database + ".species "
-                       "    WHERE NAME=%s), "
                        "  process_id = (select id from " + database + ".processes "
                        "    WHERE NAME=%s), "
                        "  lhsA_id = (select id from " + database + ".states "
@@ -713,7 +696,6 @@ for directoryname in DIR_NAMES:
                               int(met_data.iloc[0]['rhs_j']),
                               met_data.iloc[0]['background'],
                               np_str(met_data, 0, 'form'),
-                              np_str(met_data, 0, 'species'),
                               np_str(met_data, 0, 'process'),
                               np_str(met_data, 0, 'lhs_a'),
                               np_str(met_data, 0, 'lhs_b'),

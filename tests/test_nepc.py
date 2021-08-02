@@ -77,7 +77,6 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert isinstance(cs.metadata["cs_id"], int)
-    assert isinstance(cs.metadata["species"], str)
     assert isinstance(cs.metadata["units_e"], float)
     assert isinstance(cs.data["e"], list)
     assert isinstance(cs.data["e"][0], float)
@@ -99,21 +98,18 @@ def test_CustomCS_class(nepc_connect):
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert cs.metadata["cs_id"] is None
-    assert isinstance(cs.metadata["species"], str)
     assert isinstance(cs.metadata["units_e"], float)
     assert isinstance(cs.data["e"], list)
     assert isinstance(cs.data["e"][0], float)
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
     cs = nepc.CustomCS(nepc_connect[1], cs_id=1,
-                       metadata={'cs_id': -1,
-                                 'species': 'O2'},
+                       metadata={'cs_id': -1},
                        data={'e': [0.0, 1.0, 2.0],
                              'sigma': [0.0, 0.1, 0.2]})
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert cs.metadata["cs_id"] == -1
-    assert cs.metadata["species"] == 'O2'
     assert isinstance(cs.metadata["units_e"], float)
     assert isinstance(cs.data["e"], list)
     assert isinstance(cs.data["e"][0], float)
@@ -123,7 +119,6 @@ def test_CustomCS_class(nepc_connect):
     assert cs.data['sigma'] == [0.0, 0.1, 0.2]
     """option not implemented
     cs = nepc.CustomCS(metadata={'cs_id': -1,
-                                 'species': 'N2',
                                  'process': 'excitation',
                                  'lhsA': 'N2(X1Sigmag+)',
                                  'rhsA': 'N2(W3Deltau)',
@@ -136,7 +131,6 @@ def test_CustomCS_class(nepc_connect):
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert cs.metadata["cs_id"] == -1
-    assert cs.metadata["species"] == 'N2'
     assert cs.metadata["process"] == 'excitation'
     assert cs.metadata["lhsA"] == 'N2(X1Sigmag+)'
     assert cs.metadata["lhsB"] == '\\N'
@@ -168,7 +162,6 @@ def test_Model_class(nepc_connect):
     assert isinstance(fict.cs, list)
     assert isinstance(fict.cs[0].metadata, dict)
     assert isinstance(fict.cs[0].data, dict)
-    assert isinstance(fict.cs[0].metadata['species'], str)
     # test len method
     # FIXME use data in .mod files to determine number of CS in Model for assert
     assert len(fict) == 30
@@ -184,7 +177,6 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(fict.cs, list)
     assert isinstance(fict.cs[0].metadata, dict)
     assert isinstance(fict.cs[0].data, dict)
-    assert isinstance(fict.cs[0].metadata['species'], str)
     assert len(fict.cs) == 30
     fict_mod = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="fict", 
@@ -194,7 +186,6 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(fict_mod.cs, list)
     assert isinstance(fict_mod.cs[0].metadata, dict)
     assert isinstance(fict_mod.cs[0].data, dict)
-    assert isinstance(fict_mod.cs[0].metadata['species'], str)
     assert len(fict_mod.cs) == 32
     fict_subset = nepc.CustomModel(cursor=nepc_connect[1], 
             model_name="fict",
@@ -204,7 +195,6 @@ def test_CustomModel_class(nepc_connect):
     assert isinstance(fict_subset.cs, list)
     assert isinstance(fict_subset.cs[0].metadata, dict)
     assert isinstance(fict_subset.cs[0].data, dict)
-    assert isinstance(fict_subset.cs[0].metadata['species'], str)
     assert len(fict_subset.cs) == 15
 
 
