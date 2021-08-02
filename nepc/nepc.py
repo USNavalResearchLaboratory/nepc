@@ -910,9 +910,20 @@ def table_as_df(cursor, table, columns="*"):
         Table in the form of a pandas DataFrame
 
     """
+    if columns == "*":
+        cursor.execute("SHOW COLUMNS FROM " + table)
+        mysql_column_info = cursor.fetchall()
+        column_names = []
+        for col in mysql_column_info:
+            column_names.append(col[0])
+    else:
+        column_names = columns
+
     column_text = ", ".join(columns)
     cursor.execute("SELECT " + column_text + " FROM " + table)
-    return DataFrame(cursor.fetchall())
+    df = DataFrame(cursor.fetchall(), columns=column_names)
+    df.columns = column_names
+    return df
 
 def process_attr(process: str, attr_list: List[str], test=False):
     if test:

@@ -10,6 +10,17 @@ import csv
 
 # TODO: test that all values in [nepc]/tests/data are in the nepc database
 
+@pytest.mark.usefixtures("data_config", "nepc_connect")
+def test_states_table_has_species_metadata(data_config, nepc_connect):
+    """
+    check that the states table has a species_id column
+    """
+    NEPC_DATA = data_config[0]
+    number_of_states = util.wc_fxn(NEPC_DATA + 'states.tsv') - 1
+    df_states = nepc.table_as_df(nepc_connect[1], 'states')
+    assert len(df_states) == number_of_states
+    assert 'species_id' in list(df_states.columns)
+
 
 @pytest.mark.usefixtures("data_config", "nepc_connect")
 def test_csdata_lines(data_config, nepc_connect):
@@ -66,7 +77,7 @@ def test_meta_entered(data_config, nepc_connect, local, dbug):
             print(cs_id, met_file)
         e, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
 
-        meta_cols = ['cs_id', 'species', 'process', 'units_e',
+        meta_cols = ['cs_id', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
                      'lhsB', 'rhsA', 'rhsB', 'threshold', 'wavelength',
                      'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j',
