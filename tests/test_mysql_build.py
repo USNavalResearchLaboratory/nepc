@@ -10,6 +10,17 @@ import csv
 
 # TODO: test that all values in [nepc]/tests/data are in the nepc database
 
+@pytest.mark.usefixtures("data_config", "nepc_connect")
+def test_states_table_has_species_metadata(data_config, nepc_connect):
+    """
+    check that the states table has a species_id column
+    """
+    NEPC_DATA = data_config[0]
+    number_of_states = util.wc_fxn(NEPC_DATA + 'states.tsv') - 1
+    df_states = nepc.table_as_df(nepc_connect[1], 'states')
+    assert len(df_states) == number_of_states
+    assert 'species_id' in list(df_states.columns)
+
 
 @pytest.mark.usefixtures("data_config", "nepc_connect")
 def test_csdata_lines(data_config, nepc_connect):
@@ -66,7 +77,7 @@ def test_meta_entered(data_config, nepc_connect, local, dbug):
             print(cs_id, met_file)
         e, sigma = nepc.cs_e_sigma(nepc_connect[1], cs_id)
 
-        meta_cols = ['cs_id', 'specie', 'process', 'units_e',
+        meta_cols = ['cs_id', 'process', 'units_e',
                      'units_sigma', 'ref', 'lhsA',
                      'lhsB', 'rhsA', 'rhsB', 'threshold', 'wavelength',
                      'lhs_v', 'rhs_v', 'lhs_j', 'rhs_j',
@@ -76,13 +87,14 @@ def test_meta_entered(data_config, nepc_connect, local, dbug):
                 reader = csv.reader(f, delimiter='\t')
                 next(reader)
                 meta_disk = list(reader)[0]
-        meta_disk = [meta_disk[i] for i in list(range(len(meta_cols)))]
-        for i in [3, 4, 10, 11, 17, 18]:
-            meta_disk[i] = (float(meta_disk[i]) if meta_disk[i] != '\\N'
-                            else meta_disk[i])
 
-        for i in [0, 12, 13, 14, 15]:
+        meta_disk = [meta_disk[i] for i in list(range(len(meta_cols)))]
+
+        for i in [0, 11, 12, 13, 14]:
             meta_disk[i] = (int(meta_disk[i]) if meta_disk[i] != '\\N'
+                            else meta_disk[i])
+        for i in [2, 3, 9, 10, 16, 17]:
+            meta_disk[i] = (float(meta_disk[i]) if meta_disk[i] != '\\N'
                             else meta_disk[i])
 
         meta_db = [nepc.cs_metadata(nepc_connect[1], cs_id)[i]

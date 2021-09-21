@@ -159,7 +159,6 @@ class CurateCS(ABC):
                 metadata = cs
             next_cs_id = parser.write_metadata_to_file(filename=metadata['nepc_filename']+'.met',
                                                        cs_id=next_cs_id,
-                                                       specie=metadata['specie'],
                                                        process=metadata['process'],
                                                        lhs_a=metadata['lhs_a'],
                                                        lhs_b=metadata['lhs_b'],
@@ -487,7 +486,7 @@ class CurateLxCAT(CurateCS):
 
         for cs, i in zip(csdata, range(len(csdata))):
 
-            cs['specie'] = self.value(cs, 'target')
+            cs['species'] = self.value(cs, 'target')
             cs['units_e'] = units_e
             cs['units_sigma'] = units_sigma
             cs['background'] = self.value(cs, 'comment')
@@ -622,7 +621,7 @@ class CurateLumped(CurateCS):
                        augment_dicts=None, debug=False, test=False):
 
         consolidated_metadata = ['ref']
-        matched_metadata = ['specie', 'units_e', 'units_sigma']
+        matched_metadata = ['species', 'units_e', 'units_sigma']
         self.check_for_unmatched_metadata(csdata, matched_metadata)
 
         csdata_lumped = self.lump(csdata)
