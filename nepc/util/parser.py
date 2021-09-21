@@ -555,22 +555,22 @@ def format_model(model, type='lxcat', filename='lxcat.txt'):
         for cs in model.cs:
             for metadata in ['process', 'reaction_abbrev', 'threshold',
                              'reaction_full', 'param', 'header']:
-                if metadata is 'process':
+                if metadata == 'process':
                     line = f"{str(processes_lxcat[cs.metadata[metadata]]).upper()}\n" 
-                elif metadata is 'reaction_abbrev':
+                elif metadata == 'reaction_abbrev':
                     line = f'{nepc.reaction_text(cs)[0]}\n'
-                elif metadata is 'threshold':
+                elif metadata == 'threshold':
                     line = f" {threshold(cs):.6e}\n" 
-                elif metadata is 'reaction_full':
+                elif metadata == 'reaction_full':
                     line = (f'PROCESS: {str(nepc.reaction_text(cs)[1])}, '
                             f'{str(processes_lxcat[cs.metadata["process"]]).capitalize()}\n')
-                elif metadata is 'param':
+                elif metadata == 'param':
                     if cs.metadata['process'] in ['total', 'elastic', 'elastic_total']:
                         line = f'PARAM.:  m/M = {threshold(cs)}\n'
                     # TODO: make sure units_e is not needed here
                     else:
                         line = f'PARAM.:  E = {threshold(cs)} eV\n'
-                elif metadata is 'header':
+                elif metadata == 'header':
                     line = (f'COLUMNS: Energy (eV) | Cross section (m2)\n'
                             f'-----------------------------\n')
                 else:
