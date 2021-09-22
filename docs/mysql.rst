@@ -71,7 +71,7 @@ need to put them in a file at ``$HOME/.mysql/defaults``:
 
 The script ``$NEPC_HOME/nepc/mysql/build.py`` will build a NEPC-style
 database named ``nepc`` from a properly structured set of data files in
-``$NEPC_DATA_HOME``. If the script is run with the ``--test`` argument,
+``$NEPC_CS_HOME``. If the script is run with the ``--test`` argument,
 it will build the ``nepc_test`` database using the data in
 ``$NEPC_HOME/tests/data``.
 

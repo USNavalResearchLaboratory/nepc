@@ -29,10 +29,10 @@ The project is organized in the following directories:
 * tests - unit and integration testing
 * tests/data - data directory for the `nepc_test` database--an example NEPC database containing fictitious electron scattering cross section data used in unit and integration testing
 * tests/data/eda - example exploratory data analysis (EDA) of a NEPC database that is possible with the nepc Python module
-* tests/data/methods - code used to parse fictitious cross section data in [LXCat](https://nl.lxcat.net/data/set_type.php) format and create various NEPC `Model`s for the `nepc_test` database
+* tests/data/curate - code used to curate fictitious cross section data in [LXCat](https://nl.lxcat.net/data/set_type.php) format and create various NEPC `Model`s for the `nepc_test` database
 * docs - files used by Sphinx to generate the [NEPC documentation](https://nepc.readthedocs.io)
 * nepc - the Python code for the nepc package and building a NEPC database
-* nepc/mysql - the Python code for creating a NEPC database from data in `$NEPC_DATA_HOME`; also creates the `nepc_test` database from data in `$NEPC_HOME/tests/data`
+* nepc/mysql - the Python code for creating a NEPC database from data in `NEPC_CS_HOME` environment variable; also creates the `nepc_test` database from data in `NEPC_HOME/tests/data` (must have the `NEPC_HOME` environment variable set)
 
 ## Getting Started
 
@@ -43,7 +43,7 @@ $ pip install nepc
 ```
 
 Establish a connection to the database named `nepc` running on a
-production server (you must set an environment variable `$NEPC_PRODUCTION` that
+production server (you must set an environment variable `NEPC_PRODUCTION` that
 points to the production server):
 
 ```python
@@ -75,10 +75,10 @@ Plot the cross sections in `fict_min2`.
 >>> fict_min2.plot(ylog=True, xlog=True, width=8, height=4) 
 ```
 
-Additional examples of EDA using nepc are in `tests/data/eda`. Examples of methods for
-building data files for the `nepc_test` database, including parsing
+Additional examples of EDA using nepc are in `tests/data/eda`. Examples of scripts for
+curating raw data for the `nepc_test` database, including parsing
 [LXCat](https://nl.lxcat.net/data/set_type.php) formatted data,
-are in `tests/data/methods`.
+are in `tests/data/curate`.
 
 ## Built With
 
