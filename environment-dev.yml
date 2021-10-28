@@ -19,6 +19,7 @@ dependencies:
         - pip
         - pip:
                 - quadpy
+                - rstcheck
                 - pylint
                 - pdfminer.six
                 - pdfplumber

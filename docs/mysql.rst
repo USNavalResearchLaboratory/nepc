@@ -3,7 +3,7 @@ Accessing a NEPC MySQL database
 
 You have two options for accessing a NEPC MySQL database of cross
 sections via the nepc Python module: 1. the production MySQL server
-hosted at NRL (requires NRL network access) 2. a “local” MySQL server
+hosted at NRL (requires NRL network access) or 2. a “local” MySQL server
 running on “localhost” (presumably the computer you are using right now)
 
 If you are not familiar with SQL and database management, then option 2
@@ -19,13 +19,18 @@ installation and management.
 
 MySQL Sever 8.0 is recommended, and installation instructions are at
 `this link <https://dev.mysql.com/doc/refman/8.0/en/installing.html>`__.
-For macOS, we recommend the native installer at `the MySQL Community
-Server downloads page <https://dev.mysql.com/downloads/mysql/>`__.
 
-2. Configure MySQL
+**For MacOS,** we recommend the native installer at `the MySQL Community
+Server downloads page <https://dev.mysql.com/downloads/mysql/>`__. 
 
-Once MySQL is installed, you will need to add two user accounts–a
-personal account with full read/write access to the ``nepc`` and
+**On Ubuntu** (even within Windows WSL2), you can just 
+do `sudo apt-get install mysql-server`. 
+
+2. Setup user accounts
+
+Once MySQL is installed, configured, and running, you will need to add 
+two user accounts–a personal account with full read/write access to 
+the ``nepc`` and
 ``nepc_test`` databases, and a ‘nepc’ account with read-only access to
 the NEPC database. Put the following commands in a script named
 ``nepc_user_script.sql`` (replacing ``MySQL_username`` and
@@ -33,24 +38,16 @@ the NEPC database. Put the following commands in a script named
 
 .. code:: sql
 
-   CREATE USER 'MySQL_username'@'localhost'
-     IDENTIFIED BY 'MySQL_password';
-   GRANT ALL 
-     ON nepc.*
-     TO 'MySQL_username'@'localhost';
-   GRANT ALL 
-     ON nepc_test.*
-     TO 'MySQL_username'@'localhost';
+   CREATE USER 'MySQL_username'@'localhost' 
+      IDENTIFIED BY 'MySQL_password';
+   GRANT ALL ON nepc.* TO 'MySQL_username'@'localhost';
+   GRANT ALL ON nepc_test.* 
+      TO 'MySQL_username'@'localhost';
 
-   CREATE USER 'nepc'@'localhost'
-     IDENTIFIED BY 'nepc';
-   GRANT USAGE ON *.* TO `nepc`@`localhost` 
-   GRANT SELECT
-     ON nepc.* 
-     TO 'nepc'@'localhost';
-   GRANT SELECT
-     ON nepc_test.* 
-     TO 'nepc'@'localhost';
+   CREATE USER 'nepc'@'localhost' IDENTIFIED BY 'nepc';
+   GRANT USAGE ON *.* TO 'nepc'@'localhost';
+   GRANT SELECT ON nepc.* TO 'nepc'@'localhost';
+   GRANT SELECT ON nepc_test.* TO 'nepc'@'localhost';
 
 The first block creates the user ``MySQL_username`` and gives them
 read/write access to ``nepc`` and ``nepc_test`` databases. The second
