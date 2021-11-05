@@ -1,5 +1,6 @@
 """Tests for nepc/nepc.py"""
 import pandas as pd
+from nepc.nepc import cs_e
 import pytest
 import mysql.connector
 import nepc
@@ -219,7 +220,7 @@ def test_reaction_latex(nepc_connect):
     # FIXME: randomly sample cross sections
     for i in range(1, 30):
         cs = nepc.CS(nepc_connect[1], i)
-        assert isinstance(nepc.reaction_latex(cs), str)
+        assert isinstance(cs.reaction_latex(), str)
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_reaction_text(nepc_connect):
@@ -230,10 +231,10 @@ def test_reaction_text(nepc_connect):
     cs = nepc.CS(nepc_connect[1], 1)
     lhsA = 'N2(X1Sigmag+)'
     rhsA = 'N2(X1Sigmag+)_jSCHULZ'
-    assert nepc.reaction_text_side('LHS', cs) == (lhsA, f'E + {lhsA}')
-    assert nepc.reaction_text_side('RHS', cs) == (rhsA, f'E + {rhsA}')
-    assert nepc.reaction_text(cs) == (f'{lhsA} -> {rhsA}',
-                                      f'E + {lhsA} -> E + {rhsA}')
+    assert cs.reaction_text_side('LHS') == (lhsA, f'E + {lhsA}')
+    assert cs.reaction_text_side('RHS') == (rhsA, f'E + {rhsA}')
+    assert cs.reaction_text() == (f'{lhsA} -> {rhsA}',
+                                  f'E + {lhsA} -> E + {rhsA}')
 
 
 @pytest.mark.usefixtures("nepc_connect")
