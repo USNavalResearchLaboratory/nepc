@@ -417,27 +417,23 @@ class CS:
         # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
-        
+
+        keys = {'LHS': {'e': 'e_on_lhs',
+                        'sideA': 'lhsA',
+                        'sideB': 'lhsB',
+                        'side_v': 'lhs_v'},
+                'RHS': {'e': 'e_on_rhs',
+                        'sideA': 'rhsA',
+                        'sideB': 'rhsB',
+                        'side_v': 'rhs_v'}
+                }
+
         if latex: 
-            keys = {'LHS': {'e': 'e_on_lhs',
-                            'sideA': 'lhsA_long',
-                            'sideB': 'lhsB_long',
-                            'side_v': 'lhs_v'},
-                    'RHS': {'e': 'e_on_rhs',
-                            'sideA': 'rhsA_long',
-                            'sideB': 'rhsB_long',
-                            'side_v': 'rhs_v'}
-                    }
-        else: 
-            keys = {'LHS': {'e': 'e_on_lhs',
-                            'sideA': 'lhsA',
-                            'sideB': 'lhsB',
-                            'side_v': 'lhs_v'},
-                    'RHS': {'e': 'e_on_rhs',
-                            'sideA': 'rhsA',
-                            'sideB': 'rhsB',
-                            'side_v': 'rhs_v'}
-                    }
+            keys['LHS']['sideA'] = 'lhsA_long'
+            keys['LHS']['sideB'] = 'lhsB_long'
+            keys['RHS']['sideA'] = 'rhsA_long'
+            keys['RHS']['sideB'] = 'rhsB_long'
+
         self.e_on_side = self.metadata[keys[side]['e']]
 
         if self.e_on_side == 0:
