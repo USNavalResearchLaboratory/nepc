@@ -400,56 +400,70 @@ class CS:
         r"""The number of data points in the cross section data set"""
         return len(self.data['e'])
 
-    def reaction_text_side(self, side):
-        """Return the plain text for the LHS or RHS of the process involved in a nepc cross section.
+    def reaction_text_side(self, side, latex=False):
+        """Return the LaTeX for the LHS of the process involved in a nepc cross section.
         Parameters
         ----------
         side : str
             'LHS' or 'RHS' to indicate which side of the reaction to return.
-        cs : :class:`.CS` or :class:`.CustomCS`
-            A nepc cross section.
+        latex : bool, default False
+            Determine whether or not to output the LaTeX formatted text. 
         Returns
         -------
         : str
-            The plain text for either the LHS or RHS of the process involved in a NEPC cross section.
+            The plain text for either the LHS or RHS of the process involved in a NEPC cross section
+            (LaTeX) formatted if indicated.
         """
         # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
-        keys = {'LHS': {'e': 'e_on_lhs',
-                        'sideA': 'lhsA',
-                        'sideB': 'lhsB',
-                        'side_v': 'lhs_v'},
-                'RHS': {'e': 'e_on_rhs',
-                        'sideA': 'rhsA',
-                        'sideB': 'rhsB',
-                        'side_v': 'rhs_v'}
-                }
-
+        
+        if latex: 
+            keys = {'LHS': {'e': 'e_on_lhs',
+                            'sideA': 'lhsA_long',
+                            'sideB': 'lhsB_long',
+                            'side_v': 'lhs_v'},
+                    'RHS': {'e': 'e_on_rhs',
+                            'sideA': 'rhsA_long',
+                            'sideB': 'rhsB_long',
+                            'side_v': 'rhs_v'}
+                    }
+        else: 
+            keys = {'LHS': {'e': 'e_on_lhs',
+                            'sideA': 'lhsA',
+                            'sideB': 'lhsB',
+                            'side_v': 'lhs_v'},
+                    'RHS': {'e': 'e_on_rhs',
+                            'sideA': 'rhsA',
+                            'sideB': 'rhsB',
+                            'side_v': 'rhs_v'}
+                    }
         self.e_on_side = self.metadata[keys[side]['e']]
 
         if self.e_on_side == 0:
-            self.side_e_text = None
+            self.side_e_text= None
         elif self.e_on_side == 1:
-            self.side_e_text = "E"
-            # self.side_e_text = "e$^-$" Latex version
+            self.side_e_text = "e$^-$" if latex else "E"
         else:
-            self.side_e_text = str(self.e_on_side) + "E"
-            # self.side_e_text = str(self.e_on_side) + "e$^-$" Latex version
+            self.side_e_text = str(self.e_on_side) + ("e$^-$" if latex else "E")
 
         self.sideA_text = self.metadata[keys[side]['sideA']]
         if self.metadata['process'] == 'excitation_v':
             # TODO: modify for all interesting process types (e.g. excitation_j)
             self.sideA_text = self.sideA_text.replace(")", " v=" + str(self.metadata[keys[side]['side_v']]) + ")")
         self.sideB_text = self.metadata[keys[side]['sideB']]
-        self.side_items_abbrev = [self.sideA_text,
-                                  self.sideB_text]
         self.side_items_full = [self.side_e_text,
                                 self.sideA_text,
                                 self.sideB_text]
-        self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
         self.side_text_full = " + ".join(item for item in self.side_items_full if item)
-        return self.side_text_abbrev, self.side_text_full
+
+        if not latex: 
+            self.side_items_abbrev = [self.sideA_text,
+                                      self.sideB_text]
+            self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
+            return self.side_text_abbrev, self.side_text_full
+
+        return self.side_text_full
 
     def reaction_text(self):
         """Return the plain text for the process involved in a nepc cross section.
@@ -470,49 +484,6 @@ class CS:
         self.reaction_abbrev = " -> ".join([lhs_text_abbrev, rhs_text_abbrev])
         self.reaction_full = " -> ".join([lhs_text_full, rhs_text_full])
         return self.reaction_abbrev, self.reaction_full
-    
-    def reaction_latex_side(self, side):
-        """Return the LaTeX for the LHS of the process involved in a nepc cross section.
-        Parameters
-        ----------
-        side : str
-            'LHS' or 'RHS' to indicate which side of the reaction to return.
-        Returns
-        -------
-        : str
-            The LaTeX for the LHS of the process involved in a NEPC cross section.
-        """
-        # FIXME: move this method to the CS Class
-        # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-        # FIXME: decide how to represent total cross sections and implement
-        keys = {'LHS': {'e': 'e_on_lhs',
-                        'sideA': 'lhsA_long',
-                        'sideB': 'lhsB_long',
-                        'side_v': 'lhs_v'},
-                'RHS': {'e': 'e_on_rhs',
-                        'sideA': 'rhsA_long',
-                        'sideB': 'rhsB_long',
-                        'side_v': 'rhs_v'}
-                }
-        self.e_on_side = self.metadata[keys[side]['e']]
-        # e_on_lhs = self.metadata['e_on_lhs']
-        if self.e_on_side == 0:
-            self.side_e_text= None
-        elif self.e_on_side == 1:
-            self.side_e_text = "e$^-$"
-        else:
-            self.side_e_text = str(self.e_on_side) + "e$^-$"
-
-        self.sideA_text = self.metadata[keys[side]['sideA']]
-        if self.metadata['process'] == 'excitation_v':
-            self.sideA_text = self.sideA_text.replace(")", " v=" + str(self.metadata[keys[side]['side_v']]) + ")")
-        self.sideB_text = self.metadata[keys[side]['sideB']]
-        self.side_items_full = [self.side_e_text,
-                                self.sideA_text,
-                                self.sideB_text]
-        self.side_text_full = " + ".join(item for item in self.side_items_full if item)
-
-        return self.side_text_full
 
     def reaction_latex(self):
         """Return the LaTeX for the process involved in a nepc cross section.
@@ -528,8 +499,8 @@ class CS:
         # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
-        lhs_text = self.reaction_latex_side('LHS')
-        rhs_text = self.reaction_latex_side('RHS')
+        lhs_text = self.reaction_text_side('LHS', latex=True)
+        rhs_text = self.reaction_text_side('RHS', latex=True)
         reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
         return reaction
 
