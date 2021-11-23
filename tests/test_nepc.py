@@ -235,6 +235,11 @@ def test_reaction_text(nepc_connect):
     assert cs.reaction_text_side('RHS') == (rhsA, f'E + {rhsA}')
     assert cs.reaction_text() == (f'{lhsA} -> {rhsA}',
                                   f'E + {lhsA} -> E + {rhsA}')
+    lhsA_long = 'N${}_2$ (X ${}^1\\Sigma_g^+$)'
+    rhsA_long = 'N${}_2$ (X ${}^1\\Sigma_g^+ j=SCHULZ$)'
+    assert cs.reaction_text_side('LHS', latex=True) == f'e$^-$ + {lhsA_long}'
+    assert cs.reaction_text_side('RHS', latex=True) == f'e$^-$ + {rhsA_long}'
+    assert cs.reaction_latex() == f'e$^-$ + {lhsA_long} $\\rightarrow$ e$^-$ + {rhsA_long}'
 
 
 @pytest.mark.usefixtures("nepc_connect")

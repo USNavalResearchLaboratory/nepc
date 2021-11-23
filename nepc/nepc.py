@@ -453,13 +453,14 @@ class CS:
                                 self.sideB_text]
         self.side_text_full = " + ".join(item for item in self.side_items_full if item)
 
-        if not latex: 
-            self.side_items_abbrev = [self.sideA_text,
-                                      self.sideB_text]
-            self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
-            return self.side_text_abbrev, self.side_text_full
+        if latex: 
+            return self.side_text_full
+        
+        self.side_items_abbrev = [self.sideA_text,
+                                  self.sideB_text]
+        self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
+        return self.side_text_abbrev, self.side_text_full
 
-        return self.side_text_full
 
     def reaction_text(self):
         """Return the plain text for the process involved in a nepc cross section.
