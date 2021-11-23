@@ -220,7 +220,20 @@ def test_reaction_latex(nepc_connect):
     # FIXME: randomly sample cross sections
     for i in range(1, 30):
         cs = nepc.CS(nepc_connect[1], i)
+        lhsA_long = cs.metadata['lhsA_long']
+        rhsA_long = cs.metadata['rhsA_long']
+        if cs.metadata['process'] == 'excitation_v':
+            rhsA_long = rhsA_long.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
+            lhsA_long = lhsA_long.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
         assert isinstance(cs.reaction_latex(), str)
+        assert cs.reaction_text_side('LHS', latex=True) \
+                == f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}e$^-$ + {lhsA_long}"
+        assert cs.reaction_text_side('RHS', latex=True) \
+                == f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}e$^-$ + {rhsA_long}"
+        assert cs.reaction_latex() == f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}" + \
+                                      f"e$^-$ + {lhsA_long} $\\rightarrow$ " + \
+                                      f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}" + \
+                                      f"e$^-$ + {rhsA_long}"
 
 @pytest.mark.usefixtures("nepc_connect")
 def test_reaction_text(nepc_connect):
