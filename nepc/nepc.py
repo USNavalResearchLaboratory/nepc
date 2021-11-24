@@ -414,7 +414,6 @@ class CS:
             The plain text for either the LHS or RHS of the process involved in a NEPC cross section
             (LaTeX) formatted if indicated.
         """
-        # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
 
@@ -473,7 +472,6 @@ class CS:
         : (str, str)
             The plain text (abbrev, full) for the process involved in a NEPC cross section.
         """
-        # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
         lhs_text_abbrev, lhs_text_full = self.reaction_text_side('LHS')
@@ -493,7 +491,6 @@ class CS:
         : str
             The LaTeX for the process involved in a NEPC cross section.
         """
-        # FIXME: move this method to the CS Class
         # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
         # FIXME: decide how to represent total cross sections and implement
         lhs_text = self.reaction_text_side('LHS', latex=True)
