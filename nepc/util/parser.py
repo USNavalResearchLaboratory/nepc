@@ -558,11 +558,11 @@ def format_model(model, type='lxcat', filename='lxcat.txt'):
                 if metadata == 'process':
                     line = f"{str(processes_lxcat[cs.metadata[metadata]]).upper()}\n" 
                 elif metadata == 'reaction_abbrev':
-                    line = f'{cs.reaction_text()[0]}\n'
+                    line = f'{cs.reaction_text[0]}\n'
                 elif metadata == 'threshold':
                     line = f" {threshold(cs):.6e}\n" 
                 elif metadata == 'reaction_full':
-                    line = (f'PROCESS: {str(cs.reaction_text()[1])}, '
+                    line = (f'PROCESS: {str(cs.reaction_text[1])}, '
                             f'{str(processes_lxcat[cs.metadata["process"]]).capitalize()}\n')
                 elif metadata == 'param':
                     if cs.metadata['process'] in ['total', 'elastic', 'elastic_total']:

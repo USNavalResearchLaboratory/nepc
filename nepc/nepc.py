@@ -47,6 +47,16 @@ from nepc.util import config
 
 PRODUCTION = config.production()
 
+def lazy_property(fn):
+    attr = "_lazy_" + fn.__name__
+
+    @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
+
+    return _lazy_property
 
 def connect(local=False, DBUG=False, test=False, travis=False):
     """Establish a connection to a NEPC MySQL database
@@ -460,7 +470,7 @@ class CS:
         self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
         return self.side_text_abbrev, self.side_text_full
 
-
+    @lazy_property
     def reaction_text(self):
         """Return the plain text for the process involved in a nepc cross section.
         Parameters
@@ -480,6 +490,7 @@ class CS:
         self.reaction_full = " -> ".join([lhs_text_full, rhs_text_full])
         return self.reaction_abbrev, self.reaction_full
 
+    @lazy_property
     def reaction_latex(self):
         """Return the LaTeX for the process involved in a nepc cross section.
         Parameters
@@ -771,7 +782,7 @@ class Model:
                 max_peak_sigma = cs_peak_sigma
             if cs_peak_sigma < min_peak_sigma:
                 min_peak_sigma = cs_peak_sigma
-            reaction = cs.reaction_latex()
+            reaction = cs.reaction_latex
             cs_lpu = cs.metadata["lpu"]
             cs_upu = cs.metadata["upu"]
             if cs_lpu is not None and cs_lpu > max_lpu:

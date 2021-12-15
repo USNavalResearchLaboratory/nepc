@@ -225,12 +225,12 @@ def test_reaction_latex(nepc_connect):
         if cs.metadata['process'] == 'excitation_v':
             lhsA_long = lhsA_long.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
             rhsA_long = rhsA_long.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
-        assert isinstance(cs.reaction_latex(), str)
+        assert isinstance(cs.reaction_latex, str)
         assert cs.reaction_text_side('LHS', latex=True) \
                 == f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}e$^-$ + {lhsA_long}"
         assert cs.reaction_text_side('RHS', latex=True) \
                 == f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}e$^-$ + {rhsA_long}"
-        assert cs.reaction_latex() == f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}" + \
+        assert cs.reaction_latex == f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}" + \
                                       f"e$^-$ + {lhsA_long} $\\rightarrow$ " + \
                                       f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}" + \
                                       f"e$^-$ + {rhsA_long}"
@@ -248,12 +248,12 @@ def test_reaction_text(nepc_connect):
         if cs.metadata['process'] == 'excitation_v':
             lhsA = lhsA.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
             rhsA = rhsA.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
-        assert isinstance(cs.reaction_latex(), str)
+        assert isinstance(cs.reaction_latex, str)
         assert cs.reaction_text_side('LHS') \
                 == (lhsA, f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}E + {lhsA}")
         assert cs.reaction_text_side('RHS') \
                 == (rhsA, f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}E + {rhsA}")
-        assert cs.reaction_text() == (f"{lhsA} -> {rhsA}", 
+        assert cs.reaction_text == (f"{lhsA} -> {rhsA}", 
                                       f"{cs.metadata['e_on_lhs']if cs.metadata['e_on_lhs'] > 1 else ''}" + \
                                       f"E + {lhsA} -> " + \
                                       f"{cs.metadata['e_on_rhs']if cs.metadata['e_on_rhs'] > 1 else ''}" + \
