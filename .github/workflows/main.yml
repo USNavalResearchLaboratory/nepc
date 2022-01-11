@@ -32,7 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         $CONDA/bin/conda env update --file environment-ci.yml --name base
-        pip install .
+        $CONDA/bin/pip install .
     - name: setup mysql
       run: |
         mkdir ${HOME}/.mysql
