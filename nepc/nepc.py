@@ -890,8 +890,7 @@ class Model:
             elif process in ('', self.cs[i].metadata['process']):
                 plot_num += 1
 
-                reaction = reaction_latex(self.cs[i])
-                label_items = [self.cs[i].metadata['process'], ": ", reaction]
+                label_items = [self.cs[i].metadata['process'], ": ", self.cs[i].reaction_latex]
                 label_text = " ".join(item for item in label_items if item)
                 e_np = np.array(self.cs[i].data['e'])
                 sigma_np = np.array(self.cs[i].data['sigma'])
