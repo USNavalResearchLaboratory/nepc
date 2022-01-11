@@ -14,8 +14,8 @@ PARSER.add_argument('--debug', action='store_true',
                     help='print additional debug info')
 PARSER.add_argument('--test', action='store_true',
                     help='build test database on localhost')
-PARSER.add_argument('--travis', action='store_true',
-                    help='build test database on TravisCI')
+PARSER.add_argument('--github', action='store_true',
+                    help='build test database on GitHub runner')
 ARGS = PARSER.parse_args()
 
 if ARGS.debug:
@@ -25,8 +25,8 @@ else:
     MAX_CS = 2000000
     MAX_RATE = 2000000
 
-if ARGS.test and ARGS.travis:
-    raise Exception('can pass only --test or --travis, not both')
+if ARGS.test and ARGS.github:
+    raise Exception('can pass only --test or --github, not both')
 
 if ARGS.test:
     database = 'nepc_test'
@@ -36,7 +36,7 @@ if ARGS.test:
                  "/cs/lumped/n2/fict_total/"]
     HOME = config.user_home()
     option_files = HOME + '/.mysql/defaults'
-elif ARGS.travis:
+elif ARGS.github:
     database = 'nepc_test'
     NEPC_HOME = os.getcwd()
     NEPC_DATA = NEPC_HOME + "/tests/data/"
