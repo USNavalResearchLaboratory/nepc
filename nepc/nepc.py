@@ -357,42 +357,56 @@ class CS:
         sigma : list of float
             Cross sections in units of ``units_sigma`` :math:`m^2` (see :attr:`.CS.metadata`).
     """
-    def __init__(self, cursor, cs_id):
-        metadata = cs_metadata(cursor, cs_id)
-        self.metadata = {"cs_id": metadata[0],
-                         "process": metadata[1],
-                         "units_e": metadata[2],
-                         "units_sigma": metadata[3],
-                         "ref": metadata[4],
-                         "lhsA": metadata[5],
-                         "lhsB": metadata[6],
-                         "rhsA": metadata[7],
-                         "rhsB": metadata[8],
-                         "threshold": metadata[9],
-                         "wavelength": metadata[10],
-                         "lhs_v": metadata[11],
-                         "rhs_v": metadata[12],
-                         "lhs_j": metadata[13],
-                         "rhs_j": metadata[14],
-                         "background": metadata[15],
-                         "lpu": metadata[16],
-                         "upu": metadata[17],
-                         "lhsA_long": metadata[18],
-                         "lhsB_long": metadata[19],
-                         "rhsA_long": metadata[20],
-                         "rhsB_long": metadata[21],
-                         "e_on_lhs": metadata[22],
-                         "e_on_rhs": metadata[23],
-                         "hv_on_lhs": metadata[24],
-                         "hv_on_rhs": metadata[25],
-                         "v_on_lhs": metadata[26],
-                         "v_on_rhs": metadata[27],
-                         "j_on_lhs": metadata[28],
-                         "j_on_rhs": metadata[29]}
-
-        e_energy, sigma = cs_e_sigma(cursor, cs_id)
-        self.data = {"e": e_energy,
-                     "sigma": sigma}
+    def __init__(self, cursor=None, cs_id=None, metadata=None, data=None, custom=False):                    
+        if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
+            raise ValueError('If providing cursor or cs_id, must provide both.')
+        if (cursor is not None and cs_id is not None):
+            metadata = cs_metadata(cursor, cs_id)
+            self.metadata = {"cs_id": metadata[0],
+                            "process": metadata[1],
+                            "units_e": metadata[2],
+                            "units_sigma": metadata[3],
+                            "ref": metadata[4],
+                            "lhsA": metadata[5],
+                            "lhsB": metadata[6],
+                            "rhsA": metadata[7],
+                            "rhsB": metadata[8],
+                            "threshold": metadata[9],
+                            "wavelength": metadata[10],
+                            "lhs_v": metadata[11],
+                            "rhs_v": metadata[12],
+                            "lhs_j": metadata[13],
+                            "rhs_j": metadata[14],
+                            "background": metadata[15],
+                            "lpu": metadata[16],
+                            "upu": metadata[17],
+                            "lhsA_long": metadata[18],
+                            "lhsB_long": metadata[19],
+                            "rhsA_long": metadata[20],
+                            "rhsB_long": metadata[21],
+                            "e_on_lhs": metadata[22],
+                            "e_on_rhs": metadata[23],
+                            "hv_on_lhs": metadata[24],
+                            "hv_on_rhs": metadata[25],
+                            "v_on_lhs": metadata[26],
+                            "v_on_rhs": metadata[27],
+                            "j_on_lhs": metadata[28],
+                            "j_on_rhs": metadata[29]}
+            e_energy, sigma = cs_e_sigma(cursor, cs_id)
+            self.data = {"e": e_energy,
+                        "sigma": sigma}
+            if custom:
+                self.metadata['cs_id'] = None
+                if metadata is not None:
+                    for key in metadata.keys():
+                        self.metadata[key] = metadata[key]
+                if data is not None:
+                    self.data = data.copy()
+        elif (data is None or metadata is None):
+            raise ValueError('must provide data/metadata if not providing cursor/cs_id')
+        else:
+            self.metadata = metadata.copy()
+            self.data = data.copy()
 
         # Attributes to share
         self.e_on_side = None
