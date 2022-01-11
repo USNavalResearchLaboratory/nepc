@@ -47,6 +47,16 @@ from nepc.util import config
 
 PRODUCTION = config.production()
 
+def lazy_property(fn):
+    attr = "_lazy_" + fn.__name__
+
+    @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
+
+    return _lazy_property
 
 def connect(local=False, DBUG=False, test=False, travis=False):
     """Establish a connection to a NEPC MySQL database
@@ -273,14 +283,12 @@ def cs_metadata(cursor, cs_id):
 class CS:
     r"""A cross section data set, including metadata and cross section data,
     from a NEPC MySQL database.
-
     Parameters
     ----------
     cursor : cursor.MySQLCursor
         A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
     cs_id : int
         i.d. of the cross section in `cs` and `csdata` tables
-
     Attributes
     ----------
     metadata : dict
@@ -348,7 +356,6 @@ class CS:
             Electron energies in units of ``units_e`` eV (see :attr:`.CS.metadata`).
         sigma : list of float
             Cross sections in units of ``units_sigma`` :math:`m^2` (see :attr:`.CS.metadata`).
-
     """
     def __init__(self, cursor, cs_id):
         metadata = cs_metadata(cursor, cs_id)
@@ -387,11 +394,120 @@ class CS:
         self.data = {"e": e_energy,
                      "sigma": sigma}
 
+        # Attributes to share
+        self.e_on_side = None
+        self.side_e_text = None
+        self.sideA_text = None
+        self.sideB_text = None
+        self.side_items_abbrev = None
+        self.side_items_full = None
+        self.side_text_abbrev = None
+        self.side_text_full = None
+        self.reaction_abbrev = None
+        self.reaction_full = None
 
     def __len__(self):
         r"""The number of data points in the cross section data set"""
         return len(self.data['e'])
 
+    def reaction_text_side(self, side, latex=False):
+        """Return the LaTeX for the LHS of the process involved in a nepc cross section.
+        Parameters
+        ----------
+        side : str
+            'LHS' or 'RHS' to indicate which side of the reaction to return.
+        latex : bool, default False
+            Determine whether or not to output the LaTeX formatted text. 
+        Returns
+        -------
+        : str
+            The plain text for either the LHS or RHS of the process involved in a NEPC cross section
+            (LaTeX) formatted if indicated.
+        """
+        # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+        # FIXME: decide how to represent total cross sections and implement
+
+        keys = {'LHS': {'e': 'e_on_lhs',
+                        'sideA': 'lhsA',
+                        'sideB': 'lhsB',
+                        'side_v': 'lhs_v'},
+                'RHS': {'e': 'e_on_rhs',
+                        'sideA': 'rhsA',
+                        'sideB': 'rhsB',
+                        'side_v': 'rhs_v'}
+                }
+
+        if latex: 
+            keys['LHS']['sideA'] = 'lhsA_long'
+            keys['LHS']['sideB'] = 'lhsB_long'
+            keys['RHS']['sideA'] = 'rhsA_long'
+            keys['RHS']['sideB'] = 'rhsB_long'
+
+        self.e_on_side = self.metadata[keys[side]['e']]
+
+        if self.e_on_side == 0:
+            self.side_e_text= None
+        elif self.e_on_side == 1:
+            self.side_e_text = "e$^-$" if latex else "E"
+        else:
+            self.side_e_text = str(self.e_on_side) + ("e$^-$" if latex else "E")
+
+        self.sideA_text = self.metadata[keys[side]['sideA']]
+        if self.metadata['process'] == 'excitation_v':
+            # TODO: modify for all interesting process types (e.g. excitation_j)
+            self.sideA_text = self.sideA_text.replace(")", " v=" + str(self.metadata[keys[side]['side_v']]) + ")")
+        self.sideB_text = self.metadata[keys[side]['sideB']]
+        self.side_items_full = [self.side_e_text,
+                                self.sideA_text,
+                                self.sideB_text]
+        self.side_text_full = " + ".join(item for item in self.side_items_full if item)
+
+        if latex: 
+            return self.side_text_full
+        
+        self.side_items_abbrev = [self.sideA_text,
+                                  self.sideB_text]
+        self.side_text_abbrev = " + ".join(item for item in self.side_items_abbrev if item)
+        return self.side_text_abbrev, self.side_text_full
+
+    @lazy_property
+    def reaction_text(self):
+        """Return the plain text for the process involved in a nepc cross section.
+        Parameters
+        ----------
+        cs : :class:`.CS` or :class:`.CustomCS`
+          A nepc cross section.
+        Returns
+        -------
+        : (str, str)
+            The plain text (abbrev, full) for the process involved in a NEPC cross section.
+        """
+        # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+        # FIXME: decide how to represent total cross sections and implement
+        lhs_text_abbrev, lhs_text_full = self.reaction_text_side('LHS')
+        rhs_text_abbrev, rhs_text_full = self.reaction_text_side('RHS')
+        self.reaction_abbrev = " -> ".join([lhs_text_abbrev, rhs_text_abbrev])
+        self.reaction_full = " -> ".join([lhs_text_full, rhs_text_full])
+        return self.reaction_abbrev, self.reaction_full
+
+    @lazy_property
+    def reaction_latex(self):
+        """Return the LaTeX for the process involved in a nepc cross section.
+        Parameters
+        ----------
+        cs : :class:`.CS` or :class:`.CustomCS`
+            A nepc cross section.
+        Returns
+        -------
+        : str
+            The LaTeX for the process involved in a NEPC cross section.
+        """
+        # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
+        # FIXME: decide how to represent total cross sections and implement
+        lhs_text = self.reaction_text_side('LHS', latex=True)
+        rhs_text = self.reaction_text_side('RHS', latex=True)
+        reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
+        return reaction
 
     def plot(self, units_sigma=1E-20, plot_param_dict={'linewidth': 1},
              xlim_param_dict={'auto': True}, ylim_param_dict={'auto': True},
@@ -421,13 +537,11 @@ class CS:
             width of plot
         height: float, optional
             height of plot
-
         Returns
         -------
         :class:`matplotlib.axes.Axes`
             Plot of the cross section data, :attr:`.CS.data`, with formatting
             using information in the metadata, :attr:`.CS.metadata`.
-
         """
         _, axes = plt.subplots()
 
@@ -448,7 +562,7 @@ class CS:
         axes.tick_params(direction='in', which='both',
                          bottom=True, top=True, left=True, right=True)
 
-        reaction = reaction_latex(self)
+        reaction = self.reaction_latex
         label_items = [self.metadata['process'], ": ", reaction]
         label_text = " ".join(item for item in label_items if item)
         e_np = np.array(self.data['e'])
@@ -668,7 +782,7 @@ class Model:
                 max_peak_sigma = cs_peak_sigma
             if cs_peak_sigma < min_peak_sigma:
                 min_peak_sigma = cs_peak_sigma
-            reaction = reaction_latex(cs)
+            reaction = cs.reaction_latex
             cs_lpu = cs.metadata["lpu"]
             cs_upu = cs.metadata["upu"]
             if cs_lpu is not None and cs_lpu > max_lpu:
@@ -933,176 +1047,3 @@ def process_attr(process: str, attr_list: List[str], test=False):
         process_attr_dict[attr] = proc_df.loc[proc_df.name==process, attr].values[0]
     
     return process_attr_dict
-                                         
-
-def reaction_latex_lhs(cs):
-    """Return the LaTeX for the LHS of the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the LHS of the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    e_on_lhs = cs.metadata['e_on_lhs']
-    if e_on_lhs == 0:
-        lhs_e_text = None
-    elif e_on_lhs == 1:
-        lhs_e_text = "e$^-$"
-    else:
-        lhs_e_text = str(e_on_lhs) + "e$^-$"
-
-    lhsA_text = cs.metadata['lhsA_long']
-    if cs.metadata['process'] == 'excitation_v':
-        lhsA_text = lhsA_text.replace(")", " v=" + str(cs.metadata['lhs_v']) + ")")
-    lhsB_text = cs.metadata['lhsB_long']
-    lhs_items = [lhs_e_text,
-                 lhsA_text,
-                 lhsB_text]
-    lhs_text = " + ".join(item for item in lhs_items if item)
-
-    return lhs_text
-
-
-def reaction_latex_rhs(cs):
-    """Return the LaTeX for the RHS of the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the RHS of the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    e_on_rhs = cs.metadata['e_on_rhs']
-    if e_on_rhs == 0:
-        rhs_e_text = None
-    elif e_on_rhs == 1:
-        rhs_e_text = "e$^-$"
-    else:
-        rhs_e_text = str(e_on_rhs) + "e$^-$"
-
-    rhsA_text = cs.metadata['rhsA_long']
-    if cs.metadata['process'] == 'excitation_v':
-        rhsA_text = rhsA_text.replace(")", " v=" + str(cs.metadata['rhs_v']) + ")")
-    rhsB_text = cs.metadata['rhsB_long']
-    rhs_items = [rhsA_text,
-                 rhsB_text,
-                 rhs_e_text]
-    rhs_text = " + ".join(item for item in rhs_items if item)
-
-    return rhs_text
-
-
-def reaction_latex(cs):
-    """Return the LaTeX for the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The LaTeX for the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    lhs_text = reaction_latex_lhs(cs)
-    rhs_text = reaction_latex_rhs(cs)
-    reaction = " $\\rightarrow$ ".join([lhs_text, rhs_text])
-    return reaction
-
-def reaction_text_side(side, cs):
-    """Return the plain text for the LHS or RHS of the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    side : str
-        'LHS' or 'RHS' to indicate which side of the reaction to return.
-
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : str
-        The plain text for either the LHS or RHS of the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    keys = {'LHS': {'e': 'e_on_lhs',
-                    'sideA': 'lhsA',
-                    'sideB': 'lhsB',
-                    'side_v': 'lhs_v'},
-            'RHS': {'e': 'e_on_rhs',
-                    'sideA': 'rhsA',
-                    'sideB': 'rhsB',
-                    'side_v': 'rhs_v'}}
-
-    e_on_side = cs.metadata[keys[side]['e']]
-    if e_on_side == 0:
-        side_e_text = None
-    elif e_on_side == 1:
-        side_e_text = "E"
-    else:
-        side_e_text = str(e_on_side) + "E"
-
-    sideA_text = cs.metadata[keys[side]['sideA']]
-    if cs.metadata['process'] == 'excitation_v':
-        # TODO: modify for all interesting process types (e.g. excitation_j)
-        sideA_text = sideA_text.replace(")", " v=" + str(cs.metadata[keys[side]['side_v']]) + ")")
-    sideB_text = cs.metadata[keys[side]['sideB']]
-    side_items_abbrev = [sideA_text,
-                         sideB_text]
-    side_items_full = [side_e_text,
-                       sideA_text,
-                       sideB_text]
-    side_text_abbrev = " + ".join(item for item in side_items_abbrev if item)
-    side_text_full = " + ".join(item for item in side_items_full if item)
-
-    return side_text_abbrev, side_text_full
-
-
-def reaction_text(cs):
-    """Return the plain text for the process involved in a nepc cross section.
-
-    Parameters
-    ----------
-    cs : :class:`.CS` or :class:`.CustomCS`
-        A nepc cross section.
-
-    Returns
-    -------
-    : (str, str)
-        The plain text (abbrev, full) for the process involved in a NEPC cross section.
-
-    """
-    # FIXME: move this method to the CS Class
-    # FIXME: allow for varying electrons and including hv, v, j on rhs and lhs
-    # FIXME: decide how to represent total cross sections and implement
-    lhs_text_abbrev, lhs_text_full = reaction_text_side('LHS', cs)
-    rhs_text_abbrev, rhs_text_full = reaction_text_side('RHS', cs)
-    reaction_abbrev = " -> ".join([lhs_text_abbrev, rhs_text_abbrev])
-    reaction_full = " -> ".join([lhs_text_full, rhs_text_full])
-    return reaction_abbrev, reaction_full
