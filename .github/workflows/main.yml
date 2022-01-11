@@ -37,7 +37,7 @@ jobs:
       run: |
         mkdir ${HOME}/.mysql
         echo "[client]\nuser=root" > ${HOME}/.mysql/defaults
-        $CONDA/bin/python nepc/mysql/build.py --github-actions
+        $CONDA/bin/python nepc/mysql/build.py --github
     - name: Test with pytest
       run: |
         $CONDA/bin/pytest --local --cov=com --cov-report=xml --cov-report=html
