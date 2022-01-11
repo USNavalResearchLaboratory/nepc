@@ -23,7 +23,7 @@ jobs:
         python-version: '3.8'
     - name: Install dependencies
       run: |
-        $CONDA/bin/conda env update --file environment-dev.yml --name base
+        $CONDA/bin/conda env update --file environment-ci.yml --name base
     - name: Lint with flake8
       run: |
         $CONDA/bin/conda install flake8
@@ -38,6 +38,4 @@ jobs:
         $CONDA/bin/python nepc/mysql/build.py --github-actions
     - name: Test with pytest
       run: |
-        conda install pytest
-        conda install pytest-cov
         $CONDA/bin/pytest --local --cov=com --cov-report=xml --cov-report=html
