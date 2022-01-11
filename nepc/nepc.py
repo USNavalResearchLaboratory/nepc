@@ -409,6 +409,17 @@ class CS:
     def __len__(self):
         r"""The number of data points in the cross section data set"""
         return len(self.data['e'])
+    
+    def __str__(self): 
+        """Provides a list of certain metadata: specie, process, threshold,
+        ref (if set), text-formatted reaction, background."""
+        undef = "\\N"
+        return f"cross section id: {self.metadata['cs_id']}\n" \
+             + f"process: {self.metadata['process']}\n" \
+             + f"reaction: {self.reaction_text[1]}\n" \
+             + f"threshold: {self.metadata['threshold']} eV\n" \
+             + f"ref: {'N/A' if self.metadata['ref'] == undef else self.metadata['ref']}\n" \
+             + f"background: {self.metadata['background']}\n"
 
     def reaction_text_side(self, side, latex=False):
         """Return the LaTeX for the LHS of the process involved in a nepc cross section.

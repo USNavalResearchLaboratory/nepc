@@ -84,6 +84,9 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
     # test len()
+    assert(len(cs) == len(cs.data['e']))
+    # test str()
+    print(str(cs))
     # FIXME: use length of data file to get length of sampled cross section
     assert len(cs) == 21
 
