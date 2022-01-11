@@ -24,6 +24,7 @@ dependencies:
                 - pdfminer.six
                 - pdfplumber
                 - mysql-connector-python==8.0.17
+                - flake8
                 - autopep8
                 - livereload
                 - formic2

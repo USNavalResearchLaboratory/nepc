@@ -1,4 +1,4 @@
-name: nepc-dev
+name: nepc-ci
 channels:
         - conda-forge
 dependencies:
