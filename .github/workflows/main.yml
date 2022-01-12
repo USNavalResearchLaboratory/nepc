@@ -16,21 +16,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
     - uses: actions/checkout@v2
+    - uses: shogo82148/actions-setup-mysql@v1
+      with:
+        mysql-version: '8.0'
+    - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.8'
+
     - name: Lint with flake8
       run: |
         $CONDA/bin/conda update -n base -c defaults conda
@@ -39,15 +36,18 @@ jobs:
         $CONDA/bin/flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         $CONDA/bin/flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Install dependencies
       run: |
         $CONDA/bin/conda env update --file environment-ci.yml --name base
         $CONDA/bin/pip install .
+
     - name: setup mysql
       run: |
         mkdir ${HOME}/.mysql
         echo "[client]\nuser=root" > ${HOME}/.mysql/defaults
         $CONDA/bin/python nepc/mysql/build.py --github
+
     - name: Test with pytest
       run: |
         $CONDA/bin/pytest --local --cov=com --cov-report=xml --cov-report=html
