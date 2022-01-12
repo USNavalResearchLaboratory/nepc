@@ -95,20 +95,20 @@ Other Tips
 
         $ git commit --amend
 
-- To skip only the tests running on Travis CI use ``[skip travis]``.
+- To skip only the tests running on GitHub Actions use ``[skip github]``.
 
 - If your commit makes substantial changes to the documentation but no code
-  changes, then you can use ``[skip travis]``, which will skip Travis CI
+  changes, then you can use ``[skip github]``, which will skip GitHub Actions CI
   because documentation build is done on CircleCI. The exception to this rule
   is when your changes to documentation include code snippets that need to
   be tested using ``doctest``.
 
 - When contributing trivial documentation fixes (i.e., fixes to typos, spelling,
   grammar) that don't contain any special markup and are not associated with
-  code changes, please include the string ``[skip travis]`` in your commit
+  code changes, please include the string ``[skip github]`` in your commit
   message.
 
-      $ git commit -m "Fixed typo [skip travis]"
+      $ git commit -m "Fixed typo [skip github]"
 -->
 
 
