@@ -86,7 +86,14 @@ def test_CS_class(nepc_connect):
     # test len()
     assert(len(cs) == len(cs.data['e']))
     # test str()
-    print(str(cs))
+    undef = "\\N"
+    message = f"cross section id: {cs.metadata['cs_id']}\n" \
+            + f"process: {cs.metadata['process']}\n" \
+            + f"reaction: {cs.reaction_text[1]}\n" \
+            + f"threshold: {cs.metadata['threshold']} eV\n" \
+            + f"ref: {'N/A' if cs.metadata['ref'] == undef else cs.metadata['ref']}\n" \
+            + f"background: {cs.metadata['background']}\n"
+    assert(str(cs) == message)
     # FIXME: use length of data file to get length of sampled cross section
     assert len(cs) == 21
 
