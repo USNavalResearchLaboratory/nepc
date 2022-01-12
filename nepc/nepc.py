@@ -58,7 +58,7 @@ def lazy_property(fn):
 
     return _lazy_property
 
-def connect(local=False, DBUG=False, test=False, travis=False):
+def connect(local=False, DBUG=False, test=False, github=False):
     """Establish a connection to a NEPC MySQL database
 
     Parameters
@@ -70,8 +70,8 @@ def connect(local=False, DBUG=False, test=False, travis=False):
         Print debug info (default False).
     test : bool, optional
         If true, access the `nepc_test` database; otherwise, connect to the `nepc` database.
-    travis : bool, optional
-        If true, connect to database on TravisCI
+    github : bool, optional
+        If true, connect to database on GitHub
 
     Returns
     -------
@@ -95,7 +95,7 @@ def connect(local=False, DBUG=False, test=False, travis=False):
     else:
         database = 'nepc'
 
-    if travis:
+    if github:
         config = {'user': 'root',
                   'host': hostname,
                   'database': database,
