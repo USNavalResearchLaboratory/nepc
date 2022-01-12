@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  NEPC_HOME: ${GITHUB_WORKSPACE}
+  NEPC_HOME: /home/runner/work/nepc/nepc
 
 jobs:
   build:
@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - run: echo "${GITHUB_WORKSPACE}"
-    - run: echo "${NEPC_HOME}"
     - run: ls ${NEPC_HOME}
     - uses: actions/checkout@v2
     - uses: shogo82148/actions-setup-mysql@v1
