@@ -9,7 +9,9 @@ on:
     - master
 
   workflow_dispatch:
-    
+
+env:
+  NEPC_HOME: ${HOME}/nepc
 
 jobs:
   build:
