@@ -50,4 +50,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        $CONDA/bin/pytest --local --cov=com --cov-report=xml --cov-report=html
+        $CONDA/bin/pytest --local --github --cov=com --cov-report=xml --cov-report=html
