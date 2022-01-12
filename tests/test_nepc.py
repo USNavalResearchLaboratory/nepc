@@ -84,18 +84,22 @@ def test_CS_class(nepc_connect):
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
     # test len()
-    assert(len(cs) == len(cs.data['e']))
+    assert len(cs) == 21
     # test str()
-    undef = "\\N"
-    message = f"cross section id: {cs.metadata['cs_id']}\n" \
-            + f"process: {cs.metadata['process']}\n" \
-            + f"reaction: {cs.reaction_text[1]}\n" \
-            + f"threshold: {cs.metadata['threshold']} eV\n" \
-            + f"ref: {'N/A' if cs.metadata['ref'] == undef else cs.metadata['ref']}\n" \
-            + f"background: {cs.metadata['background']}\n"
+    message = "cross section id: 1\n" \
+            + "process: excitation\n" \
+            + "reaction: E + N2(X1Sigmag+) -> E + N2(X1Sigmag+)_jSCHULZ\n" \
+            + "threshold: 0.02 eV\n" \
+            + "ref: N/A\n" \
+            + "background: SCHULZ Lorem ipsum dolor sit amet, " \
+            + "consectetur adipiscing elit, sed do eiusmod tempor " \
+            + "incididunt ut labore et dolore magna aliqua. " \
+            + "Ut enim ad minim veniam, quis nostrud exercitation ullamco " \
+            + "laboris nisi ut aliquip ex ea commodo consequat. " \
+            + "Duis aute irure dolor in reprehenderit in voluptate " \
+            + "velit esse cillum dolore eu fugiat nulla pariatur.\n"
     assert(str(cs) == message)
     # FIXME: use length of data file to get length of sampled cross section
-    assert len(cs) == 21
 
 
 @pytest.mark.usefixtures("nepc_connect")
