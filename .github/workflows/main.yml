@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  NEPC_HOME: ${HOME}/nepc
+  NEPC_HOME: $GITHUB_WORKSPACE
 
 jobs:
   build:
