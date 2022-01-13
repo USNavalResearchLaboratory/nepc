@@ -3,8 +3,8 @@ def pytest_addoption(parser):
                      help="use local copy of NEPC database")
     parser.addoption("--dbug", action="store_true",
                      help="extra printing")
-    parser.addoption("--travis", action="store_true", 
-                     help="run tests on TravisCI")
+    parser.addoption("--github", action="store_true", 
+                     help="run tests on GitHub")
 
 
 def pytest_generate_tests(metafunc):
@@ -20,9 +20,9 @@ def pytest_generate_tests(metafunc):
         else:
             dbug = [False]
         metafunc.parametrize("dbug", dbug)
-    if 'travis' in metafunc.fixturenames:
-        if metafunc.config.getoption('travis'):
-            travis= [True]
+    if 'github' in metafunc.fixturenames:
+        if metafunc.config.getoption('github'):
+            github = [True]
         else:
-            travis= [False]
-        metafunc.parametrize("travis", travis)
+            github = [False]
+        metafunc.parametrize("github", github)

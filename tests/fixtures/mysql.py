@@ -5,8 +5,8 @@ import os
 
 
 @pytest.fixture
-def data_config(travis):
-    if travis:
+def data_config(github):
+    if github:
         NEPC_HOME = os.getcwd()
     else:
         NEPC_HOME = config.nepc_home()
@@ -18,7 +18,7 @@ def data_config(travis):
 
 
 @pytest.fixture
-def nepc_connect(local, dbug, travis):
+def nepc_connect(local, dbug, github):
     """Establishes a connection with the nepc_test database
 
     Parameters
@@ -38,7 +38,7 @@ def nepc_connect(local, dbug, travis):
     """
     if dbug:
         print("opening database connection")
-    cnx, cursor = nepc.connect(local, dbug, test=True, travis=travis)
+    cnx, cursor = nepc.connect(local, dbug, test=True, github=github)
     yield [cnx, cursor]
     if dbug:
         print("closing database connection")
