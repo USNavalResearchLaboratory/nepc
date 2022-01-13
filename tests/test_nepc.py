@@ -103,10 +103,10 @@ def test_CS_class(nepc_connect):
 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_CustomCS_class(nepc_connect):
+def test_customized_CS_class(nepc_connect):
     """Verify that the nepc.CustomCS class has metadata and data attributes,
     and that each attribute is of the correct type"""
-    cs = nepc.CustomCS(nepc_connect[1], cs_id=1)
+    cs = nepc.CS(nepc_connect[1], cs_id=1, custom=True)
     # FIXME: add assert for each in key in metadata
     # FIXME: test edge cases of changing NEPC cross sections
     # FIXME: check that process, species, state are in NEPC database
@@ -118,10 +118,11 @@ def test_CustomCS_class(nepc_connect):
     assert isinstance(cs.data["e"][0], float)
     assert isinstance(cs.data["sigma"], list)
     assert isinstance(cs.data["sigma"][0], float)
-    cs = nepc.CustomCS(nepc_connect[1], cs_id=1,
-                       metadata={'cs_id': -1},
-                       data={'e': [0.0, 1.0, 2.0],
-                             'sigma': [0.0, 0.1, 0.2]})
+    cs = nepc.CS(nepc_connect[1], cs_id=1,
+                 metadata={'cs_id': -1},
+                 data={'e': [0.0, 1.0, 2.0],
+                       'sigma': [0.0, 0.1, 0.2]},
+                 custom=True)
     assert isinstance(cs.metadata, dict)
     assert isinstance(cs.data, dict)
     assert cs.metadata["cs_id"] == -1
