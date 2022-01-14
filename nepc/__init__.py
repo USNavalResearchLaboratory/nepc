@@ -8,7 +8,6 @@ from .nepc import cs_metadata
 from .nepc import table_as_df
 from .nepc import process_attr
 from .nepc import CS
-# from .nepc import CustomCS
 from .nepc import Model
 from .nepc import CustomModel
 
