@@ -103,7 +103,39 @@ def test_CS_class(nepc_connect):
 
 
 @pytest.mark.usefixtures("nepc_connect")
-def test_customized_CS_class(nepc_connect):
+def test_CS_class_exceptions_and_warnings(nepc_connect):
+    with pytest.raises(ValueError) as excinfo:
+        nepc.CS(cs_id=1)
+    assert "Must provide cursor if providing cs_id" in str(excinfo.value)
+
+    insufficient_data_metadata_error = "Must provide (cursor and cs_id) OR (sufficient data and metadata)" 
+
+    with pytest.raises(ValueError) as excinfo:
+        nepc.CS()
+    assert insufficient_data_metadata_error in str(excinfo.value)
+
+    with pytest.raises(ValueError) as excinfo:
+        nepc.CS(data={'e': [0.0, 1.0, 2.0],
+                      'sigma': [0.0, 0.1, 0.2]})
+    assert insufficient_data_metadata_error in str(excinfo.value)
+
+    with pytest.raises(ValueError) as excinfo:
+        nepc.CS(metadata={'process': 'excitation',
+                          'lhsA': 'N2(X1Sigmag+)',
+                          'rhsA': 'N2(W3Deltau)',
+                          'threshold': 7.36})
+    assert insufficient_data_metadata_error in str(excinfo.value)
+
+    with pytest.raises(ValueError) as excinfo:
+        nepc.CS(cursor=nepc_connect[1],
+                cs_id=1,
+                data={'e': [0.0, 1.0, 2.0],
+                      'sigma': [0.0, 0.1, 0.2]})
+    assert "If cs_id and data provided, all data['e'] values must be provided" in str(excinfo.value)
+    
+
+@pytest.mark.usefixtures("nepc_connect")
+def test_custom_CS_class(nepc_connect):
     """Verify that the nepc.CustomCS class has metadata and data attributes,
     and that each attribute is of the correct type"""
     cs = nepc.CS(nepc_connect[1], cs_id=1, custom=True)
