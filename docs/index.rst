@@ -35,6 +35,11 @@ Other Topics
    mysql
    vandv
 
+
+Follow along with nepc development at https://github.com/USNavalResearchLaboratory/nepc.
+
+Example exploratory data analysis with nepc can be found here: https://github.com/USNavalResearchLaboratory/nepc/blob/master/tests/data/eda/01_lxcat_n2_fict.ipynb
+
 Indices and tables
 ==================
 
