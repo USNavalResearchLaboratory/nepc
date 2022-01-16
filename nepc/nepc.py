@@ -283,12 +283,28 @@ def cs_metadata(cursor, cs_id):
 class CS:
     r"""A cross section data set, including metadata and cross section data,
     from a NEPC MySQL database.
+
+    Can build data set from NEPC MySQL database and/or with customizations. 
+
+    If building upon an existing database, must provide cursor and cs_id as well
+    as one or both of metadata and data.
+
+    If building a :class:`.CS` from scratch, must provide :obj:`.metadata` 
+    and :obj:`.data`.
+
     Parameters
     ----------
     cursor : cursor.MySQLCursor
         A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
     cs_id : int
         i.d. of the cross section in `cs` and `csdata` tables
+    metadata : dict
+        one or more of the attributes of :attr:`.CS.metadata`
+    data : dict
+        same as attributes of :attr:`.CS.data`
+    custom : bool
+        whether :class:`.CS` is custom build
+
     Attributes
     ----------
     metadata : dict
@@ -357,42 +373,55 @@ class CS:
         sigma : list of float
             Cross sections in units of ``units_sigma`` :math:`m^2` (see :attr:`.CS.metadata`).
     """
-    def __init__(self, cursor, cs_id):
-        metadata = cs_metadata(cursor, cs_id)
-        self.metadata = {"cs_id": metadata[0],
-                         "process": metadata[1],
-                         "units_e": metadata[2],
-                         "units_sigma": metadata[3],
-                         "ref": metadata[4],
-                         "lhsA": metadata[5],
-                         "lhsB": metadata[6],
-                         "rhsA": metadata[7],
-                         "rhsB": metadata[8],
-                         "threshold": metadata[9],
-                         "wavelength": metadata[10],
-                         "lhs_v": metadata[11],
-                         "rhs_v": metadata[12],
-                         "lhs_j": metadata[13],
-                         "rhs_j": metadata[14],
-                         "background": metadata[15],
-                         "lpu": metadata[16],
-                         "upu": metadata[17],
-                         "lhsA_long": metadata[18],
-                         "lhsB_long": metadata[19],
-                         "rhsA_long": metadata[20],
-                         "rhsB_long": metadata[21],
-                         "e_on_lhs": metadata[22],
-                         "e_on_rhs": metadata[23],
-                         "hv_on_lhs": metadata[24],
-                         "hv_on_rhs": metadata[25],
-                         "v_on_lhs": metadata[26],
-                         "v_on_rhs": metadata[27],
-                         "j_on_lhs": metadata[28],
-                         "j_on_rhs": metadata[29]}
-
-        e_energy, sigma = cs_e_sigma(cursor, cs_id)
-        self.data = {"e": e_energy,
-                     "sigma": sigma}
+    def __init__(self, cursor=None, cs_id=None, metadata=None, data=None, custom=False):                    
+        if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
+            raise ValueError('If providing cursor or cs_id, must provide both.')
+        if (cursor is not None and cs_id is not None):
+            meta = cs_metadata(cursor, cs_id)
+            self.metadata = {"cs_id": meta[0],
+                            "process": meta[1],
+                            "units_e": meta[2],
+                            "units_sigma": meta[3],
+                            "ref": meta[4],
+                            "lhsA": meta[5],
+                            "lhsB": meta[6],
+                            "rhsA": meta[7],
+                            "rhsB": meta[8],
+                            "threshold": meta[9],
+                            "wavelength": meta[10],
+                            "lhs_v": meta[11],
+                            "rhs_v": meta[12],
+                            "lhs_j": meta[13],
+                            "rhs_j": meta[14],
+                            "background": meta[15],
+                            "lpu": meta[16],
+                            "upu": meta[17],
+                            "lhsA_long": meta[18],
+                            "lhsB_long": meta[19],
+                            "rhsA_long": meta[20],
+                            "rhsB_long": meta[21],
+                            "e_on_lhs": meta[22],
+                            "e_on_rhs": meta[23],
+                            "hv_on_lhs": meta[24],
+                            "hv_on_rhs": meta[25],
+                            "v_on_lhs": meta[26],
+                            "v_on_rhs": meta[27],
+                            "j_on_lhs": meta[28],
+                            "j_on_rhs": meta[29]}
+            e_energy, sigma = cs_e_sigma(cursor, cs_id)
+            self.data = {"e": e_energy,
+                        "sigma": sigma}
+            if custom:
+                self.metadata['cs_id'] = None
+                if metadata is not None:
+                    self.metadata.update(metadata)
+                if data is not None:
+                    self.data = data.copy()
+        elif (data is None or metadata is None):
+            raise ValueError('must provide data/metadata if not providing cursor/cs_id')
+        else:
+            self.metadata = metadata.copy()
+            self.data = data.copy()
 
         # Attributes to share
         self.e_on_side = None
@@ -610,57 +639,6 @@ class CS:
             plt.savefig(filename)
 
         return axes
-
-
-class CustomCS(CS):
-    """
-    Extends :class:`.CS` to provide a custom cross section data set.
-
-    If building upon an existing :class:`.CS`, must provide cursor and cs_id as well
-    as one or both of metadata and data.
-
-    If building a :class:`.CustomCS` from scratch, must provide :obj:`.metadata` 
-    and :obj:`.data`.
-
-    Parameters
-    ----------
-    cursor : cursor.MySQLCursor
-        A MySQLCursor object. See return value ``cursor`` of :func:`.connect`.
-    cs_id : int
-        i.d. of the cross section in `cs` and `csdata` tables
-    metadata : dict
-        one or more of the attributes of :class:`.CS`
-    data : dict
-        same as attributes of :class:`.CS`
-
-    Attributes
-    ----------
-    metadata : dict
-        see Attributes of :class:`.CS`
-
-    data : dict
-        e : list[float]
-            electron energy
-        sigma : list[float]
-            cross section
-
-    """
-    def __init__(self, cursor=None, cs_id=None, metadata=None, data=None):
-        if ((cursor is None and cs_id is not None) or (cursor is not None and cs_id is None)):
-            raise ValueError('If providing cursor or cs_id, must provide both.')
-        if (cursor is not None and cs_id is not None):
-            super().__init__(cursor, cs_id)
-            self.metadata['cs_id'] = None
-            if metadata is not None:
-                for key in metadata.keys():
-                    self.metadata[key] = metadata[key]
-            if data is not None:
-                self.data = data.copy()
-        elif (data is None or metadata is None):
-            raise ValueError('must provide data/metadata if not providing cursor/cs_id')
-        else:
-            self.metadata = metadata.copy()
-            self.data = data.copy()
 
 
 class Model:
